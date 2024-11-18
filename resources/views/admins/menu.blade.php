@@ -318,175 +318,112 @@
                     </ul>
                 </li>
 
-
-
-
-
                 <li class="nav-item">
-                    <a href="widgets" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
+                    <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
                         <p>
                             Widgets
-                            <span class="right badge badge-danger">New</span>
+                            <span class="right badge badge-danger">item</span>
+                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                </li>
-                {{-- <li class="nav-header">EXAMPLES</li>
-                <li class="nav-item">
-                    <a href="calendar" class="nav-link">
-                        <i class="nav-icon far fa-calendar-alt"></i>
-                        <p>
-                            Calendar
-                            <span class="badge badge-info right">2</span>
-                        </p>
-                    </a>
+                    <ul class="nav nav-treeview bg-dark">
+                        <li class="nav-item">
+                            <a href="layouts.advanced" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>advanced</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="layouts.buttons" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>buttons</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.calendar" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>calendar</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.chartjs" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>chartjs</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.form-general" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>form-general</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.ribbons" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>ribbons</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.flot" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>flot</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.invoice" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>invoice</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.ui-general" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>ui-general</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.modals" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>modals</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.editors" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>editors</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.data" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>data</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.sliders" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>sliders</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.profile" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>profile</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="layouts.timeline" class="nav-link text-white">
+                               <i class="fas fa-wrench"></i>
+                                <p>timeline</p>
+                            </a>
+                        </li>
+
+                    </ul>
                 </li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-envelope"></i>
-                        <p>
-                            Mailbox
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="mailbox" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Inbox</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="compose" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Compose</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="read-mail" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Read</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book"></i>
-                        <p>
-                            Pages
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="invoice" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Invoice</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="profile" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Profile</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="contacts" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Contacts</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-plus-square"></i>
-                        <p>
-                            Extras
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Login & Register v1
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="login" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Login v1</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="register" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Register v1</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="forgot-password" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Forgot Password v1</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="recover-password" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Recover Password v1</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    Login & Register v2
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="login-v2" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Login v2</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="register-v2" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Register v2</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="forgot-password-v2" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Forgot Password v2</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="recover-password-v2" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Recover Password v2</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="lockscreen" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Lockscreen</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li> --}}
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
