@@ -96,3 +96,6 @@ Route::get('/layouts.flot', function () {
 });
 
 /* ************************************************************layout************************************************************ */
+Auth::routes();
+
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
