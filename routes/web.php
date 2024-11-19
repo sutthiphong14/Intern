@@ -27,6 +27,14 @@ Route::get('/structure', function (){
     return view('structure') ;
 })->name('structure');
 
+Route::get('/signin', function (){
+    return view('signin');
+});
+
+Route::get('/signup', function (){
+    return view('signup');
+});
+
 /* ************************************************************layout************************************************************ */
 Route::get('/layouts.invoice', function () {
     return view('layouts.invoice');
