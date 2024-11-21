@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
-
+<title>Nt |@yield('title')</title>
 @section('content')
+
 <div class="d-flex justify-content-center align-items-center" style="height: 100vh; background: linear-gradient(135deg, #ecd716, #ddc806);">
     <div class="login-card card" style="width: 500px; padding: 2rem; border-radius: 15px; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
         

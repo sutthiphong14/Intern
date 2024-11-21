@@ -22,9 +22,6 @@ Route::get('/admins', function () {
 Route::get('/', function (){
     return view('home');
 });
-Route::get('/home', function (){
-    return view('home');
-});
 
 Route::get('/structure', function (){
     return view('structure') ;
@@ -37,6 +34,31 @@ Route::get('/signin', function (){
 Route::get('/signup', function (){
     return view('signup');
 });
+
+Route::get('/tableusers', function (){
+    return view('tableusers');
+});
+
+Route::get('/updatefeed', function (){
+    return view('feed.updatefeed');
+});
+
+Route::get('/listfeet', function (){
+    return view('feed.listfeet');
+});
+
+Route::get('/insertfeet', function (){
+    return view('feed.insertfeet');
+});
+
+Route::get('/profile', function (){
+    return view('profile');
+});
+
+use App\Http\Controllers\UserController;
+
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
 
 /* ************************************************************layout************************************************************ */
 Route::get('/layouts.invoice', function () {

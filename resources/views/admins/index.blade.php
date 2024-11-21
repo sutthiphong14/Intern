@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NT |@yield('title')</title>
+    <title>{{config('')}}</title>
     @yield('css')
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -99,6 +99,7 @@
                     @yield('header')
                 </div><!-- /.container-fluid -->
             </div>
+            
             <!-- Main content -->
             <section>
                 @yield('content')

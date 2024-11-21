@@ -49,7 +49,7 @@
                     <a href="https://intranet.ntplc.co.th/dir/?url=https://intranet.ntplc.co.th/home/start"
                         class="nav-link bg-warning text-center">
 
-                        <p class="text-dark h5">INTRANET</p>
+                        <p class="text-dark h5 ">INTRANET</p>
                     </a>
                 </li>
                 <li class="nav-item ">
