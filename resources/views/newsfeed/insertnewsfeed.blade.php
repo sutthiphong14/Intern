@@ -1,5 +1,10 @@
 @extends('admins.index')
-
+@section('title')
+    รายการข้อมูล
+@endsection
+@section('header')
+    รายการข้อมูล
+@endsection
 @section('css')
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -30,6 +35,7 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Description</th>
+                                    <th>Category</th>
                                     <th>Upload</th>
                                 </tr>
                             </thead>
@@ -41,6 +47,18 @@
                                     <td>
                                         <input class="form-control" type="text" placeholder="Description">
                                     </td>
+                                    <td>
+                                    <div class="form-group">
+                                        <select class="custom-select">
+                                        <option>Feednew</option>
+                                            <option>ผลการดำเนินงาน สายงาน ภน.</option>
+                                            <option>ผลการดำเนินงานด้านการตลาดสายงาน ภน.</option>
+                                            <option>คุณภาพบริการ</option>
+                                           
+                                        </select>
+                                    </div>
+                                    </td>
+                                    
                                     <td>
                                         <div class="form-group">
                                             <div class="custom-file">

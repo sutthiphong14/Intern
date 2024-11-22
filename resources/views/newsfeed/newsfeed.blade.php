@@ -1,9 +1,9 @@
 @extends('admins.index')
 @section('title')
-    รายการข้อมูล
+รายการข้อมูลข่าวสาร
 @endsection
 @section('header')
-    รายการข้อมูล
+รายการข้อมูลข่าวสาร
 @endsection
 
 @section('css')
@@ -23,23 +23,31 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="card card-warning mt-3 ">
+                <div class="card card-warning mt-3 mb-3 ">
 
                     <div class="card-header d-flex justify-content-between align-items-center ">
-                        <h3 class="card-title col-5">รายชื่อผู้ใช้ </h3>
+                        <h3 class="card-title col-6">เอกสาร </h3>
 
-                        <div class="input-group col-4">
+
+                        <select class="custom-select">
+                            <option>All</option>
+                            <option>ผลการดำเนินงาน สายงาน ภน.</option>
+                            <option>ผลการดำเนินงานด้านการตลาดสายงาน ภน.</option>
+                            <option>คุณภาพบริการ</option>
+
+                        </select>
+
+
+                        <div class="input-group col-3">
                             <input type="text" class="form-control">
                             <span class="input-group-append">
-                                <button type="button" class="btn btn-info btn-flat">seart</button>
+                                <button type="button" class="btn btn-info btn-dark">Search</button>
                             </span>
                         </div>
 
 
 
-                        <a href="insertfeet" class="btn bg-success col-2">
-                            <i class="d-flex justify-content-end "></i> Add+
-                        </a>
+
                     </div>
 
                     <!-- /.card-header -->
@@ -47,55 +55,27 @@
                         <table id="example2" class="table table-bordered table-hover ">
                             <thead class='text-center col-12'>
                                 <tr>
-                                    <th class='col-1 '>ID</th>
                                     <th class='col-3'>Name</th>
                                     <th class='col-4'>Description</th>
-                                    <th class='col-1'>Time</th>
-                                    <th class='col-3'>Action</th>
+                                    <th class='col-2'>Date</th>
+                                    <th class='col-2'>Category</th>
+                                    <th class='col-1'>Link</th>
+
                                 </tr>
-                            </thead>
+
                             <tbody>
                                 <tr>
-                                    <td>id1</td>
-                                    <td>name1</td>
-                                    <td>Admin</td>
+                                    <td>doc1</td>
+                                    <td>------------------------------</td>
                                     <td>01/01/22</td>
-                                    <td class='align-items-center text-center'>
-                                        <a class="btn btn-primary align-items-center">
-                                            <i class="far fa-eye"></i> Hide
-                                        </a>
+                                    <td>news</td>
+                                    <td>Download</td>
 
-                                        <a class="btn btn-warning align-items-center">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </a>
-                                        <a class="btn btn-danger align-items-center">
-                                            <i class="fas fa-trash"></i> Delete
-                                        </a>
-
-                                    </td>
                                 </tr>
-
-
-                                <tr>
-                                    <td>id1</td>
-                                    <td>name1</td>
-                                    <td>Admin</td>
-                                    <td>01/01/22</td>
-                                    <td>X X X</td>
-                                </tr>
+                            </tbody>
                     </div>
-                    </td>
-                    </tr>
-                    <tr>
-                        <td>id1</td>
-                        <td>name1</td>
-                        <td>Admin</td>
-                        <td>01/01/22</td>
-                        <td>X X X</td>
-                    </tr>
-
-                    </tbody>
-
+                        
+                    </thead>
                     </table>
                 </div>
                 <!-- /.card-body -->

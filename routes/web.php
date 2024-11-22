@@ -39,16 +39,20 @@ Route::get('/tableusers', function (){
     return view('tableusers');
 });
 
-Route::get('/updatefeed', function (){
-    return view('feed.updatefeed');
+Route::get('/updatenewsfeed', function (){
+    return view('newsfeed.updatenewsfeed');
 });
 
-Route::get('/listfeet', function (){
-    return view('feed.listfeet');
+Route::get('/listnewsfeed', function (){
+    return view('newsfeed.listnewsfeed');
 });
 
-Route::get('/insertfeet', function (){
-    return view('feed.insertfeet');
+Route::get('/insertnewsfeed', function (){
+    return view('newsfeed.insertnewsfeed');
+});
+
+Route::get('/newsfeed', function (){
+    return view('newsfeed.newsfeed');
 });
 
 Route::get('/profile', function (){
