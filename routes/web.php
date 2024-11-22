@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,6 +21,10 @@ Route::get('/admins', function () {
 });
 
 Route::get('/', function (){
+    return view('home');
+});
+
+Route::get('/home', function (){
     return view('home');
 });
 
@@ -43,9 +48,7 @@ Route::get('/updatenewsfeed', function (){
     return view('newsfeed.updatenewsfeed');
 });
 
-Route::get('/listnewsfeed', function (){
-    return view('newsfeed.listnewsfeed');
-});
+Route::get('/listnewsfeed',[AdminController::class , 'listnewsfeed'])->name('listnewsfeed');
 
 Route::get('/insertnewsfeed', function (){
     return view('newsfeed.insertnewsfeed');
@@ -58,6 +61,11 @@ Route::get('/newsfeed', function (){
 Route::get('/profile', function (){
     return view('profile');
 });
+
+Route::get('/create',[AdminController::class , 'create'])->name('create');
+
+Route::get('/changenews{id}',[AdminController::class , 'changenews'])->name('changenews');
+
 
 use App\Http\Controllers\UserController;
 
