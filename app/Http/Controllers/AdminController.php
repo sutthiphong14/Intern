@@ -13,6 +13,13 @@ class AdminController extends Controller
         $data = DB::table('newsfeeds')->get();
         return view('newsfeed.listnewsfeed', compact('data'));
     }
+
+    function newsfeed()
+    {
+        $data = DB::table('newsfeeds')->get();
+        return view('newsfeed.newsfeed', compact('data'));
+    }
+
     function create(Request $request)
     {
         $request->validate([

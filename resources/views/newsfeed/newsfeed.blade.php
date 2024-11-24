@@ -57,21 +57,23 @@
                                 <tr>
                                     <th class='col-3'>Name</th>
                                     <th class='col-4'>Description</th>
-                                    <th class='col-2'>Date</th>
-                                    <th class='col-2'>Category</th>
-                                    <th class='col-1'>Link</th>
+                                    <th class='col-2'>Date</th>                                   
+                                    <th class='col-1'>Download</th>
 
                                 </tr>
 
                             <tbody>
                                 <tr>
-                                    <td>doc1</td>
-                                    <td>------------------------------</td>
-                                    <td>01/01/22</td>
-                                    <td>news</td>
-                                    <td>Download</td>
+                                @foreach ($data as $item)
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->description }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i:s') }}</td>
+                                    <td><a href="{{ $item->link }}" class="nav-link text-dark">download</a></td>
+                                    
+                                
 
                                 </tr>
+                                @endforeach
                             </tbody>
                     </div>
                         

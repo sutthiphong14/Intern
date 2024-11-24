@@ -58,6 +58,8 @@ Route::get('/newsfeed', function (){
     return view('newsfeed.newsfeed');
 });
 
+Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
+
 Route::get('/profile', function (){
     return view('profile');
 });
