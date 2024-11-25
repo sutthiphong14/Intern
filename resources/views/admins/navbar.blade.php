@@ -13,7 +13,7 @@
             <a href="newsfeed" class="nav-link text-dark">ข่าว</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block ">
-            <a href="{{route('structure')}}" class="nav-link text-dark">ttttt</a>
+            <a href="listusers" class="nav-link text-dark">จัดการผู้ใช้</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block ">
             <a href="{{route('structure')}}" class="nav-link text-dark">ttttt</a>

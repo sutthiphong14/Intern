@@ -44,6 +44,14 @@ Route::get('/tableusers', function (){
     return view('tableusers');
 });
 
+Route::get('/insertusers', function (){
+    return view('insertusers');
+});
+
+Route::get('/listusers', function (){
+    return view('users.listusers');
+});
+
 Route::get('/updatenewsfeed', function (){
     return view('newsfeed.updatenewsfeed');
 });
