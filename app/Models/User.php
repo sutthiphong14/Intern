@@ -41,4 +41,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getUsers()
+    {
+        // ดึงข้อมูลทั้งหมด
+        $users = User::all();
+
+        // ส่งข้อมูลไปยัง view หรือแสดงผลใน json
+        return response()->json($users);
+    }
+
+
 }

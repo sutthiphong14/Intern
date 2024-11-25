@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NT |@yield('title')</title>
+    <title>Nt</title>
     @yield('css')
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -99,6 +99,7 @@
                     @yield('header')
                 </div><!-- /.container-fluid -->
             </div>
+            
             <!-- Main content -->
             <section>
                 @yield('content')
@@ -111,7 +112,7 @@
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
         </aside>
-        <button onclick="scrollToTop()" id="scrollToTopBtn" class="btn btn-warning rounded-circle p-3"
+        <button onclick="scrollToTop()" id="scrollToTopBtn" class="btn btn-warning rounded-circle p-4"
             title="Go to top">
             <i class="fas fa-chevron-up"></i>
         </button>

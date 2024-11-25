@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,9 +24,55 @@ Route::get('/', function (){
     return view('home');
 });
 
+Route::get('/home', function (){
+    return view('home');
+});
+
 Route::get('/structure', function (){
     return view('structure') ;
 })->name('structure');
+
+Route::get('/signin', function (){
+    return view('signin');
+});
+
+Route::get('/signup', function (){
+    return view('signup');
+});
+
+Route::get('/tableusers', function (){
+    return view('tableusers');
+});
+
+Route::get('/updatenewsfeed', function (){
+    return view('newsfeed.updatenewsfeed');
+});
+
+Route::get('/listnewsfeed',[AdminController::class , 'listnewsfeed'])->name('listnewsfeed');
+
+Route::get('/insertnewsfeed', function (){
+    return view('newsfeed.insertnewsfeed');
+});
+
+Route::get('/newsfeed', function (){
+    return view('newsfeed.newsfeed');
+});
+
+Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
+
+Route::get('/profile', function (){
+    return view('profile');
+});
+
+Route::get('/create',[AdminController::class , 'create'])->name('create');
+
+Route::get('/changenews{id}',[AdminController::class , 'changenews'])->name('changenews');
+
+
+use App\Http\Controllers\UserController;
+
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
 
 /* ************************************************************layout************************************************************ */
 Route::get('/layouts.invoice', function () {
@@ -88,3 +135,6 @@ Route::get('/layouts.flot', function () {
 });
 
 /* ************************************************************layout************************************************************ */
+Auth::routes();
+
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

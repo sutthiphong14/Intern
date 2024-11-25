@@ -28,7 +28,7 @@
     <!-- Brand Logo -->
     <!-- Brand Logo -->
     <a href="#" class="brand-link bg-warning d-flex justify-content-center align-items-center ">
-        <img src="{{ URL::asset('dist/img/ntlogo.png') }}" alt="AdminLTE Logo" class="brand-image" style="height: 30px;">
+        <img src="{{ URL::asset('dist/img/monontlogo.png') }}" alt="AdminLTE Logo" class="brand-image" style="height: 100px;">
     </a>
 
 
@@ -40,7 +40,7 @@
 
 
         <!-- Sidebar Menu -->
-        <nav class="mt-3 ">
+        <nav class="mt-1 ">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
@@ -49,7 +49,7 @@
                     <a href="https://intranet.ntplc.co.th/dir/?url=https://intranet.ntplc.co.th/home/start"
                         class="nav-link bg-warning text-center">
 
-                        <p class="text-dark h5">INTRANET</p>
+                        <p class="text-dark h5 ">INTRANET</p>
                     </a>
                 </li>
                 <li class="nav-item ">
