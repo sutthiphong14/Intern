@@ -10,14 +10,16 @@
             <a href="{{route('structure')}}" class="nav-link text-dark">เกี่ยวกับ NT</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block ">
-            <a href="{{route('structure')}}" class="nav-link text-dark">tttt</a>
+            <a href="{{route('listusers')}}" class="nav-link text-dark">จัดการผู้ใช้</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block ">
+            <a href="{{route('listnewsfeed')}}" class="nav-link text-dark">จัดการกระดานข่าว</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block ">
             <a href="{{route('structure')}}" class="nav-link text-dark">ttttt</a>
         </li>
-        <li class="nav-item d-none d-sm-inline-block ">
-            <a href="{{route('structure')}}" class="nav-link text-dark">ttttt</a>
-        </li>
+    
+        
         {{-- <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link">NT NEWS</a>
         </li>
