@@ -10,6 +10,7 @@
             <a href="{{route('structure')}}" class="nav-link text-dark">เกี่ยวกับ NT</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block ">
+            <a href="newsfeed" class="nav-link text-dark">ข่าว</a>
             <a href="{{route('listusers')}}" class="nav-link text-dark">จัดการผู้ใช้</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block ">
