@@ -77,6 +77,9 @@ Route::get('/editnews/{id}',[AdminController::class , 'editnews'])->name('editne
 
 Route::post('/updatenews/{id}',[AdminController::class , 'updatenews'])->name('updatenews');
 
+Route::get('/search', [AdminController::class, 'search'])->name('search');
+
+
 
 
 

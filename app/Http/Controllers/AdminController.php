@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
+use App\Models\Newsfeed;
 
 class AdminController extends Controller
 {
@@ -104,5 +105,15 @@ class AdminController extends Controller
         ];
         DB::table('newsfeeds')->where('id', $id)->update($data);
         return redirect('/listnewsfeed');
+    }
+
+    function search(Request $request)
+    {
+        $query = $request->input('search');
+        $data = Newsfeed::when($query, function ($q) use ($query) {
+            $q->where('name', 'like', '%' . $query . '%');
+        })->get();
+
+        return view('newsfeed.listnewsfeed', compact('data'));
     }
 }

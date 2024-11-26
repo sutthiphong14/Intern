@@ -29,10 +29,13 @@
                             <h3 class="card-title col-5">รายชื่อผู้ใช้ </h3>
 
                             <div class="input-group col-4">
-                                <input type="text" class="form-control">
-                                <span class="input-group-append">
-                                    <button type="button" class="btn btn-info btn-dark">Search</button>
-                                </span>
+                                <form method="GET" action="{{ route('search') }}" class="d-flex w-100">
+                                    <input type="text" name="search" value="{{ request()->query('search') }}"
+                                        class="form-control" placeholder="Search by Name">
+                                    <span class="input-group-append">
+                                        <button type="submit" class="btn btn-info btn-dark">Search</button>
+                                    </span>
+                                </form>
                             </div>
 
 
@@ -55,8 +58,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        @foreach ($data as $item)
+                                    @forelse ($data as $item)
+                                        <tr>
                                             <td>{{ $item->id }}</td>
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->description }}</td>
@@ -67,7 +70,6 @@
                                                     <i class="{{ $item->status ? 'fas fa-eye-slash' : 'far fa-eye' }}"></i>
                                                     {{ $item->status ? 'Hide' : 'Show' }}
                                                 </button>
-
                                                 <a href="{{ route('editnews', $item->id) }}"
                                                     class="btn btn-warning align-items-center">
                                                     <i class="fas fa-edit text-light"></i> Edit
@@ -78,23 +80,25 @@
                                                     <i class="fas fa-trash"></i> Delete
                                                 </a>
                                             </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">No results found</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
 
-                                    </tr>
-                                    @endforeach
+                            </table>
                         </div>
-                        </tbody>
+                        <!-- /.card-body -->
 
-                        </table>
+
                     </div>
-                    <!-- /.card-body -->
-
-
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
+                <!-- /.col -->
             </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
+            <!-- /.row -->
         </div>
         <!-- /.container-fluid -->
     </section>
@@ -144,36 +148,35 @@
     </script>
 
 
-<script>
-    function changeNewsStatus(id) {
-        fetch(`/changenews/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // ค้นหาและอัปเดตปุ่มในแถวที่เกี่ยวข้อง
-                const button = document.querySelector(`button[onclick="changeNewsStatus(${id})"]`);
-                if (data.status) {
-                    button.className = "btn btn-primary align-items-center";
-                    button.innerHTML = '<i class="fas fa-eye-slash"></i> Hide';
-                } else {
-                    button.className = "btn btn-secondary align-items-center";
-                    button.innerHTML = '<i class="far fa-eye"></i> Show';
-                }
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('เกิดข้อผิดพลาด โปรดลองใหม่อีกครั้ง');
-        });
-    }
-</script>
-
+    <script>
+        function changeNewsStatus(id) {
+            fetch(`/changenews/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // ค้นหาและอัปเดตปุ่มในแถวที่เกี่ยวข้อง
+                        const button = document.querySelector(`button[onclick="changeNewsStatus(${id})"]`);
+                        if (data.status) {
+                            button.className = "btn btn-primary align-items-center";
+                            button.innerHTML = '<i class="fas fa-eye-slash"></i> Hide';
+                        } else {
+                            button.className = "btn btn-secondary align-items-center";
+                            button.innerHTML = '<i class="far fa-eye"></i> Show';
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาด โปรดลองใหม่อีกครั้ง');
+                });
+        }
+    </script>
 @endsection
