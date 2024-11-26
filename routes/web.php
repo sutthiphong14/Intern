@@ -68,7 +68,8 @@ Route::get('/profile', function (){
 
 Route::post('/createnews',[AdminController::class , 'createnews'])->name('createnews');
 
-Route::get('/changenews/{id}',[AdminController::class , 'changenews'])->name('changenews');
+Route::post('/changenews/{id}', [AdminController::class, 'changenews']);
+
 
 Route::get('/deletenews/{id}',[AdminController::class , 'deletenews'])->name('deletenews');
 

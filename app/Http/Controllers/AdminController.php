@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -35,39 +36,53 @@ class AdminController extends Controller
             'category_id.required' => 'กรุณาเลือกประเภท',
             'link.required' => 'กรุณาระบุ link file'
         ]);
-        $data =[
-            'name'=>$request->name,
-            'description'=>$request->description,
-            'category_id'=>$request->category_id,
-            'link'=>$request->link,
+        $data = [
+            'name' => $request->name,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'link' => $request->link,
         ];
-      
+
         DB::table('newsfeeds')->insert($data);
         return redirect('/listnewsfeed');
-
     }
 
-    function changenews($id){
+    function changenews($id)
+    {
         $status = DB::table('newsfeeds')->where('id', $id)->first();
-        $data = [
-            'status'=>!$status->status
-        ];
-        DB::table('newsfeeds')->where('id', $id)->update($data);
+
+        if ($status) {
+            $newStatus = !$status->status;
+            DB::table('newsfeeds')->where('id', $id)->update(['status' => $newStatus]);
+
+            return response()->json([
+                'success' => true,
+                'status' => $newStatus,
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'ไม่พบข้อมูล',
+        ]);
+    }
+
+
+    function deletenews($id)
+    {
+        DB::table('newsfeeds')->where('id', $id)->delete();
         return redirect()->back();
     }
 
-    function deletenews($id){
-       DB::table('newsfeeds')->where('id',$id)->delete();
-       return redirect()->back();
-    }
-
-    function editnews($id){
-        $oldnews=DB::table('newsfeeds')->where('id',$id)->first();
+    function editnews($id)
+    {
+        $oldnews = DB::table('newsfeeds')->where('id', $id)->first();
         $categories = DB::table('categories')->get(); // ดึงข้อมูล category ทั้งหมด
-       return view('newsfeed.editnews', compact('oldnews','categories'));
+        return view('newsfeed.editnews', compact('oldnews', 'categories'));
     }
 
-    function updatenews( Request $request,$id ){
+    function updatenews(Request $request, $id)
+    {
         $request->validate([
             'name' => 'required|max:50',
             'description' => 'required',
@@ -81,13 +96,13 @@ class AdminController extends Controller
             'category_id.required' => 'กรุณาเลือกประเภท',
             'link.required' => 'กรุณาระบุ link file'
         ]);
-        $data =[
-            'name'=>$request->name,
-            'description'=>$request->description,
-            'category_id'=>$request->category_id,
-            'link'=>$request->link,
+        $data = [
+            'name' => $request->name,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'link' => $request->link,
         ];
-        DB::table('newsfeeds')->where('id',$id)->update($data);
+        DB::table('newsfeeds')->where('id', $id)->update($data);
         return redirect('/listnewsfeed');
     }
 }

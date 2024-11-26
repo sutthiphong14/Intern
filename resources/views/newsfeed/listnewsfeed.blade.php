@@ -62,29 +62,23 @@
                                             <td>{{ $item->description }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i:s') }}</td>
                                             <td class='align-items-center text-center'>
-                                                @if ($item->status == true)
-                                                    <a href="{{ route('changenews', $item->id) }}"
-                                                        class="btn btn-primary align-items-center">
-                                                        <i class="fas fa-eye-slash"></i> Hide
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('changenews', $item->id) }}"
-                                                        class="btn btn-secondary align-items-center">
-                                                        <i class="far fa-eye"></i> Show
-                                                    </a>
-                                                @endif
+                                                <button onclick="changeNewsStatus({{ $item->id }})"
+                                                    class="btn {{ $item->status ? 'btn-primary' : 'btn-secondary' }} align-items-center">
+                                                    <i class="{{ $item->status ? 'fas fa-eye-slash' : 'far fa-eye' }}"></i>
+                                                    {{ $item->status ? 'Hide' : 'Show' }}
+                                                </button>
 
-
-
-                                                <a href="{{route('editnews', $item->id)}}" class="btn btn-warning align-items-center">
+                                                <a href="{{ route('editnews', $item->id) }}"
+                                                    class="btn btn-warning align-items-center">
                                                     <i class="fas fa-edit text-light"></i> Edit
                                                 </a>
-                                                <a href="{{route('deletenews', $item->id)}}" class="btn btn-danger align-items-center"
-                                                    onclick="return confirm('ต้องการลบข้อมูล {{$item->name}} หรือไม่')">
+                                                <a href="{{ route('deletenews', $item->id) }}"
+                                                    class="btn btn-danger align-items-center"
+                                                    onclick="return confirm('ต้องการลบข้อมูล {{ $item->name }} หรือไม่')">
                                                     <i class="fas fa-trash"></i> Delete
                                                 </a>
-
                                             </td>
+
                                     </tr>
                                     @endforeach
                         </div>
@@ -148,4 +142,38 @@
             });
         });
     </script>
+
+
+<script>
+    function changeNewsStatus(id) {
+        fetch(`/changenews/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // ค้นหาและอัปเดตปุ่มในแถวที่เกี่ยวข้อง
+                const button = document.querySelector(`button[onclick="changeNewsStatus(${id})"]`);
+                if (data.status) {
+                    button.className = "btn btn-primary align-items-center";
+                    button.innerHTML = '<i class="fas fa-eye-slash"></i> Hide';
+                } else {
+                    button.className = "btn btn-secondary align-items-center";
+                    button.innerHTML = '<i class="far fa-eye"></i> Show';
+                }
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('เกิดข้อผิดพลาด โปรดลองใหม่อีกครั้ง');
+        });
+    }
+</script>
+
 @endsection
