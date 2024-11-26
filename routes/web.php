@@ -32,13 +32,6 @@ Route::get('/structure', function (){
     return view('structure') ;
 })->name('structure');
 
-Route::get('/signin', function (){
-    return view('signin');
-});
-
-Route::get('/signup', function (){
-    return view('signup');
-});
 
 Route::get('/tableusers', function (){
     return view('tableusers');
@@ -72,9 +65,24 @@ Route::get('/profile', function (){
     return view('profile');
 });
 
-Route::get('/create',[AdminController::class , 'create'])->name('create');
 
-Route::get('/changenews{id}',[AdminController::class , 'changenews'])->name('changenews');
+Route::post('/createnews',[AdminController::class , 'createnews'])->name('createnews');
+
+Route::post('/changenews/{id}', [AdminController::class, 'changenews']);
+
+
+Route::get('/deletenews/{id}',[AdminController::class , 'deletenews'])->name('deletenews');
+
+Route::get('/editnews/{id}',[AdminController::class , 'editnews'])->name('editnews');
+
+Route::post('/updatenews/{id}',[AdminController::class , 'updatenews'])->name('updatenews');
+
+Route::get('/search', [AdminController::class, 'search'])->name('search');
+
+
+
+
+
 
 
 use App\Http\Controllers\UserController;
@@ -146,3 +154,6 @@ Route::get('/layouts.flot', function () {
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+
