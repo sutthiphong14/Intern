@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->text('link');
-            $table->boolean('status')->default(false);
+            $table->boolean('status')->default(true);
             $table->unsignedBigInteger('category_id');
 
             // เพิ่ม foreign key constraint
