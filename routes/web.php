@@ -32,13 +32,6 @@ Route::get('/structure', function (){
     return view('structure') ;
 })->name('structure');
 
-Route::get('/signin', function (){
-    return view('signin');
-});
-
-Route::get('/signup', function (){
-    return view('signup');
-});
 
 Route::get('/tableusers', function (){
     return view('tableusers');
@@ -71,6 +64,7 @@ Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
 Route::get('/profile', function (){
     return view('profile');
 });
+
 
 Route::post('/createnews',[AdminController::class , 'createnews'])->name('createnews');
 
