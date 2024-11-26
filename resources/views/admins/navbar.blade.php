@@ -27,6 +27,9 @@
         <li class="nav-item d-none d-sm-inline-block ">
             <a href="viewreport2" class="nav-link text-dark">ดูรายงาน2</a>
         </li>
+        <li class="nav-item d-none d-sm-inline-block ">
+            <a href="viewreport3" class="nav-link text-dark">ดูรายงาน3</a>
+        </li>
         {{-- <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link">NT NEWS</a>
         </li>

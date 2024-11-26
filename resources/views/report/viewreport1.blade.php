@@ -29,9 +29,155 @@
                         </div>
                     </div>
                 </div>
+
+
+
+                <div class="card card-dark mt-3">
+
+                    <div class="card card-dark">
+                        <div class="card-header">
+                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead class="text-center ">
+                                        <tr>
+                                            <th>ดูข้อมูล</th>
+                                            <th>พื้นที่</th>
+                                            <th>เป้าปี 67	</th>
+                                            <th>เป้าเดือน 67</th>
+                                            <th>รายได้รวม</th>
+                                            <th>รายได้รวม</th>
+                                            <th>รายได้รวม</th>
+                                            <th>รายได้รวม</th>
+                                            <th>รายได้รวม</th>
+                                            <th>รายได้รวม</th>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <th class="col-sdp">กำหนด SDP/ODP (วัน)</th>
+                                            <th class="col-cable">โยงสาย (วัน)</th>
+                                            <th class="col-config">Config NMS (วัน)</th>
+                                            <th class="col-schedule">นัดหมายและกำหนดช่าง (วัน)</th>
+                                            <th class="col-wait-customer">รอลูกค้า (วัน)</th>
+                                            <th class="col-install">ลากสายและติดตั้ง ONT (วัน)</th>
+                                            <th class="col-close-job">ปิดงาน (วัน)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class ='text-center align-items-center'>
+                                        <tr>
+                                            <td><button type="button" class="btn btn-info btn-warning"><i
+                                                        class="fas fa-search"></i></button></td>
+                                            <td>กาฬสินธุ์</td>
+                                            <td>10</td>
+                                            <td>3</td>
+                                            <td>5</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>9</td>
+                                            <td>5</td>
+                                            <td>50%</td>
+                                        </tr>
+                                        <tr>
+                                            <td><button type="button" class="btn btn-info btn-warning"><i
+                                                        class="fas fa-search"></i></button></td>
+                                            <td>ขอนแก่น</td>
+                                            <td>10</td>
+                                            <td>3</td>
+                                            <td>5</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>9</td>
+                                            <td>5</td>
+                                            <td>50%</td>
+                                        </tr>
+                                        <tr>
+                                            <td><button type="button" class="btn btn-info btn-warning"><i
+                                                        class="fas fa-search"></i></button></td>
+                                            <td>มหาสารคาม</td>
+                                            <td>10</td>
+                                            <td>3</td>
+                                            <td>5</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>9</td>
+                                            <td>5</td>
+                                            <td>50%</td>
+                                        </tr>
+                                        <tr>
+                                            <td><button type="button" class="btn btn-info btn-warning"><i
+                                                        class="fas fa-search"></i></button></td>
+                                            <td>ร้อยเอ็ด</td>
+                                            <td>10</td>
+                                            <td>3</td>
+                                            <td>5</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>9</td>
+                                            <td>5</td>
+                                            <td>50%</td>
+                                        </tr>
+                                        <tr>
+                                            <td><button type="button" class="btn btn-info btn-warning"><i
+                                                        class="fas fa-search"></i></button></td>
+                                            <td>ภน.2.1</td>
+                                            <td>10</td>
+                                            <td>3</td>
+                                            <td>5</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>9</td>
+                                            <td>5</td>
+                                            <td>50%</td>
+                                        </tr>
+
+                                        <!-- เพิ่มข้อมูลอื่น ๆ -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
             </div>
         
     </div>
+
+    
+
 </section>
 @endsection
 

@@ -163,3 +163,7 @@ Route::get('/viewreport1', function () {
 Route::get('/viewreport2', function () {
     return view('report.viewreport2');
 });
+
+Route::get('/viewreport3', function () {
+    return view('report.viewreport3');
+});
