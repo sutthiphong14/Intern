@@ -43,7 +43,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="align-items-center">
-                                    <form action="{{ route('create') }}" class="form-group">
+                                    <form action="{{ route('createnews') }}" class="form-group" method="POST">
                                         @csrf
                                         <tr>
                                             <td>
@@ -67,7 +67,7 @@
                                                 <td>
                                                     <select class="form-control" name="category_id">
                                                         <option value="" disabled selected>เลือก Category</option>
-                                                        <option value=1 {{ old('category') == 'Feednew' ? 'selected' : '' }}>Feednew</option>
+                                                        <option value=1 {{ old('category') == 'Feednew' ? 'selected' : '' }}>Feednews</option>
                                                         <option value=2 {{ old('category') == 'ผลการดำเนินงาน สายงาน ภน.' ? 'selected' : '' }}>ผลการดำเนินงาน สายงาน ภน.</option>
                                                         <option value=3 {{ old('category') == 'ผลการดำเนินงานด้านการตลาดสายงาน ภน.' ? 'selected' : '' }}>ผลการดำเนินงานด้านการตลาดสายงาน ภน.</option>
                                                         <option value=4 {{ old('category') == 'คุณภาพบริการ' ? 'selected' : '' }}>คุณภาพบริการ</option>
