@@ -146,3 +146,20 @@ Route::get('/layouts.flot', function () {
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+/* ************************************************************report************************************************************ */
+Route::get('/listreport', function () {
+    return view('report.listreport');
+});
+
+Route::get('/viewreport', function () {
+    return view('report.viewreport');
+});
+
+Route::get('/viewreport1', function () {
+    return view('report.viewreport1');
+});
+
+Route::get('/viewreport2', function () {
+    return view('report.viewreport2');
+});
