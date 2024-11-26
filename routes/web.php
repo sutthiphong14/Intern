@@ -72,11 +72,19 @@ Route::get('/profile', function (){
     return view('profile');
 });
 
-Route::get('/createnews',[AdminController::class , 'createnews'])->name('createnews');
+Route::post('/createnews',[AdminController::class , 'createnews'])->name('createnews');
 
-Route::get('/changenews{id}',[AdminController::class , 'changenews'])->name('changenews');
+Route::get('/changenews/{id}',[AdminController::class , 'changenews'])->name('changenews');
 
-Route::get('/deletenews{id}',[AdminController::class , 'deletenews'])->name('deletenews');
+Route::get('/deletenews/{id}',[AdminController::class , 'deletenews'])->name('deletenews');
+
+Route::get('/editnews/{id}',[AdminController::class , 'editnews'])->name('editnews');
+
+Route::post('/updatenews/{id}',[AdminController::class , 'updatenews'])->name('updatenews');
+
+
+
+
 
 
 use App\Http\Controllers\UserController;

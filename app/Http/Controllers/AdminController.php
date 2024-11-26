@@ -60,4 +60,34 @@ class AdminController extends Controller
        DB::table('newsfeeds')->where('id',$id)->delete();
        return redirect()->back();
     }
+
+    function editnews($id){
+        $oldnews=DB::table('newsfeeds')->where('id',$id)->first();
+        $categories = DB::table('categories')->get(); // ดึงข้อมูล category ทั้งหมด
+       return view('newsfeed.editnews', compact('oldnews','categories'));
+    }
+
+    function updatenews( Request $request,$id ){
+        $request->validate([
+            'name' => 'required|max:50',
+            'description' => 'required',
+            'category_id' => 'required',
+            'link' => 'required'
+
+        ], [
+            'name.required' => 'กรุณาระบุชื่อ',
+            'name.max' => 'ความยาวของชื่อไม่ควรเกิน 50 ตัวอักษร',
+            'description.required' => 'กรุณาระบุคำอธิบาย',
+            'category_id.required' => 'กรุณาเลือกประเภท',
+            'link.required' => 'กรุณาระบุ link file'
+        ]);
+        $data =[
+            'name'=>$request->name,
+            'description'=>$request->description,
+            'category_id'=>$request->category_id,
+            'link'=>$request->link,
+        ];
+        DB::table('newsfeeds')->where('id',$id)->update($data);
+        return redirect('/listnewsfeed');
+    }
 }

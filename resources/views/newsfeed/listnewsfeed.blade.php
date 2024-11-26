@@ -76,7 +76,7 @@
 
 
 
-                                                <a class="btn btn-warning align-items-center">
+                                                <a href="{{route('editnews', $item->id)}}" class="btn btn-warning align-items-center">
                                                     <i class="fas fa-edit text-light"></i> Edit
                                                 </a>
                                                 <a href="{{route('deletenews', $item->id)}}" class="btn btn-danger align-items-center"
