@@ -57,7 +57,7 @@
 
                         </th>
                         <th class = 'col-1'>
-                            <a href="listnewsfeed" class="btn bg-dark  "  target="_blank">
+                            <a href="listnewsfeed" class="btn bg-dark  ">
                                 <i class="d-flex justify-content-end "></i> แก้ไข
                             </a>
                         </th>
@@ -65,21 +65,25 @@
                 </thead>
             </table>
 
-            <table class="table table-striped table-hover ">
+            <table class="table table-striped table-hover">
                 <tbody>
-                    @foreach ($data as $item1)
-                        @if ($item1->category_id == 1)
-                            <tr class="d-flex justify-content-between">
-                                <td>{{ $item1->name }}<span class="right badge badge-danger">New</span></td>
-                                <td><a href="{{$item1->link}}"
-                                        class="btn btn-dark"  target="_blank">Download <i class="fas fa-arrow-down"></i></a></td>
-                        @endif
+                    @foreach ($data->where('category_id', 1)->take(5) as $item1)
+                        <tr class="d-flex justify-content-between">
+                            <td>
+                                {{ $item1->name }}
+                                @if ($loop->index < 2)
+                                    <!-- เงื่อนไขแสดง "New" แค่ 2 รายการแรก -->
+                                    <span class="right badge badge-danger">New</span>
+                                @endif
+                            </td>
+                            <td><a href="{{ $item1->link }}" class="btn btn-dark" target="_blank">Download <i
+                                        class="fas fa-arrow-down"></i></a></td>
                         </tr>
                     @endforeach
-
-
                 </tbody>
             </table>
+
+
         </div>
     </section>
 
@@ -90,14 +94,17 @@
                     <div class="performance p-2 bg-back rounded">
                         <h4 class="bg-warning p-4"><i class="fas fa-money-bill-wave"></i> ผลการดำเนินงาน สายงาน ภน.</h4>
                         <ul class="list-unstyled text-dark">
-                            @foreach ($data as $item2)
-                                @if ($item2->category_id == 2)
-                                    <li><i class="fas fa-tag"></i><a href="{{$item2->link}}"
-                                            class="text-dark"  target="_blank">{{ $item2->name }}</a>
+                            @foreach ($data->where('category_id', 2)->take(5) as $item2)
+                                <li>
+                                    <i class="fas fa-tag"></i>
+                                    <a href="{{ $item2->link }}" class="text-dark" target="_blank">{{ $item2->name }}</a>
+                                    @if ($loop->index < 2)
+                                        <!-- แสดง "New" เฉพาะ 2 รายการแรก -->
                                         <span class="right badge badge-danger">New</span>
-                                    </li>
-                                @endif
+                                    @endif
+                                </li>
                             @endforeach
+
 
 
                         </ul>
@@ -106,32 +113,39 @@
 
                 <div class="col mb-4">
                     <div class="performanceMk p-2 bg-back pb-4 rounded">
-                        <h4 class="bg-warning p-4"><i class="fas fa-signal"></i> ผลการดำเนินงานด้านการตลาด<br>สายงาน ภน.</h4>
+                        <h4 class="bg-warning p-4"><i class="fas fa-signal"></i> ผลการดำเนินงานด้านการตลาด<br>สายงาน ภน.
+                        </h4>
                         <ul class="list-unstyled text-dark">
-                            @foreach ($data as $item3)
-                                @if ($item3->category_id == 3)
-                                    <li>
-                                        <i class="fas fa-tag"></i>
-                                        <a href="{{ $item3->link }}" class="text-dark"  target="_blank">{{ $item3->name }}</a>
+                            @foreach ($data->where('category_id', 3)->take(5) as $item3)
+                                <li>
+                                    <i class="fas fa-tag"></i>
+                                    <a href="{{ $item3->link }}" class="text-dark" target="_blank">{{ $item3->name }}</a>
+                                    @if ($loop->index < 2)
+                                        <!-- แสดง "New" เฉพาะ 2 รายการแรก -->
                                         <span class="right badge badge-danger">New</span>
-                                    </li>
-                                @endif
+                                    @endif
+                                </li>
                             @endforeach
+
                         </ul>
                     </div>
                 </div>
-                
+
                 <div class="col mb-4">
                     <div class="performanceMk p-2 bg-back rounded">
                         <h4 class="bg-warning p-4"><i class="fas fa-check-circle"></i> คุณภาพบริการ</h4>
                         <ul class="list-unstyled text-dark">
-                            @foreach ($data as $item4)
-                                @if ($item4->category_id == 4)
-                                    <li><i class="fas fa-tag"></i><a href="{{ $item4->link }}"  target="_blank"
-                                            class="text-dark">{{ $item4->name }}</a></a> <span
-                                            class="right badge badge-danger">New</span></li>
-                                @endif
+                            @foreach ($data->where('category_id', 4)->take(5) as $item4)
+                                <li>
+                                    <i class="fas fa-tag"></i>
+                                    <a href="{{ $item4->link }}" target="_blank" class="text-dark">{{ $item4->name }}</a>
+                                    @if ($loop->index < 2)
+                                        <!-- แสดง "New" เฉพาะ 2 รายการแรก -->
+                                        <span class="right badge badge-danger">New</span>
+                                    @endif
+                                </li>
                             @endforeach
+
 
 
                         </ul>

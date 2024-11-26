@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $data= DB::table('newsfeeds')->orderByDesc('id')->get();
+        $data= DB::table('newsfeeds')->orderByDesc('id')->where('status',true)->get();
         return view('home', compact('data'));
     }
 }
