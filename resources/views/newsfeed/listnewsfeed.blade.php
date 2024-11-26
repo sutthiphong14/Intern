@@ -79,7 +79,8 @@
                                                 <a class="btn btn-warning align-items-center">
                                                     <i class="fas fa-edit text-light"></i> Edit
                                                 </a>
-                                                <a href="/delnews" class="btn btn-danger align-items-center">
+                                                <a href="{{route('deletenews', $item->id)}}" class="btn btn-danger align-items-center"
+                                                    onclick="return confirm('ต้องการลบข้อมูล {{$item->name}} หรือไม่')">
                                                     <i class="fas fa-trash"></i> Delete
                                                 </a>
 

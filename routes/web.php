@@ -72,9 +72,11 @@ Route::get('/profile', function (){
     return view('profile');
 });
 
-Route::get('/create',[AdminController::class , 'create'])->name('create');
+Route::get('/createnews',[AdminController::class , 'createnews'])->name('createnews');
 
 Route::get('/changenews{id}',[AdminController::class , 'changenews'])->name('changenews');
+
+Route::get('/deletenews{id}',[AdminController::class , 'deletenews'])->name('deletenews');
 
 
 use App\Http\Controllers\UserController;
@@ -146,3 +148,6 @@ Route::get('/layouts.flot', function () {
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+

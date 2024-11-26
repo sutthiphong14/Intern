@@ -20,7 +20,7 @@ class AdminController extends Controller
         return view('newsfeed.newsfeed', compact('data'));
     }
 
-    function create(Request $request)
+    function createnews(Request $request)
     {
         $request->validate([
             'name' => 'required|max:50',
@@ -54,5 +54,10 @@ class AdminController extends Controller
         ];
         DB::table('newsfeeds')->where('id', $id)->update($data);
         return redirect()->back();
+    }
+
+    function deletenews($id){
+       DB::table('newsfeeds')->where('id',$id)->delete();
+       return redirect()->back();
     }
 }

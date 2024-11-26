@@ -43,7 +43,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="align-items-center">
-                                    <form action="{{ route('create') }}" class="form-group">
+                                    <form action="{{ route('createnews') }}" class="form-group">
                                         @csrf
                                         <tr>
                                             <td>
