@@ -106,13 +106,15 @@ class AdminController extends Controller
         DB::table('newsfeeds')->where('id', $id)->update($data);
         return redirect('/listnewsfeed');
     }
-
     function search(Request $request)
     {
         $query = $request->input('search');
-        $data = Newsfeed::when($query, function ($q) use ($query) {
-            $q->where('name', 'like', '%' . $query . '%');
-        })->get();
+
+        $data = DB::table('newsfeeds')
+            ->when($query, function ($queryBuilder) use ($query) {
+                return $queryBuilder->where('name', 'like', '%' . $query . '%');
+            })
+            ->get();
 
         return view('newsfeed.listnewsfeed', compact('data'));
     }
