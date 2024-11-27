@@ -157,3 +157,33 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 
 
+
+/* ************************************************************report************************************************************ */
+Route::get('/listreport', function () {
+    return view('report.listreport');
+});
+
+Route::get('/viewreport', function () {
+    return view('report.viewreport');
+});
+
+Route::get('/viewreport1', function () {
+    return view('report.viewreport1');
+});
+
+Route::get('/viewInstallFTTx', action: function () {
+    return view('report.viewInstallFTTx');
+});
+
+Route::get('/viewInstallFTTxcenter', function () {
+    return view('report.viewInstallFTTxcenter');
+});
+
+Route::get('/viewInstallFTTxprovin', function () {
+    return view('report.viewInstallFTTxprovin');
+});
+
+Route::get('/importdata', function () {
+    return view('report.importdata');
+});
+

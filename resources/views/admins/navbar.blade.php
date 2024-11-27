@@ -16,7 +16,22 @@
             <a href="listusers" class="nav-link text-dark">จัดการผู้ใช้</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block ">
-            <a href="{{route('structure')}}" class="nav-link text-dark">ttttt</a>
+            <a href="listreport" class="nav-link text-dark">รายงาน</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block ">
+            <a href="viewreport" class="nav-link text-dark">ดูรายงาน</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block ">
+            <a href="viewreport1" class="nav-link text-dark">ดูรายงาน1</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block ">
+            <a href="viewInstallFTTx" class="nav-link text-dark">รายงานติดตั้ง 3 วัน</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block ">
+            <a href="viewInstallFTTxprovin" class="nav-link text-dark">รายงานติดตั้ง จังหวัด</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block ">
+            <a href="viewInstallFTTxcenter" class="nav-link text-dark">รายงานติดตั้ง ศูนย์บริการ</a>
         </li>
         {{-- <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link">NT NEWS</a>
