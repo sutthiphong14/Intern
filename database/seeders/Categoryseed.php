@@ -16,6 +16,13 @@ class Categoryseed extends Seeder
         //
 
             
-            Category::factory()->count(4)->create();
+        Category::insert([
+            ['name' => 'FeedNews'],
+            ['name' => 'ผลการดำเนินงานด้านการตลาด สายงาน ภน.'],
+            ['name' => 'คุณภาพบริการ'],
+            ['name' => 'ผลการดำเนินงาน สายงาน ภน.'],
+        ]);
+        
+      
     }
 }
