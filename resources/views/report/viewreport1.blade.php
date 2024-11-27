@@ -53,113 +53,127 @@
                                             <th>เป้าปี 67	</th>
                                             <th>เป้าเดือน 67</th>
                                             <th>รายได้รวม</th>
-                                            <th>รายได้รวม</th>
-                                            <th>รายได้รวม</th>
-                                            <th>รายได้รวม</th>
-                                            <th>รายได้รวม</th>
-                                            <th>รายได้รวม</th>
-                                            
+                                            <th>รายได้เทียบเป้าปี</th>
+                                            <th>รายได้เทียบเป้า9เดือน</th>
+                                            <th>ม.ค.</th>
+                                            <th>ก.พ.</th>
+                                            <th>มี.ค.</th>
+                                            <th>เม.ย.</th>
+                                            <th>พ.ค.</th>
+                                            <th>มิ.ย.</th>
+                                            <th>ก.ค.</th>
+                                            <th>ส.ค.</th>
+                                            <th>ก.ย.</th>
+                                            <th>พ.ย.</th>
+                                            <th>ธ.ค.</th>
                                         </tr>
-                                        <tr>
-                                            <th class="col-sdp">กำหนด SDP/ODP (วัน)</th>
-                                            <th class="col-cable">โยงสาย (วัน)</th>
-                                            <th class="col-config">Config NMS (วัน)</th>
-                                            <th class="col-schedule">นัดหมายและกำหนดช่าง (วัน)</th>
-                                            <th class="col-wait-customer">รอลูกค้า (วัน)</th>
-                                            <th class="col-install">ลากสายและติดตั้ง ONT (วัน)</th>
-                                            <th class="col-close-job">ปิดงาน (วัน)</th>
-                                        </tr>
+                                     
                                     </thead>
                                     <tbody class ='text-center align-items-center'>
                                         <tr>
                                             <td><button type="button" class="btn btn-info btn-warning"><i
                                                         class="fas fa-search"></i></button></td>
                                             <td>กาฬสินธุ์</td>
-                                            <td>10</td>
-                                            <td>3</td>
-                                            <td>5</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>9</td>
-                                            <td>5</td>
-                                            <td>50%</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td><button type="button" class="btn btn-info btn-warning"><i
                                                         class="fas fa-search"></i></button></td>
                                             <td>ขอนแก่น</td>
-                                            <td>10</td>
-                                            <td>3</td>
-                                            <td>5</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>9</td>
-                                            <td>5</td>
-                                            <td>50%</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td><button type="button" class="btn btn-info btn-warning"><i
                                                         class="fas fa-search"></i></button></td>
                                             <td>มหาสารคาม</td>
-                                            <td>10</td>
-                                            <td>3</td>
-                                            <td>5</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>9</td>
-                                            <td>5</td>
-                                            <td>50%</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td><button type="button" class="btn btn-info btn-warning"><i
                                                         class="fas fa-search"></i></button></td>
                                             <td>ร้อยเอ็ด</td>
-                                            <td>10</td>
-                                            <td>3</td>
-                                            <td>5</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>9</td>
-                                            <td>5</td>
-                                            <td>50%</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td><button type="button" class="btn btn-info btn-warning"><i
                                                         class="fas fa-search"></i></button></td>
                                             <td>ภน.2.1</td>
-                                            <td>10</td>
-                                            <td>3</td>
-                                            <td>5</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>9</td>
-                                            <td>5</td>
-                                            <td>50%</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
 
                                         <!-- เพิ่มข้อมูลอื่น ๆ -->
