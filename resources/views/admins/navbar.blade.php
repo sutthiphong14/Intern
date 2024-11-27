@@ -25,10 +25,13 @@
             <a href="viewreport1" class="nav-link text-dark">ดูรายงาน1</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block ">
-            <a href="viewreport2" class="nav-link text-dark">ดูรายงาน2</a>
+            <a href="viewInstallFTTx" class="nav-link text-dark">รายงานติดตั้ง 3 วัน</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block ">
-            <a href="viewreport3" class="nav-link text-dark">ดูรายงาน3</a>
+            <a href="viewInstallFTTxprovin" class="nav-link text-dark">รายงานติดตั้ง จังหวัด</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block ">
+            <a href="viewInstallFTTxcenter" class="nav-link text-dark">รายงานติดตั้ง ศูนย์บริการ</a>
         </li>
         {{-- <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link">NT NEWS</a>

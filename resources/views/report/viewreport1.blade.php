@@ -34,10 +34,12 @@
 
                 <div class="card card-dark mt-3">
 
-                    <div class="card card-dark">
-                        <div class="card-header">
+                    <div class="card card-dark ">
+                        <div class="card-header text-center">
                             <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
                             <div class="card-tools">
+                            
+                            <button type="button" class="btn bg-gradient-warning">Export</button>
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                     <i class="fas fa-minus"></i>
                                 </button>
