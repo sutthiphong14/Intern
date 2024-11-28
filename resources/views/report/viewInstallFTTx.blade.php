@@ -1,6 +1,10 @@
-
-
 @extends('admins.index')
+@section('title')
+ติดตั้ง FTTx ได้ภายใน 3 วัน
+@endsection
+@section('header')
+ติดตั้ง FTTx ได้ภายใน 3 วัน
+@endsection
 @section('css')
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -34,10 +38,10 @@
                                 <th class='col-4'>Performance (%)</th>
                             </tr>
                         </thead>
-                        <tbody class = 'align-items-center text-center'>
+                        <tbody class='align-items-center text-center'>
                             <tr>
                                 <td>กาฬสินธุ์</td>
-                                <td><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"></i></td>
+                                <td class="star-container" data-rating="1"></td>
                                 <td>
                                     <div class="progress mb-3">
                                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="20"
@@ -49,7 +53,7 @@
                             </tr>
                             <tr>
                                 <td>ขอนแก่น</td>
-                                <td><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"></i></td>
+                                <td class="star-container" data-rating="1"></td>
                                 <td>
                                     <div class="progress mb-3">
                                         <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="20"
@@ -61,7 +65,11 @@
                             </tr>
                             <tr>
                                 <td>มหาสารคาม</td>
-                                <td><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-info"><i class="fas fa-star text-info"></i></td>
+
+                                <td class="star-container" data-rating="3"></td>
+                                
+
+
                                 <td>
                                     <div class="progress mb-3">
                                         <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="20"
@@ -73,7 +81,7 @@
                             </tr>
                             <tr>
                                 <td>ร้อยเอ็ด</td>
-                                <td><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i></td>
+                                <td class="star-container" data-rating="1"></td>
                                 <td>
                                     <div class="progress mb-3">
                                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="20"
@@ -81,12 +89,14 @@
                                             <span class="sr-only"></span>
                                         </div>
                                     </div>
-                                    
+
                                 </td>
                             </tr>
                             <tr>
                                 <td>ภน.2.1</td>
-                                <td><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-info"><i class="fas fa-star text-info"><i class="fas fa-star text-info"></i></td>
+                                <td><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i
+                                                class="fas fa-star text-dark"><i class="fas fa-star text-dark"><i
+                                                        class="fas fa-star text-dark"></i></td>
                                 <td>
                                     <div class="progress mb-3">
                                         <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="20"
@@ -99,160 +109,160 @@
                         </tbody>
                     </table>
                 </div>
-                </div>
+            </div>
 
 
-                <div class="card card-dark mt-3">
+            <div class="card card-dark mt-3">
 
-                    <div class="card card-dark">
-                        <div class="card-header">
-                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
-                            
-                            <div class="card-tools">
+                <div class="card card-dark">
+                    <div class="card-header">
+                        <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
+
+                        <div class="card-tools">
                             <a href="importdata" class="btn bg-light ">
                                 <i class="d-flex justify-content-end "></i> Import
                             </a>
                             <button type="button" class="btn bg-gradient-warning">Export</button>
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </div>
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="example2" class="table table-bordered table-hover">
-                                    <thead class="text-center ">
-                                        <tr>
-                                            <th rowspan="2" class="col-data">ดูข้อมูล</th>
-                                            <th rowspan="2" class="col-department">ส่วนงาน</th>
-                                            <th rowspan="2" class="col-count">จำนวนวงจร</th>
-                                            <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียมเอกสารรวม (วัน)</th>
-                                            <th rowspan="2" class="col-process-time">ระยะเวลาดำเนินการรวม (วัน)</th>
-                                            <th colspan="7">ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร</th>
-                                            <th rowspan="2" class="col-total-time">รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร (วัน)
-                                            </th>
-                                            <th rowspan="2" class="col-install-count">จำนวนวงจรที่ติดตั้งภายใน 3 วัน
-                                            </th>
-                                            <th rowspan="2" class="col-install-percent">ร้อยละการติดตั้งภายใน 3 วัน</th>
-                                        </tr>
-                                        <tr>
-                                            <th class="col-sdp">กำหนด SDP/ODP (วัน)</th>
-                                            <th class="col-cable">โยงสาย (วัน)</th>
-                                            <th class="col-config">Config NMS (วัน)</th>
-                                            <th class="col-schedule">นัดหมายและกำหนดช่าง (วัน)</th>
-                                            <th class="col-wait-customer">รอลูกค้า (วัน)</th>
-                                            <th class="col-install">ลากสายและติดตั้ง ONT (วัน)</th>
-                                            <th class="col-close-job">ปิดงาน (วัน)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class ='text-center align-items-center'>
-                                        <tr>
-                                            <td><button type="button" class="btn btn-info btn-warning"><i
-                                                        class="fas fa-search"></i></button></td>
-                                            <td>กาฬสินธุ์</td>
-                                            <td>10</td>
-                                            <td>3</td>
-                                            <td>5</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>9</td>
-                                            <td>5</td>
-                                            <td>50%</td>
-                                        </tr>
-                                        <tr>
-                                            <td><button type="button" class="btn btn-info btn-warning"><i
-                                                        class="fas fa-search"></i></button></td>
-                                            <td>ขอนแก่น</td>
-                                            <td>10</td>
-                                            <td>3</td>
-                                            <td>5</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>9</td>
-                                            <td>5</td>
-                                            <td>50%</td>
-                                        </tr>
-                                        <tr>
-                                            <td><button type="button" class="btn btn-info btn-warning"><i
-                                                        class="fas fa-search"></i></button></td>
-                                            <td>มหาสารคาม</td>
-                                            <td>10</td>
-                                            <td>3</td>
-                                            <td>5</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>9</td>
-                                            <td>5</td>
-                                            <td>50%</td>
-                                        </tr>
-                                        <tr>
-                                            <td><button type="button" class="btn btn-info btn-warning"><i
-                                                        class="fas fa-search"></i></button></td>
-                                            <td>ร้อยเอ็ด</td>
-                                            <td>10</td>
-                                            <td>3</td>
-                                            <td>5</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>9</td>
-                                            <td>5</td>
-                                            <td>50%</td>
-                                        </tr>
-                                        <tr>
-                                            <td><button type="button" class="btn btn-info btn-warning"><i
-                                                        class="fas fa-search"></i></button></td>
-                                            <td>ภน.2.1</td>
-                                            <td>10</td>
-                                            <td>3</td>
-                                            <td>5</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>9</td>
-                                            <td>5</td>
-                                            <td>50%</td>
-                                        </tr>
-
-                                        <!-- เพิ่มข้อมูลอื่น ๆ -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-
-
                     </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead class="text-center ">
+                                    <tr>
+                                        <th rowspan="2" class="col-data">ดูข้อมูล</th>
+                                        <th rowspan="2" class="col-department">ส่วนงาน</th>
+                                        <th rowspan="2" class="col-count">จำนวนวงจร</th>
+                                        <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียมเอกสารรวม (วัน)</th>
+                                        <th rowspan="2" class="col-process-time">ระยะเวลาดำเนินการรวม (วัน)</th>
+                                        <th colspan="7">ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร</th>
+                                        <th rowspan="2" class="col-total-time">รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร (วัน)
+                                        </th>
+                                        <th rowspan="2" class="col-install-count">จำนวนวงจรที่ติดตั้งภายใน 3 วัน
+                                        </th>
+                                        <th rowspan="2" class="col-install-percent">ร้อยละการติดตั้งภายใน 3 วัน</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-sdp">กำหนด SDP/ODP (วัน)</th>
+                                        <th class="col-cable">โยงสาย (วัน)</th>
+                                        <th class="col-config">Config NMS (วัน)</th>
+                                        <th class="col-schedule">นัดหมายและกำหนดช่าง (วัน)</th>
+                                        <th class="col-wait-customer">รอลูกค้า (วัน)</th>
+                                        <th class="col-install">ลากสายและติดตั้ง ONT (วัน)</th>
+                                        <th class="col-close-job">ปิดงาน (วัน)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class='text-center align-items-center'>
+                                    <tr>
+                                        <td><button type="button" class="btn btn-info btn-warning"><i
+                                                    class="fas fa-search"></i></button></td>
+                                        <td>กาฬสินธุ์</td>
+                                        <td>10</td>
+                                        <td>3</td>
+                                        <td>5</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>9</td>
+                                        <td>5</td>
+                                        <td>50%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><button type="button" class="btn btn-info btn-warning"><i
+                                                    class="fas fa-search"></i></button></td>
+                                        <td>ขอนแก่น</td>
+                                        <td>10</td>
+                                        <td>3</td>
+                                        <td>5</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>9</td>
+                                        <td>5</td>
+                                        <td>50%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><button type="button" class="btn btn-info btn-warning"><i
+                                                    class="fas fa-search"></i></button></td>
+                                        <td>มหาสารคาม</td>
+                                        <td>10</td>
+                                        <td>3</td>
+                                        <td>5</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>9</td>
+                                        <td>5</td>
+                                        <td>50%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><button type="button" class="btn btn-info btn-warning"><i
+                                                    class="fas fa-search"></i></button></td>
+                                        <td>ร้อยเอ็ด</td>
+                                        <td>10</td>
+                                        <td>3</td>
+                                        <td>5</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>9</td>
+                                        <td>5</td>
+                                        <td>50%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><button type="button" class="btn btn-info btn-warning"><i
+                                                    class="fas fa-search"></i></button></td>
+                                        <td>ภน.2.1</td>
+                                        <td>10</td>
+                                        <td>3</td>
+                                        <td>5</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>9</td>
+                                        <td>5</td>
+                                        <td>50%</td>
+                                    </tr>
+
+                                    <!-- เพิ่มข้อมูลอื่น ๆ -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
                 </div>
+            </div>
 
-            
+
 
         </div>
-        </div>
-        </section>
+    </div>
+</section>
 </section>
 @endsection
 
@@ -263,6 +273,42 @@
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- ChartJS -->
 <script src="plugins/chart.js/Chart.min.js"></script>
+
+<style>
+    .text-warning {
+        color: gold;
+    }
+
+    .text-dark {
+        color: lightgray;
+    }
+</style>
+
+<script>
+        // ฟังก์ชันสำหรับแปลงค่าคะแนนเป็นดาว
+        function renderStarsForAll() {
+            const starContainers = document.querySelectorAll(".star-container");
+            starContainers.forEach(container => {
+                const rating = parseFloat(container.getAttribute("data-rating")); // รับค่าคะแนนจาก data-rating
+                container.innerHTML = ""; // เคลียร์ค่าก่อนหน้า
+
+                for (let i = 1; i <= 5; i++) {
+                    const star = document.createElement("i");
+                    if (i <= Math.floor(rating)) {
+                        star.className = "fas fa-star text-warning"; // ดาวเต็ม
+                    } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                        star.className = "fas fa-star-half-alt text-warning"; // ดาวครึ่ง
+                    } else {
+                        star.className = "fas fa-star text-dark"; // ดาวว่าง
+                    }
+                    container.appendChild(star);
+                }
+            });
+        }
+
+        // เรียกใช้งานเมื่อโหลดหน้าเสร็จ
+        renderStarsForAll();
+    </script>
 <script>
     // JavaScript ที่ใช้ในการกำหนดสีของหลอดตามเปอร์เซ็นต์
     const bars = document.querySelectorAll('.performance-bar');

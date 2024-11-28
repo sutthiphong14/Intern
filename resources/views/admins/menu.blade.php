@@ -46,11 +46,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 <li class="nav-item menu-open">
-                    <a href="https://intranet.ntplc.co.th/dir/?url=https://intranet.ntplc.co.th/home/start"
-                        class="nav-link bg-warning text-center">
-
-                        <p class="text-dark h5 ">INTRANET</p>
-                    </a>
+                   
                 </li>
                 <li class="nav-item ">
                     <a href="/" class="nav-link">
@@ -58,6 +54,20 @@
                         <p>หน้าแรก</p>
                     </a>
                 </li>
+                <li class="nav-item ">
+                    <a href="incomecurrent" class="nav-link">
+                    <i class="fas fa-money-bill-wave"></i>
+                        <p>รายได้รวม</p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a href="viewInstallFTTx" class="nav-link">
+                    <i class="fas fa-wrench"></i>
+                        <p>ติดตั้ง FTTx ได้ภายใน 3 วัน</p>
+                    </a>
+                </li>
+
+
                 <li class="nav-item ">
                     <a href="#" class="nav-link">
                         <i class="fas fa-tasks"></i>
@@ -77,9 +87,9 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item ">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon"></i>
+                        <i class="nav-icon "></i>
                         <p>
                             Link
                             <i class="right fas fa-angle-left"></i>

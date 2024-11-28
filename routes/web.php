@@ -186,4 +186,7 @@ Route::get('/viewInstallFTTxprovin', function () {
 Route::get('/importdata', function () {
     return view('report.importdata');
 });
+Route::get('/incomecurrent', function () {
+    return view('report.incomecurrent');
+});
 
