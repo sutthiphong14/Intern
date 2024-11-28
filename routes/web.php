@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 /*
@@ -167,3 +168,5 @@ Route::get('/viewreport2', function () {
 Route::get('/viewreport3', function () {
     return view('report.viewreport3');
 });
+
+Route::get('/viewreport3',[ReportController::class , 'viewreport3'])->name('viewreport3');
