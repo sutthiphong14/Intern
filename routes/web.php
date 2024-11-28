@@ -33,13 +33,6 @@ Route::get('/structure', function (){
     return view('structure') ;
 })->name('structure');
 
-Route::get('/signin', function (){
-    return view('signin');
-});
-
-Route::get('/signup', function (){
-    return view('signup');
-});
 
 Route::get('/tableusers', function (){
     return view('tableusers');
@@ -73,9 +66,24 @@ Route::get('/profile', function (){
     return view('profile');
 });
 
-Route::get('/create',[AdminController::class , 'create'])->name('create');
 
-Route::get('/changenews{id}',[AdminController::class , 'changenews'])->name('changenews');
+Route::post('/createnews',[AdminController::class , 'createnews'])->name('createnews');
+
+Route::post('/changenews/{id}', [AdminController::class, 'changenews']);
+
+
+Route::get('/deletenews/{id}',[AdminController::class , 'deletenews'])->name('deletenews');
+
+Route::get('/editnews/{id}',[AdminController::class , 'editnews'])->name('editnews');
+
+Route::post('/updatenews/{id}',[AdminController::class , 'updatenews'])->name('updatenews');
+
+Route::get('/search', [AdminController::class, 'search'])->name('search');
+
+
+
+
+
 
 
 use App\Http\Controllers\UserController;
@@ -148,6 +156,9 @@ Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+
+
+
 /* ************************************************************report************************************************************ */
 Route::get('/listreport', function () {
     return view('report.listreport');
@@ -161,8 +172,23 @@ Route::get('/viewreport1', function () {
     return view('report.viewreport1');
 });
 
-Route::get('/viewreport2', function () {
-    return view('report.viewreport2');
+Route::get('/viewInstallFTTx', action: function () {
+    return view('report.viewInstallFTTx');
+});
+
+Route::get('/viewInstallFTTxcenter', function () {
+    return view('report.viewInstallFTTxcenter');
+});
+
+Route::get('/viewInstallFTTxprovin', function () {
+    return view('report.viewInstallFTTxprovin');
+});
+
+Route::get('/importdata', function () {
+    return view('report.importdata');
+});
+Route::get('/incomecurrent', function () {
+    return view('report.incomecurrent');
 });
 
 Route::get('/viewreport3', function () {

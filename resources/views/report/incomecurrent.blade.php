@@ -78,9 +78,9 @@
                                             <td>กาฬสินธุ์</td>
                                             <td></td>
                                             <td></td>
+                                            <td class ='bg-success'></td>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td ></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -99,7 +99,7 @@
                                             <td>ขอนแก่น</td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
+                                            <td class ='bg-success'></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -120,7 +120,7 @@
                                             <td>มหาสารคาม</td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
+                                            <td class ='bg-danger'></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -141,7 +141,7 @@
                                             <td>ร้อยเอ็ด</td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
+                                            <td class ='bg-warning'></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -162,7 +162,7 @@
                                             <td>ภน.2.1</td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
+                                            <td class ='bg-success'></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -233,7 +233,7 @@
             tooltips: {
                 callbacks: {
                     label: function (tooltipItem, data) {
-                        return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel.toLocaleString() + ' บาท';
+                        return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel.toLocaleString() ;
                     }
                 }
             },

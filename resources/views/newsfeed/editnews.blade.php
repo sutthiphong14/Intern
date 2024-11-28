@@ -43,20 +43,20 @@
                                     </tr>
                                 </thead>
                                 <tbody class="align-items-center">
-                                    <form action="{{ route('createnews') }}" class="form-group" method="POST">
+                                    <form action="{{ route('updatenews', $oldnews->id) }}" class="form-group" method="POST">
                                         @csrf
                                         <tr>
                                             <td>
                                                 <input class="form-control" type="text" placeholder="Name" name="name"
-                                                    value="{{ old('name') }}">
+                                                    value="{{ $oldnews->name }}">
                                                 @error('name')
                                                     <p class="text-danger my-2"><i
                                                             class="fas fa-exclamation-circle"></i>{{ $message }}</p>
                                                 @enderror
                                             </td>
                                             <td>
-                                                <input class="form-control" type="text" placeholder="Description"
-                                                    name="description" value="{{ old('description') }}">
+                    
+                                                    <textarea name="description"  cols="30" rows="5">{{ $oldnews->description }}</textarea>
                                                 @error('description')
                                                     <p class="text-danger my-2"><i
                                                             class="fas fa-exclamation-circle"></i>{{ $message }}</p>
@@ -66,15 +66,19 @@
                                             <div class="form-group">
                                                 <td>
                                                     <select class="form-control" name="category_id">
-                                                        <option value="" disabled selected>เลือก Category</option>
-                                                        <option value=1 {{ old('category') == 'Feednew' ? 'selected' : '' }}>Feednews</option>
-                                                        <option value=2 {{ old('category') == 'ผลการดำเนินงาน สายงาน ภน.' ? 'selected' : '' }}>ผลการดำเนินงาน สายงาน ภน.</option>
-                                                        <option value=3 {{ old('category') == 'ผลการดำเนินงานด้านการตลาดสายงาน ภน.' ? 'selected' : '' }}>ผลการดำเนินงานด้านการตลาดสายงาน ภน.</option>
-                                                        <option value=4 {{ old('category') == 'คุณภาพบริการ' ? 'selected' : '' }}>คุณภาพบริการ</option>
+                                                        <option value="" disabled {{ is_null(old('category_id', $oldnews->category_id)) ? 'selected' : '' }}>
+                                                            เลือก Category
+                                                        </option>
+                                                        @foreach ($categories as $category)
+                                                            <option value="{{ $category->id }}" 
+                                                                {{ old('category_id', $oldnews->category_id) == $category->id ? 'selected' : '' }}>
+                                                                {{ $category->name }}
+                                                            </option>
+                                                        @endforeach
                                                     </select>
-                                                    @error('category')
+                                                    @error('category_id')
                                                     <p class="text-danger my-2">
-                                                        <i class="fas fa-exclamation-circle"></i>{{ $message }}
+                                                        <i class="fas fa-exclamation-circle"></i> {{ $message }}
                                                     </p>
                                                     @enderror
                                                 </td>
@@ -85,7 +89,7 @@
                                             <td>
                                                 <div class="form-group">
                                                     <div class="custom-file">
-                                                        <textarea cols="30" rows="1" class="form-control" type="text" placeholder="Link" name="link">{{ old('link') }}</textarea>
+                                                        <textarea cols="30" rows="5" class="form-control" type="text" placeholder="Link" name="link">{{ $oldnews->link }}</textarea>
                                                     </div>
                                                 </div>
                                                 @error('link')

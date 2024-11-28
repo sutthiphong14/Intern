@@ -34,7 +34,7 @@
                                 <th class='col-4'>Performance (%)</th>
                             </tr>
                         </thead>
-                        <tbody class = 'align-items-center text-center'>
+                        <tbody class = 'align-items-center'>
                             <tr>
                                 <td>กาฬสินธุ์</td>
                                 <td><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"></i></td>
@@ -115,7 +115,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="example2" class="table table-bordered table-hover">
-                                    <thead class="text-center ">
+                                    <thead class="text-center">
                                         <tr>
                                             <th rowspan="2" class="col-data">ดูข้อมูล</th>
                                             <th rowspan="2" class="col-department">ส่วนงาน</th>
@@ -139,7 +139,7 @@
                                             <th class="col-close-job">ปิดงาน (วัน)</th>
                                         </tr>
                                     </thead>
-                                    <tbody class ='text-center align-items-center'>
+                                    <tbody>
                                         <tr>
                                             <td><button type="button" class="btn btn-info btn-warning"><i
                                                         class="fas fa-search"></i></button></td>

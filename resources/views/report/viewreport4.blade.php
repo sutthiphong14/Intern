@@ -41,6 +41,7 @@
                         <div class="card-header">
                             <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
                             <div class="card-tools">
+                            <button type="button" class="btn bg-gradient-warning">Export</button>
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                     <i class="fas fa-minus"></i>
                                 </button>
@@ -51,7 +52,7 @@
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead class="text-center ">
                                         <tr>
-                                            <th rowspan="2" class="col-data">ส่วนงาน</th>
+                                            <th rowspan="2" class="col-data">หน่วยงาน</th>
                                             <th rowspan="2" class="col-department">เดือน</th>
                                             <th rowspan="2" class="col-count">จำนวนวงจร</th>
                                             <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียม
@@ -79,7 +80,7 @@
                                     <tbody class ='text-center align-items-center'>
                                         <tr>
                                             
-                                            <td>จังหวัด</td>
+                                            <td>ชื่อหน่วยงาน</td>
                                             <td>เดือน</td>
                                             <td>ooo</td>
                                             <td>ooo</td>
