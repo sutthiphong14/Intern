@@ -157,8 +157,12 @@
                                 </thead>
                                 <tbody class='text-center align-items-center'>
                                     <tr>
-                                        <td><button type="button" class="btn btn-info btn-warning"><i
-                                                    class="fas fa-search"></i></button></td>
+                                        <td>
+                                            <a href="{{ route('viewInstallFTTxprovin', ['section' => 'บภน.2.1 (กส.)']) }}" class="btn btn-warning">
+                                                <i class="fas fa-search"></i>
+                                            </a>
+                                        </td>
+                                        
                                         <td>กาฬสินธุ์</td>
                                         <td>10</td>
                                         <td>3</td>
@@ -175,8 +179,9 @@
                                         <td>50%</td>
                                     </tr>
                                     <tr>
-                                        <td><button type="button" class="btn btn-info btn-warning"><i
-                                                    class="fas fa-search"></i></button></td>
+                                        <td><a href="{{ route('viewInstallFTTxprovin', ['section' => 'บภน.2.1 (ขก.)']) }}" class="btn btn-warning">
+                                            <i class="fas fa-search"></i>
+                                        </a></td>
                                         <td>ขอนแก่น</td>
                                         <td>10</td>
                                         <td>3</td>

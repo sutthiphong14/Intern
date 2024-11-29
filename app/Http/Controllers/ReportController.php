@@ -3,13 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Imports\Installfttx as ImportsInstallfttx;
+use App\Models\Installfttx;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
+
+    function installfttx()
+    {
+
+        return view('report.viewInstallFTTx');
+    }
+
     // ฟังก์ชั่นสำหรับการนำเข้าไฟล์ Excel
-    public function import(Request $request)
+    function import(Request $request)
     {
         // ตรวจสอบไฟล์ที่อัปโหลด
         $request->validate([
@@ -28,6 +36,34 @@ class ReportController extends Controller
         // คืนค่ากลับไปที่หน้าก่อนหน้า และแสดงข้อความว่า import เสร็จสมบูรณ์
         return redirect()->back()->with('status', 'Import done!!!');
     }
+
+    function datacenter()
+    {
+        // ดึงข้อมูลจากฐานข้อมูล
+        $data = Installfttx::all(); // ใช้ all() เพื่อดึงข้อมูลทั้งหมดจากตาราง
+
+        // ส่งข้อมูลไปยัง view
+        return view('report.viewInstallFTTxcenter', compact('data'));
+    }
+
+    public function dataprovin($section = null)
+    {
+        // ตรวจสอบว่า $section ถูกส่งมาหรือไม่
+        if ($section) {
+            // กรองข้อมูลตาม section และคำนวณผลรวมของ num_of_circuits
+            $totalCircuits = Installfttx::where('section', $section)
+                ->sum('num_of_circuits');
+            
+            // ส่งตัวแปรไปยัง view
+            return view('report.viewInstallFTTxprovin', compact('totalCircuits'));
+        } else {
+            // ถ้าไม่มี section ส่งค่าตัวแปรว่างไป
+            $totalCircuits = 0; // กำหนดค่า default
+            return view('report.viewInstallFTTxprovin', compact('totalCircuits'));
+        }
+    }
+    
+
+    
+    
 }
-
-

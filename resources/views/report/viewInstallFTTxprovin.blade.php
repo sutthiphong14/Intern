@@ -81,14 +81,16 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-center align-middle">
+                         
                                     <tr>
                                         <td>
                                             <button type="button" class="btn btn-info btn-warning">
                                                 <i class="fas fa-search"></i>
                                             </button>
                                         </td>
-                                        <td>จังหวัด</td>
-                                        <td>เดือน</td>
+
+                                        <td>กาฬสินธุ์</td>
+                                        <td> {{ $totalCircuits }}</td>
                                         <td>ooo</td>
                                         <td>ooo</td>
                                         <td>ooo</td>
@@ -103,6 +105,8 @@
                                         <td>ooo</td>
                                         <td>ooo</td>
                                     </tr>
+                              
+                                   
 
                                     <!-- เพิ่มข้อมูลอื่น ๆ -->
                                 </tbody>

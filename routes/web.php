@@ -172,17 +172,14 @@ Route::get('/viewreport1', function () {
     return view('report.viewreport1');
 });
 
-Route::get('/viewInstallFTTx', action: function () {
-    return view('report.viewInstallFTTx');
-});
+Route::get('/viewInstallFTTx',[ReportController::class , 'installfttx']);
 
-Route::get('/viewInstallFTTxcenter', function () {
-    return view('report.viewInstallFTTxcenter');
-});
+Route::get('/viewInstallFTTxcenter', [ReportController::class ,'datacenter']);
 
-Route::get('/viewInstallFTTxprovin', function () {
-    return view('report.viewInstallFTTxprovin');
-});
+Route::get('/viewInstallFTTxprovin',[ReportController::class ,'dataprovin'])->name('viewInstallFTTxprovin');
+
+Route::get('/viewInstallFTTx/{section}', [ReportController::class, 'dataprovin'])->name('viewInstallFTTxprovin');
+
 
 Route::get('/importdata', function () {
     return view('report.importdata');
