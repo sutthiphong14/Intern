@@ -34,62 +34,87 @@
                         <form>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Username</label>
+                                    <label for="exampleInputEmail1">ชื่อผู้ใช้</label>
                                     <input type="email" class="form-control" id="exampleInputEmail1"
                                         placeholder="Enter Username">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Name-Surname</label>
+                                    <label for="exampleInputEmail1">ชื่อนามสกุล</label>
                                     <input type="email" class="form-control" id="exampleInputEmail1"
                                         placeholder="Name-Surname">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Password</label>
+                                    <label for="exampleInputPassword1">รหัส</label>
                                     <input type="password" class="form-control" id="exampleInputPassword1"
                                         placeholder="Password">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Permission</label>
+                                    <label for="exampleInputPassword1">สิทธิ์การใช้งาน</label>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <!-- checkbox -->
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox" id="customCheckbox1"
-                                                value="option1">
-                                            <label for="customCheckbox1" class="custom-control-label">Admin</label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox" id="customCheckbox2"
-                                                value="option2">
-                                            <label for="customCheckbox2" class="custom-control-label">Marketing</label>
-                                        </div>
+                                <div class="table-responsive">
+                                    <table id="example2" class="table table-bordered table-hover">
+                                        <thead class="text-center ">
+                                            <tr>
+                                                <th class='col-4 bg-dark'>สิทธิ์</th>
+                                                <th class='col-7 bg-dark'>คำอธิบาย</th>
+                                                <th class='col-1 bg-dark'>อนุญาติ</th>
 
-                                    </div>
-                                    <div class="col-sm-6">
-                                       
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox" id="customCheckbox3"
-                                                value="option3">
-                                            <label for="customCheckbox3" class="custom-control-label">Admin</label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox" id="customCheckbox4"
-                                                value="option4">
-                                            <label for="customCheckbox4" class="custom-control-label">Admin</label>
-                                        </div>
-                                    </div>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody class='text-start align-items-center'>
+                                            <tr>
+                                                <td>จัดการผู้ใช้งานระบบ</td>
+                                                <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข
+                                                    ให้สิทธิ์การใช้งานในระบบต่างๆแก่ผู้ใช้งานระบบ</td>
+                                                <td class='text-center'>
+                                                    <div class="form-group">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="customSwitch1" style="transform: scale(2);">
+                                                            <label class="form-check-label" for="customSwitch1"></label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>จัดการหน้าแดชบอร์ด</td>
+                                                <td>สิทธิ์ในการ อัพโหลด ลบ แก้ไข หน้าแดชบอร์ด</td>
+                                                <td class='text-center'>
+                                                    <div class="form-group">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="customSwitch1" style="transform: scale(2);">
+                                                            <label class="form-check-label" for="customSwitch1"></label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>จัดการแหล่งป้อนข่าว</td>
+                                                <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข เปิดปิดการแสดงผลของหน้าฟีดข่าว</td>
+                                                <td class='text-center'>
+                                                    <div class="form-group">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="customSwitch1" style="transform: scale(2);">
+                                                            <label class="form-check-label" for="customSwitch1"></label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
 
                             </div>
                             <!-- /.card-body -->
 
-                            <div class="card-footer">
-                            <button type="submit" class="btn btn-danger aling-item=center">Cancel</button>
-                                <button type="submit" class="btn btn-success aling-item=center">Submit</button>
-
-                            </div>
+                            <div class="card-footer align-items-center text-center">
+                                <button type="submit" class="btn btn-danger ">ยกเลิก</button>
+                                <button type="submit" class="btn btn-success">ยืนยัน</button>
+                            
                         </form>
                     </div>
 
@@ -155,4 +180,5 @@
         });
     });
 </script>
+
 @endsection

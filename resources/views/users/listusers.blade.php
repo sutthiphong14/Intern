@@ -37,8 +37,8 @@
 
 
 
-                        <a href="insertnewsfeed" class="btn bg-success col-2">
-                            <i class="d-flex justify-content-end "></i> Add+
+                        <a href="insertusers" class="btn bg-success col-2">
+                            <i class="d-flex justify-content-end "></i> เพิ่มผู้ใช้งาน
                         </a>
                     </div>
 
@@ -61,7 +61,7 @@
                                     <td>------------</td>
                                     <td>Admin</td>
                                     <td class='align-items-center text-center'>
-                                        <a class="btn btn-primary align-items-center">
+                                        <a href="permissionsusers" class="btn btn-primary align-items-center">
                                             <i class="far fa-eye"></i> สิทธิ์การใช้งาน
                                         </a>
 

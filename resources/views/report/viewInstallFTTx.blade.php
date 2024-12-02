@@ -43,23 +43,17 @@
                                 <td>กาฬสินธุ์</td>
                                 <td class="star-container" data-rating="1"></td>
                                 <td>
-                                    <div class="progress mb-3">
-                                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="20"
-                                            aria-valuemin="0" aria-valuemax="100" style="width: 85%">
-                                            <span class="sr-only"></span>
-                                        </div>
+                                    <div class="progress-container" data-value="30">
+                                        <div class="progress-bar"></div>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>ขอนแก่น</td>
-                                <td class="star-container" data-rating="1"></td>
+                                <td class="star-container" data-rating="5"></td>
                                 <td>
-                                    <div class="progress mb-3">
-                                        <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="20"
-                                            aria-valuemin="0" aria-valuemax="100" style="width: 50%">
-                                            <span class="sr-only"></span>
-                                        </div>
+                                <div class="progress-container" data-value="65">
+                                        <div class="progress-bar"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -67,15 +61,9 @@
                                 <td>มหาสารคาม</td>
 
                                 <td class="star-container" data-rating="3"></td>
-                                
-
-
                                 <td>
-                                    <div class="progress mb-3">
-                                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="20"
-                                            aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                            <span class="sr-only"></span>
-                                        </div>
+                                <div class="progress-container" data-value="30">
+                                        <div class="progress-bar"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -83,11 +71,9 @@
                                 <td>ร้อยเอ็ด</td>
                                 <td class="star-container" data-rating="1"></td>
                                 <td>
-                                    <div class="progress mb-3">
-                                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="20"
-                                            aria-valuemin="0" aria-valuemax="100" style="width: 92%">
-                                            <span class="sr-only"></span>
-                                        </div>
+                                   
+                                <div class="progress-container" data-value="50">
+                                        <div class="progress-bar"></div>
                                     </div>
 
                                 </td>
@@ -98,11 +84,8 @@
                                                 class="fas fa-star text-dark"><i class="fas fa-star text-dark"><i
                                                         class="fas fa-star text-dark"></i></td>
                                 <td>
-                                    <div class="progress mb-3">
-                                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="20"
-                                            aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                            <span class="sr-only"></span>
-                                        </div>
+                                <div class="progress-container" data-value="80">
+                                        <div class="progress-bar"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -160,91 +143,91 @@
                                         <td><button type="button" class="btn btn-info btn-warning"><i
                                                     class="fas fa-search"></i></button></td>
                                         <td>กาฬสินธุ์</td>
-                                        <td>10</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>9</td>
-                                        <td>5</td>
-                                        <td>50%</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
                                     </tr>
                                     <tr>
                                         <td><button type="button" class="btn btn-info btn-warning"><i
                                                     class="fas fa-search"></i></button></td>
                                         <td>ขอนแก่น</td>
-                                        <td>10</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>9</td>
-                                        <td>5</td>
-                                        <td>50%</td>
+                                        <td>ooo0</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
                                     </tr>
                                     <tr>
                                         <td><button type="button" class="btn btn-info btn-warning"><i
                                                     class="fas fa-search"></i></button></td>
                                         <td>มหาสารคาม</td>
-                                        <td>10</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>9</td>
-                                        <td>5</td>
-                                        <td>50%</td>
+                                        <td>ooo0</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
                                     </tr>
                                     <tr>
                                         <td><button type="button" class="btn btn-info btn-warning"><i
                                                     class="fas fa-search"></i></button></td>
                                         <td>ร้อยเอ็ด</td>
-                                        <td>10</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>9</td>
-                                        <td>5</td>
-                                        <td>50%</td>
+                                        <td>ooo0</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
                                     </tr>
                                     <tr>
                                         <td><button type="button" class="btn btn-info btn-warning"><i
                                                     class="fas fa-search"></i></button></td>
                                         <td>ภน.2.1</td>
-                                        <td>10</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>9</td>
-                                        <td>5</td>
-                                        <td>50%</td>
+                                        <td>ooo0</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
+                                        <td>ooo</td>
                                     </tr>
 
                                     <!-- เพิ่มข้อมูลอื่น ๆ -->
@@ -285,44 +268,94 @@
 </style>
 
 <script>
-        // ฟังก์ชันสำหรับแปลงค่าคะแนนเป็นดาว
-        function renderStarsForAll() {
-            const starContainers = document.querySelectorAll(".star-container");
-            starContainers.forEach(container => {
-                const rating = parseFloat(container.getAttribute("data-rating")); // รับค่าคะแนนจาก data-rating
-                container.innerHTML = ""; // เคลียร์ค่าก่อนหน้า
+    // ฟังก์ชันสำหรับแปลงค่าคะแนนเป็นดาว
+    function renderStarsForAll() {
+        const starContainers = document.querySelectorAll(".star-container");
+        starContainers.forEach(container => {
+            const rating = parseFloat(container.getAttribute("data-rating")); // รับค่าคะแนนจาก data-rating
+            container.innerHTML = ""; // เคลียร์ค่าก่อนหน้า
 
-                for (let i = 1; i <= 5; i++) {
-                    const star = document.createElement("i");
-                    if (i <= Math.floor(rating)) {
-                        star.className = "fas fa-star text-warning"; // ดาวเต็ม
-                    } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
-                        star.className = "fas fa-star-half-alt text-warning"; // ดาวครึ่ง
-                    } else {
-                        star.className = "fas fa-star text-dark"; // ดาวว่าง
-                    }
-                    container.appendChild(star);
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement("i");
+                if (i <= Math.floor(rating)) {
+                    star.className = "fas fa-star text-warning"; // ดาวเต็ม
+                } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                    star.className = "fas fa-star-half-alt text-warning"; // ดาวครึ่ง
+                } else {
+                    star.className = "fas fa-star text-dark"; // ดาวว่าง
                 }
-            });
-        }
+                container.appendChild(star);
+            }
+        });
+    }
 
-        // เรียกใช้งานเมื่อโหลดหน้าเสร็จ
-        renderStarsForAll();
-    </script>
-<script>
-    // JavaScript ที่ใช้ในการกำหนดสีของหลอดตามเปอร์เซ็นต์
-    const bars = document.querySelectorAll('.performance-bar');
-    bars.forEach(bar => {
-        const width = parseInt(bar.style.width);
-        if (width >= 80) {
-            bar.classList.add('green');
-        } else if (width >= 50) {
-            bar.classList.add('yellow');
-        } else {
-            bar.classList.add('red');
-        }
-    });
+    // เรียกใช้งานเมื่อโหลดหน้าเสร็จ
+    renderStarsForAll();
 </script>
+
+
+<script>
+    // ฟังก์ชันแสดงผลหลอดเปอร์เซ็นต์
+    function updateProgressBars() {
+        // ดึงองค์ประกอบทุก progress-container
+        const containers = document.querySelectorAll('.progress-container');
+
+        containers.forEach(container => {
+            const value = parseInt(container.getAttribute('data-value')); // รับค่าจาก data-value
+            const progressBar = container.querySelector('.progress-bar');
+
+            // ตั้งค่าขนาดและข้อความ
+            progressBar.style.width = value + '%';
+            progressBar.textContent = value + '%';
+
+            // กำหนดสีตามเงื่อนไข
+            if (value < 50) {
+                progressBar.className = 'progress-bar red';
+            } else if (value < 80) {
+                progressBar.className = 'progress-bar yellow';
+            } else {
+                progressBar.className = 'progress-bar green';
+            }
+        });
+    }
+
+    // เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเสร็จ
+    updateProgressBars();
+</script>
+
+<style>
+    .progress-container {
+        width: 100%;
+        max-width: 100%;
+        background-color: #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 15px;
+    }
+
+    .progress-bar {
+        height: 25px;
+        width: 100;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+        transition: width 0.3s ease;
+    }
+
+    .red {
+        background-color: Crimson;
+    }
+
+    .yellow {
+        background-color: gold;
+        color: black;
+    }
+
+    .green {
+        background-color: SeaGreen;
+    }
+</style>
+
 <script>
 
     $(function () {

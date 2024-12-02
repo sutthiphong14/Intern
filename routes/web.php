@@ -34,15 +34,19 @@ Route::get('/structure', function (){
 
 
 Route::get('/tableusers', function (){
-    return view('tableusers');
+    return view('users.tableusers');
 });
 
 Route::get('/insertusers', function (){
-    return view('insertusers');
+    return view('users.insertusers');
 });
 
 Route::get('/listusers', function (){
     return view('users.listusers');
+});
+
+Route::get('/permissionsusers', function (){
+    return view('users.permissionsusers');
 });
 
 Route::get('/updatenewsfeed', function (){
