@@ -81,30 +81,36 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-center align-middle">
-                         
+                                    @foreach ($dataprovin as $item)
                                     <tr>
+                              
                                         <td>
                                             <button type="button" class="btn btn-info btn-warning">
                                                 <i class="fas fa-search"></i>
                                             </button>
                                         </td>
 
-                                        <td>กาฬสินธุ์</td>
-                                        <td> {{ $totalCircuits }}</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                        <td>ooo</td>
-                                    </tr>
+                                       
+                                       
+                                            <td>{{ $item->section }}</td>
+                                            <td>{{ $item->month }}</td>
+                                      
+                                           
+                                            <td>{{ $item->num_of_circuits }}</td>
+                                            <td>{{ $item->total_preparation_time_days }}</td>
+                                            <td>{{ $item->total_processing_time_days }}</td>
+                                            <td>{{ $item->sdp_odp_deadline_days }}</td>
+                                            <td>{{ $item->wiring_time_days }}</td>
+                                            <td>{{ $item->config_nms_days }}</td>
+                                            <td>{{ $item->technician_appointment_and_scheduling_time_days }}</td>
+                                            <td>{{ $item->customer_waiting_time_days }}</td>
+                                            <td>{{ $item->cable_pulling_and_ont_installation_time_days }}</td>
+                                            <td>{{ $item->closing_work_time_days }}</td>
+                                            <td>{{ $item->total_average_time_per_circuit_days }}</td>
+                                            <td>{{ $item->num_of_circuits_installed_within_3_days }}</td>
+                                            <td>{{ $item->installation_percentage_within_3_days }}</td>
+                                        </tr>
+                                    @endforeach
                               
                                    
 

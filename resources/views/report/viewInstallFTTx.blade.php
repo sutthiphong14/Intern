@@ -156,104 +156,61 @@
                                     </tr>
                                 </thead>
                                 <tbody class='text-center align-items-center'>
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('viewInstallFTTxprovin', ['section' => 'บภน.2.1 (กส.)']) }}" class="btn btn-warning">
-                                                <i class="fas fa-search"></i>
-                                            </a>
-                                        </td>
-                                        
-                                        <td>กาฬสินธุ์</td>
-                                        <td>10</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>9</td>
-                                        <td>5</td>
-                                        <td>50%</td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="{{ route('viewInstallFTTxprovin', ['section' => 'บภน.2.1 (ขก.)']) }}" class="btn btn-warning">
-                                            <i class="fas fa-search"></i>
-                                        </a></td>
-                                        <td>ขอนแก่น</td>
-                                        <td>10</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>9</td>
-                                        <td>5</td>
-                                        <td>50%</td>
-                                    </tr>
-                                    <tr>
-                                        <td><button type="button" class="btn btn-info btn-warning"><i
-                                                    class="fas fa-search"></i></button></td>
-                                        <td>มหาสารคาม</td>
-                                        <td>10</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>9</td>
-                                        <td>5</td>
-                                        <td>50%</td>
-                                    </tr>
-                                    <tr>
-                                        <td><button type="button" class="btn btn-info btn-warning"><i
-                                                    class="fas fa-search"></i></button></td>
-                                        <td>ร้อยเอ็ด</td>
-                                        <td>10</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>9</td>
-                                        <td>5</td>
-                                        <td>50%</td>
-                                    </tr>
-                                    <tr>
-                                        <td><button type="button" class="btn btn-info btn-warning"><i
-                                                    class="fas fa-search"></i></button></td>
-                                        <td>ภน.2.1</td>
-                                        <td>10</td>
-                                        <td>3</td>
-                                        <td>5</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>9</td>
-                                        <td>5</td>
-                                        <td>50%</td>
-                                    </tr>
-
-                                    <!-- เพิ่มข้อมูลอื่น ๆ -->
+                                    @foreach ($sections as $section)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ route('viewInstallFTTxprovin', ['section' => $section]) }}" class="btn btn-warning">
+                                                    <i class="fas fa-search"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <!-- ตรวจสอบค่าของ section และแสดงตามที่กำหนด -->
+                                                @if ($section == 'บภน.2.1 (กส.)')
+                                                    กาฬสินธุ์
+                                                @elseif ($section == 'บภน.2.1 (ขก.)')
+                                                    ขอนแก่น
+                                                @elseif ($section == 'บภน.2.1 (มค.)')
+                                                    มหาสารคาม
+                                                @elseif ($section == 'บภน.2.1 (รอ.)')
+                                                    ร้อยเอ็ด
+                                                @elseif ($section == 'บภน.2.2 (นค.)')
+                                                    หนองคาย
+                                                @elseif ($section == 'บภน.2.2 (นพ.)')
+                                                    นครพนม
+                                                @elseif ($section == 'บภน.2.2 (นภ.)')
+                                                    หนองบัวลำภู
+                                                @elseif ($section == 'บภน.2.2 (บก.)')
+                                                    บึงกาฬ
+                                                @elseif ($section == 'บภน.2.2 (มห.)')
+                                                    มุกดาหาร
+                                                @elseif ($section == 'บภน.2.2 (ลย.)')
+                                                    เลย
+                                                @elseif ($section == 'บภน.2.2 (สน.)')
+                                                    สกลนคร
+                                                @elseif ($section == 'บภน.2.2 (อด.)')
+                                                    อุดรธานี
+                                                @else
+                                                    {{ $section }} <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
+                                                @endif
+                                            </td>
+                                            <td>10</td>
+                                            <td>3</td>
+                                            <td>5</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>9</td>
+                                            <td>5</td>
+                                            <td>50%</td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
+                                
+                                   
                             </table>
                         </div>
                     </div>

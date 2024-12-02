@@ -12,11 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class ReportController extends Controller
 {
 
-    function installfttx()
-    {
-
-        return view('report.viewInstallFTTx');
-    }
+    
 
     // ฟังก์ชั่นสำหรับการนำเข้าไฟล์ Excel
     function import(Request $request)
@@ -52,21 +48,27 @@ class ReportController extends Controller
         return view('report.viewInstallFTTxcenter', compact('data'));
     }
 
-    public function dataprovin($section = null)
+    public function datainstallfttx()
     {
-        // ตรวจสอบว่า $section ถูกส่งมาหรือไม่
-        if ($section) {
-            // กรองข้อมูลตาม section และคำนวณผลรวมของ num_of_circuits
-            $totalCircuits = Installfttx::where('section', $section)
-                ->sum('num_of_circuits');
-            
-            // ส่งตัวแปรไปยัง view
-            return view('report.viewInstallFTTxprovin', compact('totalCircuits'));
-        } else {
-            // ถ้าไม่มี section ส่งค่าตัวแปรว่างไป
-            $totalCircuits = 0; // กำหนดค่า default
-            return view('report.viewInstallFTTxprovin', compact('totalCircuits'));
-        }
+        // ดึงข้อมูลคอลัมน์ 'section' โดยกรองค่าซ้ำ
+        $sections = Installfttx::distinct()->pluck('section');
+    
+        // คืนค่าผลลัพธ์
+        return view('report.viewInstallFTTx',compact('sections'));
+    }
+
+    public function dataprovin(){
+        $data = Installfttx::all(); // ใช้ all() เพื่อดึงข้อมูลทั้งหมดจากตาราง
+        return view('report.viewInstallFTTxprovin', compact('data'));
+    }
+
+    public function sortprovin($section)
+    {
+        // ดึงข้อมูลที่ตรงกับ section จากฐานข้อมูล
+        $dataprovin = Installfttx::where('section', $section)->get();
+
+        // แสดงข้อมูลใน view
+        return view('report.viewinstallFTTxprovin', compact('dataprovin', 'section'));
     }
     
 
