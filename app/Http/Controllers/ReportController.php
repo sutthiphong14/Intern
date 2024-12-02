@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\Installfttx as ImportsInstallfttx;
+
+use App\Imports\InstallfttxImport;
+use App\Imports\SumInstallfttxImport;
 use App\Models\Installfttx;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -31,10 +33,14 @@ class ReportController extends Controller
         $year = $request->year;
 
         // นำเข้าไฟล์ Excel โดยใช้ Import Class และส่งค่าเดือนและปีไปใน constructor
-        Excel::import(new ImportsInstallfttx($month, $year), $request->file('import_file'));
+        Excel::import(new InstallfttxImport($month, $year), $request->file('import_file'));
+
+        Excel::import(new SumInstallfttxImport($month, $year), $request->file('import_file'));
 
         // คืนค่ากลับไปที่หน้าก่อนหน้า และแสดงข้อความว่า import เสร็จสมบูรณ์
         return redirect()->back()->with('status', 'Import done!!!');
+       
+
     }
 
     function datacenter()

@@ -12,7 +12,6 @@ class Installfttx extends Model
     protected $table = 'installfttx';
 
     protected $fillable = [
-
         'region',
         'department',
         'section',
@@ -31,12 +30,8 @@ class Installfttx extends Model
         'num_of_circuits_installed_within_3_days',
         'installation_percentage_within_3_days',
         'month',
-        'year'
-        
-
-
-
-
-
+        'year',
     ];
 }
+
+

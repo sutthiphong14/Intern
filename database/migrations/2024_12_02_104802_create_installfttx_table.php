@@ -49,4 +49,3 @@ class CreateInstallfttxTable extends Migration
     }
 };
 
-
