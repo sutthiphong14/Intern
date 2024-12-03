@@ -46,12 +46,12 @@
     </section>
 
     <section class="my-2 ">
-        <div class="container col-10">
+        <div class="container col-12">
             <!-- ใช้ตารางสำหรับคำว่า Feed News -->
             <table class="table  bg-warning" style="margin-bottom: 0;">
                 <thead>
                     <tr>
-                        <th colspan="2" class="col-11">
+                        <th colspan="2" class="col-12">
                             <h2 class="text-center mb-0 "><i class="far fa-file-alt"></i> Feed News
                             </h2>
 
@@ -69,18 +69,22 @@
                 <tbody>
                     @foreach ($data->where('category_id', 1)->take(5) as $item1)
                         <tr class="d-flex justify-content-between">
-                            <td>
+                            <td class = 'ms-5'>
+                                <h5 >
                                 {{ $item1->name }}
                                 @if ($loop->index < 2)
                                     <!-- เงื่อนไขแสดง "New" แค่ 2 รายการแรก -->
                                     <span class="right badge badge-danger">New</span>
                                 @endif
+                                </h5>
                             </td>
                             <td><a href="{{ $item1->link }}" class="btn btn-dark" target="_blank">Download <i
                                         class="fas fa-arrow-down"></i></a></td>
                         </tr>
                     @endforeach
                 </tbody>
+
+                
             </table>
 
 
@@ -94,7 +98,7 @@
                     <div class="performance p-2 bg-back rounded">
                         <h4 class="bg-warning p-4"><i class="fas fa-money-bill-wave"></i> ผลการดำเนินงาน สายงาน ภน.</h4>
                         <ul class="list-unstyled text-dark">
-                            @foreach ($data->where('category_id', 2)->take(5) as $item2)
+                            @foreach ($data->take(5) as $item2)
                                 <li>
                                     <i class="fas fa-tag"></i>
                                     <a href="{{ $item2->link }}" class="text-dark" target="_blank">{{ $item2->name }}</a>
