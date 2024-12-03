@@ -22,58 +22,74 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="card card-warning mt-2 ">
-
-                    <!-- /.card-header -->
+                <div class="card card-warning mt-2">
                     <div class="card card-warning">
                         <div class="card-header">
                             <h3 class="card-title">เพิ่มผู้ใช้งานระบบ +</h3>
                         </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
-                        <form>
+                        
+                        <!-- Form Start -->
+                        <form method="POST" action="{{ route('users.store') }}">
+                            @csrf
                             <div class="card-body">
+                                <!-- Display any validation errors -->
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+
+                                <!-- Success message -->
+                                @if(session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
+
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">ชื่อผู้ใช้</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1"
-                                        placeholder="Enter Username">
+                                    <label for="name">ชื่อผู้ใช้</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="กรอกชื่อผู้ใช้" required value="{{ old('name') }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">ชื่อนามสกุล</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1"
-                                        placeholder="Name-Surname">
+                                    <label for="email">อีเมล</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="กรอกอีเมล" required value="{{ old('email') }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">รหัส</label>
-                                    <input type="password" class="form-control" id="exampleInputPassword1"
-                                        placeholder="Password">
+                                    <label for="password">รหัสผ่าน</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="กรอกรหัสผ่าน" required>
                                 </div>
+                            </div>
+
+                            <div class="card-body">
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">สิทธิ์การใช้งาน</label>
                                 </div>
 
                                 <div class="table-responsive">
                                     <table id="example2" class="table table-bordered table-hover">
-                                        <thead class="text-center ">
+                                        <thead class="text-center">
                                             <tr>
                                                 <th class='col-4 bg-dark'>สิทธิ์</th>
                                                 <th class='col-7 bg-dark'>คำอธิบาย</th>
-                                                <th class='col-1 bg-dark'>อนุญาติ</th>
-
-
+                                                <th class='col-1 bg-dark'>อนุญาต</th>
                                             </tr>
                                         </thead>
                                         <tbody class='text-start align-items-center'>
                                             <tr>
                                                 <td>จัดการผู้ใช้งานระบบ</td>
-                                                <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข
-                                                    ให้สิทธิ์การใช้งานในระบบต่างๆแก่ผู้ใช้งานระบบ</td>
+                                                <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข ให้สิทธิ์การใช้งานในระบบต่างๆแก่ผู้ใช้งานระบบ</td>
                                                 <td class='text-center'>
                                                     <div class="form-group">
                                                         <div class="form-check form-switch">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="customSwitch1" style="transform: scale(2);">
-                                                            <label class="form-check-label" for="customSwitch1"></label>
+                                                            <input class="form-check-input" type="checkbox" 
+                                                                name="manage_users_permission" 
+                                                                id="manageUsersSwitch" 
+                                                                style="transform: scale(2);">
+                                                            <label class="form-check-label" for="manageUsersSwitch"></label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -84,9 +100,11 @@
                                                 <td class='text-center'>
                                                     <div class="form-group">
                                                         <div class="form-check form-switch">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="customSwitch1" style="transform: scale(2);">
-                                                            <label class="form-check-label" for="customSwitch1"></label>
+                                                            <input class="form-check-input" type="checkbox" 
+                                                                name="manage_dashboard_permission" 
+                                                                id="manageDashboardSwitch" 
+                                                                style="transform: scale(2);">
+                                                            <label class="form-check-label" for="manageDashboardSwitch"></label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -97,9 +115,11 @@
                                                 <td class='text-center'>
                                                     <div class="form-group">
                                                         <div class="form-check form-switch">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="customSwitch1" style="transform: scale(2);">
-                                                            <label class="form-check-label" for="customSwitch1"></label>
+                                                            <input class="form-check-input" type="checkbox" 
+                                                                name="manage_newsfeed_permission" 
+                                                                id="manageNewsFeedSwitch" 
+                                                                style="transform: scale(2);">
+                                                            <label class="form-check-label" for="manageNewsFeedSwitch"></label>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -107,34 +127,18 @@
                                         </tbody>
                                     </table>
                                 </div>
-
                             </div>
-                            <!-- /.card-body -->
 
                             <div class="card-footer align-items-center text-center">
-                                <button type="submit" class="btn btn-danger ">ยกเลิก</button>
+                                <button type="button" class="btn btn-danger" onclick="window.location='{{ route('users.list') }}'">ยกเลิก</button>
                                 <button type="submit" class="btn btn-success">ยืนยัน</button>
-                            
+                            </div>
                         </form>
                     </div>
-
-                    </tbody>
-
-                    </table>
-
-
-
-
                 </div>
-                <!-- /.card-body -->
             </div>
-            <!-- /.card -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
-    </div>
-    <!-- /.container-fluid -->
 </section>
 @endsection
 
@@ -163,12 +167,6 @@
 <!-- Page specific script -->
 <script>
     $(function () {
-        $("#example1").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         $('#example2').DataTable({
             "paging": true,
             "lengthChange": false,
@@ -180,5 +178,4 @@
         });
     });
 </script>
-
 @endsection

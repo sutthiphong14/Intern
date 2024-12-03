@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 /*
@@ -41,9 +42,9 @@ Route::get('/insertusers', function (){
     return view('users.insertusers');
 });
 
-Route::get('/listusers', function (){
-    return view('users.listusers');
-});
+
+
+Route::get('/listusers', [UserController::class, 'listUsers'])->name('users.list');
 
 Route::get('/permissionsusers', function (){
     return view('users.permissionsusers');
@@ -89,7 +90,6 @@ Route::get('/search', [AdminController::class, 'search'])->name('search');
 
 
 
-use App\Http\Controllers\UserController;
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
@@ -193,4 +193,18 @@ Route::get('/importdata', function () {
 Route::get('/incomecurrent', function () {
     return view('report.incomecurrent');
 });
+Route::get('/users', [UserController::class, 'listUsers'])->name('users.list');
+
+Route::get('delete/{id}',[UserController::class,'delete'])->name('delete');
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
+Route::get('/users/{id}/edit',[UserController::class,'edit'])->name('users.edit');
+Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
+
+
+
+
+
+
+
 
