@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Imports\InstallfttxImport;
 use App\Imports\SumInstallfttxImport;
 use App\Models\Installfttx;
+use App\Models\suminstallfttx;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -64,12 +65,16 @@ class ReportController extends Controller
 
     public function sortprovin($section)
     {
-        // ดึงข้อมูลที่ตรงกับ section จากฐานข้อมูล
-        $dataprovin = Installfttx::where('section', $section)->get();
-
-        // แสดงข้อมูลใน view
-        return view('report.viewinstallFTTxprovin', compact('dataprovin', 'section'));
+        // ดึงข้อมูลจากตาราง suminstallfttx โดยเปรียบเทียบ section กับ sum_installation_center
+        $sumData = SumInstallfttx::where('sum_installation_center', 'LIKE', "%$section%")->get();
+    
+    
+    
+        // ส่งข้อมูลไปยัง view (หากต้องการใช้)
+        return view('report.viewinstallFTTxprovin', compact('sumData', 'section'));
     }
+    
+    
     
 
     
