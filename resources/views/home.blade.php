@@ -62,20 +62,18 @@
 
                 <tbody class='align-items-center '>
                     @foreach ($data->take(10) as $item1)
-                        <tr class=>
-                            <td class='ms-5 text-start'>
-                                <h5>
-                                    {{ $item1->name }}
-                                    @if ($loop->index < 2)
-                                        <!-- เงื่อนไขแสดง "New" แค่ 2 รายการแรก -->
-                                        <span class="right badge badge-danger">New</span>
-                                    @endif
-                                </h5>
-                            </td>
-                            <td class='ms-5 text-center'><a href="{{ $item1->link }}" class="btn btn-warning" target="_blank">Download <i
-                                        class="fas fa-arrow-down"></i></a></td>
-                        </tr>
-                    @endforeach
+                    <tr class=>
+                        <td class='ms-5 text-start'>
+                            <h5>
+                                {{ $item1->name }}
+                                @if ($loop->index < 2)
+                                    <span class="right badge badge-danger">New</span>
+                                @endif
+                            </h5>
+                        </td>
+                        <td class='ms-5 text-center'><a href="{{ $item1->link }}" class="btn btn-warning" target="_blank">Download <i class="fas fa-arrow-down"></i></a></td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
         </div>

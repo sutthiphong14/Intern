@@ -200,6 +200,32 @@ Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
 Route::get('/users/{id}/edit',[UserController::class,'edit'])->name('users.edit');
 Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
+// Example route protection
+Route::middleware(['auth', 'check.permission:manage_users'])->group(function () {
+    Route::get('/listusers', [UserController::class, 'listUsers'])->name('users.list');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    // Other user management routes
+});
+
+Route::middleware(['auth', 'check.permission:manage_dashboard'])->group(function () {
+    Route::get('/listreport', function () {
+        return view('report.listreport');
+    });
+    Route::get('/viewreport', function () {
+        return view('report.viewreport');
+    });
+    // Other report-related routes
+});
+
+Route::middleware(['auth', 'check.permission:manage_newsfeed'])->group(function () {
+    Route::get('/newsfeed', [AdminController::class, 'newsfeed'])->name('newsfeed');
+    Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
+    // Other news-related routes
+});
+
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 

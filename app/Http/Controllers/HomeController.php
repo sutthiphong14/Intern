@@ -3,28 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Newsfeed; // Assuming you have a Newsfeed model
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
-        $data= DB::table('newsfeeds')->orderByDesc('id')->where('status',true)->get();
+        // Fetch the latest 10 news items
+        $data = Newsfeed::orderBy('created_at', 'desc')->take(10)->get();
+
         return view('home', compact('data'));
     }
 }
