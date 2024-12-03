@@ -20,96 +20,79 @@
             <div class="col-md-12 mt-3">
                 <!-- BAR CHART -->
                 <div class="card card-dark">
-                    <div class="card-header">
-                        <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
+                <div class="card-header">
+                    <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
 
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <table id="example2" class="table table-bordered table-hover align-items-center">
-                            <thead class='text-center col-12'>
-                                <tr>
-                                    <th class='col-3 '>พื้นที่</th>
-                                    <th class='col-3'>ระดับ</th>
-                                    <th class='col-4'>Performance (%)</th>
-                                </tr>
-                            </thead>
-                            <tbody class='align-items-center text-center'>
-                                <tr>
-                                    <td>กาฬสินธุ์</td>
-                                    <td class="star-container" data-rating="1"></td>
-                                    <td>
-                                        <div class="progress mb-3">
-                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 85%">
-                                                <span class="sr-only"></span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>ขอนแก่น</td>
-                                    <td class="star-container" data-rating="1"></td>
-                                    <td>
-                                        <div class="progress mb-3">
-                                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 50%">
-                                                <span class="sr-only"></span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>มหาสารคาม</td>
-
-                                    <td class="star-container" data-rating="3"></td>
-
-
-
-                                    <td>
-                                        <div class="progress mb-3">
-                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                                <span class="sr-only"></span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>ร้อยเอ็ด</td>
-                                    <td class="star-container" data-rating="1"></td>
-                                    <td>
-                                        <div class="progress mb-3">
-                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 92%">
-                                                <span class="sr-only"></span>
-                                            </div>
-                                        </div>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>ภน.2.1</td>
-                                    <td><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i
-                                                    class="fas fa-star text-dark"><i class="fas fa-star text-dark"><i
-                                                            class="fas fa-star text-dark"></i></td>
-                                    <td>
-                                        <div class="progress mb-3">
-                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                                <span class="sr-only"></span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
+                <div class="card-body">
+                    <table id="example2" class="table table-bordered table-hover align-items-center">
+                        <thead class='text-center col-12'>
+                            <tr>
+                                <th class='col-3 '>พื้นที่</th>
+                                <th class='col-3'>ระดับ</th>
+                                <th class='col-4'>Performance (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody class='align-items-center text-center'>
+                            <tr>
+                                <td>กาฬสินธุ์</td>
+                                <td class="star-container" data-rating="1"></td>
+                                <td>
+                                    <div class="progress-container" data-value="30">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>ขอนแก่น</td>
+                                <td class="star-container" data-rating="5"></td>
+                                <td>
+                                <div class="progress-container" data-value="65">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>มหาสารคาม</td>
+
+                                <td class="star-container" data-rating="4"></td>
+                                <td>
+                                <div class="progress-container" data-value="30">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>ร้อยเอ็ด</td>
+                                <td class="star-container" data-rating="1"></td>
+                                <td>
+                                   
+                                <div class="progress-container" data-value="50">
+                                        <div class="progress-bar"></div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>ภน.2.1</td>
+                                <td><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i
+                                                class="fas fa-star text-dark"><i class="fas fa-star text-dark"><i
+                                                        class="fas fa-star text-dark"></i></td>
+                                <td>
+                                <div class="progress-container" data-value="80">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
 
                 <div class="card card-dark mt-3">
@@ -222,7 +205,13 @@
                                             <td>{{ $section['sum_closing_work_time_days'] }}</td>
                                             <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
                                             <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
-                                            <td>{{ $section['sum_installation_percentage_within_3_days'] }}%</td>
+
+                                            <td>
+                                    <div class="progress-container" data-value="{{ $section['sum_installation_percentage_within_3_days'] }}">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                </td>
+                                           
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -291,6 +280,69 @@
         // เรียกใช้งานเมื่อโหลดหน้าเสร็จ
         renderStarsForAll();
     </script>
+
+<script>
+    // ฟังก์ชันแสดงผลหลอดเปอร์เซ็นต์
+    function updateProgressBars() {
+        // ดึงองค์ประกอบทุก progress-container
+        const containers = document.querySelectorAll('.progress-container');
+
+        containers.forEach(container => {
+            const value = parseInt(container.getAttribute('data-value')); // รับค่าจาก data-value
+            const progressBar = container.querySelector('.progress-bar');
+
+            // ตั้งค่าขนาดและข้อความ
+            progressBar.style.width = value + '%';
+            progressBar.textContent = value + '%';
+
+            // กำหนดสีตามเงื่อนไข
+            if (value < 50) {
+                progressBar.className = 'progress-bar red';
+            } else if (value < 80) {
+                progressBar.className = 'progress-bar yellow';
+            } else {
+                progressBar.className = 'progress-bar green';
+            }
+        });
+    }
+
+    // เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเสร็จ
+    updateProgressBars();
+</script>
+
+<style>
+    .progress-container {
+        width: 100%;
+        max-width: 100%;
+        background-color: #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 15px;
+    }
+
+    .progress-bar {
+        height: 25px;
+        width: 100;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+        transition: width 0.3s ease;
+    }
+
+    .red {
+        background-color: Crimson;
+    }
+
+    .yellow {
+        background-color: gold;
+        color: black;
+    }
+
+    .green {
+        background-color: SeaGreen;
+    }
+</style>
+
     <script>
         // JavaScript ที่ใช้ในการกำหนดสีของหลอดตามเปอร์เซ็นต์
         const bars = document.querySelectorAll('.performance-bar');

@@ -182,6 +182,7 @@ Route::get('/viewInstallFTTxprovin/{section}/{year}',[ReportController::class ,'
 
 Route::get('/viewInstallFTTxcenter/{section}/{year}/{month}', [ReportController::class ,'sortcenter'])->name('viewInstallFTTxcenter');
 
+Route::get('/viewInstallFTTxcenter/{center}/{year}/{month}', [ReportController::class, 'viewInstallData']);
 
 
 

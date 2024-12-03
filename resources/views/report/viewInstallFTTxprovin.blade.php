@@ -2,10 +2,14 @@
 @section('css')
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+   
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+<link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+<!-- AdminLTE -->
+<link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 @endsection
 @section('content')
     <section class="content">
@@ -187,60 +191,60 @@
         });
     </script>
     <script>
-        $(function() {
-            var barChartCanvas = $('#barChart').get(0).getContext('2d');
-            var barChartData = {
-                labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.',
-                    'พ.ย.', 'ธ.ค.'
-                ], // ป้ายกำกับเดือน
-                datasets: [{
-                        label: 'ตรวจแก้ วงจรเช่า',
-                        backgroundColor: 'rgb(60, 179, 113)', // สีสำหรับรายได้
-                        borderColor: 'rgb(60, 179, 113)',
-                        data: [100, 100, 99, 99, 91, 96, 94, 90, 97, 94, 0, 0, ] // ข้อมูลรายได้
-                    },
+      $(function() {
+    // ตรวจสอบว่ามีข้อมูลจาก Backend หรือไม่
+    const sumData = @json($sumData);
+    if (!sumData || sumData.length === 0) {
+        console.warn('No data found for the chart');
+        return;
+    }
 
-                ]
-            };
+    // ดึงชื่อเดือนและร้อยละจากข้อมูล
+    const labels = sumData.map(item => item.month || 'ไม่ระบุ');
+    const data = sumData.map(item => parseFloat(item.sum_installation_percentage_within_3_days) || 0);
 
-            var barChartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                tooltips: {
-                    callbacks: {
-                        label: function(tooltipItem, data) {
-                            return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel
-                                .toLocaleString();
-                        }
+    // ตรวจสอบความถูกต้องของข้อมูล
+    console.log('Labels:', labels);
+    console.log('Data:', data);
+
+    // การตั้งค่ากราฟ
+    const barChartCanvas = $('#barChart').get(0).getContext('2d');
+    const barChartData = {
+        labels: labels,
+        datasets: [{
+            label: 'ร้อยละการติดตั้งภายใน 3 วัน',
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+            data: data
+        }]
+    };
+
+    // ตัวเลือกเพิ่มเติมสำหรับกราฟ
+    const barChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                min: 0,  // กำหนดให้แกน Y เริ่มที่ 0
+                max: 100, // กำหนดให้แกน Y จบที่ 100
+                ticks: {
+                    stepSize: 20, // เพิ่มขึ้นทีละ 10 (0, 10, 20, 30, ..., 100)
+                    callback: function(value) {
+                        return value; // แสดงค่าตัวเลข 0, 10, 20, ...
                     }
-                },
-                // scales: {
-                //     yAxes: [{
-                //         ticks: {
-                //             beginAtZero: true, // เริ่มจาก 0
-                //             callback: function (value) {
-                //                 return value.toLocaleString() + ' บาท'; // แสดงตัวเลขแบบมีคอมม่า
-                //             }
-                //         },
-                //         // scaleLabel: {
-                //         //     display: true,
-                //         //     labelString: 'จำนวนเงิน (บาท)' // ชื่อแกน Y
-                //         // }
-                //     }],
-                //     xAxes: [{
-                //         scaleLabel: {
-                //             display: true,
-                //             labelString: 'เดือน' // ชื่อแกน X
-                //         }
-                //     }]
-                // }
-            };
+                }
+            }
+        }
+    };
 
-            new Chart(barChartCanvas, {
-                type: 'bar',
-                data: barChartData,
-                options: barChartOptions
-            });
-        });
+    // วาดกราฟ
+    new Chart(barChartCanvas, {
+        type: 'bar',
+        data: barChartData,
+        options: barChartOptions
+    });
+});
+
     </script>
 @endsection
