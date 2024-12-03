@@ -26,7 +26,7 @@ class SumInstallfttxImport implements ToCollection, WithStartRow, WithLimit
 
     public function limit(): int
     {
-        return 64; // อ่าน 63 แถว
+        return 69; // อ่าน 63 แถว
     }
 
     public function collection(Collection $rows)
@@ -41,10 +41,8 @@ class SumInstallfttxImport implements ToCollection, WithStartRow, WithLimit
     private function isValidRow($columnValue): bool
     {
         $validKeywords = [
-            'รวม บภน.2.1 (กส.)', 'รวม บภน.2.1 (ขก.)', 'รวม บภน.2.1 (มค.)',
-            'รวม บภน.2.1 (รอ.)', 'รวม บภน.2.2 (นค.)', 'รวม บภน.2.2 (นพ.)',
-            'รวม บภน.2.2 (นภ.)', 'รวม บภน.2.2 (บก.)', 'รวม บภน.2.2 (มห.)',
-            'รวม บภน.2.2 (ลย.)', 'รวม บภน.2.2 (สน.)', 'รวม บภน.2.2 (อด.)'
+            'รวม',
+          
         ];
 
         foreach ($validKeywords as $keyword) {
@@ -60,19 +58,19 @@ class SumInstallfttxImport implements ToCollection, WithStartRow, WithLimit
     {
         SumInstallfttx::create([
             'sum_installation_center' => $row[4],
-            'sum_num_of_circuits' => $row[5],
-            'sum_total_preparation_time_days' => $this->cleanNumber($row[6]),
-            'sum_total_processing_time_days' => $this->cleanNumber($row[7]),
-            'sum_sdp_odp_deadline_days' => $row[8],
-            'sum_wiring_time_days' => $row[9],
-            'sum_config_nms_days' => $row[10],
-            'sum_technician_appointment_and_scheduling_time_days' => $row[11],
-            'sum_customer_waiting_time_days' => $row[12],
-            'sum_cable_pulling_and_ont_installation_time_days' => $row[13],
-            'sum_closing_work_time_days' => $row[14],
-            'sum_total_average_time_per_circuit_days' => $row[15],
-            'sum_num_of_circuits_installed_within_3_days' => $row[16],
-            'sum_installation_percentage_within_3_days' => $row[17],
+            'sum_num_of_circuits' => $this->cleanNumber($row[5]), // ใช้ cleanNumber ที่ column 5
+            'sum_total_preparation_time_days' => $this->cleanNumber($row[6]), // ใช้ cleanNumber ที่ column 6
+            'sum_total_processing_time_days' => $this->cleanNumber($row[7]), // ใช้ cleanNumber ที่ column 7
+            'sum_sdp_odp_deadline_days' => $this->cleanNumber($row[8]), // ใช้ cleanNumber ที่ column 8
+            'sum_wiring_time_days' => $this->cleanNumber($row[9]), // ใช้ cleanNumber ที่ column 9
+            'sum_config_nms_days' => $this->cleanNumber($row[10]), // ใช้ cleanNumber ที่ column 10
+            'sum_technician_appointment_and_scheduling_time_days' => $this->cleanNumber($row[11]), // ใช้ cleanNumber ที่ column 11
+            'sum_customer_waiting_time_days' => $this->cleanNumber($row[12]), // ใช้ cleanNumber ที่ column 12
+            'sum_cable_pulling_and_ont_installation_time_days' => $this->cleanNumber($row[13]), // ใช้ cleanNumber ที่ column 13
+            'sum_closing_work_time_days' => $this->cleanNumber($row[14]), // ใช้ cleanNumber ที่ column 14
+            'sum_total_average_time_per_circuit_days' => $this->cleanNumber($row[15]), // ใช้ cleanNumber ที่ column 15
+            'sum_num_of_circuits_installed_within_3_days' => $this->cleanNumber($row[16]), // ใช้ cleanNumber ที่ column 16
+            'sum_installation_percentage_within_3_days' => $this->cleanNumber($row[17]), // ใช้ cleanNumber ที่ column 17
             'month' => $this->month,
             'year' => $this->year,
         ]);
@@ -80,6 +78,15 @@ class SumInstallfttxImport implements ToCollection, WithStartRow, WithLimit
 
     private function cleanNumber($value)
     {
-        return str_replace(',', '', $value);
+        // ลบช่องว่างที่ไม่จำเป็นและเครื่องหมายจุลภาค
+        $value = trim($value); // ลบช่องว่าง
+        $value = str_replace(',', '', $value); // ลบเครื่องหมายจุลภาค
+
+        // ตรวจสอบว่าเป็นตัวเลขที่สามารถแปลงได้หรือไม่
+        if (is_numeric($value)) {
+            return floatval($value); // แปลงเป็น float
+        } else {
+            return 0; // หากไม่ใช่ตัวเลข คืนค่า 0
+        }
     }
 }

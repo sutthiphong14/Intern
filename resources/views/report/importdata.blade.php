@@ -74,8 +74,8 @@
                                             </td>
 
                                             <td>
-                                                <input type="number" id="year" name="year" min="2560"
-                                                    max="2599" value="2567" class="form-control">
+                                                <input type="number" id="year" name="year" min="2014"
+                                                    max="3000" value="2024" class="form-control">
                                             </td>
 
                                             <td>

@@ -85,57 +85,62 @@
                                             <tr>
 
                                                 <td>
-                                                    <button type="button" class="btn btn-info btn-warning">
+                                                    <a href="{{ route('viewInstallFTTxcenter', ['section' => $item['sum_installation_center'], 'year' => $item['year'], 'month' => $item['month']]) }}" class="btn btn-warning">
                                                         <i class="fas fa-search"></i>
-                                                    </button>
+                                                    </a>
                                                 </td>
 
 
                                                 <td>
-                                                    @if ($section == 'บภน.2.1 (กส.)')
+                                                    @if ($section == 'รวม บภน.2.1 (กส.)')
                                                         กาฬสินธุ์
-                                                    @elseif ($section == 'บภน.2.1 (ขก.)')
+                                                    @elseif ($section == 'รวม บภน.2.1 (ขก.)')
                                                         ขอนแก่น
-                                                    @elseif ($section == 'บภน.2.1 (มค.)')
+                                                    @elseif ($section == 'รวม บภน.2.1 (มค.)')
                                                         มหาสารคาม
-                                                    @elseif ($section == 'บภน.2.1 (รอ.)')
+                                                    @elseif ($section == 'รวม บภน.2.1 (รอ.)')
                                                         ร้อยเอ็ด
-                                                    @elseif ($section == 'บภน.2.2 (นค.)')
+                                                    @elseif ($section == 'รวม บภน.2.2 (นค.)')
                                                         หนองคาย
-                                                    @elseif ($section == 'บภน.2.2 (นพ.)')
+                                                    @elseif ($section == 'รวม บภน.2.2 (นพ.)')
                                                         นครพนม
-                                                    @elseif ($section == 'บภน.2.2 (นภ.)')
+                                                    @elseif ($section == 'รวม บภน.2.2 (นภ.)')
                                                         หนองบัวลำภู
-                                                    @elseif ($section == 'บภน.2.2 (บก.)')
+                                                    @elseif ($section == 'รวม บภน.2.2 (บก.)')
                                                         บึงกาฬ
-                                                    @elseif ($section == 'บภน.2.2 (มห.)')
+                                                    @elseif ($section == 'รวม บภน.2.2 (มห.)')
                                                         มุกดาหาร
-                                                    @elseif ($section == 'บภน.2.2 (ลย.)')
+                                                    @elseif ($section == 'รวม บภน.2.2 (ลย.)')
                                                         เลย
-                                                    @elseif ($section == 'บภน.2.2 (สน.)')
+                                                    @elseif ($section == 'รวม บภน.2.2 (สน.)')
                                                         สกลนคร
-                                                    @elseif ($section == 'บภน.2.2 (อด.)')
+                                                    @elseif ($section == 'รวม บภน.2.2 (อด.)')
                                                         อุดรธานี
-                                                    @else
-                                                        {{ $section }}
-                                                        <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
-                                                    @endif
-                                                </td>
-                                                <td>{{ $item->month }}</td>
-                                                <td>{{ $item->sum_num_of_circuits }}</td>
-                                                <td>{{ $item->sum_total_preparation_time_days }}</td>
-                                                <td>{{ $item->sum_total_processing_time_days }}</td>
-                                                <td>{{ $item->sum_sdp_odp_deadline_days }}</td>
-                                                <td>{{ $item->sum_wiring_time_days }}</td>
-                                                <td>{{ $item->sum_config_nms_days }}</td>
-                                                <td>{{ $item->sum_technician_appointment_and_scheduling_time_days }}</td>
-                                                <td>{{ $item->sum_customer_waiting_time_days }}</td>
-                                                <td>{{ $item->sum_cable_pulling_and_ont_installation_time_days }}</td>
-                                                <td>{{ $item->sum_closing_work_time_days }}</td>
-                                                <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
-                                                <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
-                                                <td>{{ $item->sum_installation_percentage_within_3_days }}</td>
-                                            </tr>
+                                                    @elseif ($section == 'รวม ภน.2.2')
+                                                        ภน.2.2
+                                                    @elseif ($section == 'รวม ภน.2.1')
+                                                        ภน.2.1
+                                                   
+                                                @else
+                                                    {{ $section }}
+                                                    <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
+                                        @endif
+                                        </td>
+                                        <td>{{ $item->month }}</td>
+                                        <td>{{ $item->sum_num_of_circuits }}</td>
+                                        <td>{{ $item->sum_total_preparation_time_days }}</td>
+                                        <td>{{ $item->sum_total_processing_time_days }}</td>
+                                        <td>{{ $item->sum_sdp_odp_deadline_days }}</td>
+                                        <td>{{ $item->sum_wiring_time_days }}</td>
+                                        <td>{{ $item->sum_config_nms_days }}</td>
+                                        <td>{{ $item->sum_technician_appointment_and_scheduling_time_days }}</td>
+                                        <td>{{ $item->sum_customer_waiting_time_days }}</td>
+                                        <td>{{ $item->sum_cable_pulling_and_ont_installation_time_days }}</td>
+                                        <td>{{ $item->sum_closing_work_time_days }}</td>
+                                        <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
+                                        <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
+                                        <td>{{ $item->sum_installation_percentage_within_3_days }}</td>
+                                        </tr>
                                         @endforeach
 
 
