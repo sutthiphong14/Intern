@@ -10,13 +10,13 @@
                 <a href="{{route('structure')}}" class="nav-link text-dark">เกี่ยวกับ NT</a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="listusers" class="nav-link text-dark">จัดการผู้ใช้</a>
+                <a href="{{route('users.list')}}" class="nav-link text-dark">จัดการผู้ใช้</a>
             </li>
         @endif
 
         @if(Auth::user()->permission['manage_newsfeed'] ?? false)
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="newsfeed" class="nav-link text-dark">ข่าว</a>
+                <a href="{{route('listnewsfeed')}}" class="nav-link text-dark">ข่าว</a>
             </li>
         @endif
 

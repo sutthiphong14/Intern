@@ -40,11 +40,11 @@
                     <div class="card-body">
                         <table id="example2" class="table table-bordered table-hover">
                             <thead class='text-center'>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>    
-                                    <th>Action</th>
+                                <tr class="col-12">
+                                    <th class = 'col-1'>ID</th>
+                                    <th class = 'col-4'>Name</th>
+                                    <th class = 'col-4'>Email</th>    
+                                    <th class = 'col-3'>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,7 +54,7 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td class="text-center">
-                                        <a href="permissionsusers/{{ $user->id }}" class="btn btn-primary">สิทธิ์การใช้งาน</a>
+                                        
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning">แก้ไข</a>
                                         <a href="#"
                                            class="btn btn-danger delete-btn"

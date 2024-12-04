@@ -45,21 +45,17 @@
                                 <td>
                                     <div class="progress-container" data-value="30">
                                         <div class="progress-bar"></div>
-                                    <div class="progress-container" data-value="30">
-                                        <div class="progress-bar"></div>
-                                    </div>
+                                  
                                 </td>
                             </tr>
                             <tr>
                                 <td>ขอนแก่น</td>
                                 <td class="star-container" data-rating="5"></td>
-                                <td class="star-container" data-rating="5"></td>
+                               
                                 <td>
                                 <div class="progress-container" data-value="65">
                                         <div class="progress-bar"></div>
-                                <div class="progress-container" data-value="65">
-                                        <div class="progress-bar"></div>
-                                    </div>
+                                
                                 </td>
                             </tr>
                             <tr>
@@ -69,9 +65,7 @@
                                 <td>
                                 <div class="progress-container" data-value="30">
                                         <div class="progress-bar"></div>
-                                <div class="progress-container" data-value="30">
-                                        <div class="progress-bar"></div>
-                                    </div>
+                               
                                 </td>
                             </tr>
                             <tr>
@@ -82,9 +76,7 @@
                                 <div class="progress-container" data-value="50">
                                         <div class="progress-bar"></div>
                                    
-                                <div class="progress-container" data-value="50">
-                                        <div class="progress-bar"></div>
-                                    </div>
+                                
 
                                 </td>
                             </tr>
@@ -96,9 +88,7 @@
                                 <td>
                                 <div class="progress-container" data-value="80">
                                         <div class="progress-bar"></div>
-                                <div class="progress-container" data-value="80">
-                                        <div class="progress-bar"></div>
-                                    </div>
+                               
                                 </td>
                             </tr>
                         </tbody>

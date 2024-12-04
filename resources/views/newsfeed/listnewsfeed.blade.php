@@ -41,7 +41,7 @@
 
 
                             <a href="insertnewsfeed" class="btn bg-success col-2">
-                                <i class="d-flex justify-content-end "></i> Add+
+                                <i class="d-flex justify-content-end "></i> เพิ่มเอกสาร
                             </a>
                         </div>
 
@@ -51,9 +51,9 @@
                                 <thead class='text-center col-12 '>
                                     <tr>
                                         <th class='col-1 '>ID</th>
-                                        <th class='col-3'>Name</th>
-                                        <th class='col-4'>Description</th>
-                                        <th class='col-1'>Time</th>
+                                        <th class='col-3'>ชื่อข่าว</th>
+                                        <th class='col-4'>คำอธิบาย</th>
+                                        <th class='col-1'>เวลาลงข้อมูล</th>
                                         <th class='col-3'>Action</th>
                                     </tr>
                                 </thead>
