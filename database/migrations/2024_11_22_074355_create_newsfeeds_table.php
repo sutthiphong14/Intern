@@ -16,11 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->text('link');
-            $table->boolean('status')->default(false);
-            $table->unsignedBigInteger('category_id');
+            $table->boolean('status')->default(true);
 
-            // เพิ่ม foreign key constraint
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
 
 

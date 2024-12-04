@@ -68,7 +68,7 @@
                                                 <button onclick="changeNewsStatus({{ $item->id }})"
                                                     class="btn {{ $item->status ? 'btn-primary' : 'btn-secondary' }} align-items-center">
                                                     <i class="{{ $item->status ? 'fas fa-eye-slash' : 'far fa-eye' }}"></i>
-                                                    {{ $item->status ? 'แสดง' : 'ซ่อน' }}
+                                                    {{ $item->status ? 'show' : 'hide' }}
                                                 </button>
                                                 <a href="{{ route('editnews', $item->id) }}"
                                                     class="btn btn-warning align-items-center">

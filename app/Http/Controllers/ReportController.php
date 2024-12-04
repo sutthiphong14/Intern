@@ -20,12 +20,14 @@ class ReportController extends Controller
     // ฟังก์ชั่นสำหรับการนำเข้าไฟล์ Excel
     function import(Request $request)
     {
+       
         // ตรวจสอบไฟล์ที่อัปโหลด
         $request->validate([
             'import_file' => 'required|file|mimes:xlsx,xls',
             'month' => 'required|string',  // ตรวจสอบ month ว่ามีการกรอก
             'year' => 'required|string'    // ตรวจสอบ year ว่ามีการกรอก
         ]);
+      
 
         // สร้างข้อมูลเดือนและปีจากฟอร์ม
         $month = $request->month;

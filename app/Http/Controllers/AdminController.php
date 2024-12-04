@@ -27,21 +27,23 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required|max:50',
             'description' => 'required',
-            'category_id' => 'required',
+            
             'link' => 'required'
 
         ], [
             'name.required' => 'กรุณาระบุชื่อ',
             'name.max' => 'ความยาวของชื่อไม่ควรเกิน 50 ตัวอักษร',
             'description.required' => 'กรุณาระบุคำอธิบาย',
-            'category_id.required' => 'กรุณาเลือกประเภท',
+            
             'link.required' => 'กรุณาระบุ link file'
         ]);
         $data = [
             'name' => $request->name,
             'description' => $request->description,
-            'category_id' => $request->category_id,
+            
             'link' => $request->link,
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
 
         DB::table('newsfeeds')->insert($data);
@@ -102,6 +104,7 @@ class AdminController extends Controller
             'description' => $request->description,
             'category_id' => $request->category_id,
             'link' => $request->link,
+            'updated_at' => now(),
         ];
         DB::table('newsfeeds')->where('id', $id)->update($data);
         return redirect('/listnewsfeed');

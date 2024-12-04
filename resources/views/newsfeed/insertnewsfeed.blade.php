@@ -38,7 +38,6 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Description</th>
-                                        <th>Category</th>
                                         <th>Upload</th>
                                     </tr>
                                 </thead>
@@ -63,23 +62,6 @@
                                                 @enderror
                                             </td>
 
-                                            <div class="form-group">
-                                                <td>
-                                                    <select class="form-control" name="category_id">
-                                                        <option value="" disabled selected>เลือก Category</option>
-                                                        <option value=1 {{ old('category') == 'Feednew' ? 'selected' : '' }}>Feednews</option>
-                                                        <option value=2 {{ old('category') == 'ผลการดำเนินงาน สายงาน ภน.' ? 'selected' : '' }}>ผลการดำเนินงาน สายงาน ภน.</option>
-                                                        <option value=3 {{ old('category') == 'ผลการดำเนินงานด้านการตลาดสายงาน ภน.' ? 'selected' : '' }}>ผลการดำเนินงานด้านการตลาดสายงาน ภน.</option>
-                                                        <option value=4 {{ old('category') == 'คุณภาพบริการ' ? 'selected' : '' }}>คุณภาพบริการ</option>
-                                                    </select>
-                                                    @error('category')
-                                                    <p class="text-danger my-2">
-                                                        <i class="fas fa-exclamation-circle"></i>{{ $message }}
-                                                    </p>
-                                                    @enderror
-                                                </td>
-
-                                            </div>
 
 
                                             <td>
