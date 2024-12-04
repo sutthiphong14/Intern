@@ -428,17 +428,30 @@
             });
         });
     </script>
-    @if (session('status'))
-    <script>
-        window.onload = function() {
+
+
+<<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('status')) {
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
-                text: '{{ session('status') }}',
+                text: localStorage.getItem('status'),
                 confirmButtonText: 'OK'
+            }).then(() => {
+                localStorage.removeItem('status');
             });
-        };
-    </script>
-@endif
+        } else {
+            // ถ้าไม่มีใน localStorage ให้เช็ค session
+            const status = '{{ session('status') }}';
+            if (status) {
+                localStorage.setItem('status', status);
+                location.reload();
+            }
+        }
+    });
+</script>
+
+
 
 @endsection
