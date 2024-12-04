@@ -117,34 +117,34 @@ class ReportController extends Controller
     }
 
     public function sortprovin($section, $year)
-    {
-        // ดึงข้อมูลจากตาราง suminstallfttx โดยเปรียบเทียบ section กับ sum_installation_center และ year
-        $sumData = SumInstallfttx::where('sum_installation_center', 'LIKE', "%$section%")
-                                 ->where('year', '=', $year)  // เปรียบเทียบปี
-                                 ->get();
-                                 
+{
+    // ดึงข้อมูลที่ตรงกับ section และ year
+    $sumData = SumInstallfttx::where('sum_installation_center', 'LIKE', "%$section%")
+                              ->where('year', '=', $year)
+                              ->get();
 
-                                 
-    
-        // ส่งข้อมูลไปยัง view
-        return view('report.viewinstallFTTxprovin', compact('sumData', 'section', 'year'));
-    }
+    // เตรียมข้อมูลสำหรับกราฟ
+    $labels = $sumData->pluck('month'); // ใช้เดือนเป็น label
+    $data = $sumData->pluck('sum_installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์รวม
+
+    return view('report.viewinstallFTTxprovin', compact('sumData', 'labels', 'data', 'section', 'year'));
+}
+
 
     public function sortcenter($section, $year, $month)
-    {
-        // ตัดคำว่า "รวม " ออกจากค่าของ $section
-        $section = str_replace('รวม ', '', $section);
-    
-        // ดึงข้อมูลจากตาราง installfttx โดยเปรียบเทียบ section, year และ month
-        $installData = Installfttx::where('section', 'LIKE', "%$section%")  // กรองตาม section
-                                  ->where('year', '=', $year)               // กรองตาม year
-                                  ->where('month', '=', $month)             // กรองตาม month
-                                  ->get();
-                            
-    
-        // ส่งข้อมูลไปยัง view
-        return view('report.viewInstallFTTxcenter', compact('installData', 'section', 'year', 'month'));
-    }
+{
+    $section = str_replace('รวม ', '', $section);
+
+    $installData = Installfttx::where('section', 'LIKE', "%$section%")
+                              ->where('year', '=', $year)
+                              ->where('month', '=', $month)
+                              ->get();
+
+    $labels = $installData->pluck('installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
+    $data = $installData->pluck('installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
+
+    return view('report.viewInstallFTTxcenter', compact('installData', 'labels', 'data', 'section', 'year', 'month'));
+}
     
     
 }

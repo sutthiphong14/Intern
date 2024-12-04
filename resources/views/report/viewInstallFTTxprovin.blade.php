@@ -27,14 +27,14 @@
 
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="card-body">
-                            <div class="chart">
-                                <canvas id="barChart"
-                                    style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Bar Chart - การติดตั้งภายใน 3 วันเปรียบเทียบแต่ละเดือน</h3>
+    </div>
+    <div class="card-body">
+        <canvas id="barChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+    </div>
+</div>
                 </div>
 
 
@@ -190,61 +190,50 @@
             }
         });
     </script>
-    <script>
-      $(function() {
-    // ตรวจสอบว่ามีข้อมูลจาก Backend หรือไม่
-    const sumData = @json($sumData);
-    if (!sumData || sumData.length === 0) {
-        console.warn('No data found for the chart');
-        return;
-    }
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // ดึงข้อมูลจาก Controller
+        const labels = @json($labels); // ชื่อเดือน
+        const data = @json($data);     // เปอร์เซ็นต์รวม
 
-    // ดึงชื่อเดือนและร้อยละจากข้อมูล
-    const labels = sumData.map(item => item.month || 'ไม่ระบุ');
-    const data = sumData.map(item => parseFloat(item.sum_installation_percentage_within_3_days) || 0);
+        // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
+        if (labels.length === 0 || data.length === 0) {
+            console.warn('No data available for chart.');
+            return;
+        }
 
-    // ตรวจสอบความถูกต้องของข้อมูล
-    console.log('Labels:', labels);
-    console.log('Data:', data);
-
-    // การตั้งค่ากราฟ
-    const barChartCanvas = $('#barChart').get(0).getContext('2d');
-    const barChartData = {
-        labels: labels,
-        datasets: [{
-            label: 'ร้อยละการติดตั้งภายใน 3 วัน',
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1,
-            data: data
-        }]
-    };
-
-    // ตัวเลือกเพิ่มเติมสำหรับกราฟ
-    const barChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                min: 0,  // กำหนดให้แกน Y เริ่มที่ 0
-                max: 100, // กำหนดให้แกน Y จบที่ 100
-                ticks: {
-                    stepSize: 20, // เพิ่มขึ้นทีละ 10 (0, 10, 20, 30, ..., 100)
-                    callback: function(value) {
-                        return value; // แสดงค่าตัวเลข 0, 10, 20, ...
+        // สร้าง Bar Chart
+        const ctx = document.getElementById('barChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', // สีพื้นหลังแท่งกราฟ
+                    borderColor: 'rgba(75, 192, 192, 1)',       // สีเส้นขอบ
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true, // เริ่มจาก 0
+                        max: 100 // กำหนดค่าบนสุดของแกน Y เป็น 100
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
                     }
                 }
             }
-        }
-    };
-
-    // วาดกราฟ
-    new Chart(barChartCanvas, {
-        type: 'bar',
-        data: barChartData,
-        options: barChartOptions
+        });
     });
-});
-
-    </script>
+</script>
 @endsection
