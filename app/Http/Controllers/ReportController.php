@@ -41,7 +41,7 @@ class ReportController extends Controller
         Excel::import(new totalfttximport($month, $year), $request->file('import_file'));
 
         // คืนค่ากลับไปที่หน้าก่อนหน้า และแสดงข้อความว่า import เสร็จสมบูรณ์
-        return redirect()->back()->with('status', 'Import done!!!');
+        return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
     }
 
     function datacenter()

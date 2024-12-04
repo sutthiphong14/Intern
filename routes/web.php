@@ -176,7 +176,7 @@ Route::get('/viewreport1', function () {
     return view('report.viewreport1');
 });
 
-Route::get('/viewInstallFTTx',[ReportController::class , 'datainstallfttx']);
+Route::get('/viewInstallFTTx',[ReportController::class , 'datainstallfttx'])->name('viewInstallFTTx');
 
 Route::get('/viewInstallFTTxcenter', [ReportController::class ,'datacenter']);
 

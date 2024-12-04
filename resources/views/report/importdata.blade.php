@@ -33,9 +33,7 @@
 
                         <!-- /.card-header -->
                         <div class="card-body">
-                            @if (session('status'))
-                                <div class="alert alert-success">{{ session('status') }}</div>
-                            @endif
+                            
 
                             <form action="{{ url('importdata') }}" method="POST" enctype="multipart/form-data"
                                 class="form-group">

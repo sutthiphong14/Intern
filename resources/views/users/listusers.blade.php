@@ -94,8 +94,7 @@
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <!-- Page specific script -->
 <script>
@@ -111,6 +110,7 @@
         });
     });
 
+    
     // SweetAlert2 สำหรับการยืนยันการลบ
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.delete-btn').forEach(button => {

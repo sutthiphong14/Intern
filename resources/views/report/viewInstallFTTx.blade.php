@@ -102,6 +102,7 @@
                     <div class="card card-dark">
                         <div class="card-header">
                             <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
+                            
 
                             <div class="card-tools">
                             @if(Auth::user()->permission['manage_dashboard'] ?? false)
@@ -427,4 +428,17 @@
             });
         });
     </script>
+    @if (session('status'))
+    <script>
+        window.onload = function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('status') }}',
+                confirmButtonText: 'OK'
+            });
+        };
+    </script>
+@endif
+
 @endsection
