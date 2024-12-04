@@ -45,13 +45,18 @@
                                 <td>
                                     <div class="progress-container" data-value="30">
                                         <div class="progress-bar"></div>
+                                    <div class="progress-container" data-value="30">
+                                        <div class="progress-bar"></div>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>ขอนแก่น</td>
                                 <td class="star-container" data-rating="5"></td>
+                                <td class="star-container" data-rating="5"></td>
                                 <td>
+                                <div class="progress-container" data-value="65">
+                                        <div class="progress-bar"></div>
                                 <div class="progress-container" data-value="65">
                                         <div class="progress-bar"></div>
                                     </div>
@@ -64,6 +69,8 @@
                                 <td>
                                 <div class="progress-container" data-value="30">
                                         <div class="progress-bar"></div>
+                                <div class="progress-container" data-value="30">
+                                        <div class="progress-bar"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -71,6 +78,9 @@
                                 <td>ร้อยเอ็ด</td>
                                 <td class="star-container" data-rating="1"></td>
                                 <td>
+                                   
+                                <div class="progress-container" data-value="50">
+                                        <div class="progress-bar"></div>
                                    
                                 <div class="progress-container" data-value="50">
                                         <div class="progress-bar"></div>
@@ -84,6 +94,8 @@
                                                 class="fas fa-star text-dark"><i class="fas fa-star text-dark"><i
                                                         class="fas fa-star text-dark"></i></td>
                                 <td>
+                                <div class="progress-container" data-value="80">
+                                        <div class="progress-bar"></div>
                                 <div class="progress-container" data-value="80">
                                         <div class="progress-bar"></div>
                                     </div>
@@ -263,19 +275,19 @@
                 const rating = parseFloat(container.getAttribute("data-rating")); // รับค่าคะแนนจาก data-rating
                 container.innerHTML = ""; // เคลียร์ค่าก่อนหน้า
 
-                for (let i = 1; i <= 5; i++) {
-                    const star = document.createElement("i");
-                    if (i <= Math.floor(rating)) {
-                        star.className = "fas fa-star text-warning"; // ดาวเต็ม
-                    } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
-                        star.className = "fas fa-star-half-alt text-warning"; // ดาวครึ่ง
-                    } else {
-                        star.className = "fas fa-star text-dark"; // ดาวว่าง
-                    }
-                    container.appendChild(star);
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement("i");
+                if (i <= Math.floor(rating)) {
+                    star.className = "fas fa-star text-warning"; // ดาวเต็ม
+                } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                    star.className = "fas fa-star-half-alt text-warning"; // ดาวครึ่ง
+                } else {
+                    star.className = "fas fa-star text-dark"; // ดาวว่าง
                 }
-            });
-        }
+                container.appendChild(star);
+            }
+        });
+    }
 
         // เรียกใช้งานเมื่อโหลดหน้าเสร็จ
         renderStarsForAll();

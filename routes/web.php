@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 /*
@@ -35,15 +36,19 @@ Route::get('/structure', function (){
 
 
 Route::get('/tableusers', function (){
-    return view('tableusers');
+    return view('users.tableusers');
 });
 
 Route::get('/insertusers', function (){
-    return view('insertusers');
+    return view('users.insertusers');
 });
 
-Route::get('/listusers', function (){
-    return view('users.listusers');
+
+
+Route::get('/listusers', [UserController::class, 'listUsers'])->name('users.list');
+
+Route::get('/permissionsusers', function (){
+    return view('users.permissionsusers');
 });
 
 Route::get('/updatenewsfeed', function (){
@@ -86,7 +91,6 @@ Route::get('/search', [AdminController::class, 'search'])->name('search');
 
 
 
-use App\Http\Controllers\UserController;
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
@@ -196,6 +200,46 @@ Route::post('/importdata', [ReportController::class ,'import']);
 Route::get('/incomecurrent', function () {
     return view('report.incomecurrent');
 });
+Route::get('/users', [UserController::class, 'listUsers'])->name('users.list');
+
+Route::get('delete/{id}',[UserController::class,'delete'])->name('delete');
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
+Route::get('/users/{id}/edit',[UserController::class,'edit'])->name('users.edit');
+Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
+// Example route protection
+Route::middleware(['auth', 'check.permission:manage_users'])->group(function () {
+    Route::get('/listusers', [UserController::class, 'listUsers'])->name('users.list');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    // Other user management routes
+});
+
+Route::middleware(['auth', 'check.permission:manage_dashboard'])->group(function () {
+    Route::get('/listreport', function () {
+        return view('report.listreport');
+    });
+    Route::get('/viewreport', function () {
+        return view('report.viewreport');
+    });
+    // Other report-related routes
+});
+
+Route::middleware(['auth', 'check.permission:manage_newsfeed'])->group(function () {
+    Route::get('/newsfeed', [AdminController::class, 'newsfeed'])->name('newsfeed');
+    Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
+    // Other news-related routes
+});
+
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+
+
+
+
+
 
 Route::get('/viewreport3', function () {
     return view('report.viewreport3');

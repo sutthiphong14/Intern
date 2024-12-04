@@ -18,78 +18,61 @@
 <!-- Theme style -->
 <link rel="stylesheet" href="dist/css/adminlte.min.css">
 @endsection
+
 @section('content')
 <section class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="card card-warning mt-3 mb-3 ">
-
-                    <div class="card-header d-flex justify-content-between align-items-center ">
-                        <h3 class="card-title col-5">รายชื่อผู้ใช้ </h3>
-
+                <div class="card card-warning mt-3 mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title col-5">รายชื่อผู้ใช้</h3>
                         <div class="input-group col-4">
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" placeholder="ค้นหา">
                             <span class="input-group-append">
-                                <button type="button" class="btn btn-info btn-dark">Search</button>
+                                <button type="button" class="btn btn-info btn-dark">ค้นหา</button>
                             </span>
                         </div>
-
-
-
-                        <a href="insertnewsfeed" class="btn bg-success col-2">
-                            <i class="d-flex justify-content-end "></i> Add+
+                        <a href="insertusers" class="btn bg-success col-2">
+                            <i class="d-flex justify-content-end"></i> เพิ่มผู้ใช้งาน
                         </a>
                     </div>
-
-                    <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="example2" class="table table-bordered table-hover ">
-                            <thead class='text-center col-12 '>
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead class='text-center'>
                                 <tr>
-                                    <th class='col-1 '>ID</th>
-                                    <th class='col-3'>Name</th>
-                                    <th class='col-4'>Description</th>
-                                    <th class='col-1'>permission</th>
-                                    <th class='col-3'>Action</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>    
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse($users as $user)
                                 <tr>
-                                    <td>id1</td>
-                                    <td>name1</td>
-                                    <td>------------</td>
-                                    <td>Admin</td>
-                                    <td class='align-items-center text-center'>
-                                        <a class="btn btn-primary align-items-center">
-                                            <i class="far fa-eye"></i> สิทธิ์การใช้งาน
-                                        </a>
-
-                                        <a class="btn btn-warning align-items-center">
-                                            <i class="fas fa-edit text-light"></i> แก้ไข
-                                        </a>
-                                        <a class="btn btn-danger align-items-center">
-                                            <i class="fas fa-trash"></i> ลบ
-                                        </a>
-
+                                    <td>{{ $user->id }}</td>
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
+                                    <td class="text-center">
+                                        <a href="permissionsusers/{{ $user->id }}" class="btn btn-primary">สิทธิ์การใช้งาน</a>
+                                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning">แก้ไข</a>
+                                        <a href="#"
+                                           class="btn btn-danger delete-btn"
+                                           data-url="{{ route('delete', $user->id) }}">ลบ</a>
                                     </td>
                                 </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="5" class="text-center">ไม่มีข้อมูล</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-                </tbody>
-
-                    </table>
                 </div>
-                <!-- /.card-body -->
-
-
             </div>
-            <!-- /.card -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
-    </div>
-    <!-- /.container-fluid -->
 </section>
 @endsection
 
@@ -111,27 +94,44 @@
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- Page specific script -->
 <script>
     $(function () {
-        $("#example1").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         $('#example2').DataTable({
             "paging": true,
             "lengthChange": false,
-            "searching": false,
+            "searching": true,
             "ordering": true,
             "info": true,
             "autoWidth": false,
             "responsive": true,
+        });
+    });
+
+    // SweetAlert2 สำหรับการยืนยันการลบ
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // ป้องกันการส่งลิงก์เดิม
+                let url = this.getAttribute('data-url');
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่?',
+                    text: "ข้อมูลจะถูกลบและไม่สามารถกู้คืนได้!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ใช่, ลบเลย!',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url; // ส่งคำขอลบ
+                    }
+                });
+            });
         });
     });
 </script>
