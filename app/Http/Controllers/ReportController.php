@@ -135,10 +135,32 @@ class ReportController extends Controller
 {
     $section = str_replace('รวม ', '', $section);
 
-    $installData = Installfttx::where('section', 'LIKE', "%$section%")
-                              ->where('year', '=', $year)
-                              ->where('month', '=', $month)
-                              ->get();
+    $columns = [
+    'num_of_circuits',
+    'total_preparation_time_days',
+    'total_processing_time_days',
+    'sdp_odp_deadline_days',
+    'wiring_time_days',
+    'config_nms_days',
+    'technician_appointment_and_scheduling_time_days',
+    'customer_waiting_time_days',
+    'cable_pulling_and_ont_installation_time_days',
+    'closing_work_time_days',
+    'total_average_time_per_circuit_days',
+    'num_of_circuits_installed_within_3_days',
+    'installation_percentage_within_3_days',
+];
+
+$installData = Installfttx::where('section', 'LIKE', "%$section%")
+    ->where('year', '=', $year)
+    ->where('month', '=', $month)
+    ->where(function($query) use ($columns) {
+        foreach ($columns as $column) {
+            $query->orWhere($column, '!=', 0);
+        }
+    })
+    ->get();
+
 
     $labels = $installData->pluck('installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
     $data = $installData->pluck('installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
