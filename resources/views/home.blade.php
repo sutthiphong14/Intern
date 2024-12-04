@@ -51,9 +51,14 @@
         <div class="card-header">
             <h3 class="card-title">ข่าว</h3>
             <div class="card-tools">
+            <a href="newsfeed" class="btn bg-light  ">
+                    <i class="d-flex justify-content-end "></i> แสดงเพิ่มเติม
+                </a>
+            @if(Auth::user()->permission['manage_newsfeed'] ?? false)
                 <a href="listnewsfeed" class="btn bg-warning  ">
                     <i class="d-flex justify-content-end "></i> แก้ไขกระดานข่าว
                 </a>
+            @endif
 
             </div>
         </div>

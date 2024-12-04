@@ -192,7 +192,7 @@ Route::get('/viewInstallFTTxcenter/{center}/{year}/{month}', [ReportController::
 
 Route::get('/importdata', function () {
     return view('report.importdata');
-});
+})->name('importdata');
 
 Route::post('/importdata', [ReportController::class ,'import']);
 
@@ -225,7 +225,7 @@ Route::middleware(['auth', 'check.permission:manage_dashboard'])->group(function
 });
 
 Route::middleware(['auth', 'check.permission:manage_newsfeed'])->group(function () {
-    Route::get('/newsfeed', [AdminController::class, 'newsfeed'])->name('newsfeed');
+    
     Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
     // Other news-related routes
 });

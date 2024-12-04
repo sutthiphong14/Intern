@@ -6,9 +6,7 @@
         </li>
         
         @if(Auth::user()->permission['manage_users'] ?? false)
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{route('structure')}}" class="nav-link text-dark">เกี่ยวกับ NT</a>
-            </li>
+            
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="{{route('users.list')}}" class="nav-link text-dark">จัดการผู้ใช้</a>
             </li>
@@ -16,30 +14,15 @@
 
         @if(Auth::user()->permission['manage_newsfeed'] ?? false)
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{route('listnewsfeed')}}" class="nav-link text-dark">ข่าว</a>
+                <a href="{{route('listnewsfeed')}}" class="nav-link text-dark">จัดการเอกสารข่าว</a>
+            </li>
+        @endif
+        @if(Auth::user()->permission['manage_dashboard'] ?? false)
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="{{route('importdata')}}" class="nav-link text-dark">อัพโหลดแดชบอร์ด</a>
             </li>
         @endif
 
-        @if(Auth::user()->permission['manage_dashboard'] ?? false)
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="listreport" class="nav-link text-dark">รายงาน</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="viewreport" class="nav-link text-dark">ดูรายงาน</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="viewreport1" class="nav-link text-dark">ดูรายงาน1</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="viewInstallFTTx" class="nav-link text-dark">รายงานติดตั้ง 3 วัน</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="viewInstallFTTxprovin" class="nav-link text-dark">รายงานติดตั้ง จังหวัด</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="viewInstallFTTxcenter" class="nav-link text-dark">รายงานติดตั้งศูนย์บริการ</a>
-            </li>
-        @endif
     </ul>
 
     <!-- Right navbar links -->

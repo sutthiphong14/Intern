@@ -68,16 +68,16 @@
                                                 <button onclick="changeNewsStatus({{ $item->id }})"
                                                     class="btn {{ $item->status ? 'btn-primary' : 'btn-secondary' }} align-items-center">
                                                     <i class="{{ $item->status ? 'fas fa-eye-slash' : 'far fa-eye' }}"></i>
-                                                    {{ $item->status ? 'Hide' : 'Show' }}
+                                                    {{ $item->status ? 'แสดง' : 'ซ่อน' }}
                                                 </button>
                                                 <a href="{{ route('editnews', $item->id) }}"
                                                     class="btn btn-warning align-items-center">
-                                                    <i class="fas fa-edit text-light"></i> Edit
+                                                    <i class="fas fa-edit text-light"></i> แก้ไข
                                                 </a>
                                                 <a href="{{ route('deletenews', $item->id) }}"
                                                     class="btn btn-danger align-items-center"
                                                     onclick="return confirm('ต้องการลบข้อมูล {{ $item->name }} หรือไม่')">
-                                                    <i class="fas fa-trash"></i> Delete
+                                                    <i class="fas fa-trash"></i> ลบ
                                                 </a>
                                             </td>
                                         </tr>
@@ -122,10 +122,7 @@
     <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="dist/js/demo.js"></script>
+    
     <!-- Page specific script -->
     <script>
         $(function() {

@@ -143,7 +143,7 @@
                                         <td>{{ $item->sum_closing_work_time_days }}</td>
                                         <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
                                         <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
-                                        <td>{{ $item->sum_installation_percentage_within_3_days }}</td>
+                                        <td>{{ $item->sum_installation_percentage_within_3_days }}%</td>
                                         </tr>
                                         @endforeach
 
@@ -212,8 +212,8 @@
                 datasets: [{
                     label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
                     data: data,
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)', // สีพื้นหลังแท่งกราฟ
-                    borderColor: 'rgba(75, 192, 192, 1)',       // สีเส้นขอบ
+                    backgroundColor: 'rgb(61, 183, 71 ,0.5)', // สีพื้นหลังแท่งกราฟ
+                    borderColor: 'rgb(61, 183, 71 ,1)',       // สีเส้นขอบ
                     borderWidth: 1
                 }]
             },
