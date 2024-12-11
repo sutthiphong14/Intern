@@ -101,12 +101,18 @@
 
                     <div class="card card-dark">
                         <div class="card-header">
-                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
-                            
-
+                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{$latestMonthData->first()->month}})</h3>
                             <div class="card-tools">
+                                <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline" id="yearForm">
+                                    <input type="number" name="year" id="yearInput" placeholder="Enter year" 
+                                    value="{{ $latestMonthData->first()->year }}"
+
+                                           class="form-control d-inline w-auto" required>
+                                </form>
+                                
+                                
                             @if(Auth::user()->permission['manage_dashboard'] ?? false)
-                                <a href="importdata" class="btn bg-light ">
+                                <a href="{{route('importdata')}}" class="btn bg-light ">
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
                                 @endif
@@ -449,6 +455,13 @@
                 location.reload();
             }
         }
+    });
+</script>
+
+<script>
+    // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
+    document.getElementById('yearInput').addEventListener('change', function() {
+        document.getElementById('yearForm').submit();
     });
 </script>
 

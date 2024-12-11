@@ -178,6 +178,8 @@ Route::get('/viewreport1', function () {
 
 Route::get('/viewInstallFTTx',[ReportController::class , 'datainstallfttx'])->name('viewInstallFTTx');
 
+Route::get('/viewInstallFTTx/{year}',[ReportController::class , 'datainstallfttxYear'])->name('viewInstallFTTxYear');
+
 Route::get('/viewInstallFTTxcenter', [ReportController::class ,'datacenter']);
 
 Route::get('/viewInstallFTTxprovin',[ReportController::class ,'dataprovin'])->name('viewInstallFTTxprovin');
