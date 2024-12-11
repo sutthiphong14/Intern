@@ -42,7 +42,7 @@
                         <table id="example2" class="table table-bordered table-hover">
                             <thead class='text-center'>
                                 <tr class="col-12">
-                                    
+                                    <th class = 'col-1'>NnumberUser</th>
                                     <th class = 'col-4'>Name</th>
                                     <th class = 'col-4'>Email</th>    
                                     <th class = 'col-3'>Action</th>
@@ -51,7 +51,7 @@
                             <tbody>
                                 @forelse($users as $user)
                                 <tr>
-                                    
+                                    <td>{{ $user->employee_id }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td class="text-center">

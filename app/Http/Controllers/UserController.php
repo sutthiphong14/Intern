@@ -31,12 +31,14 @@ class UserController extends Controller
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|string|min:6', // เพิ่มการตรวจสอบ password
+        'employee_id' => 'required|string|unique:users,employee_id',
     ]);
 
     $user = User::create([
         'name' => $validatedData['name'],
         'email' => $validatedData['email'],
         'password' => Hash::make($validatedData['password']), // บังคับใส่ password
+        'employee_id' => $validatedData['employee_id'],
         'permission' => json_encode([
             'manage_users' => $request->has('manage_users_permission') ? 1 : 0,
             'manage_dashboard' => $request->has('manage_dashboard_permission') ? 1 : 0,
@@ -60,12 +62,14 @@ public function edit($id)
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'nullable|string|min:6',
+            'employee_id' => 'required|string|unique:users,employee_id,' . $id,
         ]);
 
         $user = User::findOrFail($id);
         
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
+        $user->employee_id = $validatedData['employee_id'];
         
         if (!empty($validatedData['password'])) {
             $user->password = Hash::make($validatedData['password']);
@@ -82,15 +86,16 @@ public function edit($id)
         return redirect()->route('users.list')->with('success', 'อัปเดตผู้ใช้สำเร็จ!');
     }
 
-   
     public function search(Request $request)
-{
-    $query = $request->input('query'); // รับค่าคำค้นจากแบบฟอร์ม
-    $users = User::where('name', 'LIKE', "%{$query}%")->get(); // ค้นหาจากชื่อผู้ใช้ที่ตรงกับคำค้น
-
-    return view('users.listusers', compact('users')); // ส่งผลลัพธ์ไปยัง View
-}
-
+    {
+        $query = $request->input('query'); // รับค่าคำค้นจากแบบฟอร์ม
+        $users = User::where('name', 'LIKE', "%{$query}%")->get(); // ค้นหาจากชื่อผู้ใช้ที่ตรงกับคำค้น
+    
+        return view('users.listusers', compact('users')); // ส่งผลลัพธ์ไปยัง View
+    }
+    
+    
+    
 }
 
 
