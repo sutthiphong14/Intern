@@ -246,3 +246,6 @@ Route::get('/viewreport3', function () {
 });
 
 Route::get('/viewreport3',[ReportController::class , 'viewreport3'])->name('viewreport3');
+
+Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+

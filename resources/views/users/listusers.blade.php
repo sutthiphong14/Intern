@@ -28,11 +28,12 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3 class="card-title col-5">รายชื่อผู้ใช้</h3>
                         <div class="input-group col-4">
-                            <input type="text" class="form-control" placeholder="ค้นหา">
-                            <span class="input-group-append">
-                                <button type="button" class="btn btn-info btn-dark">ค้นหา</button>
-                            </span>
+                            <form action="{{ route('users.search') }}" method="GET" class="d-flex w-100">
+                                <input type="text" name="query" class="form-control" placeholder="ค้นหาชื่อผู้ใช้..." value="{{ request('query') }}">
+                                <button type="submit" class="btn btn-info btn-dark">ค้นหา</button>
+                            </form>
                         </div>
+                        
                         <a href="insertusers" class="btn bg-success col-2">
                             <i class="d-flex justify-content-end"></i> เพิ่มผู้ใช้งาน
                         </a>
@@ -41,7 +42,7 @@
                         <table id="example2" class="table table-bordered table-hover">
                             <thead class='text-center'>
                                 <tr class="col-12">
-                                    <th class = 'col-1'>ID</th>
+                                    
                                     <th class = 'col-4'>Name</th>
                                     <th class = 'col-4'>Email</th>    
                                     <th class = 'col-3'>Action</th>
@@ -50,7 +51,7 @@
                             <tbody>
                                 @forelse($users as $user)
                                 <tr>
-                                    <td>{{ $user->id }}</td>
+                                    
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td class="text-center">

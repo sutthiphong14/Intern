@@ -63,6 +63,7 @@
                                     <input type="password" class="form-control" id="password" name="password" placeholder="กรอกรหัสผ่าน" required>
                                 </div>
                             </div>
+                            
 
                             <div class="card-body">
                                 <div class="form-group">
@@ -161,11 +162,7 @@
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
-<!-- Page specific script -->
-<script>
+
     $(function () {
         $('#example2').DataTable({
             "paging": true,

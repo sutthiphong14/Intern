@@ -83,6 +83,14 @@ public function edit($id)
     }
 
    
+    public function search(Request $request)
+{
+    $query = $request->input('query'); // รับค่าคำค้นจากแบบฟอร์ม
+    $users = User::where('name', 'LIKE', "%{$query}%")->get(); // ค้นหาจากชื่อผู้ใช้ที่ตรงกับคำค้น
+
+    return view('users.listusers', compact('users')); // ส่งผลลัพธ์ไปยัง View
+}
+
 }
 
 
