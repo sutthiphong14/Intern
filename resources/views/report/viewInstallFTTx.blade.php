@@ -17,104 +17,106 @@
     <section class="content">
         <div class="container-fluid mb-3">
 
+
             <div class="col-md-12 mt-3">
                 <!-- BAR CHART -->
                 <div class="card card-dark">
-                <div class="card-header">
-                    <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
+                    <div class="card-header">
+                        <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน  {{ $latestMonthData->first()->month }})</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
 
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover align-items-center">
+                            <thead class='text-center col-12'>
+                                <tr>
+                                    <th class='col-3 '>พื้นที่</th>
+                                    <th class='col-3'>ระดับ</th>
+                                    <th class='col-4'>Performance (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody class='align-items-center text-center'>
+                                <tr>
+                                    <td>กาฬสินธุ์</td>
+                                    <td class="star-container" data-rating="1"></td>
+                                    <td>
+                                        <div class="progress-container" data-value="30">
+                                            <div class="progress-bar"></div>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ขอนแก่น</td>
+                                    <td class="star-container" data-rating="5"></td>
+
+                                    <td>
+                                        <div class="progress-container" data-value="65">
+                                            <div class="progress-bar"></div>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>มหาสารคาม</td>
+
+                                    <td class="star-container" data-rating="4"></td>
+                                    <td>
+                                        <div class="progress-container" data-value="30">
+                                            <div class="progress-bar"></div>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ร้อยเอ็ด</td>
+                                    <td class="star-container" data-rating="1"></td>
+                                    <td>
+
+                                        <div class="progress-container" data-value="50">
+                                            <div class="progress-bar"></div>
+
+
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ภน.2.1</td>
+                                    <td><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i
+                                                    class="fas fa-star text-dark"><i class="fas fa-star text-dark"><i
+                                                            class="fas fa-star text-dark"></i></td>
+                                    <td>
+                                        <div class="progress-container" data-value="80">
+                                            <div class="progress-bar"></div>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="card-body">
-                    <table id="example2" class="table table-bordered table-hover align-items-center">
-                        <thead class='text-center col-12'>
-                            <tr>
-                                <th class='col-3 '>พื้นที่</th>
-                                <th class='col-3'>ระดับ</th>
-                                <th class='col-4'>Performance (%)</th>
-                            </tr>
-                        </thead>
-                        <tbody class='align-items-center text-center'>
-                            <tr>
-                                <td>กาฬสินธุ์</td>
-                                <td class="star-container" data-rating="1"></td>
-                                <td>
-                                    <div class="progress-container" data-value="30">
-                                        <div class="progress-bar"></div>
-                                  
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>ขอนแก่น</td>
-                                <td class="star-container" data-rating="5"></td>
-                               
-                                <td>
-                                <div class="progress-container" data-value="65">
-                                        <div class="progress-bar"></div>
-                                
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>มหาสารคาม</td>
-
-                                <td class="star-container" data-rating="4"></td>
-                                <td>
-                                <div class="progress-container" data-value="30">
-                                        <div class="progress-bar"></div>
-                               
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>ร้อยเอ็ด</td>
-                                <td class="star-container" data-rating="1"></td>
-                                <td>
-                                   
-                                <div class="progress-container" data-value="50">
-                                        <div class="progress-bar"></div>
-                                   
-                                
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>ภน.2.1</td>
-                                <td><i class="fas fa-star text-warning"><i class="fas fa-star text-warning"><i
-                                                class="fas fa-star text-dark"><i class="fas fa-star text-dark"><i
-                                                        class="fas fa-star text-dark"></i></td>
-                                <td>
-                                <div class="progress-container" data-value="80">
-                                        <div class="progress-bar"></div>
-                               
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
 
                 <div class="card card-dark mt-3">
 
                     <div class="card card-dark">
                         <div class="card-header">
-                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{$latestMonthData->first()->month}})</h3>
+                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน
+                                {{ $latestMonthData->first()->month }})</h3>
                             <div class="card-tools">
-                                <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline" id="yearForm">
-                                    <input type="number" name="year" id="yearInput" placeholder="Enter year" 
-                                    value="{{ $latestMonthData->first()->year }}"
-
-                                           class="form-control d-inline w-auto" required>
+                                <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET"
+                                    class="d-inline" id="yearForm">
+                                    <input type="number" name="year" id="yearInput" placeholder="Enter year"
+                                        value="{{ $latestMonthData->first()->year }}" class="form-control d-inline w-auto"
+                                        required>
                                 </form>
-                                
-                                
-                            @if(Auth::user()->permission['manage_dashboard'] ?? false)
-                                <a href="{{route('importdata')}}" class="btn bg-light ">
-                                    <i class="d-flex justify-content-end "></i> Import
-                                </a>
+
+
+                                @if (Auth::user()->permission['manage_dashboard'] ?? false)
+                                    <a href="{{ route('importdata') }}" class="btn bg-light ">
+                                        <i class="d-flex justify-content-end "></i> Import
+                                    </a>
                                 @endif
                                 <button type="button" class="btn bg-gradient-warning">Export</button>
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -151,83 +153,89 @@
                                         </tr>
                                     </thead>
                                     @php
-                                    // แปลงข้อมูลจาก Collection เป็น Array
-                                    $sectionsArray = $latestMonthData->toArray();
-                                
-                                    // ใช้ usort เพื่อจัดเรียงตาม sum_installation_center
-                                    usort($sectionsArray, function($a, $b) {
-                                        return strcoll($a['sum_installation_center'], $b['sum_installation_center']);
-                                    });
-                                
-                                    // ใช้ array_slice() เพื่อจำกัดการแสดงแค่ 14 ตัวแรก
-                                    $sectionsArray = array_slice($sectionsArray, 1, 14);
-                                @endphp
-                                
-                                <tbody class='text-center align-items-center'>
-                                    @foreach ($sectionsArray as $section)
-                                        <tr>
-                                            <td>
-                                                <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year']]) }}" class="btn btn-warning">
-                                                    <i class="fas fa-search"></i>
-                                                </a>
-                                                
-                                            </td>
-                                            <td>
-                                                @if ($section['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
-                                                    กาฬสินธุ์
-                                                @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
-                                                    ขอนแก่น
-                                                @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (มค.)')
-                                                    มหาสารคาม
-                                                @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (รอ.)')
-                                                    ร้อยเอ็ด
-                                                @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นค.)')
-                                                    หนองคาย
-                                                @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นพ.)')
-                                                    นครพนม
-                                                @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นภ.)')
-                                                    หนองบัวลำภู
-                                                @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (บก.)')
-                                                    บึงกาฬ
-                                                @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (มห.)')
-                                                    มุกดาหาร
-                                                @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (ลย.)')
-                                                    เลย
-                                                @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (สน.)')
-                                                    สกลนคร
-                                                @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
-                                                    อุดรธานี
-                                                @elseif ($section['sum_installation_center'] == 'รวม ภน.2.2')
-                                                    ภน.2.2
-                                                @elseif ($section['sum_installation_center'] == 'รวม ภน.2.1')
-                                                    ภน.2.1
-                                                @endif
-                                            </td>
-                                            <!-- ค่าอื่นๆ -->
-                                            <td>{{ $section['sum_num_of_circuits'] }}</td>
-                                            <td>{{ $section['sum_total_preparation_time_days'] }}</td>
-                                            <td>{{ $section['sum_total_processing_time_days'] }}</td>
-                                            <td>{{ $section['sum_sdp_odp_deadline_days'] }}</td>
-                                            <td>{{ $section['sum_wiring_time_days'] }}</td>
-                                            <td>{{ $section['sum_config_nms_days'] }}</td>
-                                            <td>{{ $section['sum_technician_appointment_and_scheduling_time_days'] }}</td>
-                                            <td>{{ $section['sum_customer_waiting_time_days'] }}</td>
-                                            <td>{{ $section['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
-                                            <td>{{ $section['sum_closing_work_time_days'] }}</td>
-                                            <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
-                                            <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
+                                        // แปลงข้อมูลจาก Collection เป็น Array
+                                        $sectionsArray = $latestMonthData->toArray();
 
-                                            <td>
-                                    <div class="progress-container" data-value="{{ $section['sum_installation_percentage_within_3_days'] }}">
-                                        <div class="progress-bar"></div>
-                                    </div>
-                                </td>
-                                           
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                                
-                                
+                                        // ใช้ usort เพื่อจัดเรียงตาม sum_installation_center
+                                        usort($sectionsArray, function ($a, $b) {
+                                            return strcoll(
+                                                $a['sum_installation_center'],
+                                                $b['sum_installation_center'],
+                                            );
+                                        });
+
+                                        // ใช้ array_slice() เพื่อจำกัดการแสดงแค่ 14 ตัวแรก
+                                        $sectionsArray = array_slice($sectionsArray, 1, 14);
+                                    @endphp
+
+                                    <tbody class='text-center align-items-center'>
+                                        @foreach ($sectionsArray as $section)
+                                            <tr>
+                                                <td>
+                                                    <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year']]) }}"
+                                                        class="btn btn-warning">
+                                                        <i class="fas fa-search"></i>
+                                                    </a>
+
+                                                </td>
+                                                <td>
+                                                    @if ($section['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
+                                                        กาฬสินธุ์
+                                                    @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
+                                                        ขอนแก่น
+                                                    @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (มค.)')
+                                                        มหาสารคาม
+                                                    @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (รอ.)')
+                                                        ร้อยเอ็ด
+                                                    @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นค.)')
+                                                        หนองคาย
+                                                    @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นพ.)')
+                                                        นครพนม
+                                                    @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นภ.)')
+                                                        หนองบัวลำภู
+                                                    @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (บก.)')
+                                                        บึงกาฬ
+                                                    @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (มห.)')
+                                                        มุกดาหาร
+                                                    @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (ลย.)')
+                                                        เลย
+                                                    @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (สน.)')
+                                                        สกลนคร
+                                                    @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
+                                                        อุดรธานี
+                                                    @elseif ($section['sum_installation_center'] == 'รวม ภน.2.2')
+                                                        ภน.2.2
+                                                    @elseif ($section['sum_installation_center'] == 'รวม ภน.2.1')
+                                                        ภน.2.1
+                                                    @endif
+                                                </td>
+                                                <!-- ค่าอื่นๆ -->
+                                                <td>{{ $section['sum_num_of_circuits'] }}</td>
+                                                <td>{{ $section['sum_total_preparation_time_days'] }}</td>
+                                                <td>{{ $section['sum_total_processing_time_days'] }}</td>
+                                                <td>{{ $section['sum_sdp_odp_deadline_days'] }}</td>
+                                                <td>{{ $section['sum_wiring_time_days'] }}</td>
+                                                <td>{{ $section['sum_config_nms_days'] }}</td>
+                                                <td>{{ $section['sum_technician_appointment_and_scheduling_time_days'] }}
+                                                </td>
+                                                <td>{{ $section['sum_customer_waiting_time_days'] }}</td>
+                                                <td>{{ $section['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
+                                                <td>{{ $section['sum_closing_work_time_days'] }}</td>
+                                                <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
+                                                <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
+
+                                                <td>
+                                                    <div class="progress-container"
+                                                        data-value="{{ $section['sum_installation_percentage_within_3_days'] }}">
+                                                        <div class="progress-bar"></div>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+
+
 
 
 
@@ -274,85 +282,85 @@
                 const rating = parseFloat(container.getAttribute("data-rating")); // รับค่าคะแนนจาก data-rating
                 container.innerHTML = ""; // เคลียร์ค่าก่อนหน้า
 
-            for (let i = 1; i <= 5; i++) {
-                const star = document.createElement("i");
-                if (i <= Math.floor(rating)) {
-                    star.className = "fas fa-star text-warning"; // ดาวเต็ม
-                } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
-                    star.className = "fas fa-star-half-alt text-warning"; // ดาวครึ่ง
-                } else {
-                    star.className = "fas fa-star text-dark"; // ดาวว่าง
+                for (let i = 1; i <= 5; i++) {
+                    const star = document.createElement("i");
+                    if (i <= Math.floor(rating)) {
+                        star.className = "fas fa-star text-warning"; // ดาวเต็ม
+                    } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                        star.className = "fas fa-star-half-alt text-warning"; // ดาวครึ่ง
+                    } else {
+                        star.className = "fas fa-star text-dark"; // ดาวว่าง
+                    }
+                    container.appendChild(star);
                 }
-                container.appendChild(star);
-            }
-        });
-    }
+            });
+        }
 
         // เรียกใช้งานเมื่อโหลดหน้าเสร็จ
         renderStarsForAll();
     </script>
 
-<script>
-    // ฟังก์ชันแสดงผลหลอดเปอร์เซ็นต์
-    function updateProgressBars() {
-        // ดึงองค์ประกอบทุก progress-container
-        const containers = document.querySelectorAll('.progress-container');
+    <script>
+        // ฟังก์ชันแสดงผลหลอดเปอร์เซ็นต์
+        function updateProgressBars() {
+            // ดึงองค์ประกอบทุก progress-container
+            const containers = document.querySelectorAll('.progress-container');
 
-        containers.forEach(container => {
-            const value = parseInt(container.getAttribute('data-value')); // รับค่าจาก data-value
-            const progressBar = container.querySelector('.progress-bar');
+            containers.forEach(container => {
+                const value = parseInt(container.getAttribute('data-value')); // รับค่าจาก data-value
+                const progressBar = container.querySelector('.progress-bar');
 
-            // ตั้งค่าขนาดและข้อความ
-            progressBar.style.width = value + '%';
-            progressBar.textContent = value + '%';
+                // ตั้งค่าขนาดและข้อความ
+                progressBar.style.width = value + '%';
+                progressBar.textContent = value + '%';
 
-            // กำหนดสีตามเงื่อนไข
-            if (value < 50) {
-                progressBar.className = 'progress-bar red';
-            } else if (value < 80) {
-                progressBar.className = 'progress-bar yellow';
-            } else {
-                progressBar.className = 'progress-bar green';
-            }
-        });
-    }
+                // กำหนดสีตามเงื่อนไข
+                if (value < 50) {
+                    progressBar.className = 'progress-bar red';
+                } else if (value < 80) {
+                    progressBar.className = 'progress-bar yellow';
+                } else {
+                    progressBar.className = 'progress-bar green';
+                }
+            });
+        }
 
-    // เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเสร็จ
-    updateProgressBars();
-</script>
+        // เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเสร็จ
+        updateProgressBars();
+    </script>
 
-<style>
-    .progress-container {
-        width: 100%;
-        max-width: 100%;
-        background-color: #e0e0e0;
-        border-radius: 8px;
-        overflow: hidden;
-        margin-bottom: 15px;
-    }
+    <style>
+        .progress-container {
+            width: 100%;
+            max-width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
 
-    .progress-bar {
-        height: 25px;
-        width: 100;
-        text-align: center;
-        line-height: 30px;
-        color: white;
-        transition: width 0.3s ease;
-    }
+        .progress-bar {
+            height: 25px;
+            width: 100;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            transition: width 0.3s ease;
+        }
 
-    .red {
-        background-color: Crimson;
-    }
+        .red {
+            background-color: Crimson;
+        }
 
-    .yellow {
-        background-color: gold;
-        color: black;
-    }
+        .yellow {
+            background-color: gold;
+            color: black;
+        }
 
-    .green {
-        background-color: SeaGreen;
-    }
-</style>
+        .green {
+            background-color: SeaGreen;
+        }
+    </style>
 
     <script>
         // JavaScript ที่ใช้ในการกำหนดสีของหลอดตามเปอร์เซ็นต์
@@ -436,35 +444,46 @@
     </script>
 
 
-<<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if (localStorage.getItem('status')) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: localStorage.getItem('status'),
-                confirmButtonText: 'OK'
-            }).then(() => {
-                localStorage.removeItem('status');
-            });
-        } else {
-            // ถ้าไม่มีใน localStorage ให้เช็ค session
-            const status = '{{ session('status') }}';
-            if (status) {
-                localStorage.setItem('status', status);
-                location.reload();
+    <<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('status')) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: localStorage.getItem('status'),
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    localStorage.removeItem('status');
+                });
+            } else {
+                // ถ้าไม่มีใน localStorage ให้เช็ค session
+                const status = '{{ session('status') }}';
+                if (status) {
+                    localStorage.setItem('status', status);
+                    location.reload();
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 
-<script>
-    // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
-    document.getElementById('yearInput').addEventListener('change', function() {
-        document.getElementById('yearForm').submit();
-    });
-</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('alert'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่พบข้อมูล',
+                    text: '{{ session('alert') }}',
+                    confirmButtonText: 'OK'
+                });
+            @endif
+        });
+    </script>
 
 
-
+    <script>
+        // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
+        document.getElementById('yearInput').addEventListener('change', function() {
+            document.getElementById('yearForm').submit();
+        });
+    </script>
 @endsection

@@ -111,48 +111,54 @@ class ReportController extends Controller
     }
 
     public function datainstallfttxYear(Request $request)
-{
-    // รับค่า year จาก query string, ถ้าไม่มีจะใช้ปีปัจจุบัน
-    $year = $request->input('year', Carbon::now()->year); // ค่า default เป็นปีปัจจุบัน
-
-    // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
-    $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2'])
-        ->distinct() // กรองค่าซ้ำ
-        ->pluck('sum_installation_center');
+    {
+        // รับค่า year จาก query string, ถ้าไม่มีจะใช้ปีปัจจุบัน
+        $year = $request->input('year', Carbon::now()->year); // ค่า default เป็นปีปัจจุบัน
     
-    // ดึงข้อมูลที่มีปีตรงกับค่า year ที่ได้รับ
-    $sumInstallfttx = SumInstallfttx::where('year', $year)->get();
-
-    $monthMapping = [
-        'มกราคม' => 1,
-        'กุมภาพันธ์' => 2,
-        'มีนาคม' => 3,
-        'เมษายน' => 4,
-        'พฤษภาคม' => 5,
-        'มิถุนายน' => 6,
-        'กรกฎาคม' => 7,
-        'สิงหาคม' => 8,
-        'กันยายน' => 9,
-        'ตุลาคม' => 10,
-        'พฤศจิกายน' => 11,
-        'ธันวาคม' => 12,
-    ];
-
-    // แปลงชื่อเดือนเป็นหมายเลขเดือน
-    $sumInstallfttx = $sumInstallfttx->map(function ($item) use ($monthMapping) {
-        $item->month_number = $monthMapping[$item->month] ?? null; // แปลงชื่อเดือนเป็นหมายเลขเดือน
-        return $item;
-    });
-
-    // หาค่าเดือนล่าสุด (โดยใช้ max จากหมายเลขเดือน)
-    $latestMonthNumber = $sumInstallfttx->max('month_number');
-
-    // กรองข้อมูลที่มีเดือนล่าสุด
-    $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
-
-    // คืนค่าผลลัพธ์ไปยัง view พร้อมกับข้อมูลทั้งหมด
-    return view('report.viewInstallFTTx', compact('installationCenters', 'latestMonthData', 'year'));
-}
+        // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
+        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2'])
+            ->distinct() // กรองค่าซ้ำ
+            ->pluck('sum_installation_center');
+        
+        // ดึงข้อมูลที่มีปีตรงกับค่า year ที่ได้รับ
+        $sumInstallfttx = SumInstallfttx::where('year', $year)->get();
+    
+        // ถ้าไม่มีข้อมูลในปีนั้น ให้แจ้งเตือน
+        if ($sumInstallfttx->isEmpty()) {
+            return redirect()->back()->with('alert', 'ไม่พบข้อมูลสำหรับปี ' . $year);
+        }
+    
+        $monthMapping = [
+            'มกราคม' => 1,
+            'กุมภาพันธ์' => 2,
+            'มีนาคม' => 3,
+            'เมษายน' => 4,
+            'พฤษภาคม' => 5,
+            'มิถุนายน' => 6,
+            'กรกฎาคม' => 7,
+            'สิงหาคม' => 8,
+            'กันยายน' => 9,
+            'ตุลาคม' => 10,
+            'พฤศจิกายน' => 11,
+            'ธันวาคม' => 12,
+        ];
+    
+        // แปลงชื่อเดือนเป็นหมายเลขเดือน
+        $sumInstallfttx = $sumInstallfttx->map(function ($item) use ($monthMapping) {
+            $item->month_number = $monthMapping[$item->month] ?? null; // แปลงชื่อเดือนเป็นหมายเลขเดือน
+            return $item;
+        });
+    
+        // หาค่าเดือนล่าสุด (โดยใช้ max จากหมายเลขเดือน)
+        $latestMonthNumber = $sumInstallfttx->max('month_number');
+    
+        // กรองข้อมูลที่มีเดือนล่าสุด
+        $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
+    
+        // คืนค่าผลลัพธ์ไปยัง view พร้อมกับข้อมูลทั้งหมด
+        return view('report.viewInstallFTTx', compact('installationCenters', 'latestMonthData', 'year'));
+    }
+    
 
 
 
@@ -168,10 +174,34 @@ class ReportController extends Controller
 
     public function sortprovin($section, $year)
     {
-        // ดึงข้อมูลที่ตรงกับ section และ year
+
+        $monthMapping = [
+            'มกราคม' => 1,
+            'กุมภาพันธ์' => 2,
+            'มีนาคม' => 3,
+            'เมษายน' => 4,
+            'พฤษภาคม' => 5,
+            'มิถุนายน' => 6,
+            'กรกฎาคม' => 7,
+            'สิงหาคม' => 8,
+            'กันยายน' => 9,
+            'ตุลาคม' => 10,
+            'พฤศจิกายน' => 11,
+            'ธันวาคม' => 12,
+        ];
+
         $sumData = SumInstallfttx::where('sum_installation_center', 'LIKE', "%$section%")
             ->where('year', '=', $year)
-            ->get();
+            ->get()
+            ->map(function ($item) use ($monthMapping) {
+                $item->month_number = $monthMapping[$item->month] ?? null; // แปลงชื่อเดือนเป็นหมายเลขเดือน
+                return $item;
+            })
+            ->sortBy('month_number'); // เรียงตามหมายเลขเดือน
+
+        
+    
+
 
         // เตรียมข้อมูลสำหรับกราฟ
         $labels = $sumData->pluck('month'); // ใช้เดือนเป็น label
