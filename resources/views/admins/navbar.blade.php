@@ -30,7 +30,8 @@
         <!-- Messages Dropdown Menu -->
         <li class="nav-item dropdown">
             <a class="nav-link d-flex justify-content-center align-items-center" data-toggle="dropdown" href="#">
-                <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle">
+                <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-2">
+                <span>{{ Auth::user()->name }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <div class="dropdown-divider"></div>
@@ -41,7 +42,7 @@
                              document.getElementById('logout-form').submit();">
                     {{ __('Logout') }}
                 </a>
-
+        
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
                 </form>
