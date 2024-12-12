@@ -129,7 +129,7 @@
                                         <td>{{ $data['sum_closing_work_time_days'] }}</td>
                                         <td>{{ $data['sum_total_average_time_per_circuit_days'] }}</td>
                                         <td>{{ $data['sum_num_of_circuits_installed_within_3_days'] }}</td>
-                                        <td>{{ $data['sum_installation_percentage_within_3_days'] }}</td>
+                                        <td>{{ $data['sum_installation_percentage_within_3_days'] }} %</td>
                                     </tr>
                                 @endforeach
 
@@ -180,7 +180,7 @@
                                         <td>{{ $data['sum_closing_work_time_days'] }}</td>
                                         <td>{{ $data['sum_total_average_time_per_circuit_days'] }}</td>
                                         <td>{{ $data['sum_num_of_circuits_installed_within_3_days'] }}</td>
-                                        <td>{{ $data['sum_installation_percentage_within_3_days'] }}</td>
+                                        <td>{{ $data['sum_installation_percentage_within_3_days'] }} %</td>
                                     </tr>
                                 @endforeach
                             </tbody>

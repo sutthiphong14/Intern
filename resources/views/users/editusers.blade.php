@@ -117,7 +117,7 @@
                                         </thead>
                                         <tbody class='text-start align-items-center'>
                                             <tr>
-                                                <td>จัดการผู้ใช้งานระบบ</td>
+                                                <td> <i class="fas fa-users-cog"></i> จัดการผู้ใช้งานระบบ</td>
                                                 <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข ให้สิทธิ์การใช้งานในระบบต่างๆแก่ผู้ใช้งานระบบ</td>
                                                 <td class='text-center'>
                                                     <div class="form-group">
@@ -132,7 +132,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>จัดการหน้าแดชบอร์ด</td>
+                                                <td> <i class="fas fa-chart-line"></i> จัดการหน้าแดชบอร์ด</td>
                                                 <td>สิทธิ์ในการ อัพโหลด ลบ แก้ไข หน้าแดชบอร์ด</td>
                                                 <td class='text-center'>
                                                     <div class="form-group">
@@ -147,7 +147,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>จัดการแหล่งป้อนข่าว</td>
+                                                <td> <i class="fas fa-newspaper"></i> จัดการแหล่งป้อนข่าว</td>
                                                 <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข เปิดปิดการแสดงผลของหน้าฟีดข่าว</td>
                                                 <td class='text-center'>
                                                     <div class="form-group">

@@ -19,7 +19,39 @@
                 <!-- BAR CHART -->
                 <div class="card card-dark">
                     <div class="card-header">
-                        <h3 class="card-title">ตรวจแก้ FTTx ภายใน 24 ชม. : จ. บภน.2.1 (กส.)</h3>
+                        <h3 class="card-title">ตรวจแก้ FTTx ภายใน 3 วัน. : จังหวัด. @if ($section == 'รวม บภน.2.1 (กส.)')
+                                                        กาฬสินธุ์
+                                                    @elseif ($section == 'รวม บภน.2.1 (ขก.)')
+                                                        ขอนแก่น
+                                                    @elseif ($section == 'รวม บภน.2.1 (มค.)')
+                                                        มหาสารคาม
+                                                    @elseif ($section == 'รวม บภน.2.1 (รอ.)')
+                                                        ร้อยเอ็ด
+                                                    @elseif ($section == 'รวม บภน.2.2 (นค.)')
+                                                        หนองคาย
+                                                    @elseif ($section == 'รวม บภน.2.2 (นพ.)')
+                                                        นครพนม
+                                                    @elseif ($section == 'รวม บภน.2.2 (นภ.)')
+                                                        หนองบัวลำภู
+                                                    @elseif ($section == 'รวม บภน.2.2 (บก.)')
+                                                        บึงกาฬ
+                                                    @elseif ($section == 'รวม บภน.2.2 (มห.)')
+                                                        มุกดาหาร
+                                                    @elseif ($section == 'รวม บภน.2.2 (ลย.)')
+                                                        เลย
+                                                    @elseif ($section == 'รวม บภน.2.2 (สน.)')
+                                                        สกลนคร
+                                                    @elseif ($section == 'รวม บภน.2.2 (อด.)')
+                                                        อุดรธานี
+                                                    @elseif ($section == 'รวม ภน.2.2')
+                                                        ภน.2.2
+                                                    @elseif ($section == 'รวม ภน.2.1')
+                                                        ภน.2.1
+                                                    @else
+                                                        {{ $section }}
+                                                        <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
+                                                    @endif
+                                                </h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -149,8 +181,12 @@
                                                 <td>{{ $item->sum_closing_work_time_days }}</td>
                                                 <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
                                                 <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
+<<<<<<< Updated upstream
                                                 <td
                                             class="{{ $item['sum_installation_percentage_within_3_days'] > 80 ? 'bg-success' : ($item['sum_installation_percentage_within_3_days'] > 60 ? 'bg-warning' : 'bg-danger') }}">{{ $item->sum_installation_percentage_within_3_days }}%</td>
+=======
+                                                <td class="{{ $item['sum_installation_percentage_within_3_days'] > 80 ? 'bg-success' : ($item['sum_installation_percentage_within_3_days'] > 60 ? 'bg-warning' : 'bg-danger') }}">{{ $item->sum_installation_percentage_within_3_days }}%</td>
+>>>>>>> Stashed changes
                                             </tr>
                                         @endforeach
 
