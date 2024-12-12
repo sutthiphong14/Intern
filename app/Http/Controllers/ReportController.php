@@ -8,6 +8,7 @@ use App\Imports\SumInstallfttxImport;
 use App\Imports\totalfttximport;
 use App\Models\Installfttx;
 use App\Models\suminstallfttx;
+use App\Models\Totalinstallfttx;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
@@ -17,33 +18,74 @@ class ReportController extends Controller
 
 
 
-    // ฟังก์ชั่นสำหรับการนำเข้าไฟล์ Excel
-    function import(Request $request)
+    public function import(Request $request)
     {
-
-        // ตรวจสอบไฟล์ที่อัปโหลด
+        // ตรวจสอบไฟล์และข้อมูลเดือน ปี
         $request->validate([
-            'import_file' => 'required|file|mimes:xlsx,xls',
-            'month' => 'required|string',  // ตรวจสอบ month ว่ามีการกรอก
-            'year' => 'required|string'    // ตรวจสอบ year ว่ามีการกรอก
+            'month' => 'required|string',
+            'year' => 'required|string'
         ]);
-
-
-        // สร้างข้อมูลเดือนและปีจากฟอร์ม
         $month = $request->month;
         $year = $request->year;
-
-        // นำเข้าไฟล์ Excel โดยใช้ Import Class และส่งค่าเดือนและปีไปใน constructor
-        Excel::import(new InstallfttxImport($month, $year), $request->file('import_file'));
-
-        Excel::import(new SumInstallfttxImport($month, $year), $request->file('import_file'));
-
-        Excel::import(new totalfttximport($month, $year), $request->file('import_file'));
-
-        // คืนค่ากลับไปที่หน้าก่อนหน้า และแสดงข้อความว่า import เสร็จสมบูรณ์
+    
+        // ตรวจสอบข้อมูลในฐานข้อมูล
+        $existingData = Installfttx::where('month', $month)->where('year', $year)->first();
+        if ($existingData) {
+            // ถ้ามีข้อมูล และผู้ใช้ได้อัพโหลดไฟล์ใหม่
+            $filePath = $request->hasFile('import_file') 
+                        ? $request->file('import_file')->store('temp') 
+                        : null;
+    
+            // ส่งตัวแปรเพื่อเปิด Modal ในหน้า importdata
+            return view('report.importdata', [
+                'month' => $month ,
+                'year' => $year,
+                'filePath' => $filePath,
+                'showModal' => true // เพิ่มตัวแปรเพื่อเปิด Modal
+            ]);
+        }
+    
+        // ถ้าไม่มีข้อมูลในฐานข้อมูล ให้ทำการนำเข้าไฟล์ใหม่
+        if ($request->hasFile('import_file')) {
+            Excel::import(new InstallfttxImport($month, $year), $request->file('import_file'));
+            Excel::import(new SumInstallfttxImport($month, $year), $request->file('import_file'));
+            Excel::import(new TotalfttxImport($month, $year), $request->file('import_file'));
+        }
+    
         return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
-
     }
+    
+    
+    
+    public function importFile(Request $request)
+    {
+        // ตรวจสอบการเลือกไฟล์
+        $filePath = $request->filePath;
+        $month = $request->month;
+        $year = $request->year;
+        if ($request->file_choice == 'new') {
+            // ลบข้อมูลเก่าที่มีเดือนและปีนี้
+            Installfttx::where('month', $request->month)->where('year', $request->year)->delete();
+            SumInstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
+            Totalinstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
+          
+            // ใช้ไฟล์ที่รับจากฟอร์ม
+            Excel::import(new InstallfttxImport($month, $year), $filePath);
+            Excel::import(new SumInstallfttxImport($month, $year), $filePath);
+            Excel::import(new TotalfttxImport($month, $year), $filePath);
+            return redirect()->route('viewInstallFTTx')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
+        }
+    
+        // ถ้าเลือกไฟล์เดิม
+        else {
+            return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
+            
+        }
+        return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
+    }
+    
+    
+
 
     function datacenter()
     {
@@ -103,8 +145,8 @@ class ReportController extends Controller
         // กรองข้อมูลที่มีเดือนล่าสุด
         $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
 
-       
-        
+
+
 
         // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสามตัวแปร
         return view('report.viewInstallFTTx', compact('installationCenters', 'latestMonthData'));
@@ -114,20 +156,20 @@ class ReportController extends Controller
     {
         // รับค่า year จาก query string, ถ้าไม่มีจะใช้ปีปัจจุบัน
         $year = $request->input('year', Carbon::now()->year); // ค่า default เป็นปีปัจจุบัน
-    
+
         // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
         $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2'])
             ->distinct() // กรองค่าซ้ำ
             ->pluck('sum_installation_center');
-        
+
         // ดึงข้อมูลที่มีปีตรงกับค่า year ที่ได้รับ
         $sumInstallfttx = SumInstallfttx::where('year', $year)->get();
-    
+
         // ถ้าไม่มีข้อมูลในปีนั้น ให้แจ้งเตือน
         if ($sumInstallfttx->isEmpty()) {
-            return redirect()->back()->with('alert', 'ไม่พบข้อมูลสำหรับปี ' . $year);
+            return redirect()->back()->with('alert', 'ไม่มีข้อมูลสำหรับปี ' . $year);
         }
-    
+
         $monthMapping = [
             'มกราคม' => 1,
             'กุมภาพันธ์' => 2,
@@ -142,23 +184,23 @@ class ReportController extends Controller
             'พฤศจิกายน' => 11,
             'ธันวาคม' => 12,
         ];
-    
+
         // แปลงชื่อเดือนเป็นหมายเลขเดือน
         $sumInstallfttx = $sumInstallfttx->map(function ($item) use ($monthMapping) {
             $item->month_number = $monthMapping[$item->month] ?? null; // แปลงชื่อเดือนเป็นหมายเลขเดือน
             return $item;
         });
-    
+
         // หาค่าเดือนล่าสุด (โดยใช้ max จากหมายเลขเดือน)
         $latestMonthNumber = $sumInstallfttx->max('month_number');
-    
+
         // กรองข้อมูลที่มีเดือนล่าสุด
         $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
-    
+
         // คืนค่าผลลัพธ์ไปยัง view พร้อมกับข้อมูลทั้งหมด
         return view('report.viewInstallFTTx', compact('installationCenters', 'latestMonthData', 'year'));
     }
-    
+
 
 
 
@@ -199,8 +241,8 @@ class ReportController extends Controller
             })
             ->sortBy('month_number'); // เรียงตามหมายเลขเดือน
 
-        
-    
+
+
 
 
         // เตรียมข้อมูลสำหรับกราฟ

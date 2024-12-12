@@ -22,7 +22,14 @@
                 <!-- BAR CHART -->
                 <div class="card card-dark">
                     <div class="card-header">
-                        <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน  {{ $latestMonthData->first()->month }})</h3>
+                        <h3 class="card-title">
+                            @if ($latestMonthData->isEmpty())
+                                ติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
+                            @else
+                                ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})
+                            @endif
+                        </h3>
+
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -102,17 +109,21 @@
 
                     <div class="card card-dark">
                         <div class="card-header">
-                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน
-                                {{ $latestMonthData->first()->month }})</h3>
+                            <h3 class="card-title">
+                                @if ($latestMonthData->isEmpty())
+                                    ติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
+                                @else
+                                    ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})
+                                @endif
+                            </h3>
                             <div class="card-tools">
-                                <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET"
-                                    class="d-inline" id="yearForm">
+                                <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline" id="yearForm">
                                     <input type="number" name="year" id="yearInput" placeholder="Enter year"
-                                        value="{{ $latestMonthData->first()->year }}" class="form-control d-inline w-auto"
-                                        required>
+                                        value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}"
+                                        class="form-control d-inline " style="width: 200px;" required 
+                                        min="2000" max="9999">
                                 </form>
-
-
+                    
                                 @if (Auth::user()->permission['manage_dashboard'] ?? false)
                                     <a href="{{ route('importdata') }}" class="btn bg-light ">
                                         <i class="d-flex justify-content-end "></i> Import
@@ -124,6 +135,8 @@
                                 </button>
                             </div>
                         </div>
+                    </div>
+                    
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="example2" class="table table-bordered table-hover">

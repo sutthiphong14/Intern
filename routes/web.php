@@ -197,6 +197,8 @@ Route::get('/importdata', function () {
 })->name('importdata');
 
 Route::post('/importdata', [ReportController::class ,'import']);
+Route::post('/importdata2', [ReportController::class ,'importFile'])->name('importdata2');
+
 
 
 Route::get('/incomecurrent', function () {

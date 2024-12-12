@@ -48,7 +48,7 @@
                         <div class="card-header">
                            
 
-                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
+                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำปี {{$year}})</h3>
                             <div class="card-tools">
                                 <a href="{{ route('importdata') }}" class="btn bg-light ">
                                     <i class="d-flex justify-content-end "></i> Import
