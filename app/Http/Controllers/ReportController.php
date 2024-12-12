@@ -55,60 +55,68 @@ class ReportController extends Controller
     }
 
     public function datainstallfttx()
-    {
+{
+    // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
+    // และกรองค่าซ้ำ
+    $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2'])
+        ->distinct() // กรองค่าซ้ำ
+        ->pluck('sum_installation_center');
+
+    $presenct_data = SumInstallfttx::distinct()
+        ->pluck('sum_installation_center');
+
+    $monthMapping = [
+        'มกราคม' => 1,
+        'กุมภาพันธ์' => 2,
+        'มีนาคม' => 3,
+        'เมษายน' => 4,
+        'พฤษภาคม' => 5,
+        'มิถุนายน' => 6,
+        'กรกฎาคม' => 7,
+        'สิงหาคม' => 8,
+        'กันยายน' => 9,
+        'ตุลาคม' => 10,
+        'พฤศจิกายน' => 11,
+        'ธันวาคม' => 12,
+    ];
+
+    // ดึงข้อมูลจาก SumInstallfttx
+    $currentYear = Carbon::now()->year; // ดึงปีปัจจุบันจาก Carbon
+
+    // ดึงข้อมูลที่มีปีตรงกับปีปัจจุบัน
+    $sumInstallfttx = SumInstallfttx::where('year', $currentYear)->get();
+
+    // แปลงชื่อเดือนเป็นหมายเลขเดือน
+    $sumInstallfttx = $sumInstallfttx->map(function ($item) use ($monthMapping) {
+        $item->month_number = $monthMapping[$item->month] ?? null; // แปลงชื่อเดือนเป็นหมายเลขเดือน
+        return $item;
+    });
+
+    // หาค่าเดือนล่าสุด (โดยใช้ max จากหมายเลขเดือน)
+    $latestMonthNumber = $sumInstallfttx->max('month_number');
+
+    // กรองข้อมูลที่มีเดือนล่าสุด
+    $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
+
+    // จัดเรียงข้อมูลตาม installation_percentage_within_3_days จากมากไปน้อย
+    $sortedDataMax = $latestMonthData
+    ->reject(function ($item) {
+        return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2','รวม']);
+    })
+    ->sortByDesc('sum_installation_percentage_within_3_days')
+    ->take(5);
+
+    $sortedDataMin = $latestMonthData
+    ->reject(function ($item) {
+        return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม']);
+    })
+    ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
+    ->take(1); // เลือก 1 รายการแรก
 
 
-        // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
-        // และกรองค่าซ้ำ
-        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2'])
-            ->distinct() // กรองค่าซ้ำ
-            ->pluck('sum_installation_center');
-
-        $presenct_data = SumInstallfttx::distinct() // กรองค่าซ้ำ
-            ->pluck('sum_installation_center');
-        $monthMapping = [
-            'มกราคม' => 1,
-            'กุมภาพันธ์' => 2,
-            'มีนาคม' => 3,
-            'เมษายน' => 4,
-            'พฤษภาคม' => 5,
-            'มิถุนายน' => 6,
-            'กรกฎาคม' => 7,
-            'สิงหาคม' => 8,
-            'กันยายน' => 9,
-            'ตุลาคม' => 10,
-            'พฤศจิกายน' => 11,
-            'ธันวาคม' => 12,
-        ];
-
-        // ดึงข้อมูลจาก SumInstallfttx
-        $currentYear = Carbon::now()->year; // ดึงปีปัจจุบันจาก Carbon
-
-        // ดึงข้อมูลที่มีปีตรงกับปีปัจจุบัน
-        $sumInstallfttx = SumInstallfttx::where('year', $currentYear)->get();
-
-
-        // ตรวจสอบข้อมูลที่ดึงมาจากฐานข้อมูล
-        // dd($sumInstallfttx); 
-
-        // แปลงชื่อเดือนเป็นหมายเลขเดือน
-        $sumInstallfttx = $sumInstallfttx->map(function ($item) use ($monthMapping) {
-            $item->month_number = $monthMapping[$item->month] ?? null; // แปลงชื่อเดือนเป็นหมายเลขเดือน
-            return $item;
-        });
-
-        // หาค่าเดือนล่าสุด (โดยใช้ max จากหมายเลขเดือน)
-        $latestMonthNumber = $sumInstallfttx->max('month_number');
-
-        // กรองข้อมูลที่มีเดือนล่าสุด
-        $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
-
-       
-        
-
-        // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสามตัวแปร
-        return view('report.viewInstallFTTx', compact('installationCenters', 'latestMonthData'));
-    }
+    // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
+    return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax','latestMonthData','sortedDataMin'));
+}
 
     public function datainstallfttxYear(Request $request)
     {
