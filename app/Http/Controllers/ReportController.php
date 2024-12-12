@@ -289,4 +289,14 @@ class ReportController extends Controller
 
         return view('report.viewInstallFTTxcenter', compact('installData', 'labels', 'data', 'section', 'year', 'month'));
     }
+
+    public function getExistingMonths(Request $request)
+{
+    $year = $request->input('year'); // รับค่าปีจากคำขอ
+    $data = Installfttx::where('year', $year) // ดึงเฉพาะปีที่ระบุ
+                        ->select('year', 'month')
+                        ->get();
+    return response()->json($data);
+}
+
 }

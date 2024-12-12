@@ -51,12 +51,11 @@
                                         <tr>
                                          
                                             <td>
-                                                <input type="number" id="year" name="year" min="2014"
-                                                    max="3000" value="2024" class="form-control">
+                                                <input type="number" id="year" name="year" min="2014" max="3000" value="2024" class="form-control">
                                             </td>
                                             <td>
-                                                <select class="form-control" name="month">
-                                                    <option value="" disabled selected>เลือกเดือน</option>
+                                                <select id="month-select" class="form-control" name="month">
+                                                    <option value="เลือกเดือน" disabled selected>เลือกเดือน</option>
                                                     <option value="มกราคม">มกราคม</option>
                                                     <option value="กุมภาพันธ์">กุมภาพันธ์</option>
                                                     <option value="มีนาคม">มีนาคม</option>
@@ -183,5 +182,48 @@
             $('#fileChoiceModal').modal('show');
         });
     @endif
+</script>
+
+<script>
+    $(document).ready(function () {
+    // ฟังก์ชันดึงข้อมูลเดือนจาก API
+    function fetchMonths(year) {
+        $.ajax({
+            url: "{{ route('api.existing.months') }}", // URL ของ API
+            method: "GET",
+            data: { year: year }, // ส่งค่าปีไปกับคำขอ
+            success: function (response) {
+                // รีเซ็ตข้อความและลบสไตล์จาก <option> ทั้งหมด
+                $('#month-select option').each(function () {
+                    $(this).text($(this).val()); // รีเซ็ตข้อความเป็นค่าเดิม
+                    $(this).removeClass('text-success'); // ลบคลาส text-success
+                });
+
+                // อัปเดตเดือนที่มีข้อมูล
+                response.forEach(function (item) {
+                    const option = $(`#month-select option[value="${item.month}"]`);
+                    if (option.length) {
+                        option.text(`${item.month} (มีข้อมูลแล้ว)`); // อัปเดตข้อความ
+                        option.addClass('text-success'); // เพิ่มคลาส text-success
+                    }
+                });
+            },
+            error: function (error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+
+    // ดึงข้อมูลครั้งแรกเมื่อโหลดหน้า
+    const initialYear = $('#year').val();
+    fetchMonths(initialYear);
+
+    // เมื่อมีการเปลี่ยนปี
+    $('#year').on('change', function () {
+        const selectedYear = $(this).val();
+        fetchMonths(selectedYear);
+    });
+});
+
 </script>
 @endsection
