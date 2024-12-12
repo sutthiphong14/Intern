@@ -21,7 +21,7 @@
 
             <div class="card card-dark">
                 <div class="card-header">
-                    <h3 class="card-title">อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน (ประจำเดือน เดือนนี้)</h3>
+                    <h3 class="card-title">อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน (ประจำเดือน {{ $latestMonthData->first()->month }})</h3>
 
 
                     <div class="card-tools">
@@ -200,7 +200,7 @@
 
             <div class="card card-dark">
                 <div class="card-header">
-                    <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
+                    <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})</h3>
 
 
                     <div class="card-tools">
