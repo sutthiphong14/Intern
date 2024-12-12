@@ -149,7 +149,8 @@
                                                 <td>{{ $item->sum_closing_work_time_days }}</td>
                                                 <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
                                                 <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
-                                                <td>{{ $item->sum_installation_percentage_within_3_days }}%</td>
+                                                <td
+                                            class="{{ $item['sum_installation_percentage_within_3_days'] > 80 ? 'bg-success' : ($item['sum_installation_percentage_within_3_days'] > 60 ? 'bg-warning' : 'bg-danger') }}">{{ $item->sum_installation_percentage_within_3_days }}%</td>
                                             </tr>
                                         @endforeach
 

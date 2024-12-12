@@ -62,7 +62,7 @@
                                 @forelse($users as $user)
                                 <tr>
                                    
-                                    <td>{{ $user->employee_id }}</td>
+                                    <td class="text-center">{{ $user->employee_id }}</td>
                                     <td class="text-center">
                                         <img src="{{ $user->profile_image ? Storage::url($user->profile_image) : 'dist/img/default-user.png' }}" 
                                              alt="Profile Image" 

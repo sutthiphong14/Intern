@@ -75,13 +75,6 @@ class ReportController extends Controller
             Excel::import(new TotalfttxImport($month, $year), $filePath);
             return redirect()->route('viewInstallFTTx')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
         }
-    
-        // ถ้าเลือกไฟล์เดิม
-        else {
-            return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
-            
-        }
-        return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
     }
     
     
@@ -205,9 +198,25 @@ class ReportController extends Controller
         // กรองข้อมูลที่มีเดือนล่าสุด
         $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
 
-        // คืนค่าผลลัพธ์ไปยัง view พร้อมกับข้อมูลทั้งหมด
-        return view('report.viewInstallFTTx', compact('installationCenters', 'latestMonthData', 'year'));
-    }
+        // จัดเรียงข้อมูลตาม installation_percentage_within_3_days จากมากไปน้อย
+    $sortedDataMax = $latestMonthData
+    ->reject(function ($item) {
+        return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2','รวม']);
+    })
+    ->sortByDesc('sum_installation_percentage_within_3_days')
+    ->take(5);
+
+    $sortedDataMin = $latestMonthData
+    ->reject(function ($item) {
+        return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม']);
+    })
+    ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
+    ->take(1); // เลือก 1 รายการแรก
+
+
+    // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
+    return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax','latestMonthData','sortedDataMin'));
+}
 
 
 
