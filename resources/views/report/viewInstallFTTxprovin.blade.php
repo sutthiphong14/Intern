@@ -2,14 +2,14 @@
 @section('css')
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-   
+
     <!-- Font Awesome -->
-<link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
-<!-- AdminLTE -->
-<link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
-<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 @endsection
 @section('content')
     <section class="content">
@@ -28,13 +28,17 @@
                         </div>
                     </div>
                     <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Bar Chart - การติดตั้งภายใน 3 วันเปรียบเทียบแต่ละเดือน</h3>
-    </div>
-    <div class="card-body">
-        <canvas id="barChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
-    </div>
-</div>
+                        <div class="card-header">
+                            <h3 class="card-title">Bar Chart - การติดตั้งภายใน 3 วันเปรียบเทียบแต่ละเดือน</h3>
+                      
+                        
+                 
+                        </div>
+                        <div class="card-body">
+                            <canvas id="barChart"
+                                style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -42,9 +46,11 @@
 
                     <div class="card card-dark">
                         <div class="card-header">
+                           
+
                             <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
                             <div class="card-tools">
-                                <a href="importdata" class="btn bg-light ">
+                                <a href="{{ route('importdata') }}" class="btn bg-light ">
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
                                 <button type="button" class="btn bg-gradient-warning">Export</button>
@@ -89,7 +95,8 @@
                                             <tr>
 
                                                 <td>
-                                                    <a href="{{ route('viewInstallFTTxcenter', ['section' => $item['sum_installation_center'], 'year' => $item['year'], 'month' => $item['month']]) }}" class="btn btn-warning">
+                                                    <a href="{{ route('viewInstallFTTxcenter', ['section' => $item['sum_installation_center'], 'year' => $item['year'], 'month' => $item['month']]) }}"
+                                                        class="btn btn-warning">
                                                         <i class="fas fa-search"></i>
                                                     </a>
                                                 </td>
@@ -124,27 +131,26 @@
                                                         ภน.2.2
                                                     @elseif ($section == 'รวม ภน.2.1')
                                                         ภน.2.1
-                                                   
-                                                @else
-                                                    {{ $section }}
-                                                    <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
-                                        @endif
-                                        </td>
-                                        <td>{{ $item->month }}</td>
-                                        <td>{{ $item->sum_num_of_circuits }}</td>
-                                        <td>{{ $item->sum_total_preparation_time_days }}</td>
-                                        <td>{{ $item->sum_total_processing_time_days }}</td>
-                                        <td>{{ $item->sum_sdp_odp_deadline_days }}</td>
-                                        <td>{{ $item->sum_wiring_time_days }}</td>
-                                        <td>{{ $item->sum_config_nms_days }}</td>
-                                        <td>{{ $item->sum_technician_appointment_and_scheduling_time_days }}</td>
-                                        <td>{{ $item->sum_customer_waiting_time_days }}</td>
-                                        <td>{{ $item->sum_cable_pulling_and_ont_installation_time_days }}</td>
-                                        <td>{{ $item->sum_closing_work_time_days }}</td>
-                                        <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
-                                        <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
-                                        <td>{{ $item->sum_installation_percentage_within_3_days }}%</td>
-                                        </tr>
+                                                    @else
+                                                        {{ $section }}
+                                                        <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
+                                                    @endif
+                                                </td>
+                                                <td>{{ $item->month }}</td>
+                                                <td>{{ $item->sum_num_of_circuits }}</td>
+                                                <td>{{ $item->sum_total_preparation_time_days }}</td>
+                                                <td>{{ $item->sum_total_processing_time_days }}</td>
+                                                <td>{{ $item->sum_sdp_odp_deadline_days }}</td>
+                                                <td>{{ $item->sum_wiring_time_days }}</td>
+                                                <td>{{ $item->sum_config_nms_days }}</td>
+                                                <td>{{ $item->sum_technician_appointment_and_scheduling_time_days }}</td>
+                                                <td>{{ $item->sum_customer_waiting_time_days }}</td>
+                                                <td>{{ $item->sum_cable_pulling_and_ont_installation_time_days }}</td>
+                                                <td>{{ $item->sum_closing_work_time_days }}</td>
+                                                <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
+                                                <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
+                                                <td>{{ $item->sum_installation_percentage_within_3_days }}%</td>
+                                            </tr>
                                         @endforeach
 
 
@@ -191,49 +197,49 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // ดึงข้อมูลจาก Controller
-        const labels = @json($labels); // ชื่อเดือน
-        const data = @json($data);     // เปอร์เซ็นต์รวม
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ดึงข้อมูลจาก Controller
+            const labels = @json($labels); // ชื่อเดือน
+            const data = @json($data); // เปอร์เซ็นต์รวม
 
-        // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
-        if (labels.length === 0 || data.length === 0) {
-            console.warn('No data available for chart.');
-            return;
-        }
+            // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
+            if (labels.length === 0 || data.length === 0) {
+                console.warn('No data available for chart.');
+                return;
+            }
 
-        // สร้าง Bar Chart
-        const ctx = document.getElementById('barChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
-                    data: data,
-                    backgroundColor: 'rgb(61, 183, 71 ,0.5)', // สีพื้นหลังแท่งกราฟ
-                    borderColor: 'rgb(61, 183, 71 ,1)',       // สีเส้นขอบ
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true, // เริ่มจาก 0
-                        max: 100 // กำหนดค่าบนสุดของแกน Y เป็น 100
-                    }
+            // สร้าง Bar Chart
+            const ctx = document.getElementById('barChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
+                        data: data,
+                        backgroundColor: 'rgb(61, 183, 71 ,0.5)', // สีพื้นหลังแท่งกราฟ
+                        borderColor: 'rgb(61, 183, 71 ,1)', // สีเส้นขอบ
+                        borderWidth: 1
+                    }]
                 },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true, // เริ่มจาก 0
+                            max: 100 // กำหนดค่าบนสุดของแกน Y เป็น 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        }
                     }
                 }
-            }
+            });
         });
-    });
-</script>
+    </script>
 @endsection
