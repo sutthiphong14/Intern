@@ -17,6 +17,14 @@
 <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 <!-- Theme style -->
 <link rel="stylesheet" href="dist/css/adminlte.min.css">
+<style>
+    .user-profile-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -42,23 +50,30 @@
                         <table id="example2" class="table table-bordered table-hover">
                             <thead class='text-center'>
                                 <tr class="col-12">
-                                    <th class = 'col-1'>NnumberUser</th>
-                                    <th class = 'col-4'>Name</th>
-                                    <th class = 'col-4'>Email</th>    
-                                    <th class = 'col-3'>Action</th>
+                                    
+                                    <th class='col-1'>รหัสพนักงาน</th>
+                                    <th class='col-1'>รูปโปรไฟล์</th>
+                                    <th class='col-4'>ชื่อ</th>
+                                    <th class='col-4'>อีเมล</th>    
+                                    <th class='col-3'>การดำเนินการ</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($users as $user)
                                 <tr>
+                                   
                                     <td>{{ $user->employee_id }}</td>
+                                    <td class="text-center">
+                                        <img src="{{ $user->profile_image ? Storage::url($user->profile_image) : 'dist/img/default-user.png' }}" 
+                                             alt="Profile Image" 
+                                             class="user-profile-image">
+                                    </td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td class="text-center">
-                                        
-                                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning">แก้ไข</a>
+                                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">แก้ไข</a>
                                         <a href="#"
-                                           class="btn btn-danger delete-btn"
+                                           class="btn btn-danger btn-sm delete-btn"
                                            data-url="{{ route('delete', $user->id) }}">ลบ</a>
                                     </td>
                                 </tr>
@@ -96,7 +111,6 @@
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
-
 <!-- Page specific script -->
 <script>
     $(function () {
@@ -111,7 +125,6 @@
         });
     });
 
-    
     // SweetAlert2 สำหรับการยืนยันการลบ
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.delete-btn').forEach(button => {

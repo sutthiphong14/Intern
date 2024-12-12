@@ -13,7 +13,7 @@ class User extends Authenticatable
     protected $table = 'users';
 
     // กำหนดฟิลด์ที่อนุญาตให้ทำการ fill
-    protected $fillable = ['name', 'email', 'password', 'permission','employee_id'];
+    protected $fillable = ['name', 'email', 'password', 'permission','employee_id','profile_image'];
 
     // Optional: Add a mutator to handle permission JSON
 public function setPermissionAttribute($value)

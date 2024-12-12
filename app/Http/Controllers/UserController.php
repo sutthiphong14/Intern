@@ -6,17 +6,13 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-
     public function listUsers()
     {
-        // ดึงข้อมูลทั้งหมดจากตาราง users
         $users = User::all();
-
-        // ส่งข้อมูลไปยัง View
         return view('users.listusers', compact('users'));
     }
 
@@ -26,31 +22,38 @@ class UserController extends Controller
     }
 
     public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|string|min:6', // เพิ่มการตรวจสอบ password
-        'employee_id' => 'required|string|unique:users,employee_id',
-    ]);
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+            'employee_id' => 'required|string|unique:users,employee_id',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // เพิ่มการตรวจสอบไฟล์
+        ]);
 
-    $user = User::create([
-        'name' => $validatedData['name'],
-        'email' => $validatedData['email'],
-        'password' => Hash::make($validatedData['password']), // บังคับใส่ password
-        'employee_id' => $validatedData['employee_id'],
-        'permission' => json_encode([
-            'manage_users' => $request->has('manage_users_permission') ? 1 : 0,
-            'manage_dashboard' => $request->has('manage_dashboard_permission') ? 1 : 0,
-            'manage_newsfeed' => $request->has('manage_newsfeed_permission') ? 1 : 0,
-        ]),
-    ]);
+        $imagePath = null;
+        if ($request->hasFile('profile_image')) {
+            // อัพโหลดไฟล์และบันทึกพาธ
+            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+        }
 
-    return redirect()->back()->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
-}
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'employee_id' => $validatedData['employee_id'],
+            'profile_image' => $imagePath, // บันทึกพาธของรูปภาพ
+            'permission' => json_encode([
+                'manage_users' => $request->has('manage_users_permission') ? 1 : 0,
+                'manage_dashboard' => $request->has('manage_dashboard_permission') ? 1 : 0,
+                'manage_newsfeed' => $request->has('manage_newsfeed_permission') ? 1 : 0,
+            ]),
+        ]);
 
+        return redirect()->back()->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
+    }
 
-public function edit($id)
+    public function edit($id)
     {
         $user = User::findOrFail($id);
         return view('users.editusers', compact('user'));
@@ -63,6 +66,7 @@ public function edit($id)
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'nullable|string|min:6',
             'employee_id' => 'required|string|unique:users,employee_id,' . $id,
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $user = User::findOrFail($id);
@@ -73,6 +77,17 @@ public function edit($id)
         
         if (!empty($validatedData['password'])) {
             $user->password = Hash::make($validatedData['password']);
+        }
+
+        if ($request->hasFile('profile_image')) {
+            // ลบรูปเก่าก่อนอัพโหลดใหม่
+            if ($user->profile_image) {
+                Storage::disk('public')->delete($user->profile_image);
+            }
+            
+            // อัพโหลดรูปใหม่
+            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+            $user->profile_image = $imagePath;
         }
 
         $user->permission = json_encode([
@@ -88,16 +103,39 @@ public function edit($id)
 
     public function search(Request $request)
     {
-        $query = $request->input('query'); // รับค่าคำค้นจากแบบฟอร์ม
-        $users = User::where('name', 'LIKE', "%{$query}%")->get(); // ค้นหาจากชื่อผู้ใช้ที่ตรงกับคำค้น
+        $query = $request->input('query');
+        $users = User::where('name', 'LIKE', "%{$query}%")->get();
     
-        return view('users.listusers', compact('users')); // ส่งผลลัพธ์ไปยัง View
+        return view('users.listusers', compact('users'));
+    }
+    public function updateProfileImage(Request $request)
+{
+    $validatedData = $request->validate([
+        'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+    ]);
+
+    $user = auth()->user(); // ดึงผู้ใช้ปัจจุบัน
+
+    // ลบรูปเก่าก่อนอัพโหลดใหม่
+    if ($user->profile_image) {
+        Storage::disk('public')->delete($user->profile_image);
     }
     
-    
-    
+    // อัพโหลดรูปใหม่
+    $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+    $user->profile_image = $imagePath;
+    $user->save();
+
+    return redirect()->back()->with('success', 'อัปเดตรูปโปรไฟล์สำเร็จ!');
 }
+public function showProfile()
+{
+    $user = auth()->user(); // Dapatkan pengguna yang saat ini login
+    
+    if (!$user) {
+        return redirect()->route('login'); // Redirect ke halaman login jika tidak ada pengguna login
+    }
 
-
-
-
+    return view('profile', compact('user'));
+}
+}

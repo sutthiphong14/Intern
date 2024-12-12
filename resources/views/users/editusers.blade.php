@@ -29,7 +29,7 @@
                         </div>
                         
                         <!-- Form Start -->
-                        <form method="POST" action="{{ route('users.update', $user->id) }}">
+                        <form method="POST" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
                                 <!-- Display any validation errors -->
@@ -79,7 +79,27 @@
                                     <input type="password" class="form-control" id="password" name="password" 
                                            placeholder="กรอกรหัสผ่านใหม่ถ้าต้องการเปลี่ยน">
                                 </div>
+                                <div class="form-group">
+                                    <label for="profile_image">รูปโปรไฟล์</label>
+                                    @if($user->profile_image)
+                                        <div class="mb-3">
+                                            <img src="{{ Storage::url($user->profile_image) }}" 
+                                                 alt="Profile Image" 
+                                                 class="img-fluid" 
+                                                 style="max-width: 200px; max-height: 200px; object-fit: cover;">
+                                        </div>
+                                    @endif
+                                    <input type="file" 
+                                           class="form-control-file" 
+                                           id="profile_image" 
+                                           name="profile_image"
+                                           accept="image/*">
+                                    <small class="form-text text-muted">
+                                        อัพโหลดรูปโปรไฟล์ใหม่ (ไฟล์ jpeg, png, jpg เท่านั้น ขนาดไม่เกิน 2MB)
+                                    </small>
+                                </div>
                             </div>
+                           
                         
                             <div class="card-body">
                                 <div class="form-group">

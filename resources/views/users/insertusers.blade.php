@@ -29,7 +29,7 @@
                         </div>
                         
                         <!-- Form Start -->
-                        <form method="POST" action="{{ route('users.store') }}">
+                        <form method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
                                 <!-- Display any validation errors -->
@@ -42,34 +42,39 @@
                                         </ul>
                                     </div>
                                 @endif
-
+                        
                                 <!-- Success message -->
                                 @if(session('success'))
                                     <div class="alert alert-success">
                                         {{ session('success') }}
                                     </div>
                                 @endif
-
+                        
                                 <div class="form-group">
                                     <label for="employee_id">หมายเลขพนักงาน</label>
                                     <input type="text" class="form-control" id="employee_id" name="employee_id" 
                                            placeholder="กรอกหมายเลขพนักงาน" required value="{{ old('employee_id') }}">
                                 </div>
-
+                        
                                 <div class="form-group">
                                     <label for="name">ชื่อผู้ใช้</label>
                                     <input type="text" class="form-control" id="name" name="name" placeholder="กรอกชื่อผู้ใช้" required value="{{ old('name') }}">
                                 </div>
+                        
                                 <div class="form-group">
                                     <label for="email">อีเมล</label>
                                     <input type="email" class="form-control" id="email" name="email" placeholder="กรอกอีเมล" required value="{{ old('email') }}">
                                 </div>
+                        
                                 <div class="form-group">
                                     <label for="password">รหัสผ่าน</label>
                                     <input type="password" class="form-control" id="password" name="password" placeholder="กรอกรหัสผ่าน" required>
                                 </div>
-                            </div>
-                            
+                        
+                                <div class="form-group">
+                                    <label for="profile_image">รูปโปรไฟล์</label>
+                                    <input type="file" class="form-control-file" id="profile_image" name="profile_image">
+                                </div>
 
                             <div class="card-body">
                                 <div class="form-group">

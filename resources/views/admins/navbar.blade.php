@@ -30,10 +30,14 @@
         <!-- Messages Dropdown Menu -->
         <li class="nav-item dropdown">
             @auth
-                <a class="nav-link d-flex justify-content-center align-items-center" data-toggle="dropdown" href="#">
+            <a class="nav-link d-flex justify-content-center align-items-center" data-toggle="dropdown" href="#">
+                @if(Auth::user()->profile_image)
+                    <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="User Avatar" class="img-size-50 img-circle mr-2">
+                @else
                     <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-2">
-                    <span>{{ Auth::user()->name }}</span>
-                </a>
+                @endif
+                <span>{{ Auth::user()->name }}</span>
+            </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <div class="dropdown-divider"></div>
                     <a href="profile" class="dropdown-item">แก้ไขโปรไฟล์</a>

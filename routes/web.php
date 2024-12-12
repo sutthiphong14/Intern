@@ -249,3 +249,10 @@ Route::get('/viewreport3',[ReportController::class , 'viewreport3'])->name('view
 
 Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
+Route::post('/profile/update-image', [UserController::class, 'updateProfileImage'])
+    ->name('profile.update-image')
+    ->middleware('auth');
+
+    Route::get('/profile', [UserController::class, 'showProfile'])
+    ->name('profile')
+    ->middleware('auth'); // Pastikan hanya pengguna yang login yang dapat mengakses
