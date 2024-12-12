@@ -195,6 +195,7 @@ Route::get('/viewInstallFTTxcenter/{center}/{year}/{month}', [ReportController::
 Route::get('/importdata', function () {
     return view('report.importdata');
 })->name('importdata');
+Route::get('/api/existing-months', [ReportController::class, 'getExistingMonths'])->name('api.existing.months');
 
 Route::post('/importdata', [ReportController::class ,'import']);
 Route::post('/importdata2', [ReportController::class ,'importFile'])->name('importdata2');
