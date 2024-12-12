@@ -41,13 +41,19 @@
                                 <table id="example2" class="table table-bordered">
                                     <thead class="text-center">
                                         <tr>
-                                            <th class="col-4">เดือน</th>
+                                           
                                             <th class="col-4">ปี</th>
+                                            <th class="col-4">เดือน</th>
                                             <th class="col-4">อัพโหลด</th>
                                         </tr>
                                     </thead>
                                     <tbody class="align-items-center">
                                         <tr>
+                                         
+                                            <td>
+                                                <input type="number" id="year" name="year" min="2014"
+                                                    max="3000" value="2024" class="form-control">
+                                            </td>
                                             <td>
                                                 <select class="form-control" name="month">
                                                     <option value="" disabled selected>เลือกเดือน</option>
@@ -71,10 +77,6 @@
                                                 @enderror
                                             </td>
 
-                                            <td>
-                                                <input type="number" id="year" name="year" min="2014"
-                                                    max="3000" value="2024" class="form-control">
-                                            </td>
 
                                             <td>
                                                 <div class="custom-file">
@@ -99,6 +101,38 @@
             </div>
             <!-- /.row -->
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="fileChoiceModal" tabindex="-1" role="dialog" aria-labelledby="fileChoiceModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="fileChoiceModalLabel">มีข้อมูลอยู่ในเดือนและปีดังกล่าวแล้ว</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('importdata2') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="filePath" value="{{ $filePath ?? '' }}">
+                            <input type="hidden" name="month" value="{{ $month ?? ''}}">
+                            <input type="hidden" name="year" value="{{ $year ?? ''}}">
+                            <div class="form-group">
+                                <input type="hidden" name="file_choice" value="new" id="fileChoiceNew">
+                                <p class="lead" >ใช้ไฟล์ใหม่ (แทนที่ข้อมูลเดิม)</p>
+                            </div>
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                                <button type="submit" class="btn btn-success">ยืนยัน</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
         <!-- /.container-fluid -->
     </section>
 @endsection
@@ -141,4 +175,13 @@
             });
         });
     </script>
+
+<script>
+    // เปิด Modal อัตโนมัติถ้าตัวแปร showModal เป็นจริง
+    @if(isset($showModal) && $showModal)
+        $(document).ready(function () {
+            $('#fileChoiceModal').modal('show');
+        });
+    @endif
+</script>
 @endsection

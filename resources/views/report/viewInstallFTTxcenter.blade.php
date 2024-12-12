@@ -39,7 +39,7 @@
 
                 <div class="card card-dark">
                     <div class="card-header">
-                        <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
+                        <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{$month}})</h3>
                         <div class="card-tools">
                             <a href="importdata" class="btn bg-light ">
                                 <i class="d-flex justify-content-end "></i> Import
@@ -56,7 +56,7 @@
                                 <thead class="text-center ">
                                     <tr>
                                         <th rowspan="2" class="col-data">หน่วยงาน</th>
-                                        <th rowspan="2" class="col-department">เดือน</th>
+                                       
                                         <th rowspan="2" class="col-count">จำนวนวงจร</th>
                                         <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียม
                                             เอกสารรวม(วัน)</th>
@@ -91,7 +91,7 @@
                                             <td>{{ $item->installation_center }}</td>
 
 
-                                            <td>{{ $item->month }}</td>
+                                         
                                             <td>{{ $item->num_of_circuits }}</td>
                                             <td>{{ $item->total_preparation_time_days }}</td>
                                             <td>{{ $item->total_processing_time_days }}</td>

@@ -198,55 +198,67 @@
 
             </div>
 
-            <div class="card card-dark">
-                <div class="card-header">
-                    <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})</h3>
-
-
-                    <div class="card-tools">
-                        @if(Auth::user()->permission['manage_dashboard'] ?? false)
-                            <a href="importdata" class="btn bg-light ">
-                                <i class="d-flex justify-content-end "></i> Import
-                            </a>
-                        @endif
-                        <button type="button" class="btn bg-gradient-warning">Export</button>
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
+                    <div class="card card-dark">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                @if ($latestMonthData->isEmpty())
+                                    ติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
+                                @else
+                                    ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})
+                                @endif
+                            </h3>
+                            <div class="card-tools">
+                                <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline" id="yearForm">
+                                    <input type="number" name="year" id="yearInput" placeholder="Enter year"
+                                        value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}"
+                                        class="form-control d-inline " style="width: 200px;" required 
+                                        min="2000" max="9999">
+                                </form>
+                    
+                                @if (Auth::user()->permission['manage_dashboard'] ?? false)
+                                    <a href="{{ route('importdata') }}" class="btn bg-light ">
+                                        <i class="d-flex justify-content-end "></i> Import
+                                    </a>
+                                @endif
+                                <button type="button" class="btn bg-gradient-warning">Export</button>
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="example2" class="table table-bordered table-hover">
-                            <thead class="text-center ">
-                                <tr>
-                                    <th rowspan="2" class="col-data">ดูข้อมูล</th>
-                                    <th rowspan="2" class="col-department">ส่วนงาน</th>
-                                    <th rowspan="2" class="col-count">จำนวนวงจร</th>
-                                    <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียมเอกสารรวม (วัน)</th>
-                                    <th rowspan="2" class="col-process-time">ระยะเวลาดำเนินการรวม (วัน)</th>
-                                    <th colspan="7">ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร</th>
-                                    <th rowspan="2" class="col-total-time">รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร (วัน)
-                                    </th>
-                                    <th rowspan="2" class="col-install-count">จำนวนวงจรที่ติดตั้งภายใน 3 วัน
-                                    </th>
-                                    <th rowspan="2" class="col-install-percent">ร้อยละการติดตั้งภายใน 3 วัน
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="col-sdp">กำหนด SDP/ODP (วัน)</th>
-                                    <th class="col-cable">โยงสาย (วัน)</th>
-                                    <th class="col-config">Config NMS (วัน)</th>
-                                    <th class="col-schedule">นัดหมายและกำหนดช่าง (วัน)</th>
-                                    <th class="col-wait-customer">รอลูกค้า (วัน)</th>
-                                    <th class="col-install">ลากสายและติดตั้ง ONT (วัน)</th>
-                                    <th class="col-close-job">ปิดงาน (วัน)</th>
-                                </tr>
-                            </thead>
-                            @php
-
-                                // แปลงข้อมูลจาก Collection เป็น Array
-                                $sectionsArray = $latestMonthData->toArray();
+                    
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead class="text-center ">
+                                        <tr>
+                                            <th rowspan="2" class="col-data">ดูข้อมูล</th>
+                                            <th rowspan="2" class="col-department">ส่วนงาน</th>
+                                            <th rowspan="2" class="col-count">จำนวนวงจร</th>
+                                            <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียมเอกสารรวม (วัน)</th>
+                                            <th rowspan="2" class="col-process-time">ระยะเวลาดำเนินการรวม (วัน)</th>
+                                            <th colspan="7">ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร</th>
+                                            <th rowspan="2" class="col-total-time">รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร (วัน)
+                                            </th>
+                                            <th rowspan="2" class="col-install-count">จำนวนวงจรที่ติดตั้งภายใน 3 วัน
+                                            </th>
+                                            <th rowspan="2" class="col-install-percent">ร้อยละการติดตั้งภายใน 3 วัน
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-sdp">กำหนด SDP/ODP (วัน)</th>
+                                            <th class="col-cable">โยงสาย (วัน)</th>
+                                            <th class="col-config">Config NMS (วัน)</th>
+                                            <th class="col-schedule">นัดหมายและกำหนดช่าง (วัน)</th>
+                                            <th class="col-wait-customer">รอลูกค้า (วัน)</th>
+                                            <th class="col-install">ลากสายและติดตั้ง ONT (วัน)</th>
+                                            <th class="col-close-job">ปิดงาน (วัน)</th>
+                                        </tr>
+                                    </thead>
+                                    @php
+                                        // แปลงข้อมูลจาก Collection เป็น Array
+                                        $sectionsArray = $latestMonthData->toArray();
 
                                 // ใช้ usort เพื่อจัดเรียงตาม sum_installation_center
                                 usort($sectionsArray, function ($a, $b) {
