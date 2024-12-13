@@ -217,64 +217,79 @@
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- ChartJS -->
     <script src="plugins/chart.js/Chart.min.js"></script>
-    <script>
-        // JavaScript ที่ใช้ในการกำหนดสีของหลอดตามเปอร์เซ็นต์
-        const bars = document.querySelectorAll('.performance-bar');
-        bars.forEach(bar => {
-            const width = parseInt(bar.style.width);
-            if (width >= 80) {
-                bar.classList.add('green');
-            } else if (width >= 50) {
-                bar.classList.add('yellow');
-            } else {
-                bar.classList.add('red');
-            }
-        });
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // ดึงข้อมูลจาก Controller
-            const labels = @json($labels); // ชื่อเดือน
-            const data = @json($data); // เปอร์เซ็นต์รวม
+    document.addEventListener('DOMContentLoaded', function() {
+        // ดึงข้อมูลจาก Controller
+        const labels = @json($labels); // ชื่อเดือน
+        const data = @json($data); // เปอร์เซ็นต์รวม
 
-            // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
-            if (labels.length === 0 || data.length === 0) {
-                console.warn('No data available for chart.');
-                return;
-            }
+        // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
+        if (labels.length === 0 || data.length === 0) {
+            console.warn('No data available for chart.');
+            return;
+        }
 
-            // สร้าง Bar Chart
-            const ctx = document.getElementById('barChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
-                        data: data,
-                        backgroundColor: 'rgb(61, 183, 71 ,0.5)', // สีพื้นหลังแท่งกราฟ
-                        borderColor: 'rgb(61, 183, 71 ,1)', // สีเส้นขอบ
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true, // เริ่มจาก 0
-                            max: 100 // กำหนดค่าบนสุดของแกน Y เป็น 100
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
+        // คำนวณค่าต่ำสุดใน data และลดลง 10
+        const minData = Math.min(...data); // ค่าต่ำสุดใน data
+        const yMin = minData - (minData % 10); // ปรับให้เป็น 10, 20, 30, ... ตามที่ต่ำสุดใน data
+
+        // กำหนดสีของแท่งกราฟตามเงื่อนไข
+        const backgroundColors = data.map(value => 
+            value > 80 ? 'rgba(61, 183, 71, 0.5)' : 
+            value > 50 ? 'rgba(255, 206, 86, 0.5)' : 
+            'rgba(255, 99, 132, 0.5)'
+        );
+        const borderColors = data.map(value => 
+            value > 80 ? 'rgba(61, 183, 71, 1)' : 
+            value > 50 ? 'rgba(255, 206, 86, 1)' : 
+            'rgba(255, 99, 132, 1)'
+        );
+
+        // สร้าง Bar Chart
+        const ctx = document.getElementById('barChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
+                    data: data,
+                    backgroundColor: backgroundColors, // ใช้สีที่ตั้งตามเงื่อนไข
+                    borderColor: borderColors, // ใช้สีเส้นขอบที่ตั้งตามเงื่อนไข
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true, // เริ่มจาก 0
+                        min: 0, // กำหนดค่าต่ำสุดของแกน Y ตามที่คำนวณ
+                        max: 100, // กำหนดค่าบนสุดของแกน Y เป็น 100
+                        suggestedMax: 100, // แนะนำค่าบนสุดของแกน Y เป็น 100
+                        ticks: {
+                            stepSize: 10, // กำหนดให้ค่าบนแกน Y เพิ่มขึ้นทีละ 10
+                            callback: function(value) {
+                                // จัดการแสดงค่าบนแกน Y ให้แสดงตั้งแต่ 0 ถึง 100
+                                return value % 10 === 0 ? value : ''; // แสดงเฉพาะ 0, 10, 20, ...
+                            }
                         }
                     }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    }
                 }
-            });
+            }
         });
-    </script>
+    });
+</script>
+
+
+
+
 @endsection
