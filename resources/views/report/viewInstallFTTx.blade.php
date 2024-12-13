@@ -21,7 +21,13 @@
 
             <div class="card card-dark">
                 <div class="card-header">
-                    <h3 class="card-title">อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน (ประจำเดือน {{ $latestMonthData->first()->month }})</h3>
+                    <h3 class="card-title">
+                        @if ($latestMonthData->isEmpty())
+                        อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
+                    @else
+                        อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน 3 วัน (ประจำเดือน {{ $latestMonthData->first()->month }})
+                    @endif
+                </h3>
 
 
                     <div class="card-tools">

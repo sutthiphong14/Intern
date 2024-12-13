@@ -200,6 +200,10 @@ Route::get('/api/existing-months', [ReportController::class, 'getExistingMonths'
 Route::post('/importdata', [ReportController::class ,'import']);
 Route::post('/importdata2', [ReportController::class ,'importFile'])->name('importdata2');
 
+Route::get('/export/view', [ReportController::class, 'exportview']); // แสดงหน้าเว็บ
+
+Route::get('/data/export', [ReportController::class, 'export']); // Export Excel
+
 
 
 Route::get('/incomecurrent', function () {
@@ -261,3 +265,5 @@ Route::post('/profile/update-image', [UserController::class, 'updateProfileImage
     Route::get('/profile', [UserController::class, 'showProfile'])
     ->name('profile')
     ->middleware('auth'); // Pastikan hanya pengguna yang login yang dapat mengakses
+
+

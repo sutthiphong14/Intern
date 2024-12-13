@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Exports\ExportFttxReport;
+use App\Imports\exportinstallfttximport;
 use App\Imports\InstallfttxImport;
 use App\Imports\SumInstallfttxImport;
 use App\Imports\totalfttximport;
+use App\Models\Exportinstllfttx;
 use App\Models\Installfttx;
 use App\Models\suminstallfttx;
 use App\Models\Totalinstallfttx;
@@ -50,6 +52,7 @@ class ReportController extends Controller
             Excel::import(new InstallfttxImport($month, $year), $request->file('import_file'));
             Excel::import(new SumInstallfttxImport($month, $year), $request->file('import_file'));
             Excel::import(new TotalfttxImport($month, $year), $request->file('import_file'));
+            Excel::import(new exportinstallfttximport($month, $year), $request->file('import_file'));
         }
     
         return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
@@ -68,11 +71,13 @@ class ReportController extends Controller
             Installfttx::where('month', $request->month)->where('year', $request->year)->delete();
             SumInstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
             Totalinstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
+            Exportinstllfttx::where('month', $request->month)->where('year', $request->year)->delete();
           
             // ใช้ไฟล์ที่รับจากฟอร์ม
             Excel::import(new InstallfttxImport($month, $year), $filePath);
             Excel::import(new SumInstallfttxImport($month, $year), $filePath);
             Excel::import(new TotalfttxImport($month, $year), $filePath);
+            Excel::import(new exportinstallfttximport($month, $year), $filePath);
             return redirect()->route('viewInstallFTTx')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
         }
     }
@@ -316,4 +321,24 @@ class ReportController extends Controller
     return response()->json($data);
 }
 
+ // แสดงหน้าเว็บ
+ public function exportview()
+ {
+     $data = Exportinstllfttx::all();
+     return view('report.export', [
+         'data' => $data,
+         'isExport' => false // แสดงหน้าเว็บ
+     ]);
+ }
+
+ // Export เป็น Excel
+ public function export()
+ {
+     return Excel::download(new ExportFttxReport(), 'test.xlsx');
+ }
+
+
+ 
+
 }
+
