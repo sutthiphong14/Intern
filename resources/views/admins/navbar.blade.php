@@ -7,19 +7,19 @@
         
         @if(Auth::check() && Auth::user()->permission['manage_users'] ?? false)
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{route('users.list')}}" class="nav-link text-dark">จัดการผู้ใช้</a>
+                <a href="{{route('users.list')}}" class="nav-link text-dark"><i class="fas fa-users-cog"></i> จัดการผู้ใช้</a>
             </li>
         @endif
 
         @if(Auth::check() && Auth::user()->permission['manage_newsfeed'] ?? false)
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{route('listnewsfeed')}}" class="nav-link text-dark">จัดการเอกสารข่าว</a>
+                <a href="{{route('listnewsfeed')}}" class="nav-link text-dark"><i class="fas fa-newspaper"></i> จัดการเอกสารข่าว</a>
             </li>
         @endif
 
         @if(Auth::check() && Auth::user()->permission['manage_dashboard'] ?? false)
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{route('importdata')}}" class="nav-link text-dark">อัพโหลดแดชบอร์ด</a>
+                <a href="{{route('importdata')}}" class="nav-link text-dark"><i class="fas fa-chart-line"></i> จัดการแดชบอร์ด</a>
             </li>
         @endif
 
@@ -53,8 +53,8 @@
                     </form>
                 </div>
             @else
-                <a href="{{ route('login') }}" class="btn btn-primary">
-                    <i class="fas fa-sign-in-alt mr-2"></i>{{ __('Login') }}
+                <a href="{{ route('login') }}" class="btn btn-dark">
+                    <i class="fas fa-sign-in-alt mr-2"></i>{{ __('เข้าสู่ระบบ') }}
                 </a>
             @endauth
         </li>

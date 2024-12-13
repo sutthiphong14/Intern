@@ -82,9 +82,11 @@
 
                             <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำปี {{$year}})</h3>
                             <div class="card-tools">
+                            @if (Auth::user()->permission['manage_dashboard'] ?? false)
                                 <a href="{{ route('importdata') }}" class="btn bg-light ">
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
+                            @endif
                                 <button type="button" class="btn bg-gradient-warning">Export</button>
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                     <i class="fas fa-minus"></i>

@@ -150,31 +150,7 @@
  
 
 
-    <script>
-        // Show button when page is scrolled down
-        window.onscroll = function() {
-            toggleScrollButton()
-        };
     
-        function toggleScrollButton() {
-            const button = document.getElementById("scrollToTopBtn");
-            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-                button.classList.add("show");
-            } else {
-                button.classList.remove("show");
-            }
-        }
-    
-        // Scroll to top function
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-        }
-
-        
-
-        
-    </script>
 </body>
 
 </html>

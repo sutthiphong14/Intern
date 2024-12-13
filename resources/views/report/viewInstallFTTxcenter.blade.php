@@ -73,9 +73,12 @@
                     <div class="card-header">
                         <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{$month}})</h3>
                         <div class="card-tools">
+                        @if (Auth::user()->permission['manage_dashboard'] ?? false)
                             <a href="importdata" class="btn bg-light ">
                                 <i class="d-flex justify-content-end "></i> Import
                             </a>
+                            @endif
+
                             <button type="button" class="btn bg-gradient-warning">Export</button>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -163,10 +166,7 @@
 @endsection
 
 @section('script')
-<!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
 <!-- ChartJS -->
 <script src="plugins/chart.js/Chart.min.js"></script>
 <script>

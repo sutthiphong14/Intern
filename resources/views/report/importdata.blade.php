@@ -35,62 +35,69 @@
                         <div class="card-body">
                             
 
-                            <form action="{{ url('importdata') }}" method="POST" enctype="multipart/form-data"
-                                class="form-group">
-                                @csrf
-                                <table id="example2" class="table table-bordered">
-                                    <thead class="text-center">
-                                        <tr>
-                                           
-                                            <th class="col-4">ปี</th>
-                                            <th class="col-4">เดือน</th>
-                                            <th class="col-4">อัพโหลด</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="align-items-center">
-                                        <tr>
-                                         
-                                            <td>
-                                                <input type="number" id="year" name="year" min="2014" max="3000" value="2024" class="form-control">
-                                            </td>
-                                            <td>
-                                                <select id="month-select" class="form-control" name="month">
-                                                    <option value="เลือกเดือน" disabled selected>เลือกเดือน</option>
-                                                    <option value="มกราคม">มกราคม</option>
-                                                    <option value="กุมภาพันธ์">กุมภาพันธ์</option>
-                                                    <option value="มีนาคม">มีนาคม</option>
-                                                    <option value="เมษายน">เมษายน</option>
-                                                    <option value="พฤษภาคม">พฤษภาคม</option>
-                                                    <option value="มิถุนายน">มิถุนายน</option>
-                                                    <option value="กรกฎาคม">กรกฎาคม</option>
-                                                    <option value="สิงหาคม">สิงหาคม</option>
-                                                    <option value="กันยายน">กันยายน</option>
-                                                    <option value="ตุลาคม">ตุลาคม</option>
-                                                    <option value="พฤศจิกายน">พฤศจิกายน</option>
-                                                    <option value="ธันวาคม">ธันวาคม</option>
-                                                </select>
-                                                @error('month')
-                                                    <p class="text-danger my-2">
-                                                        <i class="fas fa-exclamation-circle"></i>{{ $message }}
-                                                    </p>
-                                                @enderror
-                                            </td>
+                        <form action="{{ url('importdata') }}" method="POST" enctype="multipart/form-data" class="form-group">
+    @csrf
+    <table id="example2" class="table table-bordered">
+        <thead class="text-center">
+            <tr>
+                <th class="col-4">ปี</th>
+                <th class="col-4">เดือน</th>
+                <th class="col-4">อัพโหลด</th>
+            </tr>
+        </thead>
+        <tbody class="align-items-center">
+            <tr>
+                <td>
+                    <input type="number" id="year" name="year" min="2014" max="3000" value="2024" class="form-control">
+                </td>
+                <td>
+                    <select id="month-select" class="form-control" name="month">
+                        <option value="เลือกเดือน" disabled selected>เลือกเดือน</option>
+                        <option value="มกราคม">มกราคม</option>
+                        <option value="กุมภาพันธ์">กุมภาพันธ์</option>
+                        <option value="มีนาคม">มีนาคม</option>
+                        <option value="เมษายน">เมษายน</option>
+                        <option value="พฤษภาคม">พฤษภาคม</option>
+                        <option value="มิถุนายน">มิถุนายน</option>
+                        <option value="กรกฎาคม">กรกฎาคม</option>
+                        <option value="สิงหาคม">สิงหาคม</option>
+                        <option value="กันยายน">กันยายน</option>
+                        <option value="ตุลาคม">ตุลาคม</option>
+                        <option value="พฤศจิกายน">พฤศจิกายน</option>
+                        <option value="ธันวาคม">ธันวาคม</option>
+                    </select>
+                    @error('month')
+                        <p class="text-danger my-2">
+                            <i class="fas fa-exclamation-circle"></i>{{ $message }}
+                        </p>
+                    @enderror
+                </td>
 
+                <td>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="importFile" name="import_file">
+                            <label class="custom-file-label" for="importFile">Choose file</label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-                                            <td>
-                                                <div class="custom-file">
-                                                    <input type="file" class="form-control" name="import_file">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+    <div class="col-12 mb-3 text-center">
+        <a href="/listnewsfeed" class="btn bg-danger">Cancel</a>
+        <input type="submit" class="btn btn-success" value="Submit">
+    </div>
+</form>
 
-                                <div class="col-12 mb-3 text-center">
-                                    <a href="/listnewsfeed" class="btn bg-danger">Cancel</a>
-                                    <input type="submit" class="btn btn-success" value="Submit">
-                                </div>
-                            </form>
+<script>
+    // Update the file input label with the selected file name
+    document.querySelector('.custom-file-input').addEventListener('change', function(e) {
+        var fileName = e.target.files[0]?.name || "Choose file";
+        e.target.nextElementSibling.textContent = fileName;
+    });
+</script>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -106,7 +113,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="fileChoiceModalLabel">มีข้อมูลอยู่ในเดือนและปีดังกล่าวแล้ว</h5>
+                        <h5 class="modal-title" id="fileChoiceModalLabel">มีข้อมูลอยู่แล้ว</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -119,11 +126,11 @@
                             <input type="hidden" name="year" value="{{ $year ?? ''}}">
                             <div class="form-group">
                                 <input type="hidden" name="file_choice" value="new" id="fileChoiceNew">
-                                <p class="lead" >ใช้ไฟล์ใหม่ (แทนที่ข้อมูลเดิม)</p>
+                                <p class="lead" >ต้องการแทนที่ข้อมูลเดิมหรือไม่</p>
                             </div>
                             
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">ยกเลิก</button>
                                 <button type="submit" class="btn btn-success">ยืนยัน</button>
                             </div>
                         </form>
