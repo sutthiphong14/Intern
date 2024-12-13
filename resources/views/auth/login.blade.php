@@ -15,14 +15,14 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
-                <!-- Email Field -->
+                <!-- Employee ID Field (Replaced Email) -->
                 <div class="mb-3">
-                    <label for="email" class="form-label">{{ __('Email Address') }}</label>
-                    <input id="email" type="email" 
-                           class="form-control @error('email') is-invalid @enderror" 
-                           name="email" value="{{ old('email') }}" 
-                           required autocomplete="email" autofocus>
-                    @error('email')
+                    <label for="employee_id" class="form-label">{{ __('Employee ID') }}</label>
+                    <input id="employee_id" type="text" 
+                           class="form-control @error('employee_id') is-invalid @enderror" 
+                           name="employee_id" value="{{ old('employee_id') }}" 
+                           required autocomplete="employee_id" autofocus>
+                    @error('employee_id')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -69,4 +69,3 @@
     </div>
 </div>
 @endsection
-
