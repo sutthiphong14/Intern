@@ -214,7 +214,7 @@
                                 ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})
                             @endif
                         </h3>
-                        <div class="card-tools">
+                        <div class="card-tools d-flex ">
                             <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET"
                                 class="d-inline" id="yearForm">
                                 <input type="number" name="year" id="yearInput" placeholder="Enter year"
@@ -224,7 +224,7 @@
                             </form>
 
                             @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                                <a href="{{ route('importdata') }}" class="btn bg-light ">
+                                <a href="{{ route('importdata') }}" class="btn bg-light mx-1 ">
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
                             @endif
