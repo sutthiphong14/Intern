@@ -22,7 +22,10 @@
             <table id="example2" class="table table-bordered table-hover">
                 <thead class="text-center ">
                     <tr>
-                        <td colspan="7">รายงานระยะเวลาเฉลี่ยในการติดตั้งอินเทอร์เน็ตความเร็วสูง  ณ วันที่</td>
+                        <td colspan="9">
+                            รายงานระยะเวลาเฉลี่ยในการติดตั้งอินเทอร์เน็ตความเร็วสูง ประจำเดือน {{ $month }} ปี {{ $year }}
+                        </td>
+                        
                     </tr>
                     <tr>
                         <th rowspan="2" class="col-department">ภาค</th>

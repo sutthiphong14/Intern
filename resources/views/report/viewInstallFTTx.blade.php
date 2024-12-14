@@ -226,7 +226,14 @@
                                         <i class="d-flex justify-content-end "></i> Import
                                     </a>
                                 @endif
-                                <button type="button" class="btn bg-gradient-warning">Export</button>
+                                <form action="{{ route('export') }}" method="GET">
+                                    @csrf
+                                    <!-- ช่องป้อนข้อมูลปีและเดือน -->
+                                    <input type="hidden" name="year" value="{{ $latestMonthData->first()->year }}">  <!-- ค่าปี -->
+                                    <input type="hidden" name="month" value="{{ $latestMonthData->first()->month }}">  <!-- ค่าเดือน -->
+                                
+                                    <button type="submit" class="btn bg-gradient-warning">Export</button>
+                                </form>
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                     <i class="fas fa-minus"></i>
                                 </button>

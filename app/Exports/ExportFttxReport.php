@@ -9,15 +9,29 @@ use Maatwebsite\Excel\Concerns\FromView;
 
 class ExportFttxReport implements FromView
 {
-    /**
-    * @return 
-    */
+    protected $year;
+    protected $month;
 
+    // สร้าง constructor เพื่อรับ year และ month
+    public function __construct($year, $month)
+    {
+        $this->year = $year;
+        $this->month = $month;
+    }
+
+    // ฟังก์ชัน view สำหรับแสดงผลใน Excel
     public function view(): View
     {
+        // ดึงข้อมูลจากฐานข้อมูลที่ตรงกับ year และ month
+        $data = Exportinstllfttx::where('year', $this->year)
+            ->where('month', $this->month)
+            ->get();
+
+        // ส่งข้อมูลไปยัง view
         return view('report.export', [
-            'data' => Exportinstllfttx::all(),
-            // 'isExport' => true // กำหนดว่าเป็น Export View
+            'data' => $data,
+            'month' => $this->month,
+            'year' => $this->year,
         ]);
     }
 }
