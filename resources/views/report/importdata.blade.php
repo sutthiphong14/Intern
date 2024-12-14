@@ -24,6 +24,7 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
+
             <div class="row">
                 <div class="col-12">
                     <div class="card card-warning mt-2">
@@ -33,7 +34,7 @@
 
                         <!-- /.card-header -->
                         <div class="card-body">
-                            
+
 
                             <form action="{{ url('importdata') }}" method="POST" enctype="multipart/form-data"
                                 class="form-group">
@@ -41,7 +42,7 @@
                                 <table id="example2" class="table table-bordered">
                                     <thead class="text-center">
                                         <tr>
-                                           
+
                                             <th class="col-4">ปี</th>
                                             <th class="col-4">เดือน</th>
                                             <th class="col-4">อัพโหลด</th>
@@ -49,9 +50,10 @@
                                     </thead>
                                     <tbody class="align-items-center">
                                         <tr>
-                                         
+
                                             <td>
-                                                <input type="number" id="year" name="year" min="2014" max="3000" value="2024" class="form-control">
+                                                <input type="number" id="year" name="year" min="2014"
+                                                    max="3000" value="2024" class="form-control">
                                             </td>
                                             <td>
                                                 <select id="month-select" class="form-control" name="month">
@@ -80,6 +82,9 @@
                                             <td>
                                                 <div class="custom-file">
                                                     <input type="file" class="form-control" name="import_file">
+                                                    @error('import_file')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                             </td>
                                         </tr>
@@ -102,7 +107,8 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="fileChoiceModal" tabindex="-1" role="dialog" aria-labelledby="fileChoiceModalLabel" aria-hidden="true">
+        <div class="modal fade" id="fileChoiceModal" tabindex="-1" role="dialog" aria-labelledby="fileChoiceModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -115,13 +121,13 @@
                         <form action="{{ route('importdata2') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="filePath" value="{{ $filePath ?? '' }}">
-                            <input type="hidden" name="month" value="{{ $month ?? ''}}">
-                            <input type="hidden" name="year" value="{{ $year ?? ''}}">
+                            <input type="hidden" name="month" value="{{ $month ?? '' }}">
+                            <input type="hidden" name="year" value="{{ $year ?? '' }}">
                             <div class="form-group">
                                 <input type="hidden" name="file_choice" value="new" id="fileChoiceNew">
-                                <p class="lead" >ใช้ไฟล์ใหม่ (แทนที่ข้อมูลเดิม)</p>
+                                <p class="lead">ใช้ไฟล์ใหม่ (แทนที่ข้อมูลเดิม)</p>
                             </div>
-                            
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
                                 <button type="submit" class="btn btn-success">ยืนยัน</button>
@@ -131,7 +137,7 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div>
         <!-- /.container-fluid -->
     </section>
 @endsection
@@ -154,7 +160,7 @@
     <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    
+
     <script>
         $(function() {
             $("#example1").DataTable({
@@ -175,55 +181,56 @@
         });
     </script>
 
-<script>
-    // เปิด Modal อัตโนมัติถ้าตัวแปร showModal เป็นจริง
-    @if(isset($showModal) && $showModal)
-        $(document).ready(function () {
-            $('#fileChoiceModal').modal('show');
-        });
-    @endif
-</script>
+    <script>
+        // เปิด Modal อัตโนมัติถ้าตัวแปร showModal เป็นจริง
+        @if (isset($showModal) && $showModal)
+            $(document).ready(function() {
+                $('#fileChoiceModal').modal('show');
+            });
+        @endif
+    </script>
 
-<script>
-    $(document).ready(function () {
-    // ฟังก์ชันดึงข้อมูลเดือนจาก API
-    function fetchMonths(year) {
-        $.ajax({
-            url: "{{ route('api.existing.months') }}", // URL ของ API
-            method: "GET",
-            data: { year: year }, // ส่งค่าปีไปกับคำขอ
-            success: function (response) {
-                // รีเซ็ตข้อความและลบสไตล์จาก <option> ทั้งหมด
-                $('#month-select option').each(function () {
-                    $(this).text($(this).val()); // รีเซ็ตข้อความเป็นค่าเดิม
-                    $(this).removeClass('text-success'); // ลบคลาส text-success
-                });
+    <script>
+        $(document).ready(function() {
+            // ฟังก์ชันดึงข้อมูลเดือนจาก API
+            function fetchMonths(year) {
+                $.ajax({
+                    url: "{{ route('api.existing.months') }}", // URL ของ API
+                    method: "GET",
+                    data: {
+                        year: year
+                    }, // ส่งค่าปีไปกับคำขอ
+                    success: function(response) {
+                        // รีเซ็ตข้อความและลบสไตล์จาก <option> ทั้งหมด
+                        $('#month-select option').each(function() {
+                            $(this).text($(this).val()); // รีเซ็ตข้อความเป็นค่าเดิม
+                            $(this).removeClass('text-success'); // ลบคลาส text-success
+                        });
 
-                // อัปเดตเดือนที่มีข้อมูล
-                response.forEach(function (item) {
-                    const option = $(`#month-select option[value="${item.month}"]`);
-                    if (option.length) {
-                        option.text(`${item.month} (มีข้อมูลแล้ว)`); // อัปเดตข้อความ
-                        option.addClass('text-success'); // เพิ่มคลาส text-success
+                        // อัปเดตเดือนที่มีข้อมูล
+                        response.forEach(function(item) {
+                            const option = $(`#month-select option[value="${item.month}"]`);
+                            if (option.length) {
+                                option.text(`${item.month} (มีข้อมูลแล้ว)`); // อัปเดตข้อความ
+                                option.addClass('text-success'); // เพิ่มคลาส text-success
+                            }
+                        });
+                    },
+                    error: function(error) {
+                        console.error("Error fetching data:", error);
                     }
                 });
-            },
-            error: function (error) {
-                console.error("Error fetching data:", error);
             }
+
+            // ดึงข้อมูลครั้งแรกเมื่อโหลดหน้า
+            const initialYear = $('#year').val();
+            fetchMonths(initialYear);
+
+            // เมื่อมีการเปลี่ยนปี
+            $('#year').on('change', function() {
+                const selectedYear = $(this).val();
+                fetchMonths(selectedYear);
+            });
         });
-    }
-
-    // ดึงข้อมูลครั้งแรกเมื่อโหลดหน้า
-    const initialYear = $('#year').val();
-    fetchMonths(initialYear);
-
-    // เมื่อมีการเปลี่ยนปี
-    $('#year').on('change', function () {
-        const selectedYear = $(this).val();
-        fetchMonths(selectedYear);
-    });
-});
-
-</script>
+    </script>
 @endsection

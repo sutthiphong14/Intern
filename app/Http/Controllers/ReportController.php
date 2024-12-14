@@ -25,11 +25,13 @@ class ReportController extends Controller
         // ตรวจสอบไฟล์และข้อมูลเดือน ปี
         $request->validate([
             'month' => 'required|string',
-            'year' => 'required|string'
+            'year' => 'required|string',
+            'import_file' => 'required|mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
         ]);
+        
         $month = $request->month;
         $year = $request->year;
-
+    
         // ตรวจสอบข้อมูลในฐานข้อมูล
         $existingData = Installfttx::where('month', $month)->where('year', $year)->first();
         if ($existingData) {
@@ -37,7 +39,7 @@ class ReportController extends Controller
             $filePath = $request->hasFile('import_file')
                 ? $request->file('import_file')->store('temp')
                 : null;
-
+    
             // ส่งตัวแปรเพื่อเปิด Modal ในหน้า importdata
             return view('report.importdata', [
                 'month' => $month,
@@ -46,7 +48,7 @@ class ReportController extends Controller
                 'showModal' => true // เพิ่มตัวแปรเพื่อเปิด Modal
             ]);
         }
-
+    
         // ถ้าไม่มีข้อมูลในฐานข้อมูล ให้ทำการนำเข้าไฟล์ใหม่
         if ($request->hasFile('import_file')) {
             Excel::import(new InstallfttxImport($month, $year), $request->file('import_file'));
@@ -54,15 +56,17 @@ class ReportController extends Controller
             Excel::import(new TotalfttxImport($month, $year), $request->file('import_file'));
             Excel::import(new exportinstallfttximport($month, $year), $request->file('import_file'));
         }
-
+    
         return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
     }
-
-
-
+    
     public function importFile(Request $request)
     {
         // ตรวจสอบการเลือกไฟล์
+        $request->validate([
+            'import_file' => 'required|mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
+        ]);
+    
         $filePath = $request->filePath;
         $month = $request->month;
         $year = $request->year;
@@ -72,16 +76,17 @@ class ReportController extends Controller
             SumInstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
             Totalinstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
             Exportinstllfttx::where('month', $request->month)->where('year', $request->year)->delete();
-
+    
             // ใช้ไฟล์ที่รับจากฟอร์ม
             Excel::import(new InstallfttxImport($month, $year), $filePath);
             Excel::import(new SumInstallfttxImport($month, $year), $filePath);
             Excel::import(new TotalfttxImport($month, $year), $filePath);
             Excel::import(new exportinstallfttximport($month, $year), $filePath);
+    
             return redirect()->route('viewInstallFTTx')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
         }
     }
-
+    
 
 
 
