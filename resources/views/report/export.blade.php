@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Export</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
+
 <body>
 
-{{-- เพิ่มข้อความแนะนำก่อนตาราง
-@if(isset($isExport) && $isExport)
+    {{-- เพิ่มข้อความแนะนำก่อนตาราง
+@if (isset($isExport) && $isExport)
     <h3>Exported Customer Data</h3>
 @endif --}}
 
@@ -23,11 +26,13 @@
                 <thead class="text-center ">
                     <tr>
                         <td colspan="9">
-                            รายงานระยะเวลาเฉลี่ยในการติดตั้งอินเทอร์เน็ตความเร็วสูง ประจำเดือน {{ $month }} ปี {{ $year }}
+                            รายงานระยะเวลาเฉลี่ยในการติดตั้งอินเทอร์เน็ตความเร็วสูง ประจำเดือน {{ $month }} ปี
+                            {{ $year }}
                         </td>
-                        
+
                     </tr>
                     <tr>
+                        <th rowspan="2" class="col-department">ลำดับ</th>
                         <th rowspan="2" class="col-department">ภาค</th>
                         <th rowspan="2" class="col-department">ฝ่าย</th>
                         <th rowspan="2" class="col-department">ส่วน</th>
@@ -66,42 +71,52 @@
             $sectionsArray = array_slice($sectionsArray, 1, 14);
         @endphp --}}
 
-        <tbody class='text-center align-items-center'>
-            @foreach ($data as $section)
-                <tr>
-                    <td>{{ $section['export_region'] }}</td>
-                    <!-- ค่าอื่นๆ -->
-                   
-                    <td>{{ $section['export_department'] }}</td>
-                    <td>{{ $section['export_section'] }}</td>
-                    <td>{{ $section['export_installation_center'] }}</td>
-                    <td>{{ $section['export_num_of_circuits'] }}</td>
-                    <td>{{ $section['export_installation_center'] }}</td>
-                    <td>{{ $section['export_total_preparation_time_days'] }}</td>
-                    <td>{{ $section['export_sdp_odp_deadline_days'] }}</td>
-                    <td>{{ $section['export_wiring_time_days'] }}</td>
-                    <td>{{ $section['export_config_nms_days'] }}</td>
-                    <td>{{ $section['export_technician_appointment_and_scheduling_time_days'] }}</td>
-                    <td>{{ $section['export_customer_waiting_time_days'] }}</td>
-                    <td>{{ $section['export_cable_pulling_and_ont_installation_time_days'] }}</td>
-                    <td>{{ $section['export_closing_work_time_days'] }}</td>
-                    <td>{{ $section['export_total_average_time_per_circuit_days'] }}</td>
-                    <td>{{ $section['export_num_of_circuits_installed_within_3_days'] }}</td>
-                    <td>{{ $section['export_installation_percentage_within_3_days'] }}</td>
-                    
+                <tbody class='text-center align-items-center'>
+                    @php
+                        $rowIndex = 1; // ตัวแปรลำดับเริ่มต้น
+                    @endphp
+                    @foreach ($data as $section)
+                        <tr>
+                            @if (strpos($section['export_installation_center'], 'รวม') !== false)
+                                <td></td> <!-- เว้นช่องว่างในลำดับ -->
+                            @else
+                                <td>{{ $rowIndex++ }}</td>
+                            @endif
 
-                </tr>
-            @endforeach
-        </tbody>
+                            <td>{{ $section['export_region'] }}</td>
+                            <!-- ค่าอื่นๆ -->
+
+                            <td>{{ $section['export_department'] }}</td>
+                            <td>{{ $section['export_section'] }}</td>
+                            <td>{{ $section['export_installation_center'] }}</td>
+                            <td>{{ $section['export_num_of_circuits'] }}</td>
+                            <td>{{ $section['export_total_preparation_time_days'] }}</td>
+                            <td>{{ $section['export_total_processing_time_days'] }}</td>
+                            <td>{{ $section['export_sdp_odp_deadline_days'] }}</td>
+                            <td>{{ $section['export_wiring_time_days'] }}</td>
+                            <td>{{ $section['export_config_nms_days'] }}</td>
+                            <td>{{ $section['export_technician_appointment_and_scheduling_time_days'] }}</td>
+                            <td>{{ $section['export_customer_waiting_time_days'] }}</td>
+                            <td>{{ $section['export_cable_pulling_and_ont_installation_time_days'] }}</td>
+                            <td>{{ $section['export_closing_work_time_days'] }}</td>
+                            <td>{{ $section['export_total_average_time_per_circuit_days'] }}</td>
+                            <td>{{ $section['export_num_of_circuits_installed_within_3_days'] }}</td>
+                            <td>{{ $section['export_installation_percentage_within_3_days'] }}</td>
+
+
+                        </tr>
+                    @endforeach
+                </tbody>
 
 
 
 
 
-    </table>
-</div>
-</div>
+            </table>
+        </div>
+    </div>
 
 
 </body>
+
 </html>

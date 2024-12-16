@@ -64,7 +64,7 @@ class ReportController extends Controller
     {
         // ตรวจสอบการเลือกไฟล์
         $request->validate([
-            'import_file' => 'required|mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
+            'import_file' => 'mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
         ]);
     
         $filePath = $request->filePath;
