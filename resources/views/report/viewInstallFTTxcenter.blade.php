@@ -139,8 +139,15 @@
                                             <td>{{ $item->closing_work_time_days }}</td>
                                             <td>{{ $item->total_average_time_per_circuit_days }}</td>
                                             <td>{{ $item->num_of_circuits_installed_within_3_days }}</td>
-                                            <td class="{{ $item['installation_percentage_within_3_days'] > 80 ? 'bg-success' : ($item['installation_percentage_within_3_days'] > 60 ? 'bg-warning' : 'bg-danger') }}">{{ $item->installation_percentage_within_3_days }}%</td>
-                                        </tr>
+                                            <td class="" style="background-color: 
+                                            {{$item['installation_percentage_within_3_days'] > 85 ? 'rgba(61, 183, 71, 1)' :
+                                ($item['installation_percentage_within_3_days'] > 83 ? 'rgb(142, 255, 56,1)' :
+                                    ($item['installation_percentage_within_3_days'] > 80 ? 'rgba(255, 206, 86, 1)' :
+                                        ($item['installation_percentage_within_3_days'] > 77 ? 'rgba(255, 165, 61, 1)' :
+                                            'rgba(255, 35, 82, 1)')))
+                            }}; color: white;">
+                                                        {{ $item['installation_percentage_within_3_days'] }}%
+                                                    </td>
                                     @endforeach
 
 
@@ -197,15 +204,19 @@
         }
 
         // กำหนดสีของแท่งกราฟตามเงื่อนไข
-        const backgroundColors = data.map(value => 
-            value > 80 ? 'rgba(61, 183, 71, 0.5)' : 
-            value > 60 ? 'rgba(255, 206, 86, 0.5)' : 
-            'rgba(255, 99, 132, 0.5)'
+        const backgroundColors = data.map(value =>
+            value > 85 ? 'rgba(61, 183, 71, 0.5)' :
+                value > 83 ? 'rgba(180, 255, 122, 0.5)' :
+                    value > 80 ? 'rgba(255, 206, 86, 0.5)' :
+                        value > 77 ? 'rgba(255, 165, 61, 0.5)' :
+                            'rgba(255, 35, 82, 0.5)'
         );
-        const borderColors = data.map(value => 
-            value > 80 ? 'rgba(61, 183, 71, 1)' : 
-            value > 60 ? 'rgba(255, 206, 86, 1)' : 
-            'rgba(255, 99, 132, 1)'
+        const borderColors = data.map(value =>
+            value > 85 ? 'rgba(61, 183, 71, 1)' :
+                value > 83 ? 'rgba(180, 255, 122, 1)' :
+                    value > 80 ? 'rgba(255, 206, 86, 1)' :
+                        value > 77 ? 'rgba(255, 165, 61, 1)' :
+                            'rgba(255, 35, 82, 1)'
         );
 
         // สร้าง Bar Chart
