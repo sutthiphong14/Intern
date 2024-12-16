@@ -21,7 +21,7 @@ class totalfttximport implements ToCollection, WithStartRow, WithLimit
 
     public function startRow(): int
     {
-        return 69; // เริ่มที่แถว 69
+        return 55; // เริ่มที่แถว 69
     }
 
     public function limit(): int

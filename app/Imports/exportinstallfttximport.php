@@ -29,7 +29,7 @@ class exportinstallfttximport implements ToCollection,WithStartRow, WithLimit
 
     public function limit(): int
     {
-        return 66; // อ่าน 63 แถว
+        return 91; // อ่าน 63 แถว
     }
     public function collection(Collection $row)
     {

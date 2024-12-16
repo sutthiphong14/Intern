@@ -14,6 +14,7 @@ use App\Models\Totalinstallfttx;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {
@@ -103,7 +104,7 @@ class ReportController extends Controller
     {
         // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
         // และกรองค่าซ้ำ
-        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2'])
+        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม ภน.3.1', 'รวม ภน.3.2'])
             ->distinct() // กรองค่าซ้ำ
             ->pluck('sum_installation_center');
 
@@ -146,14 +147,14 @@ class ReportController extends Controller
         // จัดเรียงข้อมูลตาม installation_percentage_within_3_days จากมากไปน้อย
         $sortedDataMax = $latestMonthData
             ->reject(function ($item) {
-                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม']);
+                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
             })
             ->sortByDesc('sum_installation_percentage_within_3_days')
             ->take(5);
 
         $sortedDataMin = $latestMonthData
             ->reject(function ($item) {
-                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม']);
+                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
             })
             ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
             ->take(1); // เลือก 1 รายการแรก
@@ -169,12 +170,15 @@ class ReportController extends Controller
         $year = $request->input('year', Carbon::now()->year); // ค่า default เป็นปีปัจจุบัน
 
         // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
-        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2'])
+        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม ภน.3.1', 'รวม ภน.3.2'])
             ->distinct() // กรองค่าซ้ำ
             ->pluck('sum_installation_center');
+        
+       
 
         // ดึงข้อมูลที่มีปีตรงกับค่า year ที่ได้รับ
         $sumInstallfttx = SumInstallfttx::where('year', $year)->get();
+      
 
         // ถ้าไม่มีข้อมูลในปีนั้น ให้แจ้งเตือน
         if ($sumInstallfttx->isEmpty()) {
@@ -208,20 +212,24 @@ class ReportController extends Controller
         // กรองข้อมูลที่มีเดือนล่าสุด
         $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
 
+       
+
         // จัดเรียงข้อมูลตาม installation_percentage_within_3_days จากมากไปน้อย
         $sortedDataMax = $latestMonthData
             ->reject(function ($item) {
-                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม']);
+                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
             })
             ->sortByDesc('sum_installation_percentage_within_3_days')
             ->take(5);
 
         $sortedDataMin = $latestMonthData
             ->reject(function ($item) {
-                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม']);
+                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
             })
             ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
             ->take(1); // เลือก 1 รายการแรก
+
+
 
 
         // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
