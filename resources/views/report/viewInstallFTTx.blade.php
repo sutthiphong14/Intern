@@ -17,30 +17,6 @@
 <section class="content">
     <div class="container-fluid mb-3">
 
-        <div class="card card-dark">
-            <div class="card-header">
-                <h3 class="card-title">ตรวจแก้ FTTx ภายใน 3 วัน. : จังหวัด.
-                </h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
-
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Bar Chart - การติดตั้งภายใน 3 วันเปรียบเทียบแต่ละเดือน</h3>
-
-
-
-                </div>
-                <div class="card-body">
-                    <canvas id="barChart"
-                        style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
-                </div>
-            </div>
-        </div>
 
 
 
