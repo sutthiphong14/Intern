@@ -26,7 +26,7 @@ class InstallfttxImport implements ToCollection, WithStartRow, WithLimit
 
     public function limit(): int
     {
-        return 64; // อ่าน 63 แถว
+        return 89; // อ่าน 63 แถว
     }
 
     public function collection(Collection $rows)

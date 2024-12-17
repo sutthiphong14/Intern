@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Exports\ExportFttxReport;
+use App\Imports\exportinstallfttximport;
 use App\Imports\InstallfttxImport;
 use App\Imports\SumInstallfttxImport;
 use App\Imports\totalfttximport;
+use App\Models\Exportinstllfttx;
 use App\Models\Installfttx;
 use App\Models\suminstallfttx;
 use App\Models\Totalinstallfttx;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {
@@ -23,8 +26,10 @@ class ReportController extends Controller
         // ตรวจสอบไฟล์และข้อมูลเดือน ปี
         $request->validate([
             'month' => 'required|string',
-            'year' => 'required|string'
+            'year' => 'required|string',
+            'import_file' => 'required|mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
         ]);
+        
         $month = $request->month;
         $year = $request->year;
     
@@ -32,13 +37,13 @@ class ReportController extends Controller
         $existingData = Installfttx::where('month', $month)->where('year', $year)->first();
         if ($existingData) {
             // ถ้ามีข้อมูล และผู้ใช้ได้อัพโหลดไฟล์ใหม่
-            $filePath = $request->hasFile('import_file') 
-                        ? $request->file('import_file')->store('temp') 
-                        : null;
+            $filePath = $request->hasFile('import_file')
+                ? $request->file('import_file')->store('temp')
+                : null;
     
             // ส่งตัวแปรเพื่อเปิด Modal ในหน้า importdata
             return view('report.importdata', [
-                'month' => $month ,
+                'month' => $month,
                 'year' => $year,
                 'filePath' => $filePath,
                 'showModal' => true // เพิ่มตัวแปรเพื่อเปิด Modal
@@ -50,16 +55,19 @@ class ReportController extends Controller
             Excel::import(new InstallfttxImport($month, $year), $request->file('import_file'));
             Excel::import(new SumInstallfttxImport($month, $year), $request->file('import_file'));
             Excel::import(new TotalfttxImport($month, $year), $request->file('import_file'));
+            Excel::import(new exportinstallfttximport($month, $year), $request->file('import_file'));
         }
     
         return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
     }
     
-    
-    
     public function importFile(Request $request)
     {
         // ตรวจสอบการเลือกไฟล์
+        $request->validate([
+            'import_file' => 'mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
+        ]);
+    
         $filePath = $request->filePath;
         $month = $request->month;
         $year = $request->year;
@@ -68,16 +76,19 @@ class ReportController extends Controller
             Installfttx::where('month', $request->month)->where('year', $request->year)->delete();
             SumInstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
             Totalinstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
-          
+            Exportinstllfttx::where('month', $request->month)->where('year', $request->year)->delete();
+    
             // ใช้ไฟล์ที่รับจากฟอร์ม
             Excel::import(new InstallfttxImport($month, $year), $filePath);
             Excel::import(new SumInstallfttxImport($month, $year), $filePath);
             Excel::import(new TotalfttxImport($month, $year), $filePath);
+            Excel::import(new exportinstallfttximport($month, $year), $filePath);
+    
             return redirect()->route('viewInstallFTTx')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
         }
     }
     
-    
+
 
 
     function datacenter()
@@ -90,68 +101,68 @@ class ReportController extends Controller
     }
 
     public function datainstallfttx()
-{
-    // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
-    // และกรองค่าซ้ำ
-    $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2'])
-        ->distinct() // กรองค่าซ้ำ
-        ->pluck('sum_installation_center');
+    {
+        // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
+        // และกรองค่าซ้ำ
+        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม ภน.3.1', 'รวม ภน.3.2'])
+            ->distinct() // กรองค่าซ้ำ
+            ->pluck('sum_installation_center');
 
-    $presenct_data = SumInstallfttx::distinct()
-        ->pluck('sum_installation_center');
+        $presenct_data = SumInstallfttx::distinct()
+            ->pluck('sum_installation_center');
 
-    $monthMapping = [
-        'มกราคม' => 1,
-        'กุมภาพันธ์' => 2,
-        'มีนาคม' => 3,
-        'เมษายน' => 4,
-        'พฤษภาคม' => 5,
-        'มิถุนายน' => 6,
-        'กรกฎาคม' => 7,
-        'สิงหาคม' => 8,
-        'กันยายน' => 9,
-        'ตุลาคม' => 10,
-        'พฤศจิกายน' => 11,
-        'ธันวาคม' => 12,
-    ];
+        $monthMapping = [
+            'มกราคม' => 1,
+            'กุมภาพันธ์' => 2,
+            'มีนาคม' => 3,
+            'เมษายน' => 4,
+            'พฤษภาคม' => 5,
+            'มิถุนายน' => 6,
+            'กรกฎาคม' => 7,
+            'สิงหาคม' => 8,
+            'กันยายน' => 9,
+            'ตุลาคม' => 10,
+            'พฤศจิกายน' => 11,
+            'ธันวาคม' => 12,
+        ];
 
-    // ดึงข้อมูลจาก SumInstallfttx
-    $currentYear = Carbon::now()->year; // ดึงปีปัจจุบันจาก Carbon
+        // ดึงข้อมูลจาก SumInstallfttx
+        $currentYear = Carbon::now()->year; // ดึงปีปัจจุบันจาก Carbon
 
-    // ดึงข้อมูลที่มีปีตรงกับปีปัจจุบัน
-    $sumInstallfttx = SumInstallfttx::where('year', $currentYear)->get();
+        // ดึงข้อมูลที่มีปีตรงกับปีปัจจุบัน
+        $sumInstallfttx = SumInstallfttx::where('year', $currentYear)->get();
 
-    // แปลงชื่อเดือนเป็นหมายเลขเดือน
-    $sumInstallfttx = $sumInstallfttx->map(function ($item) use ($monthMapping) {
-        $item->month_number = $monthMapping[$item->month] ?? null; // แปลงชื่อเดือนเป็นหมายเลขเดือน
-        return $item;
-    });
+        // แปลงชื่อเดือนเป็นหมายเลขเดือน
+        $sumInstallfttx = $sumInstallfttx->map(function ($item) use ($monthMapping) {
+            $item->month_number = $monthMapping[$item->month] ?? null; // แปลงชื่อเดือนเป็นหมายเลขเดือน
+            return $item;
+        });
 
-    // หาค่าเดือนล่าสุด (โดยใช้ max จากหมายเลขเดือน)
-    $latestMonthNumber = $sumInstallfttx->max('month_number');
+        // หาค่าเดือนล่าสุด (โดยใช้ max จากหมายเลขเดือน)
+        $latestMonthNumber = $sumInstallfttx->max('month_number');
 
-    // กรองข้อมูลที่มีเดือนล่าสุด
-    $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
+        // กรองข้อมูลที่มีเดือนล่าสุด
+        $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
 
-    // จัดเรียงข้อมูลตาม installation_percentage_within_3_days จากมากไปน้อย
-    $sortedDataMax = $latestMonthData
-    ->reject(function ($item) {
-        return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2','รวม']);
-    })
-    ->sortByDesc('sum_installation_percentage_within_3_days')
-    ->take(5);
+        // จัดเรียงข้อมูลตาม installation_percentage_within_3_days จากมากไปน้อย
+        $sortedDataMax = $latestMonthData
+            ->reject(function ($item) {
+                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
+            })
+            ->sortByDesc('sum_installation_percentage_within_3_days')
+            ->take(5);
 
-    $sortedDataMin = $latestMonthData
-    ->reject(function ($item) {
-        return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม']);
-    })
-    ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
-    ->take(1); // เลือก 1 รายการแรก
+        $sortedDataMin = $latestMonthData
+            ->reject(function ($item) {
+                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
+            })
+            ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
+            ->take(1); // เลือก 1 รายการแรก
 
 
-    // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
-    return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax','latestMonthData','sortedDataMin'));
-}
+        // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
+        return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax', 'latestMonthData', 'sortedDataMin'));
+    }
 
     public function datainstallfttxYear(Request $request)
     {
@@ -159,12 +170,15 @@ class ReportController extends Controller
         $year = $request->input('year', Carbon::now()->year); // ค่า default เป็นปีปัจจุบัน
 
         // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
-        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2'])
+        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม ภน.3.1', 'รวม ภน.3.2'])
             ->distinct() // กรองค่าซ้ำ
             ->pluck('sum_installation_center');
+        
+       
 
         // ดึงข้อมูลที่มีปีตรงกับค่า year ที่ได้รับ
         $sumInstallfttx = SumInstallfttx::where('year', $year)->get();
+      
 
         // ถ้าไม่มีข้อมูลในปีนั้น ให้แจ้งเตือน
         if ($sumInstallfttx->isEmpty()) {
@@ -198,25 +212,29 @@ class ReportController extends Controller
         // กรองข้อมูลที่มีเดือนล่าสุด
         $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
 
+       
+
         // จัดเรียงข้อมูลตาม installation_percentage_within_3_days จากมากไปน้อย
-    $sortedDataMax = $latestMonthData
-    ->reject(function ($item) {
-        return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2','รวม']);
-    })
-    ->sortByDesc('sum_installation_percentage_within_3_days')
-    ->take(5);
+        $sortedDataMax = $latestMonthData
+            ->reject(function ($item) {
+                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
+            })
+            ->sortByDesc('sum_installation_percentage_within_3_days')
+            ->take(5);
 
-    $sortedDataMin = $latestMonthData
-    ->reject(function ($item) {
-        return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม']);
-    })
-    ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
-    ->take(1); // เลือก 1 รายการแรก
+        $sortedDataMin = $latestMonthData
+            ->reject(function ($item) {
+                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
+            })
+            ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
+            ->take(1); // เลือก 1 รายการแรก
 
 
-    // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
-    return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax','latestMonthData','sortedDataMin'));
-}
+
+
+        // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
+        return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax', 'latestMonthData', 'sortedDataMin'));
+    }
 
 
 
@@ -272,8 +290,13 @@ class ReportController extends Controller
 
     public function sortcenter($section, $year, $month)
     {
+        // กำจัดคำว่า "รวม " ออก
         $section = str_replace('รวม ', '', $section);
-
+    
+        // ดึงตัวเลขแรกจาก section
+        $firstNumber = substr($section, 0, 1);
+    
+        // รายชื่อคอลัมน์ที่ต้องการตรวจสอบ
         $columns = [
             'num_of_circuits',
             'total_preparation_time_days',
@@ -289,31 +312,74 @@ class ReportController extends Controller
             'num_of_circuits_installed_within_3_days',
             'installation_percentage_within_3_days',
         ];
-
-        $installData = Installfttx::where('section', 'LIKE', "%$section%")
-            ->where('year', '=', $year)
-            ->where('month', '=', $month)
-            ->where(function ($query) use ($columns) {
-                foreach ($columns as $column) {
-                    $query->orWhere($column, '!=', 0);
-                }
-            })
-            ->get();
-
-
+    
+        // ถ้ามีการส่งตัวเลข 2 หรือ 3 มา, ตรวจหาข้อมูลจากตัวเลขแรก
+        if ($firstNumber == '2' || $firstNumber == '3') {
+            // ใช้ LIKE แบบละเอียด
+            $installData = Installfttx::where('region', 'LIKE', "%$firstNumber%")
+                ->where('year', '=', $year)
+                ->where('month', '=', $month)
+                ->where(function ($query) use ($columns) {
+                    foreach ($columns as $column) {
+                        $query->orWhere($column, '!=', 0);
+                    }
+                })
+                ->get();
+        } else {
+            // ถ้าไม่มีตัวเลข 2 หรือ 3, ใช้ section ตามปกติ
+            $installData = Installfttx::where('section', 'LIKE', "%$section%")
+                ->where('year', '=', $year)
+                ->where('month', '=', $month)
+                ->where(function ($query) use ($columns) {
+                    foreach ($columns as $column) {
+                        $query->orWhere($column, '!=', 0);
+                    }
+                })
+                ->get();
+        }
+    
+        // ตรวจสอบว่ามีข้อมูลหรือไม่
+        if ($installData->isEmpty()) {
+            return response()->json(['message' => 'ไม่พบข้อมูลสำหรับตัวเลขนี้ในฐานข้อมูล']);
+        }
+    
+        // ดึงข้อมูลสำหรับ labels และ data
         $labels = $installData->pluck('installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
         $data = $installData->pluck('installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
-
+    
+        // ส่งข้อมูลไปยัง view
         return view('report.viewInstallFTTxcenter', compact('installData', 'labels', 'data', 'section', 'year', 'month'));
     }
+    
+    
 
     public function getExistingMonths(Request $request)
-{
-    $year = $request->input('year'); // รับค่าปีจากคำขอ
-    $data = Installfttx::where('year', $year) // ดึงเฉพาะปีที่ระบุ
-                        ->select('year', 'month')
-                        ->get();
-    return response()->json($data);
-}
+    {
+        $year = $request->input('year'); // รับค่าปีจากคำขอ
+        $data = Installfttx::where('year', $year) // ดึงเฉพาะปีที่ระบุ
+            ->select('year', 'month')
+            ->get();
+        return response()->json($data);
+    }
 
+    public function exportview(Request $request)
+    {
+        // รับค่าปีและเดือนจาก URL
+        $year = $request->input('year');
+        $month = $request->input('month');
+        // ดึงข้อมูลจากฐานข้อมูลที่ตรงกับปีและเดือน
+        $data = Exportinstllfttx::where('year', $year)
+            ->where('month', $month)
+            ->get();
+        if ($data) {
+            return $this->export($year, $month);
+        }
+    }
+
+    // ฟังก์ชันสำหรับการส่งออกเป็น Excel
+    public function export($year, $month)
+    {
+        // ส่งออกข้อมูลเป็นไฟล์ Excel
+        return Excel::download(new ExportFttxReport($year, $month), 'report_' . $year . '_' . $month . '.xlsx');
+    }
 }
