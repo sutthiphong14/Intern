@@ -76,8 +76,7 @@
                         <h3 class="card-title">Bar Chart - การติดตั้งภายใน 3 วัน</h3>
                     </div>
                     <div class="card-body">
-                        <canvas id="barChart"
-                            style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                    <canvas id="myChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
                     </div>
                 </div>
             </div>
@@ -155,8 +154,15 @@
                                             <td>{{ $item->closing_work_time_days }}</td>
                                             <td>{{ $item->total_average_time_per_circuit_days }}</td>
                                             <td>{{ $item->num_of_circuits_installed_within_3_days }}</td>
-                                            <td class="{{ $item['installation_percentage_within_3_days'] > 80 ? 'bg-success' : ($item['installation_percentage_within_3_days'] > 60 ? 'bg-warning' : 'bg-danger') }}">{{ $item->installation_percentage_within_3_days }}%</td>
-                                        </tr>
+                                            <td class="" style="background-color: 
+                                            {{$item['installation_percentage_within_3_days'] > 85 ? 'rgba(61, 183, 71, 1)' :
+                                ($item['installation_percentage_within_3_days'] > 83 ? 'rgb(142, 255, 56,1)' :
+                                    ($item['installation_percentage_within_3_days'] > 80 ? 'rgba(255, 206, 86, 1)' :
+                                        ($item['installation_percentage_within_3_days'] > 77 ? 'rgba(255, 165, 61, 1)' :
+                                            'rgba(255, 35, 82, 1)')))
+                            }}; color: white;">
+                                                        {{ $item['installation_percentage_within_3_days'] }}%
+                                                    </td>
                                     @endforeach
 
 
@@ -201,19 +207,33 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // ดึงข้อมูลจาก Controller
-        const labels = @json($labels); // ชื่อ section หรือ center
-        const data = @json($data);     // เปอร์เซ็นต์การติดตั้ง
+    // ดึงข้อมูลจาก Controller
+    const labels = @json($labels); // ชื่อเดือน
+    const data = @json($data); // เปอร์เซ็นต์รวม
 
-        // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
-        if (labels.length === 0 || data.length === 0) {
-            console.warn('No data available for chart.');
-            return;
-        }
+    // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
+    if (labels.length === 0 || data.length === 0) {
+        console.warn('No data available for chart.');
+    } else {
+        // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
+        const backgroundColors = data.map(value =>
+            value > 85 ? 'rgba(61, 183, 71, 0.5)' :
+                value > 83 ? 'rgba(180, 255, 122, 0.5)' :
+                    value > 80 ? 'rgba(255, 206, 86, 0.5)' :
+                        value > 77 ? 'rgba(255, 165, 61, 0.5)' :
+                            'rgba(255, 35, 82, 0.5)'
+        );
 
-        // สร้าง Bar Chart
-        const ctx = document.getElementById('barChart').getContext('2d');
+        const borderColors = data.map(value =>
+            value > 85 ? 'rgba(61, 183, 71, 1)' :
+                value > 83 ? 'rgba(180, 255, 122, 1)' :
+                    value > 80 ? 'rgba(255, 206, 86, 1)' :
+                        value > 77 ? 'rgba(255, 165, 61, 1)' :
+                            'rgba(255, 35, 82, 1)'
+        );
+
+        const ctx = document.getElementById('myChart');
+
         new Chart(ctx, {
             type: 'bar',
             data: {
@@ -221,29 +241,21 @@
                 datasets: [{
                     label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
                     data: data,
-                    backgroundColor: 'rgb(61, 183, 71 ,0.5)', // สีพื้นหลังแท่งกราฟ
-                    borderColor: 'rgb(61, 183, 71 ,1)',       // สีเส้นขอบ
+                    backgroundColor: backgroundColors, // สีพื้นหลังแบบไดนามิก
+                    borderColor: borderColors, // สีเส้นขอบแบบไดนามิก
                     borderWidth: 1
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 scales: {
                     y: {
-                        beginAtZero: true, // เริ่มจาก 0
-                        max: 100 // กำหนดค่าบนสุดของแกน Y เป็น 100
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
+                        beginAtZero: true,
+                        max: 100 // ปรับให้แกน Y มีค่าสูงสุดเป็น 100
                     }
                 }
             }
         });
-    });
+    }
 </script>
 
 @endsection

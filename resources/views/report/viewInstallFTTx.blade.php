@@ -17,7 +17,7 @@
     <section class="content">
         <div class="container-fluid mb-3">
 
-            <div class="card card-dark mt-3">
+        <div class="card card-dark mt-3">
 
                 <div class="card card-dark">
                     <div class="card-header">
@@ -391,26 +391,32 @@
                                         <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
                                         <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
 
-                                    <td
-                                        class="{{ $section['sum_installation_percentage_within_3_days'] > 80 ? 'bg-success' : ($section['sum_installation_percentage_within_3_days'] > 60 ? 'bg-warning' : 'bg-danger') }}">
-                                        {{ $section['sum_installation_percentage_within_3_days'] }} %
-                                    </td>
-
-                                </tr>
-                            @endforeach
-                        </tbody>
-
-
-
+                                                    <td class="" style="background-color: {{
+                                $section['sum_installation_percentage_within_3_days'] > 85 ? 'rgba(61, 183, 71, 1)' :
+                                ($section['sum_installation_percentage_within_3_days'] > 83 ? 'rgb(142, 255, 56,1)' :
+                                    ($section['sum_installation_percentage_within_3_days'] > 80 ? 'rgba(255, 206, 86, 1)' :
+                                        ($section['sum_installation_percentage_within_3_days'] > 77 ? 'rgba(255, 165, 61, 1)' :
+                                            'rgba(255, 35, 82, 1)')))
+                            }}; color: white;">
+                                                        {{ $section['sum_installation_percentage_within_3_days'] }}%
+                                                    </td>
 
 
-                    </table>
-                </div>
+                                                </tr>
+                        @endforeach
+                    </tbody>
+
+
+
+
+
+                </table>
             </div>
-
-
-
         </div>
+
+
+
+
     </div>
 
 
@@ -650,6 +656,76 @@
         // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
         document.getElementById('yearInput').addEventListener('change', function () {
             document.getElementById('yearForm').submit();
+        });
+    </script>
+
+    <script src="plugins/chart.js/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
+            if (labels.length === 0 || data.length === 0) {
+                console.warn('No data available for chart.');
+                return;
+            }
+
+            // คำนวณค่าต่ำสุดใน data และลดลง 10
+            const minData = Math.min(...data); // ค่าต่ำสุดใน data
+            const yMin = minData - (minData % 10); // ปรับให้เป็น 10, 20, 30, ... ตามที่ต่ำสุดใน data
+
+            // กำหนดสีของแท่งกราฟตามเงื่อนไข
+            const backgroundColors = data.map(value =>
+                value > 80 ? 'rgba(61, 183, 71, 0.5)' :
+                    value > 50 ? 'rgba(255, 206, 86, 0.5)' :
+                        'rgba(255, 99, 132, 0.5)'
+            );
+            const borderColors = data.map(value =>
+                value > 80 ? 'rgba(61, 183, 71, 1)' :
+                    value > 50 ? 'rgba(255, 206, 86, 1)' :
+                        'rgba(255, 99, 132, 1)'
+            );
+
+            // สร้าง Bar Chart
+            const ctx = document.getElementById('barChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
+                        data: data,
+                        backgroundColor: backgroundColors, // ใช้สีที่ตั้งตามเงื่อนไข
+                        borderColor: borderColors, // ใช้สีเส้นขอบที่ตั้งตามเงื่อนไข
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true, // เริ่มจาก 0
+                            min: 0, // กำหนดค่าต่ำสุดของแกน Y ตามที่คำนวณ
+                            max: 50, // กำหนดค่าบนสุดของแกน Y เป็น 100
+                            suggestedMax: 50, // แนะนำค่าบนสุดของแกน Y เป็น 100
+                            ticks: {
+                                stepSize: 10, // กำหนดให้ค่าบนแกน Y เพิ่มขึ้นทีละ 10
+                                callback: function (value) {
+                                    // จัดการแสดงค่าบนแกน Y ให้แสดงตั้งแต่ 0 ถึง 100
+                                    return value % 10 === 0 ? value : ''; // แสดงเฉพาะ 0, 10, 20, ...
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        }
+                    }
+                }
+            });
         });
     </script>
     @endsection

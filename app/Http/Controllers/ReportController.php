@@ -229,12 +229,13 @@ class ReportController extends Controller
             ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
             ->take(1); // เลือก 1 รายการแรก
 
+    $labels = $latestMonthData->pluck('sum_installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
+    $data = $latestMonthData->pluck('sum_installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
 
 
-
-        // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
-        return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax', 'latestMonthData', 'sortedDataMin'));
-    }
+    // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
+    return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax','latestMonthData','sortedDataMin','labels','data'));
+}
 
 
 
