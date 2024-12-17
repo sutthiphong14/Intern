@@ -60,8 +60,7 @@
                         <h3 class="card-title">Bar Chart - การติดตั้งภายใน 3 วัน</h3>
                     </div>
                     <div class="card-body">
-                        <canvas id="barChart"
-                            style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                    <canvas id="myChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
                     </div>
                 </div>
             </div>
@@ -192,18 +191,15 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // ดึงข้อมูลจาก Controller
-        const labels = @json($labels); // ชื่อเดือน
-        const data = @json($data); // เปอร์เซ็นต์รวม
+    // ดึงข้อมูลจาก Controller
+    const labels = @json($labels); // ชื่อเดือน
+    const data = @json($data); // เปอร์เซ็นต์รวม
 
-        // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
-        if (labels.length === 0 || data.length === 0) {
-            console.warn('No data available for chart.');
-            return;
-        }
-
-        // กำหนดสีของแท่งกราฟตามเงื่อนไข
+    // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
+    if (labels.length === 0 || data.length === 0) {
+        console.warn('No data available for chart.');
+    } else {
+        // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
         const backgroundColors = data.map(value =>
             value > 85 ? 'rgba(61, 183, 71, 0.5)' :
                 value > 83 ? 'rgba(180, 255, 122, 0.5)' :
@@ -211,6 +207,7 @@
                         value > 77 ? 'rgba(255, 165, 61, 0.5)' :
                             'rgba(255, 35, 82, 0.5)'
         );
+
         const borderColors = data.map(value =>
             value > 85 ? 'rgba(61, 183, 71, 1)' :
                 value > 83 ? 'rgba(180, 255, 122, 1)' :
@@ -219,8 +216,8 @@
                             'rgba(255, 35, 82, 1)'
         );
 
-        // สร้าง Bar Chart
-        const ctx = document.getElementById('barChart').getContext('2d');
+        const ctx = document.getElementById('myChart');
+
         new Chart(ctx, {
             type: 'bar',
             data: {
@@ -228,38 +225,21 @@
                 datasets: [{
                     label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
                     data: data,
-                    backgroundColor: backgroundColors, // ใช้สีที่ตั้งตามเงื่อนไข
-                    borderColor: borderColors, // ใช้สีเส้นขอบที่ตั้งตามเงื่อนไข
+                    backgroundColor: backgroundColors, // สีพื้นหลังแบบไดนามิก
+                    borderColor: borderColors, // สีเส้นขอบแบบไดนามิก
                     borderWidth: 1
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 scales: {
                     y: {
-                        beginAtZero: true, // เริ่มจาก 0
-                        min: 0, // กำหนดค่าต่ำสุดของแกน Y เป็น 0
-                        max: 100, // กำหนดค่าบนสุดของแกน Y เป็น 100
-                        suggestedMax: 100, // แนะนำค่าบนสุดของแกน Y เป็น 100
-                        ticks: {
-                            stepSize: 10, // กำหนดให้ค่าบนแกน Y เพิ่มขึ้นทีละ 10
-                            callback: function(value) {
-                                // จัดการแสดงค่าบนแกน Y ให้แสดงตั้งแต่ 0 ถึง 100
-                                return value % 10 === 0 ? value : ''; // แสดงเฉพาะ 0, 10, 20, ...
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
+                        beginAtZero: true,
+                        max: 100 // ปรับให้แกน Y มีค่าสูงสุดเป็น 100
                     }
                 }
             }
         });
-    });
+    }
 </script>
 
 @endsection
