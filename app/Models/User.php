@@ -25,7 +25,19 @@ public function getPermissionAttribute($value)
 {
     return json_decode($value, true);
 }
+// Remove email from fillable fields
+protected $hidden = ['password', 'remember_token'];
 
+// Mutator for permission
+
+
+
+
+// Override the method to use employee_id for authentication
+public function findForPassport($employee_id)
+{
+    return $this->where('employee_id', $employee_id)->first();
+}
 
 
 
