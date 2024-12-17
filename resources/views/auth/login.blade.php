@@ -15,14 +15,14 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
-                <!-- Employee ID Field (Replaced Email) -->
+                <!-- Username Field -->
                 <div class="mb-3">
-                    <label for="employee_id" class="form-label">{{ __('Employee ID') }}</label>
-                    <input id="employee_id" type="text" 
-                           class="form-control @error('employee_id') is-invalid @enderror" 
-                           name="employee_id" value="{{ old('employee_id') }}" 
-                           required autocomplete="employee_id" autofocus>
-                    @error('employee_id')
+                    <label for="username" class="form-label">{{ __('Username') }}</label>
+                    <input id="username" type="text" 
+                           class="form-control @error('username') is-invalid @enderror" 
+                           name="username" value="{{ old('username') }}" 
+                           required autocomplete="username" autofocus>
+                    @error('username')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

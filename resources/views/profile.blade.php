@@ -80,7 +80,7 @@
                     </div>
                 </form>
 
-                <h3 class="profile-username text-center mt-3">{{ $user->name }}</h3>
+                <h3 class="profile-username text-center mt-3">{{ $user->username }}</h3>
 
                 <div class="card mt-3">
                     <ul class="list-group list-group-flush">
@@ -88,10 +88,7 @@
                             <strong>Email</strong>
                             <span>{{ $user->email }}</span>
                         </li>
-                        <li class="list-group-item">
-                            <strong>Employee ID</strong>
-                            <span>{{ $user->employee_id }}</span>
-                        </li>
+                        
                     </ul>
                 </div>
             </div>

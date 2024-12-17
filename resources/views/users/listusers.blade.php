@@ -51,9 +51,8 @@
                             <thead class='text-center'>
                                 <tr class="col-12">
                                     
-                                    <th class='col-1'>รหัสพนักงาน</th>
-                                    <th class='col-1'>รูปโปรไฟล์</th>
-                                    <th class='col-4'>ชื่อ</th>
+                                    <th class='col-1'>ชื่อพนักงาน</th>
+                                    <th class='col-1'>รูปโปรไฟล์</th>                                
                                     <th class='col-4'>อีเมล</th>    
                                     <th class='col-3'>การดำเนินการ</th>
                                 </tr>
@@ -62,13 +61,12 @@
                                 @forelse($users as $user)
                                 <tr>
                                    
-                                    <td>{{ $user->employee_id }}</td>
+                                    <td>{{ $user->username }}</td>
                                     <td class="text-center">
                                         <img src="{{ $user->profile_image ? Storage::url($user->profile_image) : 'dist/img/default-user.png' }}" 
                                              alt="Profile Image" 
                                              class="user-profile-image">
-                                    </td>
-                                    <td>{{ $user->name }}</td>
+                                    </td>                                   
                                     <td>{{ $user->email }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">แก้ไข</a>
