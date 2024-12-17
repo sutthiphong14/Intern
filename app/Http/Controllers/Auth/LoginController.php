@@ -8,17 +8,6 @@ use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
@@ -39,19 +28,25 @@ class LoginController extends Controller
         $this->middleware('auth')->only('logout');
     }
 
+    /**
+     * Change the authentication field to 'username'
+     *
+     * @return string
+     */
     public function username()
     {
-        return 'employee_id';
+        return 'username';
     }
 
-    // Override the login method to use employee_id
+    /**
+     * Override the login method to use username
+     */
     public function login(Request $request)
     {
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the username and
-        // the IP address of the client making these requests into this application.
+        // the login attempts for this application.
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
@@ -64,13 +59,14 @@ class LoginController extends Controller
         }
 
         // If the login attempt was unsuccessful we will increment the number of attempts
-        // to log into this application and redirect the user back to the login form.
         $this->incrementLoginAttempts($request);
 
         return $this->sendFailedLoginResponse($request);
     }
 
-    // Validate login request with employee_id
+    /**
+     * Validate login request with username
+     */
     protected function validateLogin(Request $request)
     {
         $request->validate([
