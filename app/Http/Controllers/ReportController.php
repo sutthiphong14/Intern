@@ -290,8 +290,13 @@ class ReportController extends Controller
 
     public function sortcenter($section, $year, $month)
     {
+        // กำจัดคำว่า "รวม " ออก
         $section = str_replace('รวม ', '', $section);
-
+    
+        // ดึงตัวเลขแรกจาก section
+        $firstNumber = substr($section, 0, 1);
+    
+        // รายชื่อคอลัมน์ที่ต้องการตรวจสอบ
         $columns = [
             'num_of_circuits',
             'total_preparation_time_days',
@@ -307,23 +312,46 @@ class ReportController extends Controller
             'num_of_circuits_installed_within_3_days',
             'installation_percentage_within_3_days',
         ];
-
-        $installData = Installfttx::where('section', 'LIKE', "%$section%")
-            ->where('year', '=', $year)
-            ->where('month', '=', $month)
-            ->where(function ($query) use ($columns) {
-                foreach ($columns as $column) {
-                    $query->orWhere($column, '!=', 0);
-                }
-            })
-            ->get();
-
-
+    
+        // ถ้ามีการส่งตัวเลข 2 หรือ 3 มา, ตรวจหาข้อมูลจากตัวเลขแรก
+        if ($firstNumber == '2' || $firstNumber == '3') {
+            // ใช้ LIKE แบบละเอียด
+            $installData = Installfttx::where('region', 'LIKE', "%$firstNumber%")
+                ->where('year', '=', $year)
+                ->where('month', '=', $month)
+                ->where(function ($query) use ($columns) {
+                    foreach ($columns as $column) {
+                        $query->orWhere($column, '!=', 0);
+                    }
+                })
+                ->get();
+        } else {
+            // ถ้าไม่มีตัวเลข 2 หรือ 3, ใช้ section ตามปกติ
+            $installData = Installfttx::where('section', 'LIKE', "%$section%")
+                ->where('year', '=', $year)
+                ->where('month', '=', $month)
+                ->where(function ($query) use ($columns) {
+                    foreach ($columns as $column) {
+                        $query->orWhere($column, '!=', 0);
+                    }
+                })
+                ->get();
+        }
+    
+        // ตรวจสอบว่ามีข้อมูลหรือไม่
+        if ($installData->isEmpty()) {
+            return response()->json(['message' => 'ไม่พบข้อมูลสำหรับตัวเลขนี้ในฐานข้อมูล']);
+        }
+    
+        // ดึงข้อมูลสำหรับ labels และ data
         $labels = $installData->pluck('installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
         $data = $installData->pluck('installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
-
+    
+        // ส่งข้อมูลไปยัง view
         return view('report.viewInstallFTTxcenter', compact('installData', 'labels', 'data', 'section', 'year', 'month'));
     }
+    
+    
 
     public function getExistingMonths(Request $request)
     {

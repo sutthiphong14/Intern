@@ -19,39 +19,55 @@
                 <!-- BAR CHART -->
                 <div class="card card-dark">
                     <div class="card-header">
-                        <h3 class="card-title">ตรวจแก้ FTTx ภายใน 3 วัน. : จังหวัด. @if ($section == 'รวม บภน.2.1 (กส.)')
-                                                        กาฬสินธุ์
-                                                    @elseif ($section == 'รวม บภน.2.1 (ขก.)')
-                                                        ขอนแก่น
-                                                    @elseif ($section == 'รวม บภน.2.1 (มค.)')
-                                                        มหาสารคาม
-                                                    @elseif ($section == 'รวม บภน.2.1 (รอ.)')
-                                                        ร้อยเอ็ด
-                                                    @elseif ($section == 'รวม บภน.2.2 (นค.)')
-                                                        หนองคาย
-                                                    @elseif ($section == 'รวม บภน.2.2 (นพ.)')
-                                                        นครพนม
-                                                    @elseif ($section == 'รวม บภน.2.2 (นภ.)')
-                                                        หนองบัวลำภู
-                                                    @elseif ($section == 'รวม บภน.2.2 (บก.)')
-                                                        บึงกาฬ
-                                                    @elseif ($section == 'รวม บภน.2.2 (มห.)')
-                                                        มุกดาหาร
-                                                    @elseif ($section == 'รวม บภน.2.2 (ลย.)')
-                                                        เลย
-                                                    @elseif ($section == 'รวม บภน.2.2 (สน.)')
-                                                        สกลนคร
-                                                    @elseif ($section == 'รวม บภน.2.2 (อด.)')
-                                                        อุดรธานี
-                                                    @elseif ($section == 'รวม ภน.2.2')
-                                                        ภน.2.2
-                                                    @elseif ($section == 'รวม ภน.2.1')
-                                                        ภน.2.1
-                                                    @else
-                                                        {{ $section }}
-                                                        <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
-                                                    @endif
-                                                </h3>
+                        <h3 class="card-title">ตรวจแก้ FTTx ภายใน 3 วัน. : จังหวัด.  @if ($section == 'รวม บภน.2.1 (กส.)')
+                            กาฬสินธุ์
+                        @elseif ($section == 'รวม บภน.2.1 (ขก.)')
+                            ขอนแก่น
+                        @elseif ($section == 'รวม บภน.2.1 (มค.)')
+                            มหาสารคาม
+                        @elseif ($section == 'รวม บภน.2.1 (รอ.)')
+                            ร้อยเอ็ด
+                        @elseif ($section == 'รวม บภน.2.2 (นค.)')
+                            หนองคาย
+                        @elseif ($section == 'รวม บภน.2.2 (นพ.)')
+                            นครพนม
+                        @elseif ($section == 'รวม บภน.2.2 (นภ.)')
+                            หนองบัวลำภู
+                        @elseif ($section == 'รวม บภน.2.2 (บก.)')
+                            บึงกาฬ
+                        @elseif ($section == 'รวม บภน.2.2 (มห.)')
+                            มุกดาหาร
+                        @elseif ($section == 'รวม บภน.2.2 (ลย.)')
+                            เลย
+                        @elseif ($section == 'รวม บภน.2.2 (สน.)')
+                            สกลนคร
+                        @elseif ($section == 'รวม บภน.2.2 (อด.)')
+                            อุดรธานี
+                        @elseif ($section == 'รวม บภน.3.1 (ชภ.)')
+                            ชัยภูมิิ
+                        @elseif ($section == 'รวม บภน.3.1 (นม.)')
+                            นครราชสีมา
+                        @elseif ($section == 'รวม บภน.3.1 (บร.)')
+                            บุรีรัมย์
+                        @elseif ($section == 'รวม บภน.3.1 (สร.)')
+                            สุรินทร์
+                        @elseif ($section == 'รวม บภน.3.2 (ยส.)')
+                            ยโสธร
+                        @elseif ($section == 'รวม บภน.3.2 (ศก.)')
+                            ศรีสะเกษ
+                        @elseif ($section == 'รวม บภน.3.2 (อจ.)')
+                            อำนาจเจริญ
+                        @elseif ($section == 'รวม บภน.3.2 (อบ.)')
+                            อุบลราชธานี
+                        @elseif ($section == 'รวม 3')
+                            ภน.2.2
+                        @elseif ($section == 'รวม 2')
+                            ภน.2.1
+                        @else
+                            {{ $section }}
+                            <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
+                        @endif
+                        </h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -62,9 +78,9 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Bar Chart - การติดตั้งภายใน 3 วันเปรียบเทียบแต่ละเดือน</h3>
-                      
-                        
-                 
+
+
+
                         </div>
                         <div class="card-body">
                             <canvas id="barChart"
@@ -78,9 +94,9 @@
 
                     <div class="card card-dark">
                         <div class="card-header">
-                           
 
-                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำปี {{$year}})</h3>
+
+                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำปี {{ $year }})</h3>
                             <div class="card-tools">
                                 <a href="{{ route('importdata') }}" class="btn bg-light ">
                                     <i class="d-flex justify-content-end "></i> Import
@@ -159,9 +175,25 @@
                                                         สกลนคร
                                                     @elseif ($section == 'รวม บภน.2.2 (อด.)')
                                                         อุดรธานี
-                                                    @elseif ($section == 'รวม ภน.2.2')
+                                                    @elseif ($section == 'รวม บภน.3.1 (ชภ.)')
+                                                        ชัยภูมิิ
+                                                    @elseif ($section == 'รวม บภน.3.1 (นม.)')
+                                                        นครราชสีมา
+                                                    @elseif ($section == 'รวม บภน.3.1 (บร.)')
+                                                        บุรีรัมย์
+                                                    @elseif ($section == 'รวม บภน.3.1 (สร.)')
+                                                        สุรินทร์
+                                                    @elseif ($section == 'รวม บภน.3.2 (ยส.)')
+                                                        ยโสธร
+                                                    @elseif ($section == 'รวม บภน.3.2 (ศก.)')
+                                                        ศรีสะเกษ
+                                                    @elseif ($section == 'รวม บภน.3.2 (อจ.)')
+                                                        อำนาจเจริญ
+                                                    @elseif ($section == 'รวม บภน.3.2 (อบ.)')
+                                                        อุบลราชธานี
+                                                    @elseif ($section == 'รวม 3')
                                                         ภน.2.2
-                                                    @elseif ($section == 'รวม ภน.2.1')
+                                                    @elseif ($section == 'รวม 2')
                                                         ภน.2.1
                                                     @else
                                                         {{ $section }}
@@ -182,7 +214,8 @@
                                                 <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
                                                 <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
                                                 <td
-                                            class="{{ $item['sum_installation_percentage_within_3_days'] > 80 ? 'bg-success' : ($item['sum_installation_percentage_within_3_days'] > 60 ? 'bg-warning' : 'bg-danger') }}">{{ $item->sum_installation_percentage_within_3_days }}%</td>
+                                                    class="{{ $item['sum_installation_percentage_within_3_days'] > 80 ? 'bg-success' : ($item['sum_installation_percentage_within_3_days'] > 60 ? 'bg-warning' : 'bg-danger') }}">
+                                                    {{ $item->sum_installation_percentage_within_3_days }}%</td>
                                             </tr>
                                         @endforeach
 

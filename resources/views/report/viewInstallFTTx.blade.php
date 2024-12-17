@@ -94,6 +94,74 @@
                                         <tr class="{{ $i == 1 ? 'bg-success' : '' }}">
                                             <td>{{ $i }}</td> <!-- แสดงลำดับ -->
                                             <td>
+                                                @if ($data['sum_installation_center'] == 'รวม บภน.3.1 (ชภ.)')
+                                                    ชัยภูมิ
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (นม.)')
+                                                    นครราชสีมา
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (บร.)')
+                                                    บุรีรัมย์
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (สร.)')
+                                                    สุรินทร์
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ยส.)')
+                                                    ยโสธร
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ศก.)')
+                                                    ศรีสะเกษ
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อจ.)')
+                                                    อำนาจเจริญ
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
+                                                    อุบลราชธานี
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
+                                                    กาฬสินธุ์
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
+                                                    ขอนแก่น
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (มค.)')
+                                                    มหาสารคาม
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (รอ.)')
+                                                    ร้อยเอ็ด
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นค.)')
+                                                    หนองคาย
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นพ.)')
+                                                    นครพนม
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นภ.)')
+                                                    หนองบัวลำภู
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (บก.)')
+                                                    บึงกาฬ
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (มห.)')
+                                                    มุกดาหาร
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (ลย.)')
+                                                    เลย
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (สน.)')
+                                                    สกลนคร
+                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
+                                                    อุดรธานี
+                                                @elseif ($data['sum_installation_center'] == 'รวม 3')
+                                                    ภน.2.2
+                                                @elseif ($data['sum_installation_center'] == 'รวม 2')
+                                                    ภน.2.1
+                                                @endif
+
+                                            </td>
+                                            <td>{{ $data['sum_num_of_circuits'] }}</td>
+                                            <td>{{ $data['sum_total_preparation_time_days'] }}</td>
+                                            <td>{{ $data['sum_total_processing_time_days'] }}</td>
+                                            <td>{{ $data['sum_sdp_odp_deadline_days'] }}</td>
+                                            <td>{{ $data['sum_wiring_time_days'] }}</td>
+                                            <td>{{ $data['sum_config_nms_days'] }}</td>
+                                            <td>{{ $data['sum_technician_appointment_and_scheduling_time_days'] }}</td>
+                                            <td>{{ $data['sum_customer_waiting_time_days'] }}</td>
+                                            <td>{{ $data['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
+                                            <td>{{ $data['sum_closing_work_time_days'] }}</td>
+                                            <td>{{ $data['sum_total_average_time_per_circuit_days'] }}</td>
+                                            <td>{{ $data['sum_num_of_circuits_installed_within_3_days'] }}</td>
+                                            <td>{{ $data['sum_installation_percentage_within_3_days'] }} %</td>
+                                        </tr>
+                                    @endforeach
+
+                                    <!-- แสดงอันดับสุดท้าย (อันดับที่ต่ำสุด) -->
+                                    @foreach ($sortedDataMin as $data)
+                                        <tr class="bg-danger"> <!-- แสดงแถวอันดับสุดท้าย -->
+                                            <td>12</td> <!-- อันดับสุดท้าย -->
+                                            <td>
                                                 @if ($data['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
                                                     กาฬสินธุ์
                                                 @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
@@ -134,86 +202,11 @@
                                                     อำนาจเจริญ
                                                 @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
                                                     อุบลราชธานี
-                                                @elseif ($data['sum_installation_center'] == 'รวม ภน.2.2')
+                                                @elseif ($data['sum_installation_center'] == 'รวม 3')
                                                     ภน.2.2
-                                                @elseif ($data['sum_installation_center'] == 'รวม ภน.2.1')
+                                                @elseif ($data['sum_installation_center'] == 'รวม 2')
                                                     ภน.2.1
-                                                @elseif ($data['sum_installation_center'] == 'รวม ภน.3.2')
-                                                    ภน.3.2
-                                                @elseif ($data['sum_installation_center'] == 'รวม ภน.3.1')
-                                                    ภน.3.1
                                                 @endif
-                                            </td>
-                                            <td>{{ $data['sum_num_of_circuits'] }}</td>
-                                            <td>{{ $data['sum_total_preparation_time_days'] }}</td>
-                                            <td>{{ $data['sum_total_processing_time_days'] }}</td>
-                                            <td>{{ $data['sum_sdp_odp_deadline_days'] }}</td>
-                                            <td>{{ $data['sum_wiring_time_days'] }}</td>
-                                            <td>{{ $data['sum_config_nms_days'] }}</td>
-                                            <td>{{ $data['sum_technician_appointment_and_scheduling_time_days'] }}</td>
-                                            <td>{{ $data['sum_customer_waiting_time_days'] }}</td>
-                                            <td>{{ $data['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
-                                            <td>{{ $data['sum_closing_work_time_days'] }}</td>
-                                            <td>{{ $data['sum_total_average_time_per_circuit_days'] }}</td>
-                                            <td>{{ $data['sum_num_of_circuits_installed_within_3_days'] }}</td>
-                                            <td>{{ $data['sum_installation_percentage_within_3_days'] }} %</td>
-                                        </tr>
-                                    @endforeach
-
-                                    <!-- แสดงอันดับสุดท้าย (อันดับที่ต่ำสุด) -->
-                                    @foreach ($sortedDataMin as $data)
-                                        <tr class="bg-danger"> <!-- แสดงแถวอันดับสุดท้าย -->
-                                            <td>12</td> <!-- อันดับสุดท้าย -->
-                                            <td>
-                                                @if ($data['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
-                                                กาฬสินธุ์
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
-                                                ขอนแก่น
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (มค.)')
-                                                มหาสารคาม
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (รอ.)')
-                                                ร้อยเอ็ด
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นค.)')
-                                                หนองคาย
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นพ.)')
-                                                นครพนม
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นภ.)')
-                                                หนองบัวลำภู
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (บก.)')
-                                                บึงกาฬ
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (มห.)')
-                                                มุกดาหาร
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (ลย.)')
-                                                เลย
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (สน.)')
-                                                สกลนคร
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
-                                                อุดรธานี
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (ชภ.)')
-                                                ชัยภูมิิ
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (นม.)')
-                                                นครราชสีมา
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (บร.)')
-                                                บุรีรัมย์
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (สร.)')
-                                                สุรินทร์
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ยส.)')
-                                                ยโสธร
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ศก.)')
-                                                ศรีสะเกษ
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อจ.)')
-                                                อำนาจเจริญ
-                                            @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
-                                                อุบลราชธานี
-                                            @elseif ($data['sum_installation_center'] == 'รวม ภน.2.2')
-                                                ภน.2.2
-                                            @elseif ($data['sum_installation_center'] == 'รวม ภน.2.1')
-                                                ภน.2.1
-                                            @elseif ($data['sum_installation_center'] == 'รวม ภน.3.2')
-                                                ภน.3.2
-                                            @elseif ($data['sum_installation_center'] == 'รวม ภน.3.1')
-                                                ภน.3.1
-                                            @endif
                                             </td>
                                             <td>{{ $data['sum_num_of_circuits'] }}</td>
                                             <td>{{ $data['sum_total_preparation_time_days'] }}</td>
@@ -317,30 +310,44 @@
                                 </tr>
                             </thead>
                             @php
-                                // แปลงข้อมูลจาก Collection เป็น Array
-                                $sectionsArray = $latestMonthData->toArray();
-
-                                // ใช้ usort เพื่อจัดเรียงตาม sum_installation_center
-                                usort($sectionsArray, function ($a, $b) {
-                                    return strcoll($a['sum_installation_center'], $b['sum_installation_center']);
-                                });
-
-                                // ใช้ array_slice() เพื่อจำกัดการแสดงแค่ 14 ตัวแรก
-                                
-                            @endphp
-
-                            <tbody class='text-center align-items-center'>
-                                @foreach ($sectionsArray as $section)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year']]) }}"
-                                                class="btn btn-warning">
-                                                <i class="fas fa-search"></i>
-                                            </a>
-
-                                        </td>
-                                        <td>
-                                            @if ($section['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
+                            // แปลงข้อมูลจาก Collection เป็น Array
+                            $sectionsArray = $latestMonthData->toArray();
+                        
+                            // ใช้ usort เพื่อจัดเรียงตาม sum_installation_center
+                            usort($sectionsArray, function ($a, $b) {
+                                return strcoll($a['sum_installation_center'], $b['sum_installation_center']);
+                            });
+                        
+                            // ใช้ array_slice() เพื่อจำกัดการแสดงแค่ 22 ตัวแรก
+                            $sectionsArray = array_slice($sectionsArray, 0, 22);
+                        @endphp
+                        
+                        <tbody class="text-center align-items-center">
+                            @foreach ($sectionsArray as $section)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year']]) }}" class="btn btn-warning">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @if ($section['sum_installation_center'] == 'รวม บภน.3.1 (ชภ.)')
+                                            ชัยภูมิ
+                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (นม.)')
+                                            นครราชสีมา
+                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (บร.)')
+                                            บุรีรัมย์
+                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (สร.)')
+                                            สุรินทร์
+                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (ยส.)')
+                                            ยโสธร
+                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (ศก.)')
+                                            ศรีสะเกษ
+                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (อจ.)')
+                                            อำนาจเจริญ
+                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
+                                            อุบลราชธานี
+                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
                                             กาฬสินธุ์
                                         @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
                                             ขอนแก่น
@@ -364,27 +371,10 @@
                                             สกลนคร
                                         @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
                                             อุดรธานี
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (ชภ.)')
-                                            ชัยภูมิิ
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (นม.)')
-                                            นครราชสีมา
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (บร.)')
-                                            บุรีรัมย์
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (สร.)')
-                                            สุรินทร์
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (ยส.)')
-                                            ยโสธร
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (ศก.)')
-                                            ศรีสะเกษ
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (อจ.)')
-                                            อำนาจเจริญ
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
-                                            อุบลราชธานี
-                                        @elseif ($section['sum_installation_center'] == 'รวม 2')
+                                        @elseif ($section['sum_installation_center'] == 'รวม 3')
                                             ภน.2.2
-                                        @elseif ($section['sum_installation_center'] == 'รวม 1')
+                                        @elseif ($section['sum_installation_center'] == 'รวม 2')
                                             ภน.2.1
-                                        
                                         @endif
                                         </td>
                                         <!-- ค่าอื่นๆ -->

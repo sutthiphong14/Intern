@@ -12,7 +12,7 @@ class SumInstallfttxImport implements ToCollection, WithStartRow, WithLimit
 {
     protected $month;
     protected $year;
-    protected $counter = 1; // ตัวนับสำหรับเพิ่ม 1 และ 2
+    protected $counter = 2; // ตัวนับสำหรับเพิ่ม 1 และ 2
 
     public function __construct($month, $year)
     {
