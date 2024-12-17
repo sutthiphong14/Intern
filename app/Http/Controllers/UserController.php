@@ -24,10 +24,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'employee_id' => 'required|string|unique:users,employee_id',
+            //'employee_id' => 'required|string|unique:users,employee_id',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // เพิ่มการตรวจสอบไฟล์
         ]);
 
@@ -38,10 +38,10 @@ class UserController extends Controller
         }
 
         $user = User::create([
-            'name' => $validatedData['name'],
+            'username' => $validatedData['username'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
-            'employee_id' => $validatedData['employee_id'],
+            //'employee_id' => $validatedData['employee_id'],
             'profile_image' => $imagePath, // บันทึกพาธของรูปภาพ
             'permission' => json_encode([
                 'manage_users' => $request->has('manage_users_permission') ? 1 : 0,
@@ -62,18 +62,18 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'nullable|string|min:6',
-            'employee_id' => 'required|string|unique:users,employee_id,' . $id,
+            //'employee_id' => 'required|string|unique:users,employee_id,' . $id,
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $user = User::findOrFail($id);
         
-        $user->name = $validatedData['name'];
+        $user->username = $validatedData['username'];
         $user->email = $validatedData['email'];
-        $user->employee_id = $validatedData['employee_id'];
+        //$user->employee_id = $validatedData['employee_id'];
         
         if (!empty($validatedData['password'])) {
             $user->password = Hash::make($validatedData['password']);
@@ -104,7 +104,7 @@ class UserController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
-        $users = User::where('name', 'LIKE', "%{$query}%")->get();
+        $users = User::where('username', 'LIKE', "%{$query}%")->get();
     
         return view('users.listusers', compact('users'));
     }

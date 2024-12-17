@@ -61,7 +61,7 @@
                     </a>
                 </li>
                 <li class="nav-item ">
-                    <a href="viewInstallFTTx" class="nav-link">
+                    <a href="{{route('viewInstallFTTx')}}" class="nav-link">
                     <i class="fas fa-wrench"></i>
                         <p>ติดตั้ง FTTx ได้ภายใน 3 วัน</p>
                     </a>
