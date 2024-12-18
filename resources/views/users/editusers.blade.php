@@ -49,21 +49,16 @@
                                         {{ session('success') }}
                                     </div>
                                 @endif
-
-                                <div class="form-group">
-                                    <label for="employee_id">หมายเลขพนักงาน</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           id="employee_id" 
-                                           name="employee_id" 
-                                           placeholder="กรอกหมายเลขพนักงาน" 
-                                           required 
-                                           value="{{ old('employee_id', $user->employee_id ?? '') }}">
-                                </div>
-                                
-                        
                                 <div class="form-group">
                                     <label for="name">ชื่อผู้ใช้</label>
+                                    <input type="text" class="form-control" id="name" name="username" 
+                                           placeholder="กรอกชื่อผู้ใช้" required 
+                                           value="{{ old('name', $user->username) }}">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="name">ชื่อ-นามสกุล</label>
                                     <input type="text" class="form-control" id="name" name="name" 
                                            placeholder="กรอกชื่อผู้ใช้" required 
                                            value="{{ old('name', $user->name) }}">
