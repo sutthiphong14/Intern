@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\exportCenter;
 use App\Exports\ExportFttxReport;
 use App\Imports\exportinstallfttximport;
 use App\Imports\InstallfttxImport;
@@ -94,10 +95,10 @@ class ReportController extends Controller
     function datacenter()
     {
         // ดึงข้อมูลจากฐานข้อมูล
-        $data = Installfttx::all(); // ใช้ all() เพื่อดึงข้อมูลทั้งหมดจากตาราง
+        $send_data = suminstallfttx::all(); // ใช้ all() เพื่อดึงข้อมูลทั้งหมดจากตาราง
 
         // ส่งข้อมูลไปยัง view
-        return view('report.viewInstallFTTxcenter', compact('data'));
+        return view('report.viewInstallFTTxcenter', compact('send_data'));
     }
 
     public function datainstallfttx()
@@ -347,6 +348,8 @@ class ReportController extends Controller
         // ดึงข้อมูลสำหรับ labels และ data
         $labels = $installData->pluck('installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
         $data = $installData->pluck('installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
+        
+      
     
         // ส่งข้อมูลไปยัง view
         return view('report.viewInstallFTTxcenter', compact('installData', 'labels', 'data', 'section', 'year', 'month'));
@@ -383,4 +386,67 @@ class ReportController extends Controller
         // ส่งออกข้อมูลเป็นไฟล์ Excel
         return Excel::download(new ExportFttxReport($year, $month), 'report_' . $year . '_' . $month . '.xlsx');
     }
-}
+
+
+    public function getExistingMonths2(Request $request)
+    {
+        // รับค่าปีจากคำขอ
+        $year = $request->input('year');
+    
+        // ดึงข้อมูลปีและเดือนที่ตรงกับปีที่ระบุ
+        $data = Installfttx::where('year', $year)
+            ->select('year', 'month')
+            ->distinct() // ดึงเฉพาะค่าที่ไม่ซ้ำ
+            ->get();
+    
+        // ส่งข้อมูลเป็น JSON response
+        return response()->json($data);
+    }
+    
+    public function exportview2(Request $request)
+    {
+        // รับค่าปี, เดือน และ section จาก URL
+        $year = $request->input('year');
+        $month = $request->input('month');
+        $section = $request->input('section');
+     
+    
+        // ตรวจสอบว่าได้รับค่าทั้งหมดครบถ้วน
+        if (!$year || !$month || !$section) {
+            return response()->json(['error' => 'Year, Month, and Section are required.'], 400);
+        }
+        if ($section == '2' || $section == '3') {
+            // ใช้ LIKE แบบละเอียด
+            $data = Installfttx::where('region', 'LIKE', "%$section%")
+                ->where('year', '=', $year)
+                ->where('month', '=', $month)
+                ->get();
+        } else {
+            // ถ้าไม่มีตัวเลข 2 หรือ 3, ใช้ section ตามปกติ
+            $data = Installfttx::where('section', 'LIKE', "%$section%")
+                ->where('year', '=', $year)
+                ->where('month', '=', $month)
+                ->get();
+        }
+    
+        // ถ้ามีข้อมูล ให้เรียกฟังก์ชัน export2
+        if ($data->isNotEmpty()) {
+            return $this->export2($year, $month, $section);
+        }
+    
+        // ถ้าไม่มีข้อมูล แสดงข้อความ error
+        return response()->json(['error' => 'No data found for the specified year, month, and section.'], 404);
+    }
+    
+    // ฟังก์ชันสำหรับการส่งออกเป็น Excel
+    public function export2($year, $month, $section)
+    {
+        // ใช้ exportCenter เพื่อสร้างรายงานและดาวน์โหลดไฟล์ Excel
+        return Excel::download(
+            new exportCenter($year, $month, $section),
+            'report_' . $year . '_' . $month . '_' . $section . '.xlsx'
+        );
+    }
+}    
+
+

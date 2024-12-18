@@ -195,14 +195,23 @@ Route::get('/viewInstallFTTxcenter/{center}/{year}/{month}', [ReportController::
 Route::get('/importdata', function () {
     return view('report.importdata');
 })->name('importdata');
-Route::get('/api/existing-months', [ReportController::class, 'getExistingMonths'])->name('api.existing.months');
+
+
 
 Route::post('/importdata', [ReportController::class ,'import']);
 Route::post('/importdata2', [ReportController::class ,'importFile'])->name('importdata2');
 
+Route::get('/api/existing-months', [ReportController::class, 'getExistingMonths'])->name('api.existing.months');
+
 Route::get('/export/view', [ReportController::class, 'exportview'])->name('export'); // แสดงหน้าเว็บ
 
 Route::get('/data/export', [ReportController::class, 'export']); // Export Excel
+
+Route::get('/api/existing-months2', [ReportController::class, 'getExistingMonths2'])->name('api.existing.months2');
+
+Route::get('/export/view2', [ReportController::class, 'exportview2'])->name('export2'); // แสดงหน้าเว็บ
+
+Route::get('/data/export2', [ReportController::class, 'export2']); // Export Excel
 
 
 
