@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithLimit;
 
-class InstallfttxImport implements ToCollection, WithStartRow, WithLimit
+class installfttxImport implements ToCollection, WithStartRow, WithLimit
 {
     protected $month;
     protected $year;

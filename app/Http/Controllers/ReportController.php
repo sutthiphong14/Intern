@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Exports\exportCenter;
 use App\Exports\ExportFttxReport;
 use App\Imports\exportinstallfttximport;
-use App\Imports\InstallfttxImport;
+use App\Imports\installfttxImport;
 use App\Imports\SumInstallfttxImport;
 use App\Imports\totalfttximport;
 use App\Models\Exportinstllfttx;
 use App\Models\Installfttx;
-use App\Models\suminstallfttx;
+use App\Models\SumInstallfttx;
 use App\Models\Totalinstallfttx;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -53,7 +53,7 @@ class ReportController extends Controller
     
         // ถ้าไม่มีข้อมูลในฐานข้อมูล ให้ทำการนำเข้าไฟล์ใหม่
         if ($request->hasFile('import_file')) {
-            Excel::import(new InstallfttxImport($month, $year), $request->file('import_file'));
+            Excel::import(new installfttxImport($month, $year), $request->file('import_file'));
             Excel::import(new SumInstallfttxImport($month, $year), $request->file('import_file'));
             Excel::import(new TotalfttxImport($month, $year), $request->file('import_file'));
             Excel::import(new exportinstallfttximport($month, $year), $request->file('import_file'));
@@ -80,7 +80,7 @@ class ReportController extends Controller
             Exportinstllfttx::where('month', $request->month)->where('year', $request->year)->delete();
     
             // ใช้ไฟล์ที่รับจากฟอร์ม
-            Excel::import(new InstallfttxImport($month, $year), $filePath);
+            Excel::import(new installfttxImport($month, $year), $filePath);
             Excel::import(new SumInstallfttxImport($month, $year), $filePath);
             Excel::import(new TotalfttxImport($month, $year), $filePath);
             Excel::import(new exportinstallfttximport($month, $year), $filePath);
@@ -286,7 +286,7 @@ class ReportController extends Controller
         $labels = $sumData->pluck('month'); // ใช้เดือนเป็น label
         $data = $sumData->pluck('sum_installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์รวม
 
-        return view('report.viewinstallFTTxprovin', compact('sumData', 'labels', 'data', 'section', 'year'));
+        return view('report.viewInstallFTTxprovin', compact('sumData', 'labels', 'data', 'section', 'year'));
     }
 
 

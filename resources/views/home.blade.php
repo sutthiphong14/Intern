@@ -18,17 +18,24 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="https://orgweb.intra.ntplc.co.th/v003/images/slide/S__31670320.jpg"
-                            class="d-block w-100 rounded" alt="Banner 1">
+                        <img src="/storage/app/public/banner_images/ceo_intranet.jpg" alt="Banner 1">
                     </div>
                     <div class="carousel-item">
-                        <img src="https://orgweb.intra.ntplc.co.th/v003/images/slide/cg_banner.gif"
+                        <img src="/storage/app/public/banner_images/nt_net_ban.jpg"
                             class="d-block w-100 rounded" alt="Banner 2">
                     </div>
                     <div class="carousel-item">
-                        <img src="https://orgweb.intra.ntplc.co.th/v003/images/slide/nt_net_ban.jpg"
+                         <img src="/storage/app/public/banner_images/nt_sta-66.jpg"
                             class="d-block w-100 rounded" alt="Banner 3">
                     </div>
+                    <div class="carousel-item">
+                        <img src="/storage/app/public/banner_images/S__31670320.jpg"
+                           class="d-block w-100 rounded" alt="Banner 4">
+                   </div>
+                   <div class="carousel-item">
+                    <img src="/storage/app/public/banner_images/S__68780184V2.jpg"
+                       class="d-block w-100 rounded" alt="Banner 5">
+               </div>
                 </div>
                 <a class="carousel-control-prev custom-control-prev" href="#carouselExampleIndicators" role="button"
                     data-slide="prev">
