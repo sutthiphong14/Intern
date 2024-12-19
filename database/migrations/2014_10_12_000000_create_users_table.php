@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('username')->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->string('profile_image')->nullable();
+            $table->longText('profile_image')->nullable();
         });
     }
 

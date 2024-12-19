@@ -39,9 +39,10 @@ Route::get('/tableusers', function (){
     return view('users.tableusers');
 });
 
-Route::get('/insertusers', function (){
+Route::get('/insertusers', function () {
     return view('users.insertusers');
-});
+})->name('insertusers');
+
 
 
 

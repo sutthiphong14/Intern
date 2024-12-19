@@ -42,7 +42,7 @@
                             </form>
                         </div>
                         
-                        <a href="insertusers" class="btn bg-success col-2">
+                        <a href="{{route('insertusers')}}" class="btn bg-success col-2">
                             <i class="d-flex justify-content-end"></i> เพิ่มผู้ใช้งาน
                         </a>
                     </div>
@@ -64,9 +64,15 @@
                                    
                                     <td class="text-center">{{ $user->employee_id }}</td>
                                     <td class="text-center">
-                                        <img src="{{ $user->profile_image ? Storage::url($user->profile_image) : 'dist/img/default-user.png' }}" 
-                                             alt="Profile Image" 
-                                             class="user-profile-image">
+                                        @if($user->profile_image)
+                                            <img src="{{ $user->profile_image }}" 
+                                                 alt="Profile Image" 
+                                                 class="user-profile-image">
+                                        @else
+                                            <img src="dist/img/defult_profile.jpg" 
+                                                 alt="Default Profile Image" 
+                                                 class="user-profile-image">
+                                        @endif
                                     </td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
