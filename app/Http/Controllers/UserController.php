@@ -31,14 +31,14 @@ class UserController extends Controller
             'password' => 'required|string|min:6',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-
+    
         if ($request->hasFile('profile_image')) {
             // แปลงรูปเป็น Base64
             $image = $request->file('profile_image');
             $imageData = base64_encode(file_get_contents($image));
             $imageSrc = 'data:image/' . $image->getClientOriginalExtension() . ';base64,' . $imageData;
         }
-
+    
         $user = User::create([
             'username' => $validatedData['username'],
             'name' => $validatedData['name'],
@@ -51,9 +51,10 @@ class UserController extends Controller
                 'manage_newsfeed' => $request->has('manage_newsfeed_permission') ? 1 : 0,
             ]),
         ]);
-
-        return redirect()->back()->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
+    
+        return redirect()->route('users.list')->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
     }
+    
 
     public function edit($id)
     {

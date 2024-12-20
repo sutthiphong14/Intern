@@ -221,7 +221,7 @@ Route::get('/incomecurrent', function () {
 });
 Route::get('/users', [UserController::class, 'listUsers'])->name('users.list');
 
-Route::get('delete/{id}',[UserController::class,'delete'])->name('delete');
+Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('delete');
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
 Route::get('/users/{id}/edit',[UserController::class,'edit'])->name('users.edit');

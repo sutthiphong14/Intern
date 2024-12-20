@@ -97,7 +97,7 @@
             <!-- Content Header (Page header) -->
             <div class="content-header bg-secondary">
                 <div class="container-fluid ">
-                    @yield('header')
+                   รายการข้อมูล @yield('header')
                 </div><!-- /.container-fluid -->
             </div>
             
