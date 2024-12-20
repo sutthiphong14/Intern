@@ -99,7 +99,7 @@
 @endsection
 
 @section('script')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     // การยืนยันการลบข้อมูลด้วย SweetAlert
     document.querySelectorAll('.delete-form').forEach(form => {

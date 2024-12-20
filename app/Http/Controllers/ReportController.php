@@ -15,79 +15,120 @@ use App\Models\Totalinstallfttx;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 
 class ReportController extends Controller
 {
 
 
 
+ 
+
     public function import(Request $request)
     {
-        // ตรวจสอบไฟล์และข้อมูลเดือน ปี
-        $request->validate([
-            'month' => 'required|string',
-            'year' => 'required|string',
-            'import_file' => 'required|mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
-        ]);
-        
-        $month = $request->month;
-        $year = $request->year;
+        // เริ่มต้น transaction
+        DB::beginTransaction();
     
-        // ตรวจสอบข้อมูลในฐานข้อมูล
-        $existingData = Installfttx::where('month', $month)->where('year', $year)->first();
-        if ($existingData) {
-            // ถ้ามีข้อมูล และผู้ใช้ได้อัพโหลดไฟล์ใหม่
-            $filePath = $request->hasFile('import_file')
-                ? $request->file('import_file')->store('temp')
-                : null;
-    
-            // ส่งตัวแปรเพื่อเปิด Modal ในหน้า importdata
-            return view('report.importdata', [
-                'month' => $month,
-                'year' => $year,
-                'filePath' => $filePath,
-                'showModal' => true // เพิ่มตัวแปรเพื่อเปิด Modal
+        try {
+            // ตรวจสอบไฟล์และข้อมูลเดือน ปี
+            $request->validate([
+                'month' => 'required|string',
+                'year' => 'required|string',
+                'import_file' => 'required|mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
             ]);
-        }
+            
+            $month = $request->month;
+            $year = $request->year;
+        
+            // ตรวจสอบข้อมูลในฐานข้อมูล
+            $existingData = Installfttx::where('month', $month)->where('year', $year)->first();
+            if ($existingData) {
+                // ถ้ามีข้อมูล และผู้ใช้ได้อัพโหลดไฟล์ใหม่
+                $filePath = $request->hasFile('import_file')
+                    ? $request->file('import_file')->store('temp')
+                    : null;
+        
+                // ส่งตัวแปรเพื่อเปิด Modal ในหน้า importdata
+                return view('report.importdata', [
+                    'month' => $month,
+                    'year' => $year,
+                    'filePath' => $filePath,
+                    'showModal' => true // เพิ่มตัวแปรเพื่อเปิด Modal
+                ]);
+            }
     
-        // ถ้าไม่มีข้อมูลในฐานข้อมูล ให้ทำการนำเข้าไฟล์ใหม่
-        if ($request->hasFile('import_file')) {
-            Excel::import(new installfttxImport($month, $year), $request->file('import_file'));
-            Excel::import(new SumInstallfttxImport($month, $year), $request->file('import_file'));
-            Excel::import(new TotalfttxImport($month, $year), $request->file('import_file'));
-            Excel::import(new exportinstallfttximport($month, $year), $request->file('import_file'));
-        }
+            // ถ้าไม่มีข้อมูลในฐานข้อมูล ให้ทำการนำเข้าไฟล์ใหม่
+            if ($request->hasFile('import_file')) {
+                try {
+                    // นำเข้าไฟล์ทั้งหมดในครั้งเดียว
+                    Excel::import(new installfttxImport($month, $year), $request->file('import_file'));
+                    Excel::import(new SumInstallfttxImport($month, $year), $request->file('import_file'));
+                    Excel::import(new TotalfttxImport($month, $year), $request->file('import_file'));
+                    Excel::import(new exportinstallfttximport($month, $year), $request->file('import_file'));
+                } catch (\Exception $e) {
+                    // หากเกิดข้อผิดพลาดจะ rollback และไม่บันทึกข้อมูลในฐานข้อมูล
+                    DB::rollback();
+                    return redirect()->route('importdata')->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลจำนวนแถวไม่ครบ ' );
+
+                
+                    
+                }
+            }
     
-        return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
+            // Commit transaction เมื่อทุกอย่างสำเร็จ
+            DB::commit();
+    
+            return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
+            
+        } catch (\Exception $e) {
+            // หากเกิดข้อผิดพลาดที่ไม่เกี่ยวข้องกับการนำเข้าไฟล์
+            DB::rollback();
+            return redirect()->route('importdata')->with('error', 'เกิดข้อผิดพลาด ' );
+        }
     }
     
-    public function importFile(Request $request)
-    {
-        // ตรวจสอบการเลือกไฟล์
-        $request->validate([
-            'import_file' => 'mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
-        ]);
     
-        $filePath = $request->filePath;
-        $month = $request->month;
-        $year = $request->year;
+    public function importFile(Request $request)
+{
+    // ตรวจสอบการเลือกไฟล์
+    $request->validate([
+        'import_file' => 'mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
+    ]);
+    
+    $filePath = $request->file('import_file'); // แก้ไขเพื่อให้ได้ไฟล์ที่ถูกอัปโหลด
+    $month = $request->month;
+    $year = $request->year;
+    
+    try {
+        DB::beginTransaction(); // เริ่มต้น transaction
+
+        // ถ้าเลือก 'new' ให้ลบข้อมูลเก่าที่มีเดือนและปีนี้
         if ($request->file_choice == 'new') {
-            // ลบข้อมูลเก่าที่มีเดือนและปีนี้
             Installfttx::where('month', $request->month)->where('year', $request->year)->delete();
             SumInstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
             Totalinstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
             Exportinstllfttx::where('month', $request->month)->where('year', $request->year)->delete();
-    
-            // ใช้ไฟล์ที่รับจากฟอร์ม
-            Excel::import(new installfttxImport($month, $year), $filePath);
-            Excel::import(new SumInstallfttxImport($month, $year), $filePath);
-            Excel::import(new TotalfttxImport($month, $year), $filePath);
-            Excel::import(new exportinstallfttximport($month, $year), $filePath);
-    
-            return redirect()->route('viewInstallFTTx')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
         }
+
+        // ใช้ไฟล์ที่รับจากฟอร์มและนำเข้าข้อมูล
+        Excel::import(new installfttxImport($month, $year), $filePath);
+        Excel::import(new SumInstallfttxImport($month, $year), $filePath);
+        Excel::import(new TotalfttxImport($month, $year), $filePath);
+        Excel::import(new exportinstallfttximport($month, $year), $filePath);
+
+        DB::commit(); // commit เมื่อทุกอย่างเสร็จสมบูรณ์
+        
+        return redirect()->route('viewInstallFTTx')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
+    } catch (\Exception $e) {
+        // หากเกิดข้อผิดพลาด, rollback การทำงานทั้งหมด
+        DB::rollback();
+        
+        // ส่งข้อความผิดพลาดกลับไปยังผู้ใช้
+        return redirect()->back()->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลจำนวนแถวไม่ครบ ');
     }
+}
+
     
 
 

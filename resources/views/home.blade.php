@@ -119,10 +119,19 @@
         /* เพิ่มระยะห่างจากขอบขวา */
     }
 </style>
+
+
 @endsection
 
 @section('script')
 <!-- Page specific script -->
+
+
+
+
+
+
+
 <script>
     $(function () {
         /* ChartJS

@@ -1,15 +1,6 @@
 @extends('admins.index')
 @section('css')
-<!-- Google Font: Source Sans Pro -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
-<!-- AdminLTE -->
-<link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
-<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 @endsection
 @section('content')
 <section class="content">
@@ -226,10 +217,7 @@
 @endsection
 
 @section('script')
-<!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
 <!-- ChartJS -->
 <script src="plugins/chart.js/Chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

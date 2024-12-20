@@ -9,16 +9,6 @@
 @endsection
 
 @section('css')
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
 @endsection
 
 @section('content')
@@ -91,19 +81,19 @@
                                     </tbody>
                                 </table>
 
-    <div class="col-12 mb-3 text-center">
-        <a href="/listnewsfeed" class="btn bg-danger">Cancel</a>
-        <input type="submit" class="btn btn-success" value="Submit">
-    </div>
-</form>
+                                <div class="col-12 mb-3 text-center">
+                                    <a href="/listnewsfeed" class="btn bg-danger">Cancel</a>
+                                    <input type="submit" class="btn btn-success" value="Submit">
+                                </div>
+                            </form>
 
-<script>
-    // Update the file input label with the selected file name
-    document.querySelector('.custom-file-input').addEventListener('change', function(e) {
-        var fileName = e.target.files[0]?.name || "Choose file";
-        e.target.nextElementSibling.textContent = fileName;
-    });
-</script>
+                            <script>
+                                // Update the file input label with the selected file name
+                                document.querySelector('.custom-file-input').addEventListener('change', function(e) {
+                                    var fileName = e.target.files[0]?.name || "Choose file";
+                                    e.target.nextElementSibling.textContent = fileName;
+                                });
+                            </script>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -151,24 +141,6 @@
 @endsection
 
 @section('script')
-    <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- DataTables & Plugins -->
-    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="plugins/jszip/jszip.min.js"></script>
-    <script src="plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
     <script>
         $(function() {
             $("#example1").DataTable({
@@ -241,4 +213,15 @@
             });
         });
     </script>
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาดในการนำเข้าไฟล์',
+                text: {!! json_encode(session('error')) !!},
+                confirmButtonText: 'ตกลง'
+            });
+        </script>
+    @endif
 @endsection
