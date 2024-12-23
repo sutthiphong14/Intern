@@ -96,7 +96,7 @@ class ReportController extends Controller
         'import_file' => 'mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
     ]);
     
-    $filePath = $request->file('import_file'); // แก้ไขเพื่อให้ได้ไฟล์ที่ถูกอัปโหลด
+    $filePath = $request->filePath; // แก้ไขเพื่อให้ได้ไฟล์ที่ถูกอัปโหลด
     $month = $request->month;
     $year = $request->year;
     
