@@ -315,59 +315,58 @@ class ReportController extends Controller
         ];
         // ใช้ LIKE แบบละเอียด
         $sumData = SumInstallfttx::where('sum_installation_center', 'LIKE', "%$firstNumber.%")
-        ->where('year', '=', $year)
-        ->where('month', '=', $month)
-        ->where(function ($query) use ($columns) {
-            foreach ($columns as $column) {
-                $query->orWhere($column, '!=', 0);
-            }
-        })
-      
-        ->get() ;
-    
-        
+            ->where('year', '=', $year)
+            ->where('month', '=', $month)
+            ->where(function ($query) use ($columns) {
+                foreach ($columns as $column) {
+                    $query->orWhere($column, '!=', 0);
+                }
+            })
 
-        // เตรียมข้อมูลสำหรับกราฟ
-        $labels = $sumData->pluck('sum_installation_center')->map(function ($item) {
-            // เปลี่ยนค่าตามที่กำหนดใน if-else
-            if ($item == 'รวม บภน.2.1 (กส.)') {
-                return 'กาฬสินธุ์';
-            } elseif ($item == 'รวม บภน.2.1 (ขก.)') {
-                return 'ขอนแก่น';
-            } elseif ($item == 'รวม บภน.2.1 (มค.)') {
-                return 'มหาสารคาม';
-            } elseif ($item == 'รวม บภน.2.1 (รอ.)') {
-                return 'ร้อยเอ็ด';
-            } elseif ($item == 'รวม บภน.2.2 (นค.)') {
-                return 'หนองคาย';
-            } elseif ($item == 'รวม บภน.2.2 (นพ.)') {
-                return 'นครพนม';
-            } elseif ($item == 'รวม บภน.2.2 (นภ.)') {
-                return 'หนองบัวลำภู';
-            } elseif ($item == 'รวม บภน.2.2 (บก.)') {
-                return 'บึงกาฬ';
-            } elseif ($item == 'รวม บภน.2.2 (มห.)') {
-                return 'มุกดาหาร';
-            } elseif ($item == 'รวม บภน.2.2 (ลย.)') {
-                return 'เลย';
-            } elseif ($item == 'รวม บภน.2.2 (สน.)') {
-                return 'สกลนคร';
-            } elseif ($item == 'รวม บภน.2.2 (อด.)') {
-                return 'อุดรธานี';
-            } elseif ($item == 'รวม ภน.2.2') {
-                return 'ภน.2.2';
-            } elseif ($item == 'รวม ภน.2.1') {
-                return 'ภน.2.1';
-            } else {
-                return $item; // ถ้าไม่ตรงกับที่กำหนด, ให้ใช้ค่าเดิม
-            }
+            ->get();
+
+
+
+
+        // กำหนดแผนที่ระหว่างรหัสกับชื่อจังหวัด
+        $content = [
+            'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
+            'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
+            'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
+            'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
+            'รวม บภน.2.2 (นค.)' => 'หนองคาย',
+            'รวม บภน.2.2 (นพ.)' => 'นครพนม',
+            'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
+            'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
+            'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
+            'รวม บภน.2.2 (ลย.)' => 'เลย',
+            'รวม บภน.2.2 (สน.)' => 'สกลนคร',
+            'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
+            'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
+            'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
+            'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
+            'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
+            'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
+            'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
+            'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
+            'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
+        ];
+
+        // การแปลงข้อมูลจาก sum_installation_center ให้เป็นชื่อจังหวัด
+        $labels = $sumData->pluck('sum_installation_center')->map(function ($item) use ($content) {
+            return isset($content[$item]) ? $content[$item] : null;  // ถ้าไม่พบก็จะใช้ค่าเดิม
         });
-        
+
+     
+
+
+
+
         $data = $sumData->pluck('sum_installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์รวม
 
         return view('report.viewInstallFTTxprovin', compact('sumData', 'labels', 'data', 'section', 'year', 'month'));
     }
-    public function sortprovinMonth($section, $year,)
+    public function sortprovinMonth($section, $year)
     {
 
         $monthMapping = [
@@ -387,7 +386,7 @@ class ReportController extends Controller
 
         $sumData = SumInstallfttx::where('sum_installation_center', 'LIKE', "%$section%")
             ->where('year', '=', $year)
-     
+
             ->get()
             ->map(function ($item) use ($monthMapping) {
                 $item->month_number = $monthMapping[$item->month] ?? null; // แปลงชื่อเดือนเป็นหมายเลขเดือน
@@ -398,7 +397,7 @@ class ReportController extends Controller
         $labels = $sumData->pluck('month'); // ใช้เดือนเป็น label
         $data = $sumData->pluck('sum_installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์รวม
 
-        return view('report.viewInstallFTTxprovinSort', compact('sumData', 'labels', 'data', 'section', 'year', ));
+        return view('report.viewInstallFTTxprovinSort', compact('sumData', 'labels', 'data', 'section', 'year'));
     }
 
     public function sortcenter($section, $year, $month)
@@ -406,16 +405,13 @@ class ReportController extends Controller
         // กำจัดคำว่า "รวม " ออก
         $section = str_replace('รวม ', '', $section);
 
-            $installData = Installfttx::where('section', 'LIKE', "%$section%")
-                ->where('year', '=', $year)
-                ->where('month', '=', $month)
-                ->get();
-            
-
-        
+        $installData = Installfttx::where('section', 'LIKE', "%$section%")
+            ->where('year', '=', $year)
+            ->where('month', '=', $month)
+            ->get();
 
 
-       
+
 
         // ดึงข้อมูลสำหรับ labels และ data
         $labels = $installData->pluck('installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
@@ -425,7 +421,7 @@ class ReportController extends Controller
         return view('report.viewInstallFTTxcenter', compact('installData', 'labels', 'data', 'section', 'year', 'month'));
     }
 
-    
+
 
 
     // public function sortcenter($section, $year, $month)

@@ -34,14 +34,24 @@
                         สกลนคร
                     @elseif ($section == 'รวม บภน.2.2 (อด.)')
                         อุดรธานี
-                    @elseif ($section == 'รวม ภน.2.2')
-                        ภน.2.2
-                    @elseif ($section == 'รวม ภน.2.1')
-                        ภน.2.1
-                    @else
-                        {{ $section }}
-                        <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
+                    @elseif ($section == 'รวม บภน.3.1 (ชภ.)')
+                        ชัยภูมิ
+                    @elseif ($section == 'รวม บภน.3.1 (นม.)')
+                        นครราชสีมา
+                    @elseif ($section == 'รวม บภน.3.1 (บร.)')
+                        บุรีรัมย์
+                    @elseif ($section == 'รวม บภน.3.1 (สร.)')
+                        สุรินทร์
+                    @elseif ($section == 'รวม บภน.3.2 (ยส.)')
+                        ยโสธร
+                    @elseif ($section == 'รวม บภน.3.2 (ศก.)')
+                        ศรีสะเกษ
+                    @elseif ($section == 'รวม บภน.3.2 (อจ.)')
+                        อำนาจเจริญ
+                    @elseif ($section == 'รวม บภน.3.2 (อบ.)')
+                        อุบลราชธานี
                     @endif
+                    
                     </h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">

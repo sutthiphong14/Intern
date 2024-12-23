@@ -182,55 +182,57 @@
 
 
 <script>
-    // ดึงข้อมูลจาก Controller
-    const labels = @json($labels); // ชื่อเดือน
-    const data = @json($data); // เปอร์เซ็นต์รวม
+    document.addEventListener("DOMContentLoaded", function() {
+        // กรองค่า null ออกจาก labels และ data
+        const labels = @json($labels).filter(item => item !== null); // กรองค่า null ออกจาก labels
+        const data = @json($data).filter(item => item !== null); // กรองค่า null ออกจาก data
 
-    // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
-    if (labels.length === 0 || data.length === 0) {
-        console.warn('No data available for chart.');
-    } else {
-        // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
-        const backgroundColors = data.map(value =>
-            value > 85 ? 'rgba(61, 183, 71, 0.5)' :
-                value > 83 ? 'rgba(180, 255, 122, 0.5)' :
-                    value > 80 ? 'rgba(255, 206, 86, 0.5)' :
-                        value > 77 ? 'rgba(253, 144, 19, 0.5)' :
-                            'rgba(255, 35, 82, 0.5)'
-        );
+        // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
+        if (labels.length === 0 || data.length === 0) {
+            console.warn('No data available for chart.');
+        } else {
+            // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
+            const backgroundColors = data.map(value =>
+                value > 85 ? 'rgba(61, 183, 71, 0.5)' :
+                    value > 83 ? 'rgba(180, 255, 122, 0.5)' :
+                        value > 80 ? 'rgba(255, 206, 86, 0.5)' :
+                            value > 77 ? 'rgba(253, 144, 19, 0.5)' :
+                                'rgba(255, 35, 82, 0.5)'
+            );
 
-        const borderColors = data.map(value =>
-            value > 85 ? 'rgba(61, 183, 71, 1)' :
-                value > 83 ? 'rgba(180, 255, 122, 1)' :
-                    value > 80 ? 'rgba(255, 206, 86, 1)' :
-                        value > 77 ? 'rgb(253, 144, 19,1)' :
-                            'rgba(255, 35, 82, 1)'
-        );
+            const borderColors = data.map(value =>
+                value > 85 ? 'rgba(61, 183, 71, 1)' :
+                    value > 83 ? 'rgba(180, 255, 122, 1)' :
+                        value > 80 ? 'rgba(255, 206, 86, 1)' :
+                            value > 77 ? 'rgb(253, 144, 19,1)' :
+                                'rgba(255, 35, 82, 1)'
+            );
 
-        const ctx = document.getElementById('myChart');
+            const ctx = document.getElementById('myChart');
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
-                    data: data,
-                    backgroundColor: backgroundColors, // สีพื้นหลังแบบไดนามิก
-                    borderColor: borderColors, // สีเส้นขอบแบบไดนามิก
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100 // ปรับให้แกน Y มีค่าสูงสุดเป็น 100
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
+                        data: data,
+                        backgroundColor: backgroundColors, // สีพื้นหลังแบบไดนามิก
+                        borderColor: borderColors, // สีเส้นขอบแบบไดนามิก
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100 // ปรับให้แกน Y มีค่าสูงสุดเป็น 100
+                        }
                     }
                 }
-            }
-        });
-    }
+            });
+        }
+    });
 </script>
 
 
