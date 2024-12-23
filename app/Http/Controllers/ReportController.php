@@ -69,6 +69,7 @@ class ReportController extends Controller
                 } catch (\Exception $e) {
                     // หากเกิดข้อผิดพลาดจะ rollback และไม่บันทึกข้อมูลในฐานข้อมูล
                     DB::rollback();
+                    
                     return redirect()->route('importdata')->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลจำนวนแถวไม่ครบ ');
                 }
             }
@@ -92,9 +93,10 @@ class ReportController extends Controller
             'import_file' => 'mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
         ]);
 
-        $filePath = $request->file('import_file'); // แก้ไขเพื่อให้ได้ไฟล์ที่ถูกอัปโหลด
+        $filePath = $request->filePath; // แก้ไขเพื่อให้ได้ไฟล์ที่ถูกอัปโหลด
         $month = $request->month;
         $year = $request->year;
+ 
 
         try {
             DB::beginTransaction(); // เริ่มต้น transaction
@@ -119,6 +121,7 @@ class ReportController extends Controller
         } catch (\Exception $e) {
             // หากเกิดข้อผิดพลาด, rollback การทำงานทั้งหมด
             DB::rollback();
+            
 
             // ส่งข้อความผิดพลาดกลับไปยังผู้ใช้
             return redirect()->back()->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลจำนวนแถวไม่ครบ ');
