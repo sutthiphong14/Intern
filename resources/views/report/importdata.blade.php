@@ -70,13 +70,20 @@
 
 
                                             <td>
+                                            <div class="mb-3">
                                                 <div class="custom-file">
-                                                    <input type="file" class="form-control" name="import_file">
-                                                    @error('import_file')
-                                                        <div class="text-danger">{{ $message }}</div>
-                                                    @enderror
+                                                    <input type="file" id="import_file" class="custom-file-input"
+                                                        name="import_file">
+                                                    <label class="custom-file-label"
+                                                        for="import_file">เลือกไฟล์...</label>
                                                 </div>
-                                            </td>
+                                                @error('import_file')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+
+                                        </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -94,6 +101,65 @@
                                     e.target.nextElementSibling.textContent = fileName;
                                 });
                             </script>
+                            <div class="col-md-12 mt-1">
+
+<div class="card card-dark">
+    <div class="card-header">
+        <h3 class="card-title">จัดการข้อมูล
+
+        </h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+
+            </button>
+
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <table id="example2" class="table table-bordered">
+            <thead class="text-center">
+                <tr>
+                    <th class="col-1">ลำดับ</th>
+                    <th class="col-6">เดือน</th>
+                    <th class="col-2">สถานะข้อมูล</th>
+                    <th class="col-3">Action</th>
+                    
+                
+                </tr>
+            </thead>
+            <tbody class="align-items-center">
+                <tr>
+
+                    <td>
+                        
+                    </td>
+                    <td>
+                       
+                    </td>
+
+
+                    <td>
+                       
+                </tr>
+            </tbody>
+        </table>
+
+
+
+    </div>
+
+</div>
+</div>
+
+
+
+
+
+
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -136,6 +202,7 @@
             </div>
         </div>
         </div>
+        
         <!-- /.container-fluid -->
     </section>
 @endsection
