@@ -21,6 +21,11 @@
             <li class="nav-item d-none d-sm-inline-block">
                 <a href="{{route('importdata')}}" class="nav-link text-dark"><i class="fas fa-chart-line"></i> จัดการแดชบอร์ด</a>
             </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="{{ route('categories.listcategories') }}" class="nav-link text-dark"><i class="fas fa-columns"></i> จัดการประเภท</a>
+            </li>
+            
+            
         @endif
 
     </ul>
