@@ -185,7 +185,9 @@ Route::get('/viewInstallFTTxcenter', [ReportController::class ,'datacenter']);
 
 Route::get('/viewInstallFTTxprovin',[ReportController::class ,'dataprovin'])->name('viewInstallFTTxprovin');
 
-Route::get('/viewInstallFTTxprovin/{section}/{year}',[ReportController::class ,'sortprovin'])->name('viewInstallFTTxprovin');
+Route::get('/viewInstallFTTxprovin/{section}/{year},{month}',[ReportController::class ,'sortprovin'])->name('viewInstallFTTxprovin');
+
+Route::get('/viewInstallFTTxprovinMonth/{section}/{year}', [ReportController::class ,'sortprovinmonth'])->name('viewInstallFTTxprovinSort');
 
 Route::get('/viewInstallFTTxcenter/{section}/{year}/{month}', [ReportController::class ,'sortcenter'])->name('viewInstallFTTxcenter');
 

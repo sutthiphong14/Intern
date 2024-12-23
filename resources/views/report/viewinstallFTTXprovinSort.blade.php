@@ -10,11 +10,34 @@
 
             <div class="card card-dark">
                 <div class="card-header">
-                    <h3 class="card-title">ตรวจแก้ FTTx ภายใน 3 วัน. : ฝ่าย 
-                        @if ($section == '2')
-                        ภน.2.1
-                    @elseif ($section == '3')
+                    <h3 class="card-title">ตรวจแก้ FTTx ภายใน 3 วัน. : จังหวัด. @if ($section == 'รวม บภน.2.1 (กส.)')
+                        กาฬสินธุ์
+                    @elseif ($section == 'รวม บภน.2.1 (ขก.)')
+                        ขอนแก่น
+                    @elseif ($section == 'รวม บภน.2.1 (มค.)')
+                        มหาสารคาม
+                    @elseif ($section == 'รวม บภน.2.1 (รอ.)')
+                        ร้อยเอ็ด
+                    @elseif ($section == 'รวม บภน.2.2 (นค.)')
+                        หนองคาย
+                    @elseif ($section == 'รวม บภน.2.2 (นพ.)')
+                        นครพนม
+                    @elseif ($section == 'รวม บภน.2.2 (นภ.)')
+                        หนองบัวลำภู
+                    @elseif ($section == 'รวม บภน.2.2 (บก.)')
+                        บึงกาฬ
+                    @elseif ($section == 'รวม บภน.2.2 (มห.)')
+                        มุกดาหาร
+                    @elseif ($section == 'รวม บภน.2.2 (ลย.)')
+                        เลย
+                    @elseif ($section == 'รวม บภน.2.2 (สน.)')
+                        สกลนคร
+                    @elseif ($section == 'รวม บภน.2.2 (อด.)')
+                        อุดรธานี
+                    @elseif ($section == 'รวม ภน.2.2')
                         ภน.2.2
+                    @elseif ($section == 'รวม ภน.2.1')
+                        ภน.2.1
                     @else
                         {{ $section }}
                         <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
@@ -46,7 +69,7 @@
                     <div class="card-header">
 
 
-                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำปี {{ $year }} เดือน {{ $month }})</h3>
+                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำปี {{ $year }})</h3>
                             <div class="card-tools">
                             @if (Auth::user()->permission['manage_dashboard'] ?? false)
                                 <a href="{{ route('importdata') }}" class="btn bg-light ">
@@ -66,7 +89,7 @@
                                     <tr>
                                         <th rowspan="2" class="col-data">ดูข้อมูล</th>
                                         <th rowspan="2" class="col-data">ส่วนงาน</th>
-                                   
+                                        <th rowspan="2" class="col-department">เดือน</th>
                                         <th rowspan="2" class="col-count">จำนวนวงจร</th>
                                         <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียม
                                             เอกสารรวม(วัน)</th>
@@ -124,7 +147,7 @@
                                 @foreach ($filteredData as $item)
                                     <tr>
                                         <td>
-                                            <a href="{{ route('viewInstallFTTxprovinSort', ['section' => $item['sum_installation_center'], 'year' => $item['year'], 'month' => $item['month']]) }}"
+                                            <a href="{{ route('viewInstallFTTxcenter', ['section' => $item['sum_installation_center'], 'year' => $item['year'], 'month' => $item['month']]) }}"
                                                 class="btn btn-warning">
                                                 <i class="fas fa-search"></i>
                                             </a>
@@ -132,7 +155,7 @@
                                         <td>
                                             {{ $centers[$item->sum_installation_center] }}
                                         </td>
-                              
+                                        <td>{{ $item->month }}</td>
                                         <td>{{ $item->sum_num_of_circuits }}</td>
                                         <td>{{ $item->sum_total_preparation_time_days }}</td>
                                         <td>{{ $item->sum_total_processing_time_days }}</td>

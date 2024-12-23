@@ -6,13 +6,12 @@
     ติดตั้ง FTTx ได้ภายใน 3 วัน
 @endsection
 @section('css')
-   
 @endsection
 @section('content')
     <section class="content">
         <div class="container-fluid mb-3">
 
-        <div class="card card-dark mt-3">
+            <div class="card card-dark mt-3">
 
                 <div class="card card-dark">
                     <div class="card-header">
@@ -305,114 +304,72 @@
                                 </tr>
                             </thead>
                             @php
-                            // แปลงข้อมูลจาก Collection เป็น Array
-                            $sectionsArray = $latestMonthData->toArray();
-                        
-                            // ใช้ usort เพื่อจัดเรียงตาม sum_installation_center
-                            usort($sectionsArray, function ($a, $b) {
-                                return strcoll($a['sum_installation_center'], $b['sum_installation_center']);
-                            });
-                        
-                            // ใช้ array_slice() เพื่อจำกัดการแสดงแค่ 22 ตัวแรก
-                            $sectionsArray = array_slice($sectionsArray, 0, 22);
-                        @endphp
-                        
-                        <tbody class="text-center align-items-center">
-                            @foreach ($sectionsArray as $section)
-                                <tr>
-                                    <td>
-                                        <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year']]) }}" class="btn btn-warning">
-                                            <i class="fas fa-search"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        @if ($section['sum_installation_center'] == 'รวม บภน.3.1 (ชภ.)')
-                                            ชัยภูมิ
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (นม.)')
-                                            นครราชสีมา
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (บร.)')
-                                            บุรีรัมย์
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (สร.)')
-                                            สุรินทร์
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (ยส.)')
-                                            ยโสธร
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (ศก.)')
-                                            ศรีสะเกษ
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (อจ.)')
-                                            อำนาจเจริญ
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
-                                            อุบลราชธานี
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
-                                            กาฬสินธุ์
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
-                                            ขอนแก่น
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (มค.)')
-                                            มหาสารคาม
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (รอ.)')
-                                            ร้อยเอ็ด
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นค.)')
-                                            หนองคาย
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นพ.)')
-                                            นครพนม
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นภ.)')
-                                            หนองบัวลำภู
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (บก.)')
-                                            บึงกาฬ
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (มห.)')
-                                            มุกดาหาร
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (ลย.)')
-                                            เลย
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (สน.)')
-                                            สกลนคร
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
-                                            อุดรธานี
-                                        @elseif ($section['sum_installation_center'] == 'รวม 3')
-                                            ภน.2.2
-                                        @elseif ($section['sum_installation_center'] == 'รวม 2')
-                                            ภน.2.1
-                                        @endif
-                                        </td>
-                                        <!-- ค่าอื่นๆ -->
-                                        <td>{{ $section['sum_num_of_circuits'] }}</td>
-                                        <td>{{ $section['sum_total_preparation_time_days'] }}</td>
-                                        <td>{{ $section['sum_total_processing_time_days'] }}</td>
-                                        <td>{{ $section['sum_sdp_odp_deadline_days'] }}</td>
-                                        <td>{{ $section['sum_wiring_time_days'] }}</td>
-                                        <td>{{ $section['sum_config_nms_days'] }}</td>
-                                        <td>{{ $section['sum_technician_appointment_and_scheduling_time_days'] }}</td>
-                                        <td>{{ $section['sum_customer_waiting_time_days'] }}</td>
-                                        <td>{{ $section['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
-                                        <td>{{ $section['sum_closing_work_time_days'] }}</td>
-                                        <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
-                                        <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
+                                // แปลงข้อมูลจาก Collection เป็น Array
+                                $sectionsArray = $latestMonthData->toArray();
+                            @endphp
 
-                                                    <td class="" style="background-color: {{
-                                $section['sum_installation_percentage_within_3_days'] > 85 ? 'rgba(61, 183, 71, 1)' :
-                                ($section['sum_installation_percentage_within_3_days'] > 83 ? 'rgb(142, 255, 56,1)' :
-                                    ($section['sum_installation_percentage_within_3_days'] > 80 ? 'rgba(255, 206, 86, 1)' :
-                                        ($section['sum_installation_percentage_within_3_days'] > 77 ? 'rgba(255, 165, 61, 1)' :
-                                            'rgba(255, 35, 82, 1)')))
-                            }}; color: white;">
-                                                        {{ $section['sum_installation_percentage_within_3_days'] }}%
-                                                    </td>
+                            <tbody class="text-center align-items-center">
+                                @foreach ($sectionsArray as $section)
+                                    @if ($section['sum_installation_center'] == 'รวม 3' || $section['sum_installation_center'] == 'รวม 2')
+                                        <tr>
+                                            <td>
+                                                <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year'], 'month' => $section['month']]) }}"
+                                                    class="btn btn-warning">
+                                                    <i class="fas fa-search"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @if ($section['sum_installation_center'] == 'รวม 3')
+                                                    ภน.2.2
+                                                @elseif ($section['sum_installation_center'] == 'รวม 2')
+                                                    ภน.2.1
+                                                @endif
+                                            </td>
+                                            <!-- ค่าอื่นๆ -->
+                                            <td>{{ $section['sum_num_of_circuits'] }}</td>
+                                            <td>{{ $section['sum_total_preparation_time_days'] }}</td>
+                                            <td>{{ $section['sum_total_processing_time_days'] }}</td>
+                                            <td>{{ $section['sum_sdp_odp_deadline_days'] }}</td>
+                                            <td>{{ $section['sum_wiring_time_days'] }}</td>
+                                            <td>{{ $section['sum_config_nms_days'] }}</td>
+                                            <td>{{ $section['sum_technician_appointment_and_scheduling_time_days'] }}</td>
+                                            <td>{{ $section['sum_customer_waiting_time_days'] }}</td>
+                                            <td>{{ $section['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
+                                            <td>{{ $section['sum_closing_work_time_days'] }}</td>
+                                            <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
+                                            <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
+
+                                            <td class=""
+                                                style="background-color: {{ $section['sum_installation_percentage_within_3_days'] > 85
+                                                    ? 'rgba(61, 183, 71, 1)'
+                                                    : ($section['sum_installation_percentage_within_3_days'] > 83
+                                                        ? 'rgb(142, 255, 56,1)'
+                                                        : ($section['sum_installation_percentage_within_3_days'] > 80
+                                                            ? 'rgba(255, 206, 86, 1)'
+                                                            : ($section['sum_installation_percentage_within_3_days'] > 77
+                                                                ? 'rgba(255, 165, 61, 1)'
+                                                                : 'rgba(255, 35, 82, 1)'))) }}; color: white;">
+                                                {{ $section['sum_installation_percentage_within_3_days'] }}%
+                                            </td>
 
 
-                                                </tr>
-                        @endforeach
-                    </tbody>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
 
 
 
 
 
-                </table>
+                        </table>
+                    </div>
+                </div>
+
+
+
+
             </div>
-        </div>
-
-
-
-
-    </div>
 
 
 
@@ -423,8 +380,6 @@
 @endsection
 
 @section('script')
-  
-
     <style>
         .text-warning {
             color: gold;
@@ -443,85 +398,85 @@
                 const rating = parseFloat(container.getAttribute("data-rating")); // รับค่าคะแนนจาก data-rating
                 container.innerHTML = ""; // เคลียร์ค่าก่อนหน้า
 
-            for (let i = 1; i <= 5; i++) {
-                const star = document.createElement("i");
-                if (i <= Math.floor(rating)) {
-                    star.className = "fas fa-star text-warning"; // ดาวเต็ม
-                } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
-                    star.className = "fas fa-star-half-alt text-warning"; // ดาวครึ่ง
-                } else {
-                    star.className = "fas fa-star text-dark"; // ดาวว่าง
+                for (let i = 1; i <= 5; i++) {
+                    const star = document.createElement("i");
+                    if (i <= Math.floor(rating)) {
+                        star.className = "fas fa-star text-warning"; // ดาวเต็ม
+                    } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                        star.className = "fas fa-star-half-alt text-warning"; // ดาวครึ่ง
+                    } else {
+                        star.className = "fas fa-star text-dark"; // ดาวว่าง
+                    }
+                    container.appendChild(star);
                 }
-                container.appendChild(star);
-            }
-        });
-    }
+            });
+        }
 
         // เรียกใช้งานเมื่อโหลดหน้าเสร็จ
         renderStarsForAll();
     </script>
 
-<script>
-    // ฟังก์ชันแสดงผลหลอดเปอร์เซ็นต์
-    function updateProgressBars() {
-        // ดึงองค์ประกอบทุก progress-container
-        const containers = document.querySelectorAll('.progress-container');
+    <script>
+        // ฟังก์ชันแสดงผลหลอดเปอร์เซ็นต์
+        function updateProgressBars() {
+            // ดึงองค์ประกอบทุก progress-container
+            const containers = document.querySelectorAll('.progress-container');
 
-        containers.forEach(container => {
-            const value = parseInt(container.getAttribute('data-value')); // รับค่าจาก data-value
-            const progressBar = container.querySelector('.progress-bar');
+            containers.forEach(container => {
+                const value = parseInt(container.getAttribute('data-value')); // รับค่าจาก data-value
+                const progressBar = container.querySelector('.progress-bar');
 
-            // ตั้งค่าขนาดและข้อความ
-            progressBar.style.width = value + '%';
-            progressBar.textContent = value + '%';
+                // ตั้งค่าขนาดและข้อความ
+                progressBar.style.width = value + '%';
+                progressBar.textContent = value + '%';
 
-            // กำหนดสีตามเงื่อนไข
-            if (value < 50) {
-                progressBar.className = 'progress-bar red';
-            } else if (value < 80) {
-                progressBar.className = 'progress-bar yellow';
-            } else {
-                progressBar.className = 'progress-bar green';
-            }
-        });
-    }
+                // กำหนดสีตามเงื่อนไข
+                if (value < 50) {
+                    progressBar.className = 'progress-bar red';
+                } else if (value < 80) {
+                    progressBar.className = 'progress-bar yellow';
+                } else {
+                    progressBar.className = 'progress-bar green';
+                }
+            });
+        }
 
-    // เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเสร็จ
-    updateProgressBars();
-</script>
+        // เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเสร็จ
+        updateProgressBars();
+    </script>
 
-<style>
-    .progress-container {
-        width: 100%;
-        max-width: 100%;
-        background-color: #e0e0e0;
-        border-radius: 8px;
-        overflow: hidden;
-        margin-bottom: 15px;
-    }
+    <style>
+        .progress-container {
+            width: 100%;
+            max-width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
 
-    .progress-bar {
-        height: 25px;
-        width: 100;
-        text-align: center;
-        line-height: 30px;
-        color: white;
-        transition: width 0.3s ease;
-    }
+        .progress-bar {
+            height: 25px;
+            width: 100;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            transition: width 0.3s ease;
+        }
 
-    .red {
-        background-color: Crimson;
-    }
+        .red {
+            background-color: Crimson;
+        }
 
-    .yellow {
-        background-color: gold;
-        color: black;
-    }
+        .yellow {
+            background-color: gold;
+            color: black;
+        }
 
-    .green {
-        background-color: SeaGreen;
-    }
-</style>
+        .green {
+            background-color: SeaGreen;
+        }
+    </style>
 
     <script>
         // JavaScript ที่ใช้ในการกำหนดสีของหลอดตามเปอร์เซ็นต์
@@ -603,7 +558,7 @@
             });
         });
     </script>
-    
+
 
 
     <script>
@@ -629,7 +584,7 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             @if (session('alert'))
                 Swal.fire({
                     icon: 'error',
@@ -647,7 +602,7 @@
 
     <script>
         // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
-        document.getElementById('yearInput').addEventListener('change', function () {
+        document.getElementById('yearInput').addEventListener('change', function() {
             document.getElementById('yearForm').submit();
         });
     </script>
@@ -655,7 +610,7 @@
     <script src="plugins/chart.js/Chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
 
             // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
             if (labels.length === 0 || data.length === 0) {
@@ -670,13 +625,13 @@
             // กำหนดสีของแท่งกราฟตามเงื่อนไข
             const backgroundColors = data.map(value =>
                 value > 80 ? 'rgba(61, 183, 71, 0.5)' :
-                    value > 50 ? 'rgba(255, 206, 86, 0.5)' :
-                        'rgba(255, 99, 132, 0.5)'
+                value > 50 ? 'rgba(255, 206, 86, 0.5)' :
+                'rgba(255, 99, 132, 0.5)'
             );
             const borderColors = data.map(value =>
                 value > 80 ? 'rgba(61, 183, 71, 1)' :
-                    value > 50 ? 'rgba(255, 206, 86, 1)' :
-                        'rgba(255, 99, 132, 1)'
+                value > 50 ? 'rgba(255, 206, 86, 1)' :
+                'rgba(255, 99, 132, 1)'
             );
 
             // สร้าง Bar Chart
@@ -704,7 +659,7 @@
                             suggestedMax: 50, // แนะนำค่าบนสุดของแกน Y เป็น 100
                             ticks: {
                                 stepSize: 10, // กำหนดให้ค่าบนแกน Y เพิ่มขึ้นทีละ 10
-                                callback: function (value) {
+                                callback: function(value) {
                                     // จัดการแสดงค่าบนแกน Y ให้แสดงตั้งแต่ 0 ถึง 100
                                     return value % 10 === 0 ? value : ''; // แสดงเฉพาะ 0, 10, 20, ...
                                 }
@@ -721,6 +676,4 @@
             });
         });
     </script>
-
-
-    @endsection
+@endsection

@@ -15,49 +15,49 @@
                 <!-- BAR CHART -->
                 <div class="card card-dark">
                     <div class="card-header">
-                        <h3 class="card-title">ตรวจแก้ FTTx ภายใน 24 ชม. : จ. @if ($section == 'รวม บภน.2.1 (กส.)')
+                        <h3 class="card-title">ตรวจแก้ FTTx ภายใน 24 ชม. : จังหวัด  @if ($section == 'บภน.2.1 (กส.)')
                                 กาฬสินธุ์
-                            @elseif ($section == 'รวม บภน.2.1 (ขก.)')
+                            @elseif ($section == 'บภน.2.1 (ขก.)')
                                 ขอนแก่น
-                            @elseif ($section == 'รวม บภน.2.1 (มค.)')
+                            @elseif ($section == 'บภน.2.1 (มค.)')
                                 มหาสารคาม
-                            @elseif ($section == 'รวม บภน.2.1 (รอ.)')
+                            @elseif ($section == 'บภน.2.1 (รอ.)')
                                 ร้อยเอ็ด
-                            @elseif ($section == 'รวม บภน.2.2 (นค.)')
+                            @elseif ($section == 'บภน.2.2 (นค.)')
                                 หนองคาย
-                            @elseif ($section == 'รวม บภน.2.2 (นพ.)')
+                            @elseif ($section == 'บภน.2.2 (นพ.)')
                                 นครพนม
-                            @elseif ($section == 'รวม บภน.2.2 (นภ.)')
+                            @elseif ($section == 'บภน.2.2 (นภ.)')
                                 หนองบัวลำภู
-                            @elseif ($section == 'รวม บภน.2.2 (บก.)')
+                            @elseif ($section == 'บภน.2.2 (บก.)')
                                 บึงกาฬ
-                            @elseif ($section == 'รวม บภน.2.2 (มห.)')
+                            @elseif ($section == 'บภน.2.2 (มห.)')
                                 มุกดาหาร
-                            @elseif ($section == 'รวม บภน.2.2 (ลย.)')
+                            @elseif ($section == 'บภน.2.2 (ลย.)')
                                 เลย
-                            @elseif ($section == 'รวม บภน.2.2 (สน.)')
+                            @elseif ($section == 'บภน.2.2 (สน.)')
                                 สกลนคร
-                            @elseif ($section == 'รวม บภน.2.2 (อด.)')
+                            @elseif ($section == 'บภน.2.2 (อด.)')
                                 อุดรธานี
-                            @elseif ($section == 'รวม บภน.3.1 (ชภ.)')
+                            @elseif ($section == 'บภน.3.1 (ชภ.)')
                                 ชัยภูมิิ
-                            @elseif ($section == 'รวม บภน.3.1 (นม.)')
+                            @elseif ($section == 'บภน.3.1 (นม.)')
                                 นครราชสีมา
-                            @elseif ($section == 'รวม บภน.3.1 (บร.)')
+                            @elseif ($section == 'บภน.3.1 (บร.)')
                                 บุรีรัมย์
-                            @elseif ($section == 'รวม บภน.3.1 (สร.)')
+                            @elseif ($section == 'บภน.3.1 (สร.)')
                                 สุรินทร์
-                            @elseif ($section == 'รวม บภน.3.2 (ยส.)')
+                            @elseif ($section == 'บภน.3.2 (ยส.)')
                                 ยโสธร
-                            @elseif ($section == 'รวม บภน.3.2 (ศก.)')
+                            @elseif ($section == 'บภน.3.2 (ศก.)')
                                 ศรีสะเกษ
-                            @elseif ($section == 'รวม บภน.3.2 (อจ.)')
+                            @elseif ($section == 'บภน.3.2 (อจ.)')
                                 อำนาจเจริญ
-                            @elseif ($section == 'รวม บภน.3.2 (อบ.)')
+                            @elseif ($section == 'บภน.3.2 (อบ.)')
                                 อุบลราชธานี
-                            @elseif ($section == 'รวม 3')
+                            @elseif ($section == '3')
                                 ภน.2.2
-                            @elseif ($section == 'รวม 2')
+                            @elseif ($section == '2')
                                 ภน.2.1
                             @else
                                 {{ $section }}
