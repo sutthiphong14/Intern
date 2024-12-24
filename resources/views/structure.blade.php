@@ -8,7 +8,7 @@
 @section('content')
     <section class="py-2">
         <div class="container">
-            <img src="https://orgweb.intra.ntplc.co.th/v003/images/IMG/orgbms.jpg" alt="Department stucter">
+            <img src={{ asset('/img/banner_images/orgbms.jpg') }} alt="Department stucter">
 
         </div>
     </section>
