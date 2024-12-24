@@ -99,6 +99,7 @@ class ReportController extends Controller
     $filePath = $request->filePath; // แก้ไขเพื่อให้ได้ไฟล์ที่ถูกอัปโหลด
     $month = $request->month;
     $year = $request->year;
+    dd($month);
     
     try {
         DB::beginTransaction(); // เริ่มต้น transaction

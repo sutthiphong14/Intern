@@ -17,87 +17,87 @@
         <div class="row">
             <div class="col-12">
                 <div class="card card-dark mt-2">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="card-title">อัพโหลดข้อมูลติดตั้งFttxภายใน 3 วัน</h3>
-                        <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
+                    <div class="card-header">
+                        <h3 class="card-title">อัพโหลด</h3>
+
+                        <div class="card-tools d-flex align-items-center">
+                            <form action="{{ url('importdata') }}" method="POST" enctype="multipart/form-data"
+                                class="form-group d-flex align-items-center">
+                                @csrf
+                                <input type="number" id="year" name="year" min="2014" max="3000" value="2024"
+                                    class="form-control me-2" style="width: 200px;">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+
+                        </div>
 
                     </div>
-                    </div>
-                    
+
 
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <form action="{{ url('importdata') }}" method="POST" enctype="multipart/form-data"
-                            class="form-group">
-                            @csrf
-                            <table id="example2" class="table table-bordered">
-                                <thead class="text-center">
-                                    <tr>
 
-                                        <th class="col-4">ปี</th>
-                                        <th class="col-4">เดือน</th>
-                                        <th class="col-4">อัพโหลด</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="align-items-center">
-                                    <tr>
+                        <table id="example2" class="table table-bordered">
+                            <thead class="text-center">
+                                <tr>
 
-                                        <td>
-                                            <input type="number" id="year" name="year" min="2014" max="3000"
-                                                value="2024" class="form-control">
-                                        </td>
-                                        <td>
-                                            <select id="month-select" class="form-control" name="month">
-                                                <option value="เลือกเดือน" disabled selected>เลือกเดือน</option>
-                                                <option value="มกราคม">มกราคม</option>
-                                                <option value="กุมภาพันธ์">กุมภาพันธ์</option>
-                                                <option value="มีนาคม">มีนาคม</option>
-                                                <option value="เมษายน">เมษายน</option>
-                                                <option value="พฤษภาคม">พฤษภาคม</option>
-                                                <option value="มิถุนายน">มิถุนายน</option>
-                                                <option value="กรกฎาคม">กรกฎาคม</option>
-                                                <option value="สิงหาคม">สิงหาคม</option>
-                                                <option value="กันยายน">กันยายน</option>
-                                                <option value="ตุลาคม">ตุลาคม</option>
-                                                <option value="พฤศจิกายน">พฤศจิกายน</option>
-                                                <option value="ธันวาคม">ธันวาคม</option>
-                                            </select>
-                                            @error('month')
-                                                <p class="text-danger my-2">
-                                                    <i class="fas fa-exclamation-circle"></i>{{ $message }}
-                                                </p>
-                                            @enderror
-                                        </td>
+                                    <th class="col-4">ปี</th>
+                                    <th class="col-4">เดือน</th>
+                                    <th class="col-4">อัพโหลด</th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-items-center">
+
+                                <tr>
 
 
-                                        <td>
-                                            <div class="mb-3">
-                                                <div class="custom-file">
-                                                    <input type="file" id="import_file" class="custom-file-input"
-                                                        name="import_file">
-                                                    <label class="custom-file-label"
-                                                        for="import_file">เลือกไฟล์...</label>
-                                                </div>
-                                                @error('import_file')
-                                                    <div class="text-danger">{{ $message }}</div>
-                                                @enderror
+                                    <td>
+                                        <select id="month-select" class="form-control" name="month">
+                                            <option value="เลือกเดือน" disabled selected>เลือกเดือน</option>
+                                            <option value="มกราคม">มกราคม</option>
+                                            <option value="กุมภาพันธ์">กุมภาพันธ์</option>
+                                            <option value="มีนาคม">มีนาคม</option>
+                                            <option value="เมษายน">เมษายน</option>
+                                            <option value="พฤษภาคม">พฤษภาคม</option>
+                                            <option value="มิถุนายน">มิถุนายน</option>
+                                            <option value="กรกฎาคม">กรกฎาคม</option>
+                                            <option value="สิงหาคม">สิงหาคม</option>
+                                            <option value="กันยายน">กันยายน</option>
+                                            <option value="ตุลาคม">ตุลาคม</option>
+                                            <option value="พฤศจิกายน">พฤศจิกายน</option>
+                                            <option value="ธันวาคม">ธันวาคม</option>
+                                        </select>
+                                        @error('month')
+                                            <p class="text-danger my-2">
+                                                <i class="fas fa-exclamation-circle"></i>{{ $message }}
+                                            </p>
+                                        @enderror
+                                    </td>
+
+
+                                    <td>
+                                        <div class="mb-3">
+                                            <div class="custom-file">
+                                                <input type="file" id="import_file" class="custom-file-input"
+                                                    name="import_file">
+                                                <label class="custom-file-label" for="import_file">เลือกไฟล์...</label>
                                             </div>
+                                            @error('import_file')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
 
 
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                            <div class="col-12 mb-3 text-center">
-                                <a href="/listnewsfeed" class="btn bg-danger">Cancel</a>
-                                <input type="submit" class="btn btn-success" value="Submit">
-                            </div>
-                        </form>
-
+                        <div class="col-12 mb-3 text-center">
+                            <a href="/listnewsfeed" class="btn bg-danger">Cancel</a>
+                            <input type="submit" class="btn btn-success" value="Submit">
+                        </div>
 
                         <script>
                             // Update the file input label with the selected file name
@@ -108,86 +108,89 @@
                         </script>
 
                         <div class="col-md-12 mt-1">
-                        <form action="{{ url('importdata') }}" method="POST" enctype="multipart/form-data"
-                                        class="form-group">
-                                        @csrf
-                                        <table id="example2" class="table table-bordered">
-                                            <table id="months-table" class="table table-bordered text-center">
-                                                <thead>
-                                                    <tr class = 'bg-dark'>
-                                    
-                                                        <th class="col-6 ">เดือน</th>
-                                                        <th class="col-3">สถานะข้อมูล</th>
-                                                        <th class="col-3">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>มกราคม</td>
-                                                        <td class="text-danger">ไม่มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>กุมภาพันธ์</td>
-                                                        <td class="text-success">มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>มีนาคม</td>
-                                                        <td class="text-danger">ไม่มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>เมษายน</td>
-                                                        <td class="text-danger">ไม่มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>พฤษภาคม</td>
-                                                        <td class="text-danger">ไม่มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>มิถุนายน</td>
-                                                        <td class="text-danger">ไม่มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>กรกฎาคม</td>
-                                                        <td class="text-danger">ไม่มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>สิงหาคม</td>
-                                                        <td class="text-danger">ไม่มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>กันยายน</td>
-                                                        <td class="text-danger">ไม่มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>ตุลาคม</td>
-                                                        <td class="text-danger">ไม่มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>พฤศจิกายน</td>
-                                                        <td class="text-danger">ไม่มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>ธันวาคม</td>
-                                                        <td class="text-danger">ไม่มีข้อมูล</td>
-                                                        <td class="text-danger">ปุ่ม</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </table>
+
+                            <table id="month-select" name="month" class="table table-bordered">
+                                <table id="months-table" class="table table-bordered text-center">
+                                    <thead>
+                                        <tr class='bg-dark'>
+
+                                            <th class="col-6 ">เดือน</th>
+                                            <th class="col-3">สถานะข้อมูล</th>
+                                            <th class="col-3">Action</th>
+                                        </tr>
+                                    </thead>
+                                   
+                                    <tbody >
+                                        <tr>
+                                            <td>มกราคม</td>
+                                            <td>ไม่มีข้อมูล</td>
+                                            <td>
+                                            <button type="button" class="btn btn-primary" value="มกราคม" name="month">มกราคม</button>
+                                                <button type="submit" class="btn btn-danger btn-sm">ลบ</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>กุมภาพันธ์</td>
+                                            <td class="text-success">มีข้อมูล</td>
+                                            <td><button type="button" value="กุมภาพันธ์" name="month" onclick="showUploadAlert(value)">Click Me</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>มีนาคม</td>
+                                            <td>ไม่มีข้อมูล</td>
+                                            <td>ปุ่ม</td>
+                                        </tr>
+                                        <tr>
+                                            <td>เมษายน</td>
+                                            <td>ไม่มีข้อมูล</td>
+                                            <td>ปุ่ม</td>
+                                        </tr>
+                                        <tr>
+                                            <td>พฤษภาคม</td>
+                                            <td>ไม่มีข้อมูล</td>
+                                            <td>ปุ่ม</td>
+                                        </tr>
+                                        <tr>
+                                            <td>มิถุนายน</td>
+                                            <td>ไม่มีข้อมูล</td>
+                                            <td>ปุ่ม</td>
+                                        </tr>
+                                        <tr>
+                                            <td>กรกฎาคม</td>
+                                            <td>ไม่มีข้อมูล</td>
+                                            <td>ปุ่ม</td>
+                                        </tr>
+                                        <tr>
+                                            <td>สิงหาคม</td>
+                                            <td>ไม่มีข้อมูล</td>
+                                            <td>ปุ่ม</td>
+                                        </tr>
+                                        <tr>
+                                            <td>กันยายน</td>
+                                            <td>ไม่มีข้อมูล</td>
+                                            <td>ปุ่ม</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ตุลาคม</td>
+                                            <td>ไม่มีข้อมูล</td>
+                                            <td>ปุ่ม</td>
+                                        </tr>
+                                        <tr>
+                                            <td>พฤศจิกายน</td>
+                                            <td>ไม่มีข้อมูล</td>
+                                            <td>ปุ่ม</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ธันวาคม</td>
+                                            <td>ไม่มีข้อมูล</td>
+                                            <td>ปุ่ม</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </table>
 
 
-                                    </form>
+                            </form>
                         </div>
                     </div>
                     <!-- /.card-body -->
@@ -306,59 +309,111 @@
 
 
 <script>
-        $(document).ready(function() {
-            // ฟังก์ชันดึงข้อมูลเดือนจาก API
-            function fetchMonths(year) {
-                $.ajax({
-                    url: "{{ route('api.existing.months') }}", // URL ของ API
-                    method: "GET",
-                    data: {
-                        year: year
-                    }, // ส่งค่าปีไปกับคำขอ
-                    success: function(response) {
-                        // รีเซ็ตข้อความและลบสไตล์จาก <option> ทั้งหมด
-                        $('#month-select option').each(function() {
-                            $(this).text($(this).val()); // รีเซ็ตข้อความเป็นค่าเดิม
-                            $(this).removeClass('text-success'); // ลบคลาส text-success
-                        });
+    $(document).ready(function () {
+        // ฟังก์ชันดึงข้อมูลเดือนจาก API
+        function fetchMonths(year) {
+            $.ajax({
+                url: "{{ route('api.existing.months') }}", // URL ของ API
+                method: "GET",
+                data: {
+                    year: year
+                }, // ส่งค่าปีไปกับคำขอ
+                success: function (response) {
+                    // รีเซ็ตข้อความและลบสไตล์จาก <option> ทั้งหมด
+                    $('#month-select option').each(function () {
+                        $(this).text($(this).val()); // รีเซ็ตข้อความเป็นค่าเดิม
+                        $(this).removeClass('text-success'); // ลบคลาส text-success
+                    });
 
-                        // อัปเดตเดือนที่มีข้อมูล
-                        response.forEach(function(item) {
-                            const option = $(`#month-select option[value="${item.month}"]`);
-                            if (option.length) {
-                                option.text(`${item.month} (มีข้อมูลแล้ว)`); // อัปเดตข้อความ
-                                option.addClass('text-success'); // เพิ่มคลาส text-success
-                            }
-                        });
-                    },
-                    error: function(error) {
-                        console.error("Error fetching data:", error);
-                    }
-                });
-            }
-
-            // ดึงข้อมูลครั้งแรกเมื่อโหลดหน้า
-            const initialYear = $('#year').val();
-            fetchMonths(initialYear);
-
-            // เมื่อมีการเปลี่ยนปี
-            $('#year').on('change', function() {
-                const selectedYear = $(this).val();
-                fetchMonths(selectedYear);
+                    // อัปเดตเดือนที่มีข้อมูล
+                    response.forEach(function (item) {
+                        const option = $(`#month-select option[value="${item.month}"]`);
+                        if (option.length) {
+                            option.text(`${item.month} (มีข้อมูลแล้ว)`); // อัปเดตข้อความ
+                            option.addClass('text-success'); // เพิ่มคลาส text-success
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.error("Error fetching data:", error);
+                }
             });
+        }
+
+        // ดึงข้อมูลครั้งแรกเมื่อโหลดหน้า
+        const initialYear = $('#year').val();
+        fetchMonths(initialYear);
+
+        // เมื่อมีการเปลี่ยนปี
+        $('#year').on('change', function () {
+            const selectedYear = $(this).val();
+            fetchMonths(selectedYear);
         });
+    });
 
+    $(function () {
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
 
-
-    </script>
-    @if (session('error'))
-        <script>
+    function showUploadAlert(month) {
             Swal.fire({
-                icon: 'error',
-                title: 'เกิดข้อผิดพลาดในการนำเข้าไฟล์',
-                text: {!! json_encode(session('error')) !!},
-                confirmButtonText: 'ตกลง'
+                title: 'อัพโหลดไฟล์',
+                text: `คุณต้องการอัพโหลดไฟล์สำหรับ ${month} หรือไม่?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่, อัพโหลด!',
+                
+                didOpen: () => {
+                    // หลังจากที่ Swal ถูกแสดง เราจะเพิ่ม listener สำหรับการเลือกไฟล์
+                    document.getElementById('import_file').addEventListener('change', (event) => {
+                        // แสดงชื่อไฟล์ที่เลือกใน label
+                        const fileName = event.target.files[0] ? event.target.files[0].name : 'ยังไม่ได้เลือกไฟล์';
+                        document.querySelector('.custom-file-label').textContent = fileName;
+                    });
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // หลังจากการยืนยันการอัพโหลด สามารถทำอะไรได้ที่นี่
+                    alert('ไฟล์พร้อมสำหรับการอัพโหลด');
+                }
             });
-        </script>
-    @endif
+        }
+
+
+
+        function logTime(month) {
+            const currentTime = new Date();
+            console.log(`กดปุ่ม ${month} เวลา: ${currentTime}`);
+        }
+     
+    function showValue(button) {
+        alert('Button value: ' + button.value);
+    }
+
+
+
+
+</script>
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'เกิดข้อผิดพลาดในการนำเข้าไฟล์',
+            text: {!! json_encode(session('error')) !!},
+            confirmButtonText: 'ตกลง'
+        });
+    </script>
+
+    
+@endif
 @endsection
