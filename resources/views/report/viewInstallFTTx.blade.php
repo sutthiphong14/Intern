@@ -24,7 +24,6 @@
                             @endif
                         </h3>
 
-
                         <div class="card-tools">
                             @if (Auth::user()->permission['manage_dashboard'] ?? false)
                                 <a href="importdata" class="btn bg-light ">
