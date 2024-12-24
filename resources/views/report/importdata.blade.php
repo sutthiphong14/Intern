@@ -82,7 +82,7 @@
                                 </table>
 
                                 <div class="col-12 mb-3 text-center">
-                                    <a href="/listnewsfeed" class="btn bg-danger">Cancel</a>
+                                    <a href="{{ url()->previous() }}" class="btn bg-danger">Cancel</a>
                                     <input type="submit" class="btn btn-success" value="Submit">
                                 </div>
                             </form>

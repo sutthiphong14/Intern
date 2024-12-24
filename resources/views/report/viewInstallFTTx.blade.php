@@ -19,7 +19,7 @@
                             @if ($latestMonthData->isEmpty())
                                 อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
                             @else
-                                อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน 3 วัน (ประจำเดือน
+                                อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน (ประจำเดือน
                                 {{ $latestMonthData->first()->month }})
                             @endif
                         </h3>
@@ -31,7 +31,7 @@
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
                             @endif
-                            <button type="button" class="btn bg-gradient-warning">Export</button>
+                            <a href="{{ route('exportInstallFTTxcenter') }}" class="btn bg-gradient-warning text-dark">Export</a>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
@@ -255,19 +255,8 @@
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
                             @endif
-                            <form action="{{ route('export') }}" method="GET">
-                                @csrf
-                                <!-- ช่องป้อนข้อมูลปีและเดือน -->
-                                <input type="hidden" name="year"
-                                    value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
-                                <!-- ค่าปี -->
-                                <input type="hidden" name="month"
-                                    value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
-                                <!-- ค่าเดือน -->
+                            <a href="{{ route('exportInstallFTTxcenter') }}" class="btn bg-gradient-warning text-dark">Export</a>
 
-
-                                <button type="submit" class="btn bg-gradient-warning">Export</button>
-                            </form>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>

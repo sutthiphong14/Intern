@@ -193,6 +193,7 @@ Route::get('/viewInstallFTTxcenter/{section}/{year}/{month}', [ReportController:
 
 Route::get('/viewInstallFTTxcenter/{center}/{year}/{month}', [ReportController::class, 'viewInstallData']);
 
+Route::get('/ExportInstallFttxcenter', [ReportController::class, 'exportData'])->name('exportInstallFTTxcenter');;
 
 
 Route::get('/importdata', function () {

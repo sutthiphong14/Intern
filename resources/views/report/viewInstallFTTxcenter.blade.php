@@ -91,21 +91,8 @@
                                 <a href="importdata" class="btn bg-light mx-1">
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
-                                <form action="{{ route('export2') }}" method="GET">
-                                    @csrf
-                                    <!-- ค่าปี -->
-                                    <input type="hidden" name="year" value="{{ $installData->first() ? $installData->first()->year : null }}">
-                                
-                                    <!-- ค่าเดือน -->
-                                    <input type="hidden" name="month" value="{{ $installData->first() ? $installData->first()->month : null }}">
-                                
-                                    <!-- ค่า section -->
-                                    <input type="hidden" name="section" value="{{  $section ? $section : null }}">
-                                
-                                    <!-- ปุ่มส่งออก -->
-                                    <button type="submit" class="btn bg-gradient-warning">Export</button>
-                                </form>
-                                
+                                <a href="{{ route('exportInstallFTTxcenter') }}" class="btn bg-gradient-warning text-dark">Export</a>
+
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                     <i class="fas fa-minus"></i>
                                 </button>

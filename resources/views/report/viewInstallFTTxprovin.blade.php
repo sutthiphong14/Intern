@@ -53,7 +53,8 @@
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
                             @endif
-                            <button type="button" class="btn bg-gradient-warning">Export</button>
+                            <a href="{{ route('exportInstallFTTxcenter') }}" class="btn bg-gradient-warning text-dark">Export</a>
+
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
