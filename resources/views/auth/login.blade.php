@@ -63,7 +63,7 @@
 
             <!-- Sign Up Link -->
             <p class="text-center mt-4">
-                {{ __("Don't have an account?") }} <a href="/register" class="text-decoration-none">{{ __('register') }}</a>
+                {{ __("Don't have an account?") }} <a href="{{ route('insertRequests') }}" class="text-decoration-none">{{ __('ส่งคำขอเปิดใช้งาน') }}</a>
             </p>
         </div>
     </div>

@@ -3,7 +3,9 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RequestController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RequestsController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -276,4 +278,15 @@ Route::post('/profile/update-image', [UserController::class, 'updateProfileImage
     ->name('profile')
     ->middleware('auth'); // Pastikan hanya pengguna yang login yang dapat mengakses
 
+    
+
+    Route::get('/requests', [RequestsController::class, 'index'])->name('requests.list');
+    Route::get('/requests/create', [RequestsController::class, 'create'])->name('insertRequests');
+    Route::post('/requests', [RequestsController::class, 'store'])->name('requests.store');
+    Route::get('/requests/{id}/edit', [RequestsController::class, 'edit'])->name('requests.edit');
+    Route::put('/requests/{id}', [RequestsController::class, 'update'])->name('requests.update');
+    Route::delete('/requests/{id}', [RequestsController::class, 'destroy'])->name('requests.delete');
+    Route::get('/requests/search', [RequestsController::class, 'search'])->name('requests.search');
+    Route::post('/requests/{id}/approve', [RequestsController::class, 'approve'])->name('requests.approve');
+    
 
