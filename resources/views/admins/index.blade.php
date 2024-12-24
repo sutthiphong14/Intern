@@ -32,30 +32,22 @@
         href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
         rel="stylesheet">
 
+
     <style>
         .card-header {
-            display: flex;
-            justify-content: space-between;
-            /* จัดตำแหน่งให้ปุ่มอยู่ขอบซ้ายและขวา */
-            align-items: center;
-            /* จัดตำแหน่งกลางแนวตั้ง */
-            height: 10;
-            /* ความสูงของ card-header */
-        }
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+    }
 
-        .container {
-            display: flex;
-            align-items: center;
-            /* จัดตำแหน่งข้อความกลางแนวตั้ง */
-        }
+    .card-tools {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: auto; /* เพิ่มระยะห่างทางซ้ายให้ .card-tools เลื่อนไปทางขวาสุด */
+    }
 
-        .card-tools {
-            display: flex;
-            align-items: center;
-            /* จัดตำแหน่งปุ่มกลางแนวตั้ง */
-        }
-    </style>
-    <style>
         body {
             font-family: "Kanit", sans-serif;
             font-style: normal;
@@ -94,7 +86,7 @@
             opacity: 1;
             /* Full opacity when the button is visible */
             transform: translateY(0);
-
+        
             /* Reset the translation */
         }
 
@@ -103,9 +95,7 @@
         }
     </style>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"
-        integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
 
@@ -124,7 +114,7 @@
                     @yield('header')
                 </div><!-- /.container-fluid -->
             </div>
-
+            
             <!-- Main content -->
             <section>
                 @yield('content')
@@ -145,11 +135,11 @@
         <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
+  
 
 
 
-
-
+    
 </body>
 <!-- jQuery -->
 <script src="{{ URL::asset('plugins/jquery/jquery.min.js') }}"></script>

@@ -57,19 +57,17 @@
     <!-- BAR CHART -->
     <div class="card card-dark">
     <div class="card-header">
-    <div class="container">
-        <i class="d-flex justify-content-start"></i> ข่าว
-    </div>
+    <h3 class="card-title">ข่าว</h3>
     <div class="card-tools">
-        <a href="newsfeed" class="btn bg-light">
-            <i class="d-flex justify-content-end"></i> แสดงเพิ่มเติม
+    <a href="newsfeed" class="btn bg-light me-3">
+        <i class="justify-content-end"></i> แสดงเพิ่มเติม
+    </a>
+    @if(Auth::user()->permission['manage_newsfeed'] ?? false)
+        <a href="listnewsfeed" class="btn bg-warning ms-3">
+            <i class="justify-content-end me-auto"></i> แก้ไขกระดานข่าว
         </a>
-        @if(Auth::user()->permission['manage_newsfeed'] ?? false)
-            <a href="listnewsfeed" class="btn bg-warning">
-                <i class="d-flex justify-content-end"></i> แก้ไขกระดานข่าว
-            </a>
-        @endif
-    </div>
+    @endif
+</div>
 </div>
         <div class="card-body">
             <table id="example2" class="table table-bordered table-hover align-items-center">
