@@ -6,34 +6,21 @@
     รายการข้อมูล
 @endsection
 @section('css')
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    
 @endsection
 @section('content')
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div class="card card-warning mt-2 ">
-                        <div class="card-header d-flex justify-content-between align-items-center ">
-                            <h3 class="card-title ">เพิ่มเอกสาร </h3>
-
-
+                    <div class="card card-warning mt-2">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title">เพิ่มเอกสาร</h3>
                         </div>
 
                         <!-- /.card-header -->
                         <div class="card-body">
-
-
-                            <table id="example2" class="table table-bordered ">
+                            <table id="example2" class="table table-bordered">
                                 <thead class="text-center">
                                     <tr>
                                         <th>Name</th>
@@ -42,7 +29,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="align-items-center">
-                                    <form action="{{ route('createnews') }}" class="form-group" method="POST">
+                                    <form action="{{ route('createnews') }}" class="form-group" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <tr>
                                             <td>
@@ -62,42 +49,31 @@
                                                 @enderror
                                             </td>
 
-
-
                                             <td>
                                                 <div class="form-group">
-                                                    <div class="custom-file">
-                                                        <textarea cols="30" rows="1" class="form-control" type="text" placeholder="Link" name="link">{{ old('link') }}</textarea>
-                                                    </div>
+                                                    <label for="import_file">เลือกไฟล์:</label>
+                                                    <input type="file" id="import_file" class="custom-file-input" name="file">
+                                                    @error('file')
+                                                        <p class="text-danger my-2"><i
+                                                                class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+                                                    @enderror
                                                 </div>
-                                                @error('link')
-                                                    <p class="text-danger my-2"><i
-                                                            class="fas fa-exclamation-circle"></i>{{ $message }}</p>
-                                                @enderror
                                             </td>
                                         </tr>
-
-
                                 </tbody>
                             </table>
                         </div>
 
                         </tbody>
-
-
                         </table>
 
-                        <div class="col-12 mb-3 text-center ">
-                            <a href="/listnewsfeed" class="btn bg-danger ">
+                        <div class="col-12 mb-3 text-center">
+                            <a href="/listnewsfeed" class="btn bg-danger">
                                 Cancel
                             </a>
-                            <input type="submit" class=" btn btn-success" value="Submit">
-
+                            <input type="submit" class="btn btn-success" value="Submit">
                         </div>
                         </form>
-
-
-
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -112,28 +88,7 @@
 @endsection
 
 @section('script')
-    <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- DataTables  & Plugins -->
-    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="plugins/jszip/jszip.min.js"></script>
-    <script src="plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="dist/js/demo.js"></script>
-    <!-- Page specific script -->
+    
     <script>
         $(function() {
             $("#example1").DataTable({
