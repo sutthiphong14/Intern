@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RequestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RequestsController;
@@ -256,12 +257,6 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-
-
-
-
-
-
 Route::get('/viewreport3', function () {
     return view('report.viewreport3');
 });
@@ -274,9 +269,22 @@ Route::post('/profile/update-image', [UserController::class, 'updateProfileImage
     ->name('profile.update-image')
     ->middleware('auth');
 
-    Route::get('/profile', [UserController::class, 'showProfile'])
-    ->name('profile')
-    ->middleware('auth'); // Pastikan hanya pengguna yang login yang dapat mengakses
+Route::get('/profile', [UserController::class, 'showProfile'])
+ ->name('profile')
+->middleware('auth'); // Pastikan hanya pengguna yang login yang dapat mengaksesRoute::prefix('categories')->group(function () {
+Route::get('/listcategories', [CategoryController::class, 'listcategories'])->name('categories.listcategories');
+Route::get('/create', [CategoryController::class, 'create'])->name('categories.create');
+Route::post('/store', [CategoryController::class, 'store'])->name('categories.store');
+Route::get('/edit/{category}', [CategoryController::class, 'edit'])->name('categories.edit');
+Route::put('/update/{category}', [CategoryController::class, 'update'])->name('categories.update');
+Route::get('/delete/{category}', [CategoryController::class, 'destroy'])->name('categories.delete');
+Route::get('/search', [CategoryController::class, 'search'])->name('categories.search');
+Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->name('categories.delete');
+
+
+    
+
+
 
     
 
