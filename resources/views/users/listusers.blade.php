@@ -112,7 +112,7 @@
                                         
                                     </tr>
                                 </thead>
-                                <tbody class = 'table-border-bottom-0'>
+                                <tbody class = 'table-border-bottom-0 text-center'>
                                     @forelse($users as $user)
                                         <tr>
 
