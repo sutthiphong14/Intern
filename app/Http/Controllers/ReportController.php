@@ -200,9 +200,50 @@ class ReportController extends Controller
             ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
             ->take(1); // เลือก 1 รายการแรก
 
+        // กำหนดแผนที่ระหว่างรหัสกับชื่อจังหวัด
+        $content = [
+            'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
+            'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
+            'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
+            'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
+            'รวม บภน.2.2 (นค.)' => 'หนองคาย',
+            'รวม บภน.2.2 (นพ.)' => 'นครพนม',
+            'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
+            'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
+            'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
+            'รวม บภน.2.2 (ลย.)' => 'เลย',
+            'รวม บภน.2.2 (สน.)' => 'สกลนคร',
+            'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
+            'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
+            'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
+            'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
+            'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
+            'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
+            'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
+            'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
+            'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
+        ];
+
+        // การแปลงข้อมูลจาก sum_installation_center ให้เป็นชื่อจังหวัด
+        $labels = $latestMonthData->pluck('sum_installation_center')->map(function ($item) use ($content) {
+            return isset($content[$item]) ? $content[$item] : null;  // ถ้าไม่พบก็จะใช้ค่าเดิม
+        });
+
+        // ดึงข้อมูลจาก sum_installation_percentage_within_3_days และกรองตามค่าใน labels
+        $data1 = $latestMonthData->pluck('sum_installation_percentage_within_3_days')
+            ->filter(function ($item, $key) use ($labels) {
+                // ตรวจสอบให้แน่ใจว่า $labels ที่ตรงกันไม่ใช่ null และค่าของ sum_installation_percentage_within_3_days ไม่เป็น null
+                return !is_null($labels[$key]);
+            });
+
+     
+
+
+
+
 
         // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
-        return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax', 'latestMonthData', 'sortedDataMin'));
+        return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax', 'latestMonthData', 'sortedDataMin', 'labels','data1'));
     }
 
     public function datainstallfttxYear(Request $request)
@@ -270,12 +311,48 @@ class ReportController extends Controller
             ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
             ->take(1); // เลือก 1 รายการแรก
 
-        $labels = $latestMonthData->pluck('sum_installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
-        $data = $latestMonthData->pluck('sum_installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
+        // กำหนดแผนที่ระหว่างรหัสกับชื่อจังหวัด
+        $content = [
+            'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
+            'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
+            'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
+            'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
+            'รวม บภน.2.2 (นค.)' => 'หนองคาย',
+            'รวม บภน.2.2 (นพ.)' => 'นครพนม',
+            'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
+            'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
+            'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
+            'รวม บภน.2.2 (ลย.)' => 'เลย',
+            'รวม บภน.2.2 (สน.)' => 'สกลนคร',
+            'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
+            'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
+            'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
+            'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
+            'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
+            'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
+            'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
+            'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
+            'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
+        ];
+
+        // การแปลงข้อมูลจาก sum_installation_center ให้เป็นชื่อจังหวัด
+        $labels = $latestMonthData->pluck('sum_installation_center')->map(function ($item) use ($content) {
+            return isset($content[$item]) ? $content[$item] : null;  // ถ้าไม่พบก็จะใช้ค่าเดิม
+        });
+
+        // ดึงข้อมูลจาก sum_installation_percentage_within_3_days และกรองตามค่าใน labels
+        $data1 = $latestMonthData->pluck('sum_installation_percentage_within_3_days')
+            ->filter(function ($item, $key) use ($labels) {
+                // ตรวจสอบให้แน่ใจว่า $labels ที่ตรงกันไม่ใช่ null และค่าของ sum_installation_percentage_within_3_days ไม่เป็น null
+                return !is_null($labels[$key]);
+            });
+
+     
+
 
 
         // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
-        return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax', 'latestMonthData', 'sortedDataMin', 'labels', 'data'));
+        return view('report.viewInstallFTTx', compact('installationCenters', 'labels', 'data1', 'sortedDataMax', 'latestMonthData', 'sortedDataMin'));
     }
 
 
@@ -366,6 +443,8 @@ class ReportController extends Controller
 
 
         $data = $sumData->pluck('sum_installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์รวม
+
+        
 
         return view('report.viewInstallFTTxprovin', compact('sumData', 'labels', 'data', 'section', 'year', 'month'));
     }
@@ -584,7 +663,7 @@ class ReportController extends Controller
             'report_' . $year . '_' . $month . '_' . $section . '.xlsx'
         );
     }
-    
+
     public function exportData()
     {
         return view('report.view_export');

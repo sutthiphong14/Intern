@@ -178,11 +178,15 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // กรองค่า null ออกจาก labels และ data
         const labels = @json($labels).filter(item => item !== null); // กรองค่า null ออกจาก labels
         const data = @json($data).filter(item => item !== null); // กรองค่า null ออกจาก data
+
+        console.log(labels, data); // ตรวจสอบค่าผ่าน Console
+
 
         // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
         if (labels.length === 0 || data.length === 0) {
