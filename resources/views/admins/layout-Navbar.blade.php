@@ -12,13 +12,13 @@
     <!-- navitem -->
     <div class="navbar-nav align-items-center">
     <li class="nav-item lh-1 me-3">
-        <a href="home" class="btn btn-warning">
+        <a href="home" class="">
         <i class="fas fa-bars"></i> หน้าแรก
         </a>
       </li>
 
       <li class="nav-item lh-1 me-3">
-        <a href="{{ route('users.list') }}" class="btn btn-warning">
+        <a href="{{ route('users.list') }}" class="">
           <i class="fas fa-users-cog"></i> จัดการผู้ใช้
         </a>
       </li>

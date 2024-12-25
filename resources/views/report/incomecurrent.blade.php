@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
 <!-- Theme style -->
 <link rel="stylesheet" href="dist/css/adminlte.min.css">
+<link rel="stylesheet" href="{{ URL::asset('dist/css/adminlte.min.css') }}">
 @endsection
 @section('content')
 <section class="content">

@@ -96,11 +96,14 @@
 }
 
 .text-primary {
-  color: #696cff !important;
+  color: #ffd000 !important;
+}
+.text-white {
+  color: #ffd000 !important;
 }
 
 .text-body[href]:hover {
-  color: #5f61e6 !important;
+  color: #5fd2e6 !important;
 }
 
 .bg-primary {
@@ -748,11 +751,11 @@ html:not(.layout-menu-collapsed) .bg-menu-theme .menu-inner .menu-item .menu-lin
   color: #696cff;
 }
 .bg-menu-theme .menu-inner > .menu-item.active > .menu-link {
-  color: #696cff;
-  background-color: rgba(105, 108, 255, 0.16) !important;
+  color: #ffff;
+  background-color: #ffc400 !important;
 }
 .bg-menu-theme .menu-inner > .menu-item.active:before {
-  background: #696cff;
+  background: #ffdb0c;
 }
 .bg-menu-theme .menu-sub > .menu-item > .menu-link:before {
   background-color: #b4bdc6 !important;

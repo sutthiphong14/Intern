@@ -14,26 +14,25 @@
 
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
-            <li class="menu-item ">
-              <a href="/" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">หน้าแรก</div>
-              </a>
-            </li>
-            <li class="menu-item ">
-              <a href="incomecurrent" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">รายได้รวม</div>
-              </a>
-            </li>
-            <li class="menu-item ">
-              <a href="{{route('viewInstallFTTx')}}" class="menu-link">
-              <i class="fas fa-wrench"></i>
-                <div data-i18n="Analytics">ติดตั้ง FTTx ได้ภายใน 3 วัน</div>
-              </a>
-            </li>
+            <li class="menu-item {{ Route::is('home') ? 'active' : '' }}">
+        <a href="/" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+            <div data-i18n="Analytics">หน้าแรก</div>
+        </a>
+    </li>
+    <li class="menu-item {{ Request::is('incomecurrent') ? 'active' : '' }}">
+        <a href="incomecurrent" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+            <div data-i18n="Analytics">รายได้รวม</div>
+        </a>
+    </li>
+    <li class="menu-item {{ Route::is('viewInstallFTTx') ? 'active' : '' }}">
+        <a href="{{ route('viewInstallFTTx') }}" class="menu-link">
+            <i class="fas fa-wrench"></i>
+            <div data-i18n="Analytics">ติดตั้ง FTTx ได้ภายใน 3 วัน</div>
+        </a>
+    </li>
 
-            <!-- Layouts -->
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>

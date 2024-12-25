@@ -6,7 +6,7 @@
     ติดตั้ง FTTx ได้ภายใน 3 วัน
 @endsection
 @section('css')
-   
+<link rel="stylesheet" href="{{ URL::asset('custom/css/custom-style.css') }}">
 @endsection
 @section('content')
 
@@ -244,9 +244,9 @@
                 <div class="card-body">
                 <div class="table-responsive">
                         <table id="example2" class="table table-bordered table-hover">
-                            <thead class="text-center ">
-                                <tr class = 'bg-dark text-light'>
-                                    <th rowspan="2" class="col-data">ดูข้อมูล</th>
+                            <thead class="text-center text-white">
+                                <tr class = 'bg-dark text-white'>
+                                    <th rowspan="2" class="col-data ">ดูข้อมูล</th>
                                     <th rowspan="2" class="col-department">ส่วนงาน</th>
                                     <th rowspan="2" class="col-count">จำนวนวงจร</th>
                                     <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียมเอกสารรวม (วัน)</th>

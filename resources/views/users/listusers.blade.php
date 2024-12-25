@@ -96,6 +96,75 @@
             </div>
         </div>
     </section>
+    <div class="card ">
+    <h3 class="card-header">รายชื่อผู้ใช้</h3>
+    <div class="table-responsive text-nowrap">
+                  <table class="table">
+                  <thead class='text-center'>
+                                    <tr class="col-12">
+
+                                        <th class='col-1'>รหัสพนักงาน</th>
+                                        <th class='col-1'>รูปโปรไฟล์</th>
+                                        <th class='col-2'>ชื่อ</th>
+                                        <th class='col-3'>อีเมล</th>
+                                        <th class='col-3'>username</th>
+                                        <th class='col-3'>การดำเนินการ</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody class = 'table-border-bottom-0'>
+                                    @forelse($users as $user)
+                                        <tr>
+
+                                            <td class="text-center">{{ $user->id }}</td>
+                                            <td class="text-center">
+                                                @if ($user->profile_image)
+                                                    <img src="{{ $user->profile_image }}" alt="Profile Image"
+                                                        class="user-profile-image">
+                                                @else
+                                                    <img src="dist/img/defult_profile.jpg" alt="Default Profile Image"
+                                                        class="user-profile-image">
+                                                @endif
+                                            </td>
+                                            <td>{{ $user->name }}</td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->username }}</td>
+                                            <td>
+    <div class="dropdown">
+        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+            <i class="bx bx-dots-vertical-rounded"></i>
+        </button>
+        <div class="dropdown-menu">
+            <!-- Edit link -->
+            <a class="dropdown-item" href="{{ route('users.edit', $user->id) }}">
+                <i class="bx bx-edit-alt me-1"></i> แก้ไข
+            </a>
+
+            <!-- Delete form -->
+            <form action="{{ route('delete', $user->id) }}" method="POST" class="d-inline delete-form">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="dropdown-item text-danger" style="border: none; background: none;">
+                    <i class="bx bx-trash me-1"></i> ลบ
+                </button>
+            </form>
+        </div>
+    </div>
+</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">ไม่มีข้อมูล</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+
+
+    </table>
+                  </div>  
+    </div> 
+
+
 @endsection
 
 @section('script')
