@@ -4,7 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\RequestController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RequestsController;
 use Illuminate\Support\Facades\Auth;

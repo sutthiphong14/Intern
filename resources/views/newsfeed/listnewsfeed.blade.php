@@ -28,15 +28,7 @@
                         <div class="card-header d-flex justify-content-between align-items-center ">
                             <h3 class="card-title col-5">รายชื่อผู้ใช้ </h3>
 
-                            <div class="input-group col-4">
-                                <form method="GET" action="{{ route('search') }}" class="d-flex w-100">
-                                    <input type="text" name="search" value="{{ request()->query('search') }}"
-                                        class="form-control" placeholder="Search by Name">
-                                    <span class="input-group-append">
-                                        <button type="submit" class="btn btn-info btn-dark">Search</button>
-                                    </span>
-                                </form>
-                            </div>
+                            
 
 
 

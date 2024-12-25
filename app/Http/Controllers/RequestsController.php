@@ -128,7 +128,7 @@ class RequestsController extends Controller
         
         // สร้าง User ใหม่จากข้อมูล Request
         User::create([
-            'employee_id' => $request->id_employee,
+            
             'username' => $request->user_request,
             'name' => $request->name_request,
             'email' => $request->email_request,
