@@ -25,22 +25,21 @@
     <!-- BS Stepper -->
     <link rel="stylesheet" href="{{ URL::asset('plugins/bs-stepper/css/bs-stepper.min.css') }}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ URL::asset('dist/css/adminlte.min.css') }}">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
         rel="stylesheet">
 
-        <link rel="icon" type="image/x-icon" href="dist/assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="dist/assets/img/favicon/favicon.ico" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet" />
 
     <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="dist/assets/vendor/fonts/boxicons.css" />
@@ -65,113 +64,48 @@
     <script src="dist/assets/js/config.js"></script>
 
 
-    <style>
-        .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 50px;
-    }
-
-    .card-tools {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-left: auto; /* เพิ่มระยะห่างทางซ้ายให้ .card-tools เลื่อนไปทางขวาสุด */
-    }
-
-        body {
-            font-family: "Kanit", sans-serif;
-            font-style: normal;
-        }
-
-        :root {
-            --gray-color: #dfdfdf;
-            /* ประกาศตัวแปรสี */
-
-        }
-
-        .bg-back {
-            background-color: var(--gray-color);
-        }
-
-        #scrollToTopBtn {
-            display: none;
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            z-index: 99;
-            font-size: 18px;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            opacity: 0;
-            /* Initial opacity */
-            transition: opacity 0.5s ease-in-out, transform 0.10s ease-in-out;
-            /* Smooth transition */
-            transform: translateY(20px);
-            /* Slightly translate the button */
-        }
-
-        #scrollToTopBtn.show {
-            display: block;
-            opacity: 1;
-            /* Full opacity when the button is visible */
-            transform: translateY(0);
-        
-            /* Reset the translation */
-        }
-
-        #scrollToTopBtn:hover {
-            opacity: 0.8;
-        }
-    </style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"
+        integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
 
 <body class="hold-transition layout-fixed">
-    <div class="wrapper">
-        <!-- Navbar -->
-        @include('admins.navbar')
-        <!-- /.navbar -->
-        <!-- Main Sidebar Container -->
-        @include('admins.menu')
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header bg-secondary">
-                <div class="container-fluid ">
-                    @yield('header')
-                </div><!-- /.container-fluid -->
-            </div>
-            
-            <!-- Main content -->
-            <section>
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+        @include('admins.layout-menu')
+        <div class="layout-page">
+
+        @include('admins.layout-Navbar')
+        
+        <div class="container-xxl flex-grow-1 container-p-y">
                 @yield('content')
-            </section>
-            <!-- /.content -->
+                </div>
+            @include('admins.footer')
         </div>
-        <!-- /.content-wrapper -->
-        @include('admins.footer')
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <button onclick="scrollToTop()" id="scrollToTopBtn" class="btn btn-warning rounded-circle p-4"
-            title="Go to top">
-            <i class="fas fa-chevron-up"></i>
-        </button>
+        </div>
 
-        <!-- /.control-sidebar -->
+
     </div>
-    <!-- ./wrapper -->
-  
+    <script src="dist/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="dist/assets/vendor/libs/popper/popper.js"></script>
+    <script src="dist/assets/vendor/js/bootstrap.js"></script>
+    <script src="dist/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
+    <script src="dist/assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
 
+    <!-- Vendors JS -->
+    <script src="dist/assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
-    
+    <!-- Main JS -->
+    <script src="dist/assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="dist/assets/js/dashboards-analytics.js"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 <!-- jQuery -->
 <script src="{{ URL::asset('plugins/jquery/jquery.min.js') }}"></script>
@@ -189,10 +123,7 @@
 <script src="{{ URL::asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
 <!-- BS-Stepper -->
 <script src="{{ URL::asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
-<!-- AdminLTE App -->
-<script src="{{ URL::asset('dist/js/adminlte.min.js') }}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{{ URL::asset('dist/js/demo.js') }}"></script>
+
 <!-- Page specific script -->
 <!-- ChartJS -->
 <script src="{{ URL::asset('plugins/chart.js/Chart.min.js') }}"></script>

@@ -9,14 +9,37 @@
    
 @endsection
 @section('content')
+    <section class="content">
+        <div class="container-fluid mb-3">
+
+        <div class="card card-dark mt-3">
+
+                <div class="card card-dark">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            @if ($latestMonthData->isEmpty())
+                                อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
+                            @else
+                                อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน 3 วัน (ประจำเดือน
+                                {{ $latestMonthData->first()->month }})
+                            @endif
+                        </h3>
 
 
-
-              <!-- Bordered Table -->
-              <div class="card ">
-                <h5 class="card-header">Bordered Table</h5>
-                <div class="card-body">
-                <div class="table-responsive">
+                        <div class="card-tools">
+                            @if (Auth::user()->permission['manage_dashboard'] ?? false)
+                                <a href="importdata" class="btn bg-light ">
+                                    <i class="d-flex justify-content-end "></i> Import
+                                </a>
+                            @endif
+                            <button type="button" class="btn bg-gradient-warning">Export</button>
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead class="text-center ">
                                     <tr>
@@ -204,48 +227,60 @@
 
                             </table>
                         </div>
+                    </div>
+
+
+
                 </div>
-              </div>
-              <hr class="my-3" />
-              <div class="card ">
-              <div class="d-flex align-items-center gap-2"> <!-- ใช้ align-items-center และ gap-2 -->
-              <h5 class="card-header">Bordered Table</h5>
 
-    <!-- ฟอร์มเลือกปี -->
-    <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET"
-        class="d-inline" id="yearForm">
-        <input type="number" name="year" id="yearInput" placeholder="Enter year"
-            value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}"
-            class="form-control" style="width: 200px;" required min="2000" max="9999">
-    </form>
+                <div class="card card-dark">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            @if ($latestMonthData->isEmpty())
+                                ติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
+                            @else
+                                ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})
+                            @endif
+                        </h3>
+                        <div class="card-tools d-flex ">
+                            <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET"
+                                class="d-inline" id="yearForm">
+                                <input type="number" name="year" id="yearInput" placeholder="Enter year"
+                                    value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}"
+                                    class="form-control d-inline " style="width: 200px;" required min="2000"
+                                    max="9999">
+                            </form>
 
-    <!-- ปุ่ม Import -->
-    @if (Auth::user()->permission['manage_dashboard'] ?? false)
-        <a href="{{ route('importdata') }}" class="btn bg-light">
-            <i class="fas fa-file-import"></i> Import
-        </a>
-    @endif
+                            @if (Auth::user()->permission['manage_dashboard'] ?? false)
+                                <a href="{{ route('importdata') }}" class="btn bg-light mx-1 ">
+                                    <i class="d-flex justify-content-end "></i> Import
+                                </a>
+                            @endif
+                            <form action="{{ route('export') }}" method="GET">
+                                @csrf
+                                <!-- ช่องป้อนข้อมูลปีและเดือน -->
+                                <input type="hidden" name="year"
+                                    value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
+                                <!-- ค่าปี -->
+                                <input type="hidden" name="month"
+                                    value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
+                                <!-- ค่าเดือน -->
 
-    <!-- ฟอร์ม Export -->
-    <form action="{{ route('export') }}" method="GET">
-        @csrf
-        <input type="hidden" name="year"
-            value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
-        <input type="hidden" name="month"
-            value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
-        <button type="submit" class="btn bg-gradient-warning">
-            <i class="fas fa-file-export"></i> Export
-        </button>
-    </form>
 
-    <!-- ปุ่มย่อ/ขยาย -->
-</div>
-                
+                                <button type="submit" class="btn bg-gradient-warning">Export</button>
+                            </form>
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card-body">
-                <div class="table-responsive">
+                    <div class="table-responsive">
                         <table id="example2" class="table table-bordered table-hover">
                             <thead class="text-center ">
-                                <tr class = 'bg-dark text-light'>
+                                <tr>
                                     <th rowspan="2" class="col-data">ดูข้อมูล</th>
                                     <th rowspan="2" class="col-department">ส่วนงาน</th>
                                     <th rowspan="2" class="col-count">จำนวนวงจร</th>
@@ -259,7 +294,7 @@
                                     <th rowspan="2" class="col-install-percent">ร้อยละการติดตั้งภายใน 3 วัน
                                     </th>
                                 </tr>
-                                <tr class = 'bg-dark'>
+                                <tr>
                                     <th class="col-sdp">กำหนด SDP/ODP (วัน)</th>
                                     <th class="col-cable">โยงสาย (วัน)</th>
                                     <th class="col-config">Config NMS (วัน)</th>
@@ -284,7 +319,7 @@
                         
                         <tbody class="text-center align-items-center">
                             @foreach ($sectionsArray as $section)
-                                <tr >
+                                <tr>
                                     <td>
                                         <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year']]) }}" class="btn btn-warning">
                                             <i class="fas fa-search"></i>
@@ -372,19 +407,33 @@
 
                 </table>
             </div>
-                </div>
-              </div>
+        </div>
 
 
 
 
-            
+    </div>
+
+
+
+        </div>
+        </div>
+    </section>
+    </section>
 @endsection
 
 @section('script')
   
 
-    
+    <style>
+        .text-warning {
+            color: gold;
+        }
+
+        .text-dark {
+            color: lightgray;
+        }
+    </style>
 
     <script>
         // ฟังก์ชันสำหรับแปลงค่าคะแนนเป็นดาว
@@ -441,7 +490,38 @@
     updateProgressBars();
 </script>
 
+<style>
+    .progress-container {
+        width: 100%;
+        max-width: 100%;
+        background-color: #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 15px;
+    }
 
+    .progress-bar {
+        height: 25px;
+        width: 100;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+        transition: width 0.3s ease;
+    }
+
+    .red {
+        background-color: Crimson;
+    }
+
+    .yellow {
+        background-color: gold;
+        color: black;
+    }
+
+    .green {
+        background-color: SeaGreen;
+    }
+</style>
 
     <script>
         // JavaScript ที่ใช้ในการกำหนดสีของหลอดตามเปอร์เซ็นต์

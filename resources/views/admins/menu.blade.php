@@ -28,7 +28,7 @@
     <!-- Brand Logo -->
     <!-- Brand Logo -->
     <a href="#" class="brand-link bg-warning d-flex justify-content-center align-items-center ">
-        <img src="{{ URL::asset('dist/img/monontlogo.png') }}" alt="AdminLTE Logo" class="brand-image" style="height: 100px;">
+        <img src="{{ URL::asset('dist/img/monontlogo.png') }}" alt="Logo" class="brand-image" style="height: 100px;">
     </a>
 
 
