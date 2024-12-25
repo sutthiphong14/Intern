@@ -66,7 +66,16 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->description }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i:s') }}</td>
-                                            <td><a href="{{ $item->link }}" class="nav-link btn btn-warning">download</a></td>
+                                            <td class='ms-5 text-center'>
+                                @if(Storage::disk('public')->exists($item->file))
+                                    <a href="{{ asset('storage/' . $item->file) }}" class="btn btn-warning" download
+                                        target="_blank">
+                                        Download <i class="fas fa-arrow-down"></i>
+                                    </a>
+                                @else
+                                    <span class="text-danger">ไฟล์ไม่พบ</span>
+                                @endif
+                            </td>
 
 
 

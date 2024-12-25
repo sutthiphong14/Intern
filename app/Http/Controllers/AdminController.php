@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Newsfeed;
 
@@ -24,28 +24,37 @@ class AdminController extends Controller
 
     function createnews(Request $request)
     {
+        // การตรวจสอบข้อมูล
         $request->validate([
             'name' => 'required|max:50',
             'description' => 'required',
-            
-            'link' => 'required'
-
+            'file' => 'required|file|mimes:pdf,jpg,png,xlsx|max:10240', // 10MB
         ], [
             'name.required' => 'กรุณาระบุชื่อ',
             'name.max' => 'ความยาวของชื่อไม่ควรเกิน 50 ตัวอักษร',
             'description.required' => 'กรุณาระบุคำอธิบาย',
-            
-            'link.required' => 'กรุณาระบุ link file'
+            'file.required' => 'กรุณาระบุไฟล์',
+            'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
+            'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 10MB',
         ]);
+
+        // จัดการไฟล์ที่อัปโหลด
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            // เก็บไฟล์ใน storage/app/public และให้ชื่อไฟล์เป็นชื่อที่ไม่ซ้ำ
+            $filePath = $file->storeAs('newsfeeds', time() . '_' . $file->getClientOriginalName(), 'public');
+        }
+
+        // ข้อมูลที่ต้องการบันทึกในฐานข้อมูล
         $data = [
             'name' => $request->name,
             'description' => $request->description,
-            
-            'link' => $request->link,
+            'file' => $filePath, // เก็บลิงก์ไฟล์ที่อัปโหลด
             'created_at' => now(),
             'updated_at' => now(),
         ];
 
+        // แทรกข้อมูลลงในฐานข้อมูล
         DB::table('newsfeeds')->insert($data);
         return redirect('/listnewsfeed');
     }
@@ -70,9 +79,13 @@ class AdminController extends Controller
         ]);
     }
 
-
     function deletenews($id)
     {
+        $newsfeed = DB::table('newsfeeds')->where('id', $id)->first();
+        if ($newsfeed && $newsfeed->file) {
+            // ลบไฟล์จาก storage หากมีไฟล์
+            Storage::disk('public')->delete($newsfeed->file);
+        }
         DB::table('newsfeeds')->where('id', $id)->delete();
         return redirect()->back();
     }
@@ -86,26 +99,37 @@ class AdminController extends Controller
 
     function updatenews(Request $request, $id)
     {
+        // การตรวจสอบข้อมูล
         $request->validate([
             'name' => 'required|max:50',
             'description' => 'required',
             'category_id' => 'required',
-            'link' => 'required'
-
+            'file' => 'nullable|file|mimes:pdf,jpg,png,xlsx|max:2048', // ไฟล์ไม่จำเป็นต้องอัปเดตทุกครั้ง
         ], [
             'name.required' => 'กรุณาระบุชื่อ',
             'name.max' => 'ความยาวของชื่อไม่ควรเกิน 50 ตัวอักษร',
             'description.required' => 'กรุณาระบุคำอธิบาย',
             'category_id.required' => 'กรุณาเลือกประเภท',
-            'link.required' => 'กรุณาระบุ link file'
+            'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
+            'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 2MB',
         ]);
+
+        // ข้อมูลที่ต้องการอัปเดต
         $data = [
             'name' => $request->name,
             'description' => $request->description,
             'category_id' => $request->category_id,
-            'link' => $request->link,
             'updated_at' => now(),
         ];
+
+        // หากมีการอัปโหลดไฟล์ใหม่
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filePath = $file->storeAs('newsfeeds', time() . '_' . $file->getClientOriginalName(), 'public');
+            $data['file'] = $filePath; // เพิ่มไฟล์ใหม่ในข้อมูล
+        }
+
+        // อัปเดตข้อมูลในฐานข้อมูล
         DB::table('newsfeeds')->where('id', $id)->update($data);
         return redirect('/listnewsfeed');
     }

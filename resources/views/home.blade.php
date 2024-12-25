@@ -18,24 +18,24 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src={{ asset('/img/banner_images/ceo_intranet.jpg') }}
-                            class="d-block w-100 rounded" alt="Banner 1">
+                        <img src={{ asset('/img/banner_images/ceo_intranet.jpg') }} class="d-block w-100 rounded"
+                            alt="Banner 1">
                     </div>
                     <div class="carousel-item">
-                        <img src={{ asset('/img/banner_images/nt_net_ban.jpg') }}
-                            class="d-block w-100 rounded" alt="Banner 2">
+                        <img src={{ asset('/img/banner_images/nt_net_ban.jpg') }} class="d-block w-100 rounded"
+                            alt="Banner 2">
                     </div>
                     <div class="carousel-item">
-                        <img src={{ asset('/img/banner_images/nt_sta-66.jpg') }}
-                            class="d-block w-100 rounded" alt="Banner 3">
+                        <img src={{ asset('/img/banner_images/nt_sta-66.jpg') }} class="d-block w-100 rounded"
+                            alt="Banner 3">
                     </div>
                     <div class="carousel-item">
-                        <img src={{ asset('/img/banner_images/S__31670320.jpg') }}
-                            class="d-block w-100 rounded" alt="Banner 3">
+                        <img src={{ asset('/img/banner_images/S__31670320.jpg') }} class="d-block w-100 rounded"
+                            alt="Banner 3">
                     </div>
                     <div class="carousel-item">
-                        <img src={{ asset('/img/banner_images/S__68780184V2.jpg') }}
-                            class="d-block w-100 rounded" alt="Banner 3">
+                        <img src={{ asset('/img/banner_images/S__68780184V2.jpg') }} class="d-block w-100 rounded"
+                            alt="Banner 3">
                     </div>
                 </div>
                 <a class="carousel-control-prev custom-control-prev" href="#carouselExampleIndicators" role="button"
@@ -56,37 +56,45 @@
 <div class="col-md-12 mt-3">
     <!-- BAR CHART -->
     <div class="card card-dark">
-        <div class="card-header">
-            <h3 class="card-title">ข่าว</h3>
-            <div class="card-tools">
-            <a href="newsfeed" class="btn bg-light  ">
-                    <i class="d-flex justify-content-end "></i> แสดงเพิ่มเติม
-                </a>
-            @if(Auth::user()->permission['manage_newsfeed'] ?? false)
-                <a href="listnewsfeed" class="btn bg-warning  ">
-                    <i class="d-flex justify-content-end "></i> แก้ไขกระดานข่าว
-                </a>
-            @endif
-
-            </div>
-        </div>
+    <div class="card-header">
+    <h3 class="card-title">ข่าว</h3>
+    <div class="card-tools">
+    <a href="newsfeed" class="btn bg-light me-3">
+        <i class="justify-content-end"></i> แสดงเพิ่มเติม
+    </a>
+    @if(Auth::user()->permission['manage_newsfeed'] ?? false)
+        <a href="listnewsfeed" class="btn bg-warning ms-3">
+            <i class="justify-content-end me-auto"></i> แก้ไขกระดานข่าว
+        </a>
+    @endif
+</div>
+</div>
         <div class="card-body">
             <table id="example2" class="table table-bordered table-hover align-items-center">
 
                 <tbody class='align-items-center '>
                     @foreach ($data->take(10) as $item1)
-                    <tr class=>
-                        <td class='ms-5 text-start'>
-                            <h5>
-                                {{ $item1->name }}
-                                @if ($loop->index < 2)
-                                    <span class="right badge badge-danger">New</span>
+                        <tr class=>
+                            <td class='ms-5 text-start'>
+                                <h5>
+                                    {{ $item1->name }}
+                                    @if ($loop->index < 2)
+                                        <span class="right badge badge-danger">New</span>
+                                    @endif
+                                </h5>
+                            </td>
+                            <td class='ms-5 text-center'>
+                                @if(Storage::disk('public')->exists($item1->file))
+                                    <a href="{{ asset('storage/' . $item1->file) }}" class="btn btn-warning" download
+                                        target="_blank">
+                                        Download <i class="fas fa-arrow-down"></i>
+                                    </a>
+                                @else
+                                    <span class="text-danger">ไฟล์ไม่พบ</span>
                                 @endif
-                            </h5>
-                        </td>
-                        <td class='ms-5 text-center'><a href="{{ $item1->link }}" class="btn btn-warning" target="_blank">Download <i class="fas fa-arrow-down"></i></a></td>
-                    </tr>
-                @endforeach
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

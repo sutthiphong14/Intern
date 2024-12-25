@@ -36,6 +36,20 @@
 
 
     <style>
+        .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+    }
+
+    .card-tools {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: auto; /* เพิ่มระยะห่างทางซ้ายให้ .card-tools เลื่อนไปทางขวาสุด */
+    }
+
         body {
             font-family: "Kanit", sans-serif;
             font-style: normal;
