@@ -468,25 +468,61 @@
 
                         // เปิด Modal
                         $('#fileChoiceModal').modal('show');
-                    }
-
-                    if (data.status) {
-                        // แสดง SweetAlert
+                    } else if (data.status === 'success') {
+                        // แสดง SweetAlert สำหรับสถานะ success
                         Swal.fire({
                             icon: 'success',
-                            title: 'Success',
-                            text: data.status,
+                            title: 'success',
+                            text: data.message,
                             confirmButtonText: 'OK'
                         }).then(() => {
                             window.location.href = data.redirect_url; // ทำการ redirect ไปยัง URL ที่กำหนด
                         });
+                    } else if (data.status === 'error') {
+                        // แสดง SweetAlert สำหรับสถานะ error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาดในการนำเข้าไฟล์',
+                            text: data.message,
+                            confirmButtonText: 'OK'
+                        });
                     }
-
-                    
                 })
+                .catch(error => {
+                    // แสดงข้อผิดพลาดในกรณีที่เกิดปัญหาในการเชื่อมต่อกับเซิร์ฟเวอร์
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
+                        confirmButtonText: 'OK'
+                    });
+                });
 
         }
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('status')) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: localStorage.getItem('status'),
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    localStorage.removeItem('status');
+                });
+            } else {
+                // ถ้าไม่มีใน localStorage ให้เช็ค session
+                const status = '{{ session('status') }}';
+                if (status) {
+                    localStorage.setItem('status', status);
+                    location.reload();
+                }
+            }
+        });
+    </script>
+
 
 
 

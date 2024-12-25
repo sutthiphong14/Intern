@@ -606,27 +606,6 @@
     
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            if (localStorage.getItem('status')) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: localStorage.getItem('status'),
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    localStorage.removeItem('status');
-                });
-            } else {
-                // ถ้าไม่มีใน localStorage ให้เช็ค session
-                const status = '{{ session('status') }}';
-                if (status) {
-                    localStorage.setItem('status', status);
-                    location.reload();
-                }
-            }
-        });
-    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

@@ -68,7 +68,7 @@ class ReportController extends Controller
                     DB::rollback();
                     return response()->json([
                         'status' => 'error',
-                        'message' => 'ไฟล์ที่คุณนำเข้ามีข้อมูลจำนวนแถวไม่ครบ ' . $e->getMessage()
+                        'message' => 'ไฟล์ที่คุณนำเข้ามีข้อมูลไม่สมบูรณ์' 
                     ], 400); // รหัส 400 สำหรับข้อผิดพลาด
                 }
             }
@@ -79,7 +79,7 @@ class ReportController extends Controller
             return response()->json([
                 'status' => 'success',
                 'redirect_url' => route('viewInstallFTTx'),
-                'message' => 'Import done!!!'
+                'message' => 'นำเข้าไฟล์สำเร็จ!!!'
             ]);
     
         } catch (\Exception $e) {
@@ -123,17 +123,13 @@ class ReportController extends Controller
 
             DB::commit(); // commit เมื่อทุกอย่างเสร็จสมบูรณ์
 
-            return response()->json([
-                'status' => 'successfully',
-                'redirect_url' => route('importdata'),
-                'message' => 'แทนที่ไฟล์แล้ว!!!'
-            ]);
+            return redirect()->route('importdata')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
         } catch (\Exception $e) {
             // หากเกิดข้อผิดพลาด, rollback การทำงานทั้งหมด
             DB::rollback();
 
             // ส่งข้อความผิดพลาดกลับไปยังผู้ใช้
-            return redirect()->back()->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลจำนวนแถวไม่ครบ ');
+            return redirect()->back()->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลไม่สมบูรณ์ ');
         }
     }
 
