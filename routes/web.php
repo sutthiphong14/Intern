@@ -29,6 +29,9 @@ Route::get('/', function (){
     return view('home');
 });
 
+
+
+
 Route::get('/home', function (){
     return view('home');
 });
@@ -73,6 +76,10 @@ Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
 
 Route::get('/profile', function (){
     return view('profile');
+});
+
+Route::get('/test', function (){
+    return view('admins.test');
 });
 
 
