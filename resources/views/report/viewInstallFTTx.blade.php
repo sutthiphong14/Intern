@@ -243,7 +243,7 @@
                 
                 <div class="card-body">
                 <div class="table-responsive">
-                        <table id="example2" class="table table-bordered table-hover">
+                        <table id="example2" class="table table-light table-hover table-bordered">
                             <thead class="text-center text-white">
                                 <tr class = 'bg-dark text-white'>
                                     <th rowspan="2" class="col-data ">ดูข้อมูล</th>

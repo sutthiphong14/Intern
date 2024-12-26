@@ -20,6 +20,9 @@
             <div data-i18n="Analytics">หน้าแรก</div>
         </a>
     </li>
+    <li class="menu-header small text-uppercase">
+              <span class="menu-header-text">DashBoard</span>
+            </li>
     <li class="menu-item {{ Request::is('incomecurrent') ? 'active' : '' }}">
         <a href="incomecurrent" class="menu-link">
             <i class="menu-icon tf-icons bx bx-home-circle"></i>

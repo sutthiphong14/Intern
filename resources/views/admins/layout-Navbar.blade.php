@@ -10,18 +10,27 @@
 
   <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
     <!-- navitem -->
-    <div class="navbar-nav align-items-center">
-    <li class="nav-item lh-1 me-3">
+    <div class="navbar-nav align-items-center ">
+    <li class="nav-item lh-1 me-3 ">
         <a href="home" class="">
         <i class="fas fa-bars"></i> หน้าแรก
         </a>
       </li>
-
+      @if (Auth::check() && Auth::user()->permission['manage_users'] ?? false)
       <li class="nav-item lh-1 me-3">
         <a href="{{ route('users.list') }}" class="">
           <i class="fas fa-users-cog"></i> จัดการผู้ใช้
         </a>
       </li>
+      @endif
+
+      @if (Auth::check() && Auth::user()->permission['manage_dashboard'] ?? false)
+      <li class="nav-item lh-1 me-3">
+        <a href="{{ route('importdata') }}" class="">
+          <i class="fas fa-users-cog"></i> จัดการ Dashboard
+        </a>
+      </li>
+      @endif
 
     </div>
     <!-- /navitem -->

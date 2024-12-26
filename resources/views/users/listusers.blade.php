@@ -103,12 +103,11 @@
                   <thead class='text-center'>
                                     <tr class="col-12">
 
-                                        <th class='col-1'>รหัสพนักงาน</th>
+                                    <th class='col-3'>username</th>
                                         <th class='col-1'>รูปโปรไฟล์</th>
-                                        <th class='col-2'>ชื่อ</th>
+                                        <th class='col-3'>ชื่อ-นามสกุล</th>
                                         <th class='col-3'>อีเมล</th>
-                                        <th class='col-3'>username</th>
-                                        <th class='col-3'>การดำเนินการ</th>
+                                        <th class='col-2'>การดำเนินการ</th>
                                         
                                     </tr>
                                 </thead>
@@ -116,7 +115,7 @@
                                     @forelse($users as $user)
                                         <tr>
 
-                                            <td class="text-center">{{ $user->id }}</td>
+                                        <td>{{ $user->username }}</td>
                                             <td class="text-center">
                                                 @if ($user->profile_image)
                                                     <img src="{{ $user->profile_image }}" alt="Profile Image"
@@ -128,7 +127,7 @@
                                             </td>
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
-                                            <td>{{ $user->username }}</td>
+                                            
                                             <td>
     <div class="dropdown">
         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
