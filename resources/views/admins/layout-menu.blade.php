@@ -32,7 +32,7 @@
     <li class="menu-item {{ Route::is('viewInstallFTTx') ? 'active' : '' }}">
         <a href="{{ route('viewInstallFTTx') }}" class="menu-link">
             <i class="fas fa-wrench"></i>
-            <div data-i18n="Analytics">ติดตั้ง FTTx ได้ภายใน 3 วัน</div>
+            <div>ติดตั้ง FTTx ได้ภายใน 3 วัน</div>
         </a>
     </li>
 

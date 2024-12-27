@@ -18,7 +18,7 @@
     <div class="card-body">
         <div class="table-responsive">
             <table id="example2" class="table table-bordered table-hover ">
-                <thead class="text-center text-white bg-dark">
+                <thead class="text-center bg-dark">
                     <tr>
                         <th rowspan="2" class="col-data ">อันดับ</th>
                         <th rowspan="2" class="col-department">ส่วนงาน</th>
@@ -221,7 +221,7 @@
 
         <!-- ปุ่ม Import -->
         @if (Auth::user()->permission['manage_dashboard'] ?? false)
-            <a href="{{ route('importdata') }}" class="btn bg-light">
+            <a href="{{ route('importdata') }}" class="btn bg-success">
                 <i class="fas fa-file-import"></i> Import
             </a>
         @endif
@@ -237,15 +237,14 @@
                 <i class="fas fa-file-export"></i> Export
             </button>
         </form>
-
-       
+    
     </div>
 
     <div class="card-body">
         <div class="table-responsive">
             <table id="example2" class="table table-bordered table-hover">
-                <thead class="text-center text-white">
-                    <tr class='bg-dark text-white'>
+                <thead class="text-center ">
+                    <tr class='bg-dark'>
                         <th rowspan="2" class="col-data ">ดูข้อมูล</th>
                         <th rowspan="2" class="col-department">ส่วนงาน</th>
                         <th rowspan="2" class="col-count">จำนวนวงจร</th>
@@ -353,11 +352,11 @@
                                         <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
 
                                         <td class="" style="background-color: {{
-                        $section['sum_installation_percentage_within_3_days'] > 85 ? 'rgba(61, 183, 71, 1)' :
-                        ($section['sum_installation_percentage_within_3_days'] > 83 ? 'rgb(142, 255, 56,1)' :
+                        $section['sum_installation_percentage_within_3_days'] > 85 ? 'rgba(113, 221, 55)' :
+                        ($section['sum_installation_percentage_within_3_days'] > 83 ? 'rgb(164, 255, 37)' :
                             ($section['sum_installation_percentage_within_3_days'] > 80 ? 'rgba(255, 206, 86, 1)' :
                                 ($section['sum_installation_percentage_within_3_days'] > 77 ? 'rgba(255, 165, 61, 1)' :
-                                    'rgba(255, 35, 82, 1)')))
+                                    'rgba(255, 62, 29)')))
                                             }}; color: white;">
                                             {{ $section['sum_installation_percentage_within_3_days'] }}%
                                         </td>

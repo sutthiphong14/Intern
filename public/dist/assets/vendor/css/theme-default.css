@@ -103,13 +103,15 @@
 }
 .bg-success{
   color: #fff;
-  background-color: rgba(113, 221, 55, 0.85) !important;
-
+  background-color: rgba(113, 221, 55) !important;
 }
 .bg-danger{
   color: #fff;
-  background-color: rgba(255, 62, 29, 0.85) !important;
-
+  background-color: rgba(255, 62, 29) !important;
+}
+.bg-dark{
+  color: #fff;
+  background-color: rgba(35, 52, 70, 0.85) !important;
 }
 
 
