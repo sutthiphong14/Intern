@@ -98,7 +98,7 @@
     </section>
     <div class="card ">
     <h3 class="card-header">รายชื่อผู้ใช้</h3>
-    <div class="table-responsive text-nowrap">
+    <div class="table-responsive ">
                   <table class="table">
                   <thead class='text-center'>
                                     <tr class="col-12">

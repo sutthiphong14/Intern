@@ -25,13 +25,14 @@
             </li>
     <li class="menu-item {{ Request::is('incomecurrent') ? 'active' : '' }}">
         <a href="incomecurrent" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+
+            <i class='menu-icon bx bx-money'></i>
             <div data-i18n="Analytics">รายได้รวม</div>
         </a>
     </li>
     <li class="menu-item {{ Route::is('viewInstallFTTx') ? 'active' : '' }}">
         <a href="{{ route('viewInstallFTTx') }}" class="menu-link">
-            <i class="fas fa-wrench"></i>
+            <i class="menu-icon fas fa-wrench"></i>
             <div>ติดตั้ง FTTx ได้ภายใน 3 วัน</div>
         </a>
     </li>
