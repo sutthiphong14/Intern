@@ -12,9 +12,65 @@
 
 
 
-<!-- Bordered Table -->
+<!-- navigate -->
+<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
+    <a href="home" class="">
+         หน้าแรก
+        </a> 
+        /
+    </span> ติดตั้ง fttx ภายใน 3 วัน</h4>
+
+
 <div class="card ">
-    <h4 class="card-header text-warning ">Bordered Table</h4>
+    
+<div class="d-flex justify-content-between align-items-center gap-2">
+    <!-- หัวข้อ -->
+    <h4 class="card-header text-warning">อันดับติดตั้ง fttx ภายใน 3 วัน</h4>
+    <div class="d-flex align-items-center gap-2">
+        <!-- ฟอร์มเลือกปี -->
+                     
+                      <!-- Modal -->
+                      
+                      
+                      
+
+                       
+                      
+        
+                      <button
+                          type="button"
+                          class="btn btn-primary"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalScrollable"
+                        >
+                          Option 2
+                        </button>
+        <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline" id="yearForm">
+            <input type="number" name="year" id="yearInput" placeholder="Enter year"
+                value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}" class="form-control"
+                style="width: 200px;" required min="2000" max="9999">
+        </form>
+
+        <!-- ปุ่ม Import -->
+        @if (Auth::user()->permission['manage_dashboard'] ?? false)
+            <a href="{{ route('importdata') }}" class="btn bg-yellow">
+                <i class="fas fa-file-import"></i> Import
+            </a>
+        @endif
+
+        <!-- ฟอร์ม Export -->
+        <form action="{{ route('export') }}" method="GET">
+            @csrf
+            <input type="hidden" name="year"
+                value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
+            <input type="hidden" name="month"
+                value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
+            <button type="submit" class="btn bg-dark me-4">
+                <i class="fas fa-file-export"></i> Export
+            </button>
+        </form>
+    </div>
+</div>
     <div class="card-body">
         <div class="table-responsive">
             <table id="example2" class="table table-bordered table-hover ">
@@ -208,12 +264,15 @@
 </div>
 <hr class="my-3" />
 <div class="card ">
-    <div class="d-flex align-items-center gap-2"> <!-- ใช้ align-items-center และ gap-2 -->
-        <h4 class="card-header text-warning">Bordered Table</h4>
+<div class="d-flex justify-content-between align-items-center gap-2">
+    <!-- หัวข้อ -->
+    <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
 
+    
+    <div class="d-flex align-items-center gap-2">
+    
         <!-- ฟอร์มเลือกปี -->
-        <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline"
-            id="yearForm">
+        <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline" id="yearForm">
             <input type="number" name="year" id="yearInput" placeholder="Enter year"
                 value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}" class="form-control"
                 style="width: 200px;" required min="2000" max="9999">
@@ -221,7 +280,7 @@
 
         <!-- ปุ่ม Import -->
         @if (Auth::user()->permission['manage_dashboard'] ?? false)
-            <a href="{{ route('importdata') }}" class="btn bg-success">
+            <a href="{{ route('importdata') }}" class="btn bg-yellow">
                 <i class="fas fa-file-import"></i> Import
             </a>
         @endif
@@ -233,12 +292,21 @@
                 value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
             <input type="hidden" name="month"
                 value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
-            <button type="submit" class="btn bg-gradient-warning">
+            <button type="submit" class="btn bg-dark ">
                 <i class="fas fa-file-export"></i> Export
             </button>
+
         </form>
-    
+        <button
+                          type="button"
+                          class="btn btn-dark me-4"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalScrollable"
+                        >
+                        <i class="fas fa-question-circle"></i>
+                        </button>
     </div>
+</div>
 
     <div class="card-body">
         <div class="table-responsive">
@@ -378,7 +446,89 @@
 
 
 
+<div class="modal fade" id="modalScrollable" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="modalScrollableTitle">คำอธิบายข้อมูล</h5>
+                              <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                              ></button>
+                            </div>
+                            <div class="modal-body text-dark">
+                              <p>
+                              รายงานระยะเวลาเฉลี่ยในการติดตั้ง
+                              หน้าหลัก  รายงานระยะเวลาเฉลี่ยในการติดตั้ง
+                              </p>
+                              <p>
+                              หมายเหตุ : รายงานระยะเวลาเฉลี่ยในการติดตั้ง ตามศูนย์บริการติดตั้ง
+                              </p>
+                              <p>
+                              • จำนวนวงจร : จะนับเฉพาะใบคำขอที่ทำการปิดงานเรียบร้อยบนระบบ FTTxSM เท่านั้น (ไม่รวมข้อมูลใบคำขอที import มาจากสผ.และใบคำขอที่ยังไม่เคยปิดงานเรียบร้อย) ตามช่วงเวลาที่เลือก
+                              </p>
+                              <p>
+                              • ระยะเวลาเตรียมข้อมูลรวม : ยอดรวมระยะเวลาที่ใช้ในเตรียมเอกสารของวงจรตามช่วงเวลาที่เลือก โดยนับระยะเวลาตั้งแต่วันที่สร้างคำขอ - รับชำระเงิน
+                              </p>
+                              <p>
+                              • ระยะเวลาดำเนินการรวม : ยอดรวมระยะเวลาที่ใช้ในการติดตั้งของวงจรตามช่วงเวลาที่เลือก โดยนับระยะเวลาตั้งแต่รับชำระเงิน - ปิดงานเรียบร้อย ยกเว้น ช่วงรอลูกค้า
+                              </p>
+                              <p>
+                              • ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร :
+                              
+                              </p>
+                              <p>
+                              - กำหนดSDP/ODP :
+                              </p>
+                              <p>
+                              >> กรณีส่งงานโยงสายถัดไป ยอดรวมจำนวนวัน นับจากวันที่รับชำระเงินจนถึงส่งงานโยงสาย หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              >> กรณีส่งงานNMSถัดไป ยอดรวมจำนวนวัน นับจากวันที่รับชำระเงินจนถึงส่งงาน NMS หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - โยงสาย (ถ้าส่งงาน) : ยอดรวมจำนวนวัน นับจากวันที่ส่งงานโยงสายจนถึงส่งงาน NMS หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - การดำเนินการของ NMS, นัดหมายและกำหนดช่าง, ปิดงาน : ยอดรวมจำนวนวัน นับจากวันที่รับงานมาดำเนินการจนถึงวันที่จ่ายงานให้งานถัดไป หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - รอลูกค้า :
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งเร็วกว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่ส่งงานลากสายและติดตั้งจนถึงวันที่ติดตั้ง หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งช้ากว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่ส่งงานลากสายและติดตั้งจนถึงวันที่นัดหมายลูกค้า หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - ลากสายและติดตั้ง :
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งเร็วกว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่ติดตั้งจนถึงวันที่ส่งงานปิดงาน หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งช้ากว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่วันนัดหมายลูกค้าจนถึงวันที่ส่งงานปิดงาน หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              • รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร : ระยะเวลารวม (ช่องที่ 3) หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              • ร้อยละการติดตั้งภายใน 5 วัน : ร้อยละการปิดงานเรียบร้อยภายใน 5 วัน(รับชำระเงิน - ปิดงานเรียบร้อย ยกเว้นช่วงรอลูกค้า) เมื่อเทียบกับ จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              • กรณีมีการติดตั้งวงจร แต่ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจรเท่ากับ 0.00 : ใช้ระยะเวลาในการดำเนินการเป็นระดับวินาที จึงไม่สามารถแสดงตัวเลขได้
+                              </p>
+                              <p>
+                              • รายงานเดือนตุลา ที่มีตัวเลขติดลบในบางพื้นที่ ทางระบบกำลังดำเนินการตรวจสอบและแก้ไขค่ะ เนื่องจากมีการเลือกวันที่ติดตั้งและส่งงานไม่ถูกต้อง
+                              </p>
+                            </div>
 
+                          </div>
+                        </div>
+                      </div>
 @endsection
 
 @section('script')
