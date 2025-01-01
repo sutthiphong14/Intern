@@ -25,26 +25,12 @@
     
 <div class="d-flex justify-content-between align-items-center gap-2">
     <!-- หัวข้อ -->
-    <h4 class="card-header text-warning">อันดับติดตั้ง fttx ภายใน 3 วัน</h4>
-    <div class="d-flex align-items-center gap-2">
-        <!-- ฟอร์มเลือกปี -->
-                     
-                      <!-- Modal -->
-                      
-                      
-                      
+    <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
 
-                       
-                      
-        
-                      <button
-                          type="button"
-                          class="btn btn-primary"
-                          data-bs-toggle="modal"
-                          data-bs-target="#modalScrollable"
-                        >
-                          Option 2
-                        </button>
+    
+    <div class="d-flex align-items-center gap-2">
+    
+        <!-- ฟอร์มเลือกปี -->
         <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline" id="yearForm">
             <input type="number" name="year" id="yearInput" placeholder="Enter year"
                 value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}" class="form-control"
@@ -65,10 +51,19 @@
                 value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
             <input type="hidden" name="month"
                 value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
-            <button type="submit" class="btn bg-dark me-4">
+            <button type="submit" class="btn bg-dark ">
                 <i class="fas fa-file-export"></i> Export
             </button>
+
         </form>
+        <button
+                          type="button"
+                          class="btn btn-dark me-4"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalScrollable"
+                        >
+                        <i class="fas fa-question-circle"></i>
+                        </button>
     </div>
 </div>
     <div class="card-body">
@@ -516,7 +511,7 @@
                               • รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร : ระยะเวลารวม (ช่องที่ 3) หารด้วย จำนวนวงจร (ช่องที่ 1)
                               </p>
                               <p>
-                              • ร้อยละการติดตั้งภายใน 5 วัน : ร้อยละการปิดงานเรียบร้อยภายใน 5 วัน(รับชำระเงิน - ปิดงานเรียบร้อย ยกเว้นช่วงรอลูกค้า) เมื่อเทียบกับ จำนวนวงจร (ช่องที่ 1)
+                              • ร้อยละการติดตั้งภายใน 3 วัน : ร้อยละการปิดงานเรียบร้อยภายใน 3 วัน(รับชำระเงิน - ปิดงานเรียบร้อย ยกเว้นช่วงรอลูกค้า) เมื่อเทียบกับ จำนวนวงจร (ช่องที่ 1)
                               </p>
                               <p>
                               • กรณีมีการติดตั้งวงจร แต่ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจรเท่ากับ 0.00 : ใช้ระยะเวลาในการดำเนินการเป็นระดับวินาที จึงไม่สามารถแสดงตัวเลขได้
