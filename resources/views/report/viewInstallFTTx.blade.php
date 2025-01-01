@@ -96,22 +96,22 @@
                 </thead>
                 @php
 
-                    // แปลงข้อมูลจาก Collection เป็น Array
-                    $sectionsArray = $latestMonthData->toArray();
+                                    // แปลงข้อมูลจาก Collection เป็น Array
+                                    $sectionsArray = $latestMonthData->toArray();
 
-                    // ใช้ usort เพื่อจัดเรียงตาม sum_installation_center
-                    usort($sectionsArray, function ($a, $b) {
-                        return strcoll($a['sum_installation_center'], $b['sum_installation_center']);
-                    });
+                                    // ใช้ usort เพื่อจัดเรียงตาม sum_installation_center
+                                    usort($sectionsArray, function ($a, $b) {
+                                        return strcoll($a['sum_installation_center'], $b['sum_installation_center']);
+                                    });
 
-                    // ใช้ array_slice() เพื่อจำกัดการแสดงแค่ 14 ตัวแรก
-                    $sectionsArray = array_slice($sectionsArray, 1, 14);
-                @endphp
+                                    // ใช้ array_slice() เพื่อจำกัดการแสดงแค่ 14 ตัวแรก
+                                    $sectionsArray = array_slice($sectionsArray, 1, 14);
+                                @endphp
 
                 <tbody class="text-center align-items-center">
-                    @php $i = 0; @endphp <!-- กำหนดตัวแปรเริ่มต้น -->
-                    @foreach ($sortedDataMax as $data)
-                        @php    $i++; @endphp <!-- เพิ่มค่าลำดับ -->
+                @php $i = 0; @endphp <!-- กำหนดตัวแปรเริ่มต้น -->
+                                    @foreach ($sortedDataMax as $data)
+                                        @php    $i++; @endphp <!-- เพิ่มค่าลำดับ -->
 
                         <!-- ตรวจสอบว่าเป็น 5 อันดับแรกหรือไม่ -->
                         <tr class="{{ $i == 1 ? 'bg-success' : '' }}">
@@ -345,89 +345,54 @@
                 @endphp
 
                 <tbody class="text-center align-items-center">
-                    @foreach ($sectionsArray as $section)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year']]) }}"
-                                                class="btn btn-warning">
-                                                <i class="fas fa-search"></i>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            @if ($section['sum_installation_center'] == 'รวม บภน.3.1 (ชภ.)')
-                                                ชัยภูมิ
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (นม.)')
-                                                นครราชสีมา
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (บร.)')
-                                                บุรีรัมย์
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (สร.)')
-                                                สุรินทร์
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (ยส.)')
-                                                ยโสธร
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (ศก.)')
-                                                ศรีสะเกษ
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (อจ.)')
-                                                อำนาจเจริญ
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
-                                                อุบลราชธานี
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
-                                                กาฬสินธุ์
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
-                                                ขอนแก่น
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (มค.)')
-                                                มหาสารคาม
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (รอ.)')
-                                                ร้อยเอ็ด
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นค.)')
-                                                หนองคาย
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นพ.)')
-                                                นครพนม
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นภ.)')
-                                                หนองบัวลำภู
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (บก.)')
-                                                บึงกาฬ
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (มห.)')
-                                                มุกดาหาร
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (ลย.)')
-                                                เลย
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (สน.)')
-                                                สกลนคร
-                                            @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
-                                                อุดรธานี
-                                            @elseif ($section['sum_installation_center'] == 'รวม 3')
-                                                ภน.2.2
-                                            @elseif ($section['sum_installation_center'] == 'รวม 2')
-                                                ภน.2.1
-                                            @endif
-                                        </td>
-                                        <!-- ค่าอื่นๆ -->
-                                        <td>{{ $section['sum_num_of_circuits'] }}</td>
-                                        <td>{{ $section['sum_total_preparation_time_days'] }}</td>
-                                        <td>{{ $section['sum_total_processing_time_days'] }}</td>
-                                        <td>{{ $section['sum_sdp_odp_deadline_days'] }}</td>
-                                        <td>{{ $section['sum_wiring_time_days'] }}</td>
-                                        <td>{{ $section['sum_config_nms_days'] }}</td>
-                                        <td>{{ $section['sum_technician_appointment_and_scheduling_time_days'] }}</td>
-                                        <td>{{ $section['sum_customer_waiting_time_days'] }}</td>
-                                        <td>{{ $section['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
-                                        <td>{{ $section['sum_closing_work_time_days'] }}</td>
-                                        <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
-                                        <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
+                                @foreach ($sectionsArray as $section)
+                                    @if ($section['sum_installation_center'] == 'รวม 3' || $section['sum_installation_center'] == 'รวม 2')
+                                        <tr>
+                                            <td>
+                                                <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year'], 'month' => $section['month']]) }}"
+                                                    class="btn btn-warning">
+                                                    <i class="fas fa-search"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @if ($section['sum_installation_center'] == 'รวม 3')
+                                                    ภน.2.2
+                                                @elseif ($section['sum_installation_center'] == 'รวม 2')
+                                                    ภน.2.1
+                                                @endif
+                                            </td>
+                                            <!-- ค่าอื่นๆ -->
+                                            <td>{{ $section['sum_num_of_circuits'] }}</td>
+                                            <td>{{ $section['sum_total_preparation_time_days'] }}</td>
+                                            <td>{{ $section['sum_total_processing_time_days'] }}</td>
+                                            <td>{{ $section['sum_sdp_odp_deadline_days'] }}</td>
+                                            <td>{{ $section['sum_wiring_time_days'] }}</td>
+                                            <td>{{ $section['sum_config_nms_days'] }}</td>
+                                            <td>{{ $section['sum_technician_appointment_and_scheduling_time_days'] }}</td>
+                                            <td>{{ $section['sum_customer_waiting_time_days'] }}</td>
+                                            <td>{{ $section['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
+                                            <td>{{ $section['sum_closing_work_time_days'] }}</td>
+                                            <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
+                                            <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
 
-                                        <td class="" style="background-color: {{
-                        $section['sum_installation_percentage_within_3_days'] > 85 ? 'rgba(113, 221, 55)' :
-                        ($section['sum_installation_percentage_within_3_days'] > 83 ? 'rgb(164, 255, 37)' :
-                            ($section['sum_installation_percentage_within_3_days'] > 80 ? 'rgba(255, 206, 86, 1)' :
-                                ($section['sum_installation_percentage_within_3_days'] > 77 ? 'rgba(255, 165, 61, 1)' :
-                                    'rgba(255, 62, 29)')))
-                                            }}; color: white;">
-                                            {{ $section['sum_installation_percentage_within_3_days'] }}%
-                                        </td>
+                                            <td class=""
+                                                style="background-color: {{ $section['sum_installation_percentage_within_3_days'] > 85
+                                                    ? 'rgba(61, 183, 71, 1)'
+                                                    : ($section['sum_installation_percentage_within_3_days'] > 83
+                                                        ? 'rgb(142, 255, 56,1)'
+                                                        : ($section['sum_installation_percentage_within_3_days'] > 80
+                                                            ? 'rgba(255, 206, 86, 1)'
+                                                            : ($section['sum_installation_percentage_within_3_days'] > 77
+                                                                ? 'rgba(255, 165, 61, 1)'
+                                                                : 'rgba(255, 35, 82, 1)'))) }}; color: white;">
+                                                {{ $section['sum_installation_percentage_within_3_days'] }}%
+                                            </td>
 
 
-                                    </tr>
-                    @endforeach
-                </tbody>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
 
 
 
