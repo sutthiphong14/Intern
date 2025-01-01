@@ -21,11 +21,15 @@ use Illuminate\Support\Facades\DB;
 class ReportController extends Controller
 {
 
+
+
+
+
     public function import(Request $request)
     {
         // เริ่มต้น transaction
         DB::beginTransaction();
-    
+
         try {
             // ตรวจสอบไฟล์และข้อมูลเดือน ปี
             $request->validate([
@@ -33,10 +37,10 @@ class ReportController extends Controller
                 'year' => 'required|string',
                 'import_file' => 'required|mimes:xlsx,xls'  // ตรวจสอบประเภทไฟล์ Excel
             ]);
-    
+
             $month = $request->month;
             $year = $request->year;
-    
+
             // ตรวจสอบข้อมูลในฐานข้อมูล
             $existingData = Installfttx::where('month', $month)->where('year', $year)->first();
             if ($existingData) {
@@ -44,17 +48,16 @@ class ReportController extends Controller
                 $filePath = $request->hasFile('import_file')
                     ? $request->file('import_file')->store('temp')
                     : null;
-    
-                // ส่งข้อมูลกลับเป็น JSON (เพื่อให้จัดการใน JS)
-                return response()->json([
-                   
-                    'filePath' => $filePath,
-                    'showModal' => true,
+
+                // ส่งตัวแปรเพื่อเปิด Modal ในหน้า importdata
+                return view('report.importdata', [
                     'month' => $month,
-                    'year' => $year
+                    'year' => $year,
+                    'filePath' => $filePath,
+                    'showModal' => true // เพิ่มตัวแปรเพื่อเปิด Modal
                 ]);
             }
-    
+
             // ถ้าไม่มีข้อมูลในฐานข้อมูล ให้ทำการนำเข้าไฟล์ใหม่
             if ($request->hasFile('import_file')) {
                 try {
@@ -66,32 +69,22 @@ class ReportController extends Controller
                 } catch (\Exception $e) {
                     // หากเกิดข้อผิดพลาดจะ rollback และไม่บันทึกข้อมูลในฐานข้อมูล
                     DB::rollback();
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'ไฟล์ที่คุณนำเข้ามีข้อมูลไม่สมบูรณ์' 
-                    ], 400); // รหัส 400 สำหรับข้อผิดพลาด
+
+                    return redirect()->route('importdata')->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลจำนวนแถวไม่ครบ ');
                 }
             }
-    
+
             // Commit transaction เมื่อทุกอย่างสำเร็จ
             DB::commit();
-    
-            return response()->json([
-                'status' => 'success',
-                'redirect_url' => route('viewInstallFTTx'),
-                'message' => 'นำเข้าไฟล์สำเร็จ!!!'
-            ]);
-    
+
+            return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
         } catch (\Exception $e) {
             // หากเกิดข้อผิดพลาดที่ไม่เกี่ยวข้องกับการนำเข้าไฟล์
             DB::rollback();
-            return response()->json([
-                'status' => 'error',
-                'message' => 'เกิดข้อผิดพลาด ' . $e->getMessage()
-            ], 500); // รหัส 500 สำหรับข้อผิดพลาดที่ไม่คาดคิด
+            return redirect()->route('importdata')->with('error', 'เกิดข้อผิดพลาด ');
         }
     }
-    
+
 
     public function importFile(Request $request)
     {
@@ -103,6 +96,7 @@ class ReportController extends Controller
         $filePath = $request->filePath; // แก้ไขเพื่อให้ได้ไฟล์ที่ถูกอัปโหลด
         $month = $request->month;
         $year = $request->year;
+
 
         try {
             DB::beginTransaction(); // เริ่มต้น transaction
@@ -123,13 +117,14 @@ class ReportController extends Controller
 
             DB::commit(); // commit เมื่อทุกอย่างเสร็จสมบูรณ์
 
-            return redirect()->route('importdata')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
+            return redirect()->route('viewInstallFTTx')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
         } catch (\Exception $e) {
             // หากเกิดข้อผิดพลาด, rollback การทำงานทั้งหมด
             DB::rollback();
 
+
             // ส่งข้อความผิดพลาดกลับไปยังผู้ใช้
-            return redirect()->back()->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลไม่สมบูรณ์ ');
+            return redirect()->back()->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลจำนวนแถวไม่ครบ ');
         }
     }
 
@@ -205,9 +200,50 @@ class ReportController extends Controller
             ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
             ->take(1); // เลือก 1 รายการแรก
 
+        // กำหนดแผนที่ระหว่างรหัสกับชื่อจังหวัด
+        $content = [
+            'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
+            'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
+            'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
+            'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
+            'รวม บภน.2.2 (นค.)' => 'หนองคาย',
+            'รวม บภน.2.2 (นพ.)' => 'นครพนม',
+            'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
+            'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
+            'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
+            'รวม บภน.2.2 (ลย.)' => 'เลย',
+            'รวม บภน.2.2 (สน.)' => 'สกลนคร',
+            'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
+            'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
+            'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
+            'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
+            'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
+            'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
+            'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
+            'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
+            'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
+        ];
+
+        // การแปลงข้อมูลจาก sum_installation_center ให้เป็นชื่อจังหวัด
+        $labels = $latestMonthData->pluck('sum_installation_center')->map(function ($item) use ($content) {
+            return isset($content[$item]) ? $content[$item] : null;  // ถ้าไม่พบก็จะใช้ค่าเดิม
+        });
+
+        // ดึงข้อมูลจาก sum_installation_percentage_within_3_days และกรองตามค่าใน labels
+        $data1 = $latestMonthData->pluck('sum_installation_percentage_within_3_days')
+            ->filter(function ($item, $key) use ($labels) {
+                // ตรวจสอบให้แน่ใจว่า $labels ที่ตรงกันไม่ใช่ null และค่าของ sum_installation_percentage_within_3_days ไม่เป็น null
+                return !is_null($labels[$key]);
+            });
+
+     
+
+
+
+
 
         // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
-        return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax', 'latestMonthData', 'sortedDataMin'));
+        return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax', 'latestMonthData', 'sortedDataMin', 'labels','data1'));
     }
 
     public function datainstallfttxYear(Request $request)
@@ -275,12 +311,48 @@ class ReportController extends Controller
             ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
             ->take(1); // เลือก 1 รายการแรก
 
-        $labels = $latestMonthData->pluck('sum_installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
-        $data = $latestMonthData->pluck('sum_installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
+        // กำหนดแผนที่ระหว่างรหัสกับชื่อจังหวัด
+        $content = [
+            'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
+            'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
+            'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
+            'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
+            'รวม บภน.2.2 (นค.)' => 'หนองคาย',
+            'รวม บภน.2.2 (นพ.)' => 'นครพนม',
+            'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
+            'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
+            'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
+            'รวม บภน.2.2 (ลย.)' => 'เลย',
+            'รวม บภน.2.2 (สน.)' => 'สกลนคร',
+            'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
+            'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
+            'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
+            'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
+            'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
+            'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
+            'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
+            'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
+            'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
+        ];
+
+        // การแปลงข้อมูลจาก sum_installation_center ให้เป็นชื่อจังหวัด
+        $labels = $latestMonthData->pluck('sum_installation_center')->map(function ($item) use ($content) {
+            return isset($content[$item]) ? $content[$item] : null;  // ถ้าไม่พบก็จะใช้ค่าเดิม
+        });
+
+        // ดึงข้อมูลจาก sum_installation_percentage_within_3_days และกรองตามค่าใน labels
+        $data1 = $latestMonthData->pluck('sum_installation_percentage_within_3_days')
+            ->filter(function ($item, $key) use ($labels) {
+                // ตรวจสอบให้แน่ใจว่า $labels ที่ตรงกันไม่ใช่ null และค่าของ sum_installation_percentage_within_3_days ไม่เป็น null
+                return !is_null($labels[$key]);
+            });
+
+     
+
 
 
         // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
-        return view('report.viewInstallFTTx', compact('installationCenters', 'sortedDataMax', 'latestMonthData', 'sortedDataMin', 'labels', 'data'));
+        return view('report.viewInstallFTTx', compact('installationCenters', 'labels', 'data1', 'sortedDataMax', 'latestMonthData', 'sortedDataMin'));
     }
 
 
@@ -296,7 +368,87 @@ class ReportController extends Controller
         return view('report.viewInstallFTTxprovin', compact('data'));
     }
 
-    public function sortprovin($section, $year)
+    public function sortprovin($section, $year, $month)
+    {
+
+        // กำจัดคำว่า "รวม " ออก
+        $section = str_replace('รวม ', '', $section);
+
+        // ดึงตัวเลขแรกจาก section
+        $firstNumber = substr($section, 0, 1);
+
+        // รายชื่อคอลัมน์ที่ต้องการตรวจสอบ
+        $columns = [
+            'sum_num_of_circuits',
+            'sum_total_preparation_time_days',
+            'sum_total_processing_time_days',
+            'sum_sdp_odp_deadline_days',
+            'sum_wiring_time_days',
+            'sum_config_nms_days',
+            'sum_technician_appointment_and_scheduling_time_days',
+            'sum_customer_waiting_time_days',
+            'sum_cable_pulling_and_ont_installation_time_days',
+            'sum_closing_work_time_days',
+            'sum_total_average_time_per_circuit_days',
+            'sum_num_of_circuits_installed_within_3_days',
+            'sum_installation_percentage_within_3_days',
+        ];
+        // ใช้ LIKE แบบละเอียด
+        $sumData = SumInstallfttx::where('sum_installation_center', 'LIKE', "%$firstNumber.%")
+            ->where('year', '=', $year)
+            ->where('month', '=', $month)
+            ->where(function ($query) use ($columns) {
+                foreach ($columns as $column) {
+                    $query->orWhere($column, '!=', 0);
+                }
+            })
+
+            ->get();
+
+
+
+
+        // กำหนดแผนที่ระหว่างรหัสกับชื่อจังหวัด
+        $content = [
+            'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
+            'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
+            'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
+            'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
+            'รวม บภน.2.2 (นค.)' => 'หนองคาย',
+            'รวม บภน.2.2 (นพ.)' => 'นครพนม',
+            'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
+            'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
+            'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
+            'รวม บภน.2.2 (ลย.)' => 'เลย',
+            'รวม บภน.2.2 (สน.)' => 'สกลนคร',
+            'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
+            'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
+            'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
+            'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
+            'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
+            'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
+            'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
+            'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
+            'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
+        ];
+
+        // การแปลงข้อมูลจาก sum_installation_center ให้เป็นชื่อจังหวัด
+        $labels = $sumData->pluck('sum_installation_center')->map(function ($item) use ($content) {
+            return isset($content[$item]) ? $content[$item] : null;  // ถ้าไม่พบก็จะใช้ค่าเดิม
+        });
+
+
+
+
+
+
+        $data = $sumData->pluck('sum_installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์รวม
+
+        
+
+        return view('report.viewInstallFTTxprovin', compact('sumData', 'labels', 'data', 'section', 'year', 'month'));
+    }
+    public function sortprovinMonth($section, $year)
     {
 
         $monthMapping = [
@@ -316,89 +468,108 @@ class ReportController extends Controller
 
         $sumData = SumInstallfttx::where('sum_installation_center', 'LIKE', "%$section%")
             ->where('year', '=', $year)
+
             ->get()
             ->map(function ($item) use ($monthMapping) {
                 $item->month_number = $monthMapping[$item->month] ?? null; // แปลงชื่อเดือนเป็นหมายเลขเดือน
                 return $item;
             })
             ->sortBy('month_number'); // เรียงตามหมายเลขเดือน
-
-
-
-
-
         // เตรียมข้อมูลสำหรับกราฟ
         $labels = $sumData->pluck('month'); // ใช้เดือนเป็น label
         $data = $sumData->pluck('sum_installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์รวม
 
-        return view('report.viewInstallFTTxprovin', compact('sumData', 'labels', 'data', 'section', 'year'));
+        return view('report.viewInstallFTTxprovinSort', compact('sumData', 'labels', 'data', 'section', 'year'));
     }
-
 
     public function sortcenter($section, $year, $month)
     {
         // กำจัดคำว่า "รวม " ออก
         $section = str_replace('รวม ', '', $section);
 
-        // ดึงตัวเลขแรกจาก section
-        $firstNumber = substr($section, 0, 1);
+        $installData = Installfttx::where('section', 'LIKE', "%$section%")
+            ->where('year', '=', $year)
+            ->where('month', '=', $month)
+            ->get();
 
-        // รายชื่อคอลัมน์ที่ต้องการตรวจสอบ
-        $columns = [
-            'num_of_circuits',
-            'total_preparation_time_days',
-            'total_processing_time_days',
-            'sdp_odp_deadline_days',
-            'wiring_time_days',
-            'config_nms_days',
-            'technician_appointment_and_scheduling_time_days',
-            'customer_waiting_time_days',
-            'cable_pulling_and_ont_installation_time_days',
-            'closing_work_time_days',
-            'total_average_time_per_circuit_days',
-            'num_of_circuits_installed_within_3_days',
-            'installation_percentage_within_3_days',
-        ];
 
-        // ถ้ามีการส่งตัวเลข 2 หรือ 3 มา, ตรวจหาข้อมูลจากตัวเลขแรก
-        if ($firstNumber == '2' || $firstNumber == '3') {
-            // ใช้ LIKE แบบละเอียด
-            $installData = Installfttx::where('region', 'LIKE', "%$firstNumber%")
-                ->where('year', '=', $year)
-                ->where('month', '=', $month)
-                ->where(function ($query) use ($columns) {
-                    foreach ($columns as $column) {
-                        $query->orWhere($column, '!=', 0);
-                    }
-                })
-                ->get();
-        } else {
-            // ถ้าไม่มีตัวเลข 2 หรือ 3, ใช้ section ตามปกติ
-            $installData = Installfttx::where('section', 'LIKE', "%$section%")
-                ->where('year', '=', $year)
-                ->where('month', '=', $month)
-                ->where(function ($query) use ($columns) {
-                    foreach ($columns as $column) {
-                        $query->orWhere($column, '!=', 0);
-                    }
-                })
-                ->get();
-        }
 
-        // ตรวจสอบว่ามีข้อมูลหรือไม่
-        if ($installData->isEmpty()) {
-            return response()->json(['message' => 'ไม่พบข้อมูลสำหรับตัวเลขนี้ในฐานข้อมูล']);
-        }
 
         // ดึงข้อมูลสำหรับ labels และ data
         $labels = $installData->pluck('installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
         $data = $installData->pluck('installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
 
-
-
         // ส่งข้อมูลไปยัง view
         return view('report.viewInstallFTTxcenter', compact('installData', 'labels', 'data', 'section', 'year', 'month'));
     }
+
+
+
+
+    // public function sortcenter($section, $year, $month)
+    // {
+    //     // กำจัดคำว่า "รวม " ออก
+    //     $section = str_replace('รวม ', '', $section);
+
+    //     // ดึงตัวเลขแรกจาก section
+    //     $firstNumber = substr($section, 0, 1);
+
+    //     // รายชื่อคอลัมน์ที่ต้องการตรวจสอบ
+    //     $columns = [
+    //         'num_of_circuits',
+    //         'total_preparation_time_days',
+    //         'total_processing_time_days',
+    //         'sdp_odp_deadline_days',
+    //         'wiring_time_days',
+    //         'config_nms_days',
+    //         'technician_appointment_and_scheduling_time_days',
+    //         'customer_waiting_time_days',
+    //         'cable_pulling_and_ont_installation_time_days',
+    //         'closing_work_time_days',
+    //         'total_average_time_per_circuit_days',
+    //         'num_of_circuits_installed_within_3_days',
+    //         'installation_percentage_within_3_days',
+    //     ];
+
+    //     // ถ้ามีการส่งตัวเลข 2 หรือ 3 มา, ตรวจหาข้อมูลจากตัวเลขแรก
+    //     if ($firstNumber == '2' || $firstNumber == '3') {
+    //         // ใช้ LIKE แบบละเอียด
+    //         $installData = Installfttx::where('region', 'LIKE', "%$firstNumber%")
+    //             ->where('year', '=', $year)
+    //             ->where('month', '=', $month)
+    //             ->where(function ($query) use ($columns) {
+    //                 foreach ($columns as $column) {
+    //                     $query->orWhere($column, '!=', 0);
+    //                 }
+    //             })
+    //             ->get();
+    //     } else {
+    //         // ถ้าไม่มีตัวเลข 2 หรือ 3, ใช้ section ตามปกติ
+    //         $installData = Installfttx::where('section', 'LIKE', "%$section%")
+    //             ->where('year', '=', $year)
+    //             ->where('month', '=', $month)
+    //             ->where(function ($query) use ($columns) {
+    //                 foreach ($columns as $column) {
+    //                     $query->orWhere($column, '!=', 0);
+    //                 }
+    //             })
+    //             ->get();
+    //     }
+
+    //     // ตรวจสอบว่ามีข้อมูลหรือไม่
+    //     if ($installData->isEmpty()) {
+    //         return response()->json(['message' => 'ไม่พบข้อมูลสำหรับตัวเลขนี้ในฐานข้อมูล']);
+    //     }
+
+    //     // ดึงข้อมูลสำหรับ labels และ data
+    //     $labels = $installData->pluck('installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
+    //     $data = $installData->pluck('installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
+
+
+
+    //     // ส่งข้อมูลไปยัง view
+    //     return view('report.viewInstallFTTxcenter', compact('installData', 'labels', 'data', 'section', 'year', 'month'));
+    // }
 
 
 
@@ -491,5 +662,10 @@ class ReportController extends Controller
             new exportCenter($year, $month, $section),
             'report_' . $year . '_' . $month . '_' . $section . '.xlsx'
         );
+    }
+
+    public function exportData()
+    {
+        return view('report.view_export');
     }
 }

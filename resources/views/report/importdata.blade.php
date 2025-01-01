@@ -13,20 +13,38 @@
 
 @section('content')
 <section class="content">
+<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
+    <a href="home" class="">
+         หน้าแรก
+        </a> 
+        /
+    </span> จัดการ dashboard ติดตั้ง fttx ภายใน 3 วัน</h4>
     <div class="card ">
-        <h3 class="card-header text-primary">อัพโหลด</h3>
-        <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center gap-2">
+    
+    <h4 class="card-header text-warning">จัดการ dashboard ติดตั้ง fttx ภายใน 3 วัน</h4>
 
-            <div class="card-tools d-flex align-items-center">
-                <form id="myForm" enctype="multipart/form-data" class="form-group d-flex align-items-center">
+    
+    <div class="d-flex align-items-center gap-2">
+    
+    <form id="myForm" enctype="multipart/form-data" class="form-group d-flex align-items-center">
                     @csrf
 
                     <input type="number" id="year" name="year" placeholder="Enter year" min="2014" max="3000"
                         value="2024" class="form-control" style="width: 200px;" />
+        
+        <button
+                          type="button"
+                          class="btn btn-dark me-4 ms-3"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalScrollable"
+                        >
+                        <i class="fas fa-question-circle"></i>
+                        </button>
+    </div>
+</div>
+        <div class="card-body">
 
-
-
-            </div>
 
 
 
@@ -46,97 +64,109 @@
                             <td>มกราคม</td>
                             <td>ไม่มีข้อมูล</td>
                             <td>
-                                <button type="button" class="btn btn-primary" value="มกราคม" name="month"
-                                    onclick="openImportModal(value)">มกราคม</button>
-                                <button type="submit" class="btn btn-danger btn-sm">ลบ</button>
+                                <button type="button" class="btn btn-success" value="มกราคม" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                               
                             </td>
                         </tr>
                         <tr>
                             <td>กุมภาพันธ์</td>
                             <td class="text-success">มีข้อมูล</td>
                             <td>
-                                <button type="button" value="กุมภาพันธ์" name="month"
-                                    onclick="openImportModal(value)">คลิกเพื่ออัปโหลด</button>
+                                <button type="button" class="btn btn-success" value="กุมภาพันธ์" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
                             </td>
                         </tr>
                         <tr>
                             <td>มีนาคม</td>
                             <td>ไม่มีข้อมูล</td>
                             <td>
-                                <button type="button" value="มีนาคม" name="month"
-                                    onclick="openImportModal(value)">มีนาคม</button>
+                                <button type="button" class="btn btn-success" value="มีนาคม" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
                             </td>
                         </tr>
                         <tr>
                             <td>เมษายน</td>
                             <td>ไม่มีข้อมูล</td>
                             <td>
-                                <button type="button" value="เมษายน" name="month"
-                                    onclick="openImportModal(value)">เมษายน</button>
+                                <button type="button" class="btn btn-success" value="เมษายน" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
                             </td>
                         </tr>
                         <tr>
                             <td>พฤษภาคม</td>
                             <td>ไม่มีข้อมูล</td>
                             <td>
-                                <button type="button" value="พฤษภาคม" name="month"
-                                    onclick="openImportModal(value)">พฤษภาคม</button>
+                                <button type="button" class="btn btn-success" value="พฤษภาคม" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
                             </td>
                         </tr>
                         <tr>
                             <td>มิถุนายน</td>
                             <td>ไม่มีข้อมูล</td>
                             <td>
-                                <button type="button" value="มิถุนายน" name="month"
-                                    onclick="openImportModal(value)">มิถุนายน</button>
+                                <button type="button" class="btn btn-success" value="มิถุนายน" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
                             </td>
                         </tr>
                         <tr>
                             <td>กรกฎาคม</td>
                             <td>ไม่มีข้อมูล</td>
                             <td>
-                                <button type="button" value="กรกฎาคม" name="month"
-                                    onclick="openImportModal(value)">กรกฎาคม</button>
+                                <button type="button" class="btn btn-success" value="กรกฎาคม" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
                             </td>
                         </tr>
                         <tr>
                             <td>สิงหาคม</td>
                             <td>ไม่มีข้อมูล</td>
                             <td>
-                                <button type="button" value="สิงหาคม" name="month"
-                                    onclick="openImportModal(value)">สิงหาคม</button>
+                                <button type="button" class="btn btn-success" value="สิงหาคม" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
                             </td>
                         </tr>
                         <tr>
                             <td>กันยายน</td>
                             <td>ไม่มีข้อมูล</td>
                             <td>
-                                <button type="button" value="กันยายน" name="month"
-                                    onclick="openImportModal(value)">กันยายน</button>
+                                <button type="button" class="btn btn-success" value="กันยายน" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
                             </td>
                         </tr>
                         <tr>
                             <td>ตุลาคม</td>
                             <td>ไม่มีข้อมูล</td>
                             <td>
-                                <button type="button" value="ตุลาคม" name="month"
-                                    onclick="openImportModal(value)">ตุลาคม</button>
+                                <button type="button" class="btn btn-success" value="ตุลาคม" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
                             </td>
                         </tr>
                         <tr>
                             <td>พฤศจิกายน</td>
                             <td>ไม่มีข้อมูล</td>
                             <td>
-                                <button type="button" value="พฤศจิกายน" name="month"
-                                    onclick="openImportModal(value)">พฤศจิกายน</button>
+                                <button type="button" class="btn btn-success" value="พฤศจิกายน" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
                             </td>
                         </tr>
                         <tr>
                             <td>ธันวาคม</td>
                             <td>ไม่มีข้อมูล</td>
                             <td>
-                                <button type="button" value="ธันวาคม" name="month"
-                                    onclick="openImportModal(value)">ธันวาคม</button>
+                                <button type="button" class="btn btn-success" value="ธันวาคม" name="month"
+                                    onclick="openImportModal(value)">อัปโหลด</button>
+                                    <button type="submit" class="btn btn-danger ">ลบ</button>
                             </td>
                         </tr>
                     </tbody>
@@ -187,6 +217,90 @@
         </div>
     </div>
     <!-- /.container-fluid -->
+
+    <div class="modal fade" id="modalScrollable" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="modalScrollableTitle">คำอธิบายข้อมูลหน้าจัดการ dashboard ติดตั้ง fttx ภายใน 3 วัน</h5>
+                              <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                              ></button>
+                            </div>
+                            <div class="modal-body text-dark">
+                              <p>
+                              รายงานระยะเวลาเฉลี่ยในการติดตั้ง
+                              หน้าหลัก  รายงานระยะเวลาเฉลี่ยในการติดตั้ง
+                              </p>
+                              <p>
+                              หมายเหตุ : รายงานระยะเวลาเฉลี่ยในการติดตั้ง ตามศูนย์บริการติดตั้ง
+                              </p>
+                              <p>
+                              • จำนวนวงจร : จะนับเฉพาะใบคำขอที่ทำการปิดงานเรียบร้อยบนระบบ FTTxSM เท่านั้น (ไม่รวมข้อมูลใบคำขอที import มาจากสผ.และใบคำขอที่ยังไม่เคยปิดงานเรียบร้อย) ตามช่วงเวลาที่เลือก
+                              </p>
+                              <p>
+                              • ระยะเวลาเตรียมข้อมูลรวม : ยอดรวมระยะเวลาที่ใช้ในเตรียมเอกสารของวงจรตามช่วงเวลาที่เลือก โดยนับระยะเวลาตั้งแต่วันที่สร้างคำขอ - รับชำระเงิน
+                              </p>
+                              <p>
+                              • ระยะเวลาดำเนินการรวม : ยอดรวมระยะเวลาที่ใช้ในการติดตั้งของวงจรตามช่วงเวลาที่เลือก โดยนับระยะเวลาตั้งแต่รับชำระเงิน - ปิดงานเรียบร้อย ยกเว้น ช่วงรอลูกค้า
+                              </p>
+                              <p>
+                              • ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร :
+                              
+                              </p>
+                              <p>
+                              - กำหนดSDP/ODP :
+                              </p>
+                              <p>
+                              >> กรณีส่งงานโยงสายถัดไป ยอดรวมจำนวนวัน นับจากวันที่รับชำระเงินจนถึงส่งงานโยงสาย หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              >> กรณีส่งงานNMSถัดไป ยอดรวมจำนวนวัน นับจากวันที่รับชำระเงินจนถึงส่งงาน NMS หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - โยงสาย (ถ้าส่งงาน) : ยอดรวมจำนวนวัน นับจากวันที่ส่งงานโยงสายจนถึงส่งงาน NMS หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - การดำเนินการของ NMS, นัดหมายและกำหนดช่าง, ปิดงาน : ยอดรวมจำนวนวัน นับจากวันที่รับงานมาดำเนินการจนถึงวันที่จ่ายงานให้งานถัดไป หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - รอลูกค้า :
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งเร็วกว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่ส่งงานลากสายและติดตั้งจนถึงวันที่ติดตั้ง หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งช้ากว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่ส่งงานลากสายและติดตั้งจนถึงวันที่นัดหมายลูกค้า หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - ลากสายและติดตั้ง :
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งเร็วกว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่ติดตั้งจนถึงวันที่ส่งงานปิดงาน หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งช้ากว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่วันนัดหมายลูกค้าจนถึงวันที่ส่งงานปิดงาน หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              • รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร : ระยะเวลารวม (ช่องที่ 3) หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              • ร้อยละการติดตั้งภายใน 3 วัน : ร้อยละการปิดงานเรียบร้อยภายใน 3 วัน(รับชำระเงิน - ปิดงานเรียบร้อย ยกเว้นช่วงรอลูกค้า) เมื่อเทียบกับ จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              • กรณีมีการติดตั้งวงจร แต่ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจรเท่ากับ 0.00 : ใช้ระยะเวลาในการดำเนินการเป็นระดับวินาที จึงไม่สามารถแสดงตัวเลขได้
+                              </p>
+                              <p>
+                              • รายงานเดือนตุลา ที่มีตัวเลขติดลบในบางพื้นที่ ทางระบบกำลังดำเนินการตรวจสอบและแก้ไขค่ะ เนื่องจากมีการเลือกวันที่ติดตั้งและส่งงานไม่ถูกต้อง
+                              </p>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
 </section>
 @endsection
 

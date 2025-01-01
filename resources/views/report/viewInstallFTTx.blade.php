@@ -21,7 +21,58 @@
     </span> ติดตั้ง fttx ภายใน 3 วัน</h4>
 
 
-<div class="card ">
+<div class = 'card'>
+<div class="d-flex justify-content-between align-items-center gap-2">
+    <!-- หัวข้อ -->
+    <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
+
+    
+    <div class="d-flex align-items-center gap-2">
+    
+        <!-- ฟอร์มเลือกปี -->
+        <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline" id="yearForm">
+            <input type="number" name="year" id="yearInput" placeholder="Enter year"
+                value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}" class="form-control"
+                style="width: 200px;" required min="2000" max="9999">
+        </form>
+
+        <!-- ปุ่ม Import -->
+        @if (Auth::user()->permission['manage_dashboard'] ?? false)
+            <a href="{{ route('importdata') }}" class="btn bg-yellow">
+                <i class="fas fa-file-import"></i> Import
+            </a>
+        @endif
+
+        <!-- ฟอร์ม Export -->
+        <form action="{{ route('export') }}" method="GET">
+            @csrf
+            <input type="hidden" name="year"
+                value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
+            <input type="hidden" name="month"
+                value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
+            <button type="submit" class="btn bg-dark ">
+                <i class="fas fa-file-export"></i> Export
+            </button>
+
+        </form>
+        <button
+                          type="button"
+                          class="btn btn-dark me-4"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalScrollable"
+                        >
+                        <i class="fas fa-question-circle"></i>
+                        </button>
+    </div>
+</div>
+<div class="card-body">
+                        <canvas id="myChart"
+                            style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+
+</div>
+</div>
+
+<div class="card mt-4">
     
 <div class="d-flex justify-content-between align-items-center gap-2">
     <!-- หัวข้อ -->
@@ -492,244 +543,119 @@
 @endsection
 
 @section('script')
-
-
-
-
-<script>
-    // ฟังก์ชันสำหรับแปลงค่าคะแนนเป็นดาว
-    function renderStarsForAll() {
-        const starContainers = document.querySelectorAll(".star-container");
-        starContainers.forEach(container => {
-            const rating = parseFloat(container.getAttribute("data-rating")); // รับค่าคะแนนจาก data-rating
-            container.innerHTML = ""; // เคลียร์ค่าก่อนหน้า
-
-            for (let i = 1; i <= 5; i++) {
-                const star = document.createElement("i");
-                if (i <= Math.floor(rating)) {
-                    star.className = "fas fa-star text-warning"; // ดาวเต็ม
-                } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
-                    star.className = "fas fa-star-half-alt text-warning"; // ดาวครึ่ง
-                } else {
-                    star.className = "fas fa-star text-dark"; // ดาวว่าง
-                }
-                container.appendChild(star);
-            }
-        });
-    }
-
-    // เรียกใช้งานเมื่อโหลดหน้าเสร็จ
-    renderStarsForAll();
-</script>
-
-<script>
-    // ฟังก์ชันแสดงผลหลอดเปอร์เซ็นต์
-    function updateProgressBars() {
-        // ดึงองค์ประกอบทุก progress-container
-        const containers = document.querySelectorAll('.progress-container');
-
-        containers.forEach(container => {
-            const value = parseInt(container.getAttribute('data-value')); // รับค่าจาก data-value
-            const progressBar = container.querySelector('.progress-bar');
-
-            // ตั้งค่าขนาดและข้อความ
-            progressBar.style.width = value + '%';
-            progressBar.textContent = value + '%';
-
-            // กำหนดสีตามเงื่อนไข
-            if (value < 50) {
-                progressBar.className = 'progress-bar red';
-            } else if (value < 80) {
-                progressBar.className = 'progress-bar yellow';
-            } else {
-                progressBar.className = 'progress-bar green';
-            }
-        });
-    }
-
-    // เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเสร็จ
-    updateProgressBars();
-</script>
-
-
-
-<script>
-    // JavaScript ที่ใช้ในการกำหนดสีของหลอดตามเปอร์เซ็นต์
-    const bars = document.querySelectorAll('.performance-bar');
-    bars.forEach(bar => {
-        const width = parseInt(bar.style.width);
-        if (width >= 80) {
-            bar.classList.add('green');
-        } else if (width >= 50) {
-            bar.classList.add('yellow');
-        } else {
-            bar.classList.add('red');
+    <style>
+        .text-warning {
+            color: gold;
         }
-    });
-</script>
-<script>
-    $(function () {
-        var barChartCanvas = $('#barChart').get(0).getContext('2d');
-        var barChartData = {
-            labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ต.ค.', 'พ.ย.',
-                'ธ.ค.'
-            ], // ป้ายกำกับเดือน
-            datasets: [{
-                label: 'รายได้จริง',
-                backgroundColor: 'rgb(60, 179, 113)', // สีสำหรับรายได้
-                borderColor: 'rgb(60, 179, 113)',
-                data: [46.83, 47.6, 48.2, 48.25, 46.83, 46.83, 46.83, 46.83, 46.83, 46.83, 46.83,
-                    46.83,
-                ] // ข้อมูลรายได้
-            },
-            {
-                label: 'เป้าหมาย',
-                backgroundColor: 'rgba(210, 214, 222, 1)', // สีสำหรับเป้าหมาย
-                borderColor: 'rgba(210, 214, 222, 1)',
-                data: [52.34, 52.34, 52.34, 52.34, 52.34, 52.34, 52.34, 52.34, 52.34, 52.34, 52.34,
-                    52.34,
-                ] // ข้อมูลเป้าหมาย
-            }
-            ]
-        };
 
-        var barChartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            tooltips: {
-                callbacks: {
-                    label: function (tooltipItem, data) {
-                        return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel
-                            .toLocaleString() + ' บาท';
-                    }
-                }
-            },
-            // scales: {
-            //     yAxes: [{
-            //         ticks: {
-            //             beginAtZero: true, // เริ่มจาก 0
-            //             callback: function (value) {
-            //                 return value.toLocaleString() + ' บาท'; // แสดงตัวเลขแบบมีคอมม่า
-            //             }
-            //         },
-            //         // scaleLabel: {
-            //         //     display: true,
-            //         //     labelString: 'จำนวนเงิน (บาท)' // ชื่อแกน Y
-            //         // }
-            //     }],
-            //     xAxes: [{
-            //         scaleLabel: {
-            //             display: true,
-            //             labelString: 'เดือน' // ชื่อแกน X
-            //         }
-            //     }]
-            // }
-        };
-
-        new Chart(barChartCanvas, {
-            type: 'bar',
-            data: barChartData,
-            options: barChartOptions
-        });
-    });
-</script>
+        .text-dark {
+            color: lightgray;
+        }
+    </style>
 
 
+    <!-- ChartJS -->
+    <script src="plugins/chart.js/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        @if (session('alert'))
-            Swal.fire({
-                icon: 'error',
-                title: 'ไม่พบข้อมูล',
-                text: '{{ session('alert') }}',
-                confirmButtonText: 'OK'
-            });
-        @endif
-    });
-</script>
-
-
-
-
-
-<script>
-    // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
-    document.getElementById('yearInput').addEventListener('change', function () {
-        document.getElementById('yearForm').submit();
-    });
-</script>
-
-<script src="plugins/chart.js/Chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-
+    <script>
+        // กรองค่า null ออกจาก labels และ data
+        const labels = @json($labels).filter(item => item !== null); // กรองค่า null ออกจาก labels
+        const data1 = @json($data1); // กรองค่า null ออกจาก data
+        const dataArray = Object.values(data1);
+        console.log(labels, dataArray); // ตรวจสอบค่าผ่าน Console
+    
         // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
-        if (labels.length === 0 || data.length === 0) {
+        console.log('Labels length:', labels.length);
+        console.log('Data1 length:', dataArray.length);
+    
+        if (labels.length === 0 || dataArray.length === 0) {
             console.warn('No data available for chart.');
-            return;
-        }
-
-        // คำนวณค่าต่ำสุดใน data และลดลง 10
-        const minData = Math.min(...data); // ค่าต่ำสุดใน data
-        const yMin = minData - (minData % 10); // ปรับให้เป็น 10, 20, 30, ... ตามที่ต่ำสุดใน data
-
-        // กำหนดสีของแท่งกราฟตามเงื่อนไข
-        const backgroundColors = data.map(value =>
-            value > 80 ? 'rgba(61, 183, 71, 0.5)' :
-                value > 50 ? 'rgba(255, 206, 86, 0.5)' :
-                    'rgba(255, 99, 132, 0.5)'
-        );
-        const borderColors = data.map(value =>
-            value > 80 ? 'rgba(61, 183, 71, 1)' :
-                value > 50 ? 'rgba(255, 206, 86, 1)' :
-                    'rgba(255, 99, 132, 1)'
-        );
-
-        // สร้าง Bar Chart
-        const ctx = document.getElementById('barChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
-                    data: data,
-                    backgroundColor: backgroundColors, // ใช้สีที่ตั้งตามเงื่อนไข
-                    borderColor: borderColors, // ใช้สีเส้นขอบที่ตั้งตามเงื่อนไข
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true, // เริ่มจาก 0
-                        min: 0, // กำหนดค่าต่ำสุดของแกน Y ตามที่คำนวณ
-                        max: 50, // กำหนดค่าบนสุดของแกน Y เป็น 100
-                        suggestedMax: 50, // แนะนำค่าบนสุดของแกน Y เป็น 100
-                        ticks: {
-                            stepSize: 10, // กำหนดให้ค่าบนแกน Y เพิ่มขึ้นทีละ 10
-                            callback: function (value) {
-                                // จัดการแสดงค่าบนแกน Y ให้แสดงตั้งแต่ 0 ถึง 100
-                                return value % 10 === 0 ? value : ''; // แสดงเฉพาะ 0, 10, 20, ...
-                            }
+        } else {
+            // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
+            const backgroundColors = dataArray.map(value =>
+                value > 85 ? 'rgba(61, 183, 71, 0.5)' :
+                value > 83 ? 'rgba(180, 255, 122, 0.5)' :
+                value > 80 ? 'rgba(255, 206, 86, 0.5)' :
+                value > 77 ? 'rgba(253, 144, 19, 0.5)' :
+                'rgba(255, 35, 82, 0.5)'
+            );
+    
+            const borderColors = dataArray.map(value =>
+                value > 85 ? 'rgba(61, 183, 71, 1)' :
+                value > 83 ? 'rgba(180, 255, 122, 1)' :
+                value > 80 ? 'rgba(255, 206, 86, 1)' :
+                value > 77 ? 'rgb(253, 144, 19,1)' :
+                'rgba(255, 35, 82, 1)'
+            );
+    
+            const ctx = document.getElementById('myChart');
+    
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
+                        data: dataArray, // ใช้ data แทน data1
+                        backgroundColor: backgroundColors, // สีพื้นหลังแบบไดนามิก
+                        borderColor: borderColors, // สีเส้นขอบแบบไดนามิก
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100 // ปรับให้แกน Y มีค่าสูงสุดเป็น 100
                         }
                     }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                    }
+                }
+            });
+        }
+    </script>
+    
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('status')) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: localStorage.getItem('status'),
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    localStorage.removeItem('status');
+                });
+            } else {
+                // ถ้าไม่มีใน localStorage ให้เช็ค session
+                const status = '{{ session('status') }}';
+                if (status) {
+                    localStorage.setItem('status', status);
+                    location.reload();
                 }
             }
         });
-    });
-</script>
+    </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('alert'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่พบข้อมูล',
+                    text: '{{ session('alert') }}',
+                    confirmButtonText: 'OK'
+                });
+            @endif
+        });
+    </script>
 
+    <script>
+        // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
+        document.getElementById('yearInput').addEventListener('change', function() {
+            document.getElementById('yearForm').submit();
+        });
+    </script>
 @endsection
