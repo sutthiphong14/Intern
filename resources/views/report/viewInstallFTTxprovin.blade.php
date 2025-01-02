@@ -19,7 +19,7 @@
         </a>
         /
         <a href="{{ route('viewInstallFTTx') }}" class="">
-        ติดตั้ง fttx ภายใน 3 วัน
+            ติดตั้ง fttx ภายใน 3 วัน
         </a>
         /
     </span> ติดตั้ง fttx ภายใน 3 วันจังหวัด</h4>
@@ -46,7 +46,7 @@
             <!-- ฟอร์ม Export -->
             <form action="{{ route('export') }}" method="GET">
                 @csrf
-                
+
                 <button type="submit" class="btn bg-dark ">
                     <i class="fas fa-file-export"></i> Export
                 </button>
@@ -86,7 +86,7 @@
             <!-- ฟอร์ม Export -->
             <form action="{{ route('export') }}" method="GET">
                 @csrf
-                
+
                 <button type="submit" class="btn bg-dark ">
                     <i class="fas fa-file-export"></i> Export
                 </button>
@@ -128,38 +128,38 @@
                 </thead>
 
 
-<tbody class="text-center align-middle">
-                                    @php
-                                    $centers = [
-                                        'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
-                                        'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
-                                        'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
-                                        'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
-                                        'รวม บภน.2.2 (นค.)' => 'หนองคาย',
-                                        'รวม บภน.2.2 (นพ.)' => 'นครพนม',
-                                        'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
-                                        'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
-                                        'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
-                                        'รวม บภน.2.2 (ลย.)' => 'เลย',
-                                        'รวม บภน.2.2 (สน.)' => 'สกลนคร',
-                                        'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
-                                        'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
-                                        'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
-                                        'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
-                                        'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
-                                        'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
-                                        'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
-                                        'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
-                                        'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
-                                    ];
-                                
-                                    // กรองข้อมูลเพื่อแสดงเฉพาะค่าใน $centers
-                                    $filteredData = $sumData->filter(function ($item) use ($centers) {
-                                        return isset($centers[$item->sum_installation_center]);
-                                    });
-                                @endphp
-                                
-                                @foreach ($filteredData as $item)
+                <tbody class="text-center align-middle">
+                    @php
+                        $centers = [
+                            'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
+                            'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
+                            'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
+                            'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
+                            'รวม บภน.2.2 (นค.)' => 'หนองคาย',
+                            'รวม บภน.2.2 (นพ.)' => 'นครพนม',
+                            'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
+                            'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
+                            'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
+                            'รวม บภน.2.2 (ลย.)' => 'เลย',
+                            'รวม บภน.2.2 (สน.)' => 'สกลนคร',
+                            'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
+                            'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
+                            'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
+                            'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
+                            'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
+                            'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
+                            'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
+                            'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
+                            'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
+                        ];
+
+                        // กรองข้อมูลเพื่อแสดงเฉพาะค่าใน $centers
+                        $filteredData = $sumData->filter(function ($item) use ($centers) {
+                            return isset($centers[$item->sum_installation_center]);
+                        });
+                    @endphp
+
+                    @foreach ($filteredData as $item)
                                     <tr>
                                         <td>
                                             <a href="{{ route('viewInstallFTTxprovinSort', ['section' => $item['sum_installation_center'], 'year' => $item['year'], 'month' => $item['month']]) }}"
@@ -170,7 +170,7 @@
                                         <td>
                                             {{ $centers[$item->sum_installation_center] }}
                                         </td>
-                              
+
                                         <td>{{ $item->sum_num_of_circuits }}</td>
                                         <td>{{ $item->sum_total_preparation_time_days }}</td>
                                         <td>{{ $item->sum_total_processing_time_days }}</td>
@@ -183,17 +183,26 @@
                                         <td>{{ $item->sum_closing_work_time_days }}</td>
                                         <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
                                         <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
-                                        <td
-                                            class="{{ $item['sum_installation_percentage_within_3_days'] > 80 ? 'bg-success' : ($item['sum_installation_percentage_within_3_days'] > 60 ? 'bg-warning' : 'bg-danger') }}">
-                                            {{ $item->sum_installation_percentage_within_3_days }}%</td>
+                                        <td class="" style="background-color: {{ $item['sum_installation_percentage_within_3_days'] > 85
+                        ? 'rgba(68, 180, 40, 1)'
+                        : ($item['sum_installation_percentage_within_3_days'] > 83
+                            ? 'rgb(113, 221, 55,1)'
+                            : ($item['sum_installation_percentage_within_3_days'] > 80
+                                ? 'rgb(255, 196, 0,1)'
+                                : ($item['sum_installation_percentage_within_3_days'] > 77
+                                    ? 'rgba(253, 126, 20, 1)'
+                                    : 'rgba(255, 62, 29, 1)'))) }}; color: white;">
+                                            {{ $item['sum_installation_percentage_within_3_days'] }}%
+                                        </td>
+
                                     </tr>
-                                @endforeach
-                                
+                    @endforeach
 
 
 
-                                    <!-- เพิ่มข้อมูลอื่น ๆ -->
-                                </tbody>
+
+                    <!-- เพิ่มข้อมูลอื่น ๆ -->
+                </tbody>
 
 
 
@@ -318,7 +327,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         // กรองค่า null ออกจาก labels และ data
         const labels = @json($labels).filter(item => item !== null); // กรองค่า null ออกจาก labels
         const data = @json($data).filter(item => item !== null); // กรองค่า null ออกจาก data
@@ -332,19 +341,19 @@
         } else {
             // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
             const backgroundColors = data.map(value =>
-                value > 85 ? 'rgba(61, 183, 71, 0.5)' :
-                    value > 83 ? 'rgba(180, 255, 122, 0.5)' :
-                        value > 80 ? 'rgba(255, 206, 86, 0.5)' :
-                            value > 77 ? 'rgba(253, 144, 19, 0.5)' :
-                                'rgba(255, 35, 82, 0.5)'
+            value > 85 ? 'rgba(68, 180, 40, 0.8)' :
+                value > 83 ? 'rgba(113, 221, 55, 0.8)' :
+                value > 80 ? 'rgba(255, 196, 0,0.8)' :
+                value > 77 ? 'rgba(253, 126, 20, 0.8)' :
+                'rgba(255, 62, 29, 0.8)'
             );
 
             const borderColors = data.map(value =>
-                value > 85 ? 'rgba(61, 183, 71, 1)' :
-                    value > 83 ? 'rgba(180, 255, 122, 1)' :
-                        value > 80 ? 'rgba(255, 206, 86, 1)' :
-                            value > 77 ? 'rgb(253, 144, 19,1)' :
-                                'rgba(255, 35, 82, 1)'
+            value > 85 ? 'rgba(79, 193, 51, 1)' :
+                value > 83 ? 'rgba(113, 221, 55, 1)' :
+                value > 80 ? 'rgba(255, 196, 0,1)' :
+                value > 77 ? 'rgb(253, 126, 20, 1)' :
+                'rgba(255, 62, 29, 1)'
             );
 
             const ctx = document.getElementById('myChart');

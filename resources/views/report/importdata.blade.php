@@ -31,7 +31,7 @@
                     @csrf
 
                     <input type="number" id="year" name="year" placeholder="Enter year" min="2014" max="3000"
-                        value="2024" class="form-control" style="width: 200px;" />
+                    class="form-control" style="width: 200px;" />
         
         <button
                           type="button"
@@ -305,6 +305,14 @@
 @endsection
 
 @section('script')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentYear = new Date().toLocaleString('en-GB', { timeZone: 'Asia/Bangkok' }).split(',')[0].split('/')[2];
+        document.getElementById('year').value = currentYear;  // กำหนดค่า value เป็นปีปัจจุบัน
+    });
+</script>
+
 <script>
     $(function () {
         $('#example2').DataTable({

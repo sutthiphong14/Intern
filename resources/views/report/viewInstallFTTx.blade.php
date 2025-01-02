@@ -432,7 +432,7 @@
                                                     : ($section['sum_installation_percentage_within_3_days'] > 83
                                                         ? 'rgb(113, 221, 55,1)'
                                                         : ($section['sum_installation_percentage_within_3_days'] > 80
-                                                            ? 'rgba(255, 171, 0, 1)'
+                                                            ? 'rgba(255, 196, 0,1)'
                                                             : ($section['sum_installation_percentage_within_3_days'] > 77
                                                                 ? 'rgba(253, 126, 20, 1)'
                                                                 : 'rgba(255, 62, 29, 1)'))) }}; color: white;">
@@ -576,19 +576,19 @@
         } else {
             // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
             const backgroundColors = dataArray.map(value =>
-                value > 85 ? 'rgba(68, 180, 40, 0.8)' :
-                value > 83 ? 'rgba(113, 221, 55, 0.8)' :
-                value > 80 ? 'rgba(255, 171, 0, 0.8)' :
-                value > 77 ? 'rgba(253, 126, 20, 0.8)' :
-                'rgba(255, 62, 29, 0.8)'
+                value > 85 ? 'rgba(68, 180, 40, 0.7)' :
+                value > 83 ? 'rgba(113, 221, 55, 0.7)' :
+                value > 80 ? 'rgba(255, 196, 0,0.7)' :
+                value > 77 ? 'rgba(253, 126, 20, 0.7)' :
+                'rgb(255, 0, 0,0.7)'
             );
     
             const borderColors = dataArray.map(value =>
                 value > 85 ? 'rgba(79, 193, 51, 1)' :
                 value > 83 ? 'rgba(113, 221, 55, 1)' :
-                value > 80 ? 'rgba(255, 171, 0, 1)' :
+                value > 80 ? 'rgba(255, 196, 0,1)' :
                 value > 77 ? 'rgb(253, 126, 20, 1)' :
-                'rgba(255, 62, 29, 1)'
+                'rgb(255, 38, 0)'
             );
     
             const ctx = document.getElementById('myChart');
