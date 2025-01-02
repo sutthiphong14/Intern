@@ -1,92 +1,151 @@
 @extends('admins.index')
 @section('title')
-    ติดตั้ง FTTx ได้ภายใน 3 วัน
+ติดตั้ง FTTx ได้ภายใน 3 วัน
 @endsection
 @section('header')
-    ติดตั้ง FTTx ได้ภายใน 3 วัน
+ติดตั้ง FTTx ได้ภายใน 3 วัน
 @endsection
 @section('css')
+<link rel="stylesheet" href="{{ URL::asset('custom/css/custom-style.css') }}">
 @endsection
 @section('content')
-    <section class="content">
-        <div class="container-fluid mb-3">
 
-            <div class="card card-dark mt-3">
 
-                <div class="card card-dark">
-                    <div class="card-header">
-                        <h3 class="card-title">ตรวจแก้ FTTx ภายใน 3 วัน. : จังหวัด.
-                            กาฬสินธุ์
 
-                        </h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
+<!-- navigate -->
+<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
+    <a href="home" class="">
+         หน้าแรก
+        </a> 
+        /
+    </span> ติดตั้ง fttx ภายใน 3 วัน</h4>
 
-                        </div>
-                    </div>
 
-                    <div class="card-body">
-                        <h3 class="card-title">Bar Chart - การติดตั้งภายใน 3 วันเปรียบเทียบแต่ละเดือน</h3>
+<div class = 'card'>
+<div class="d-flex justify-content-between align-items-center gap-2">
+    <!-- หัวข้อ -->
+    <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
+
+    
+    <div class="d-flex align-items-center gap-2">
+    
+        <!-- ฟอร์มเลือกปี -->
+        <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline" id="yearForm">
+            <input type="number" name="year" id="yearInput" placeholder="Enter year"
+                value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}" class="form-control"
+                style="width: 200px;" required min="2000" max="9999">
+        </form>
+
+        <!-- ปุ่ม Import -->
+        @if (Auth::user()->permission['manage_dashboard'] ?? false)
+            <a href="{{ route('importdata') }}" class="btn bg-yellow">
+                <i class="fas fa-file-import"></i> Import
+            </a>
+        @endif
+
+        <!-- ฟอร์ม Export -->
+        <form action="{{ route('export') }}" method="GET">
+            @csrf
+            <input type="hidden" name="year"
+                value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
+            <input type="hidden" name="month"
+                value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
+            <button type="submit" class="btn bg-dark ">
+                <i class="fas fa-file-export"></i> Export
+            </button>
+
+        </form>
+        <button
+                          type="button"
+                          class="btn btn-dark me-4"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalScrollable"
+                        >
+                        <i class="fas fa-question-circle"></i>
+                        </button>
+    </div>
+</div>
+<div class="card-body">
                         <canvas id="myChart"
                             style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
-                    </div>
-                </div>
 
-                <div class="card card-dark">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            @if ($latestMonthData->isEmpty())
-                                อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
-                            @else
-                                อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน (ประจำเดือน
-                                {{ $latestMonthData->first()->month }})
-                            @endif
-                        </h3>
+</div>
+</div>
 
-                        <div class="card-tools">
-                            @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                                <a href="importdata" class="btn bg-light ">
-                                    <i class="d-flex justify-content-end "></i> Import
-                                </a>
-                            @endif
-                            <a href="{{ route('exportInstallFTTxcenter') }}"
-                                class="btn bg-gradient-warning text-dark">Export</a>
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="example2" class="table table-bordered table-hover">
-                                <thead class="text-center ">
-                                    <tr>
-                                        <th rowspan="2" class="col-data">อันดับ</th>
-                                        <th rowspan="2" class="col-department">ส่วนงาน</th>
-                                        <th rowspan="2" class="col-count">จำนวนวงจร</th>
-                                        <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียมเอกสารรวม (วัน)</th>
-                                        <th rowspan="2" class="col-process-time">ระยะเวลาดำเนินการรวม (วัน)</th>
-                                        <th colspan="7">ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร</th>
-                                        <th rowspan="2" class="col-total-time">รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร (วัน)
-                                        </th>
-                                        <th rowspan="2" class="col-install-count">จำนวนวงจรที่ติดตั้งภายใน 3 วัน
-                                        </th>
-                                        <th rowspan="2" class="col-install-percent">ร้อยละการติดตั้งภายใน 3 วัน
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th class="col-sdp">กำหนด SDP/ODP (วัน)</th>
-                                        <th class="col-cable">โยงสาย (วัน)</th>
-                                        <th class="col-config">Config NMS (วัน)</th>
-                                        <th class="col-schedule">นัดหมายและกำหนดช่าง (วัน)</th>
-                                        <th class="col-wait-customer">รอลูกค้า (วัน)</th>
-                                        <th class="col-install">ลากสายและติดตั้ง ONT (วัน)</th>
-                                        <th class="col-close-job">ปิดงาน (วัน)</th>
-                                    </tr>
-                                </thead>
-                                @php
+<div class="card mt-4">
+    
+<div class="d-flex justify-content-between align-items-center gap-2">
+    <!-- หัวข้อ -->
+    <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
+
+    
+    <div class="d-flex align-items-center gap-2">
+    
+        <!-- ฟอร์มเลือกปี -->
+        <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline" id="yearForm">
+            <input type="number" name="year" id="yearInput" placeholder="Enter year"
+                value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}" class="form-control"
+                style="width: 200px;" required min="2000" max="9999">
+        </form>
+
+        <!-- ปุ่ม Import -->
+        @if (Auth::user()->permission['manage_dashboard'] ?? false)
+            <a href="{{ route('importdata') }}" class="btn bg-yellow">
+                <i class="fas fa-file-import"></i> Import
+            </a>
+        @endif
+
+        <!-- ฟอร์ม Export -->
+        <form action="{{ route('export') }}" method="GET">
+            @csrf
+            <input type="hidden" name="year"
+                value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
+            <input type="hidden" name="month"
+                value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
+            <button type="submit" class="btn bg-dark ">
+                <i class="fas fa-file-export"></i> Export
+            </button>
+
+        </form>
+        <button
+                          type="button"
+                          class="btn btn-dark me-4"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalScrollable"
+                        >
+                        <i class="fas fa-question-circle"></i>
+                        </button>
+    </div>
+</div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="example2" class="table table-bordered table-hover ">
+                <thead class="text-center bg-dark">
+                    <tr>
+                        <th rowspan="2" class="col-data ">อันดับ</th>
+                        <th rowspan="2" class="col-department">ส่วนงาน</th>
+                        <th rowspan="2" class="col-count">จำนวนวงจร</th>
+                        <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียมเอกสารรวม (วัน)</th>
+                        <th rowspan="2" class="col-process-time">ระยะเวลาดำเนินการรวม (วัน)</th>
+                        <th colspan="7">ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร</th>
+                        <th rowspan="2" class="col-total-time">รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร (วัน)
+                        </th>
+                        <th rowspan="2" class="col-install-count">จำนวนวงจรที่ติดตั้งภายใน 3 วัน
+                        </th>
+                        <th rowspan="2" class="col-install-percent">ร้อยละการติดตั้งภายใน 3 วัน
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="col-sdp">กำหนด SDP/ODP (วัน)</th>
+                        <th class="col-cable">โยงสาย (วัน)</th>
+                        <th class="col-config">Config NMS (วัน)</th>
+                        <th class="col-schedule">นัดหมายและกำหนดช่าง (วัน)</th>
+                        <th class="col-wait-customer">รอลูกค้า (วัน)</th>
+                        <th class="col-install">ลากสายและติดตั้ง ONT (วัน)</th>
+                        <th class="col-close-job">ปิดงาน (วัน)</th>
+                    </tr>
+                </thead>
+                @php
 
                                     // แปลงข้อมูลจาก Collection เป็น Array
                                     $sectionsArray = $latestMonthData->toArray();
@@ -100,226 +159,243 @@
                                     $sectionsArray = array_slice($sectionsArray, 1, 14);
                                 @endphp
 
-                                <tbody class="text-center align-items-center">
-                                    @php $i = 0; @endphp <!-- กำหนดตัวแปรเริ่มต้น -->
+                <tbody class="text-center align-items-center">
+                @php $i = 0; @endphp <!-- กำหนดตัวแปรเริ่มต้น -->
                                     @foreach ($sortedDataMax as $data)
                                         @php    $i++; @endphp <!-- เพิ่มค่าลำดับ -->
 
-                                        <!-- ตรวจสอบว่าเป็น 5 อันดับแรกหรือไม่ -->
-                                        <tr class="{{ $i == 1 ? 'bg-success' : '' }}">
-                                            <td>{{ $i }}</td> <!-- แสดงลำดับ -->
-                                            <td>
-                                                @if ($data['sum_installation_center'] == 'รวม บภน.3.1 (ชภ.)')
-                                                    ชัยภูมิ
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (นม.)')
-                                                    นครราชสีมา
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (บร.)')
-                                                    บุรีรัมย์
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (สร.)')
-                                                    สุรินทร์
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ยส.)')
-                                                    ยโสธร
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ศก.)')
-                                                    ศรีสะเกษ
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อจ.)')
-                                                    อำนาจเจริญ
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
-                                                    อุบลราชธานี
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
-                                                    กาฬสินธุ์
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
-                                                    ขอนแก่น
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (มค.)')
-                                                    มหาสารคาม
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (รอ.)')
-                                                    ร้อยเอ็ด
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นค.)')
-                                                    หนองคาย
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นพ.)')
-                                                    นครพนม
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นภ.)')
-                                                    หนองบัวลำภู
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (บก.)')
-                                                    บึงกาฬ
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (มห.)')
-                                                    มุกดาหาร
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (ลย.)')
-                                                    เลย
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (สน.)')
-                                                    สกลนคร
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
-                                                    อุดรธานี
-                                                @elseif ($data['sum_installation_center'] == 'รวม 3')
-                                                    ภน.2.2
-                                                @elseif ($data['sum_installation_center'] == 'รวม 2')
-                                                    ภน.2.1
-                                                @endif
+                        <!-- ตรวจสอบว่าเป็น 5 อันดับแรกหรือไม่ -->
+                        <tr class="{{ $i == 1 ? 'bg-success' : '' }}">
+                            <td>{{ $i }}</td> <!-- แสดงลำดับ -->
+                            <td>
+                                @if ($data['sum_installation_center'] == 'รวม บภน.3.1 (ชภ.)')
+                                    ชัยภูมิ
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (นม.)')
+                                    นครราชสีมา
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (บร.)')
+                                    บุรีรัมย์
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (สร.)')
+                                    สุรินทร์
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ยส.)')
+                                    ยโสธร
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ศก.)')
+                                    ศรีสะเกษ
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อจ.)')
+                                    อำนาจเจริญ
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
+                                    อุบลราชธานี
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
+                                    กาฬสินธุ์
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
+                                    ขอนแก่น
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (มค.)')
+                                    มหาสารคาม
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (รอ.)')
+                                    ร้อยเอ็ด
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นค.)')
+                                    หนองคาย
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นพ.)')
+                                    นครพนม
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นภ.)')
+                                    หนองบัวลำภู
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (บก.)')
+                                    บึงกาฬ
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (มห.)')
+                                    มุกดาหาร
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (ลย.)')
+                                    เลย
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (สน.)')
+                                    สกลนคร
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
+                                    อุดรธานี
+                                @elseif ($data['sum_installation_center'] == 'รวม 3')
+                                    ภน.2.2
+                                @elseif ($data['sum_installation_center'] == 'รวม 2')
+                                    ภน.2.1
+                                @endif
 
-                                            </td>
-                                            <td>{{ $data['sum_num_of_circuits'] }}</td>
-                                            <td>{{ $data['sum_total_preparation_time_days'] }}</td>
-                                            <td>{{ $data['sum_total_processing_time_days'] }}</td>
-                                            <td>{{ $data['sum_sdp_odp_deadline_days'] }}</td>
-                                            <td>{{ $data['sum_wiring_time_days'] }}</td>
-                                            <td>{{ $data['sum_config_nms_days'] }}</td>
-                                            <td>{{ $data['sum_technician_appointment_and_scheduling_time_days'] }}</td>
-                                            <td>{{ $data['sum_customer_waiting_time_days'] }}</td>
-                                            <td>{{ $data['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
-                                            <td>{{ $data['sum_closing_work_time_days'] }}</td>
-                                            <td>{{ $data['sum_total_average_time_per_circuit_days'] }}</td>
-                                            <td>{{ $data['sum_num_of_circuits_installed_within_3_days'] }}</td>
-                                            <td>{{ $data['sum_installation_percentage_within_3_days'] }} %</td>
-                                        </tr>
-                                    @endforeach
+                            </td>
+                            <td>{{ $data['sum_num_of_circuits'] }}</td>
+                            <td>{{ $data['sum_total_preparation_time_days'] }}</td>
+                            <td>{{ $data['sum_total_processing_time_days'] }}</td>
+                            <td>{{ $data['sum_sdp_odp_deadline_days'] }}</td>
+                            <td>{{ $data['sum_wiring_time_days'] }}</td>
+                            <td>{{ $data['sum_config_nms_days'] }}</td>
+                            <td>{{ $data['sum_technician_appointment_and_scheduling_time_days'] }}</td>
+                            <td>{{ $data['sum_customer_waiting_time_days'] }}</td>
+                            <td>{{ $data['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
+                            <td>{{ $data['sum_closing_work_time_days'] }}</td>
+                            <td>{{ $data['sum_total_average_time_per_circuit_days'] }}</td>
+                            <td>{{ $data['sum_num_of_circuits_installed_within_3_days'] }}</td>
+                            <td>{{ $data['sum_installation_percentage_within_3_days'] }} %</td>
+                        </tr>
+                    @endforeach
 
-                                    <!-- แสดงอันดับสุดท้าย (อันดับที่ต่ำสุด) -->
-                                    @foreach ($sortedDataMin as $data)
-                                        <tr class="bg-danger"> <!-- แสดงแถวอันดับสุดท้าย -->
-                                            <td>12</td> <!-- อันดับสุดท้าย -->
-                                            <td>
-                                                @if ($data['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
-                                                    กาฬสินธุ์
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
-                                                    ขอนแก่น
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (มค.)')
-                                                    มหาสารคาม
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (รอ.)')
-                                                    ร้อยเอ็ด
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นค.)')
-                                                    หนองคาย
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นพ.)')
-                                                    นครพนม
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นภ.)')
-                                                    หนองบัวลำภู
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (บก.)')
-                                                    บึงกาฬ
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (มห.)')
-                                                    มุกดาหาร
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (ลย.)')
-                                                    เลย
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (สน.)')
-                                                    สกลนคร
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
-                                                    อุดรธานี
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (ชภ.)')
-                                                    ชัยภูมิิ
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (นม.)')
-                                                    นครราชสีมา
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (บร.)')
-                                                    บุรีรัมย์
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (สร.)')
-                                                    สุรินทร์
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ยส.)')
-                                                    ยโสธร
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ศก.)')
-                                                    ศรีสะเกษ
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อจ.)')
-                                                    อำนาจเจริญ
-                                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
-                                                    อุบลราชธานี
-                                                @elseif ($data['sum_installation_center'] == 'รวม 3')
-                                                    ภน.2.2
-                                                @elseif ($data['sum_installation_center'] == 'รวม 2')
-                                                    ภน.2.1
-                                                @endif
-                                            </td>
-                                            <td>{{ $data['sum_num_of_circuits'] }}</td>
-                                            <td>{{ $data['sum_total_preparation_time_days'] }}</td>
-                                            <td>{{ $data['sum_total_processing_time_days'] }}</td>
-                                            <td>{{ $data['sum_sdp_odp_deadline_days'] }}</td>
-                                            <td>{{ $data['sum_wiring_time_days'] }}</td>
-                                            <td>{{ $data['sum_config_nms_days'] }}</td>
-                                            <td>{{ $data['sum_technician_appointment_and_scheduling_time_days'] }}</td>
-                                            <td>{{ $data['sum_customer_waiting_time_days'] }}</td>
-                                            <td>{{ $data['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
-                                            <td>{{ $data['sum_closing_work_time_days'] }}</td>
-                                            <td>{{ $data['sum_total_average_time_per_circuit_days'] }}</td>
-                                            <td>{{ $data['sum_num_of_circuits_installed_within_3_days'] }}</td>
-                                            <td>{{ $data['sum_installation_percentage_within_3_days'] }} %</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-
-
+                    <!-- แสดงอันดับสุดท้าย (อันดับที่ต่ำสุด) -->
+                    @foreach ($sortedDataMin as $data)
+                        <tr class="bg-danger"> <!-- แสดงแถวอันดับสุดท้าย -->
+                            <td>12</td> <!-- อันดับสุดท้าย -->
+                            <td>
+                                @if ($data['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
+                                    กาฬสินธุ์
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
+                                    ขอนแก่น
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (มค.)')
+                                    มหาสารคาม
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.1 (รอ.)')
+                                    ร้อยเอ็ด
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นค.)')
+                                    หนองคาย
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นพ.)')
+                                    นครพนม
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (นภ.)')
+                                    หนองบัวลำภู
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (บก.)')
+                                    บึงกาฬ
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (มห.)')
+                                    มุกดาหาร
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (ลย.)')
+                                    เลย
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (สน.)')
+                                    สกลนคร
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
+                                    อุดรธานี
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (ชภ.)')
+                                    ชัยภูมิิ
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (นม.)')
+                                    นครราชสีมา
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (บร.)')
+                                    บุรีรัมย์
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.1 (สร.)')
+                                    สุรินทร์
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ยส.)')
+                                    ยโสธร
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (ศก.)')
+                                    ศรีสะเกษ
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อจ.)')
+                                    อำนาจเจริญ
+                                @elseif ($data['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
+                                    อุบลราชธานี
+                                @elseif ($data['sum_installation_center'] == 'รวม 3')
+                                    ภน.2.2
+                                @elseif ($data['sum_installation_center'] == 'รวม 2')
+                                    ภน.2.1
+                                @endif
+                            </td>
+                            <td>{{ $data['sum_num_of_circuits'] }}</td>
+                            <td>{{ $data['sum_total_preparation_time_days'] }}</td>
+                            <td>{{ $data['sum_total_processing_time_days'] }}</td>
+                            <td>{{ $data['sum_sdp_odp_deadline_days'] }}</td>
+                            <td>{{ $data['sum_wiring_time_days'] }}</td>
+                            <td>{{ $data['sum_config_nms_days'] }}</td>
+                            <td>{{ $data['sum_technician_appointment_and_scheduling_time_days'] }}</td>
+                            <td>{{ $data['sum_customer_waiting_time_days'] }}</td>
+                            <td>{{ $data['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
+                            <td>{{ $data['sum_closing_work_time_days'] }}</td>
+                            <td>{{ $data['sum_total_average_time_per_circuit_days'] }}</td>
+                            <td>{{ $data['sum_num_of_circuits_installed_within_3_days'] }}</td>
+                            <td>{{ $data['sum_installation_percentage_within_3_days'] }} %</td>
+                        </tr>
+                    @endforeach
+                </tbody>
 
 
 
 
-                            </table>
-                        </div>
-                    </div>
 
 
+            </table>
+        </div>
+    </div>
+</div>
+<hr class="my-3" />
+<div class="card ">
+<div class="d-flex justify-content-between align-items-center gap-2">
+    <!-- หัวข้อ -->
+    <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
 
-                </div>
+    
+    <div class="d-flex align-items-center gap-2">
+    
+        <!-- ฟอร์มเลือกปี -->
+        <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline" id="yearForm">
+            <input type="number" name="year" id="yearInput" placeholder="Enter year"
+                value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}" class="form-control"
+                style="width: 200px;" required min="2000" max="9999">
+        </form>
 
-                <div class="card card-dark">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            @if ($latestMonthData->isEmpty())
-                                ติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
-                            @else
-                                ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})
-                            @endif
-                        </h3>
-                        <div class="card-tools d-flex ">
-                            <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET"
-                                class="d-inline" id="yearForm">
-                                <input type="number" name="year" id="yearInput" placeholder="Enter year"
-                                    value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}"
-                                    class="form-control d-inline " style="width: 200px;" required min="2000"
-                                    max="9999">
-                            </form>
+        <!-- ปุ่ม Import -->
+        @if (Auth::user()->permission['manage_dashboard'] ?? false)
+            <a href="{{ route('importdata') }}" class="btn bg-yellow">
+                <i class="fas fa-file-import"></i> Import
+            </a>
+        @endif
 
-                            @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                                <a href="{{ route('importdata') }}" class="btn bg-light mx-1 ">
-                                    <i class="d-flex justify-content-end "></i> Import
-                                </a>
-                            @endif
-                            <a href="{{ route('exportInstallFTTxcenter') }}"
-                                class="btn bg-gradient-warning text-dark">Export</a>
+        <!-- ฟอร์ม Export -->
+        <form action="{{ route('export') }}" method="GET">
+            @csrf
+            <input type="hidden" name="year"
+                value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
+            <input type="hidden" name="month"
+                value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
+            <button type="submit" class="btn bg-dark ">
+                <i class="fas fa-file-export"></i> Export
+            </button>
 
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+        </form>
+        <button
+                          type="button"
+                          class="btn btn-dark me-4"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalScrollable"
+                        >
+                        <i class="fas fa-question-circle"></i>
+                        </button>
+    </div>
+</div>
 
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="example2" class="table table-bordered table-hover">
-                            <thead class="text-center ">
-                                <tr>
-                                    <th rowspan="2" class="col-data">ดูข้อมูล</th>
-                                    <th rowspan="2" class="col-department">ส่วนงาน</th>
-                                    <th rowspan="2" class="col-count">จำนวนวงจร</th>
-                                    <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียมเอกสารรวม (วัน)</th>
-                                    <th rowspan="2" class="col-process-time">ระยะเวลาดำเนินการรวม (วัน)</th>
-                                    <th colspan="7">ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร</th>
-                                    <th rowspan="2" class="col-total-time">รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร (วัน)
-                                    </th>
-                                    <th rowspan="2" class="col-install-count">จำนวนวงจรที่ติดตั้งภายใน 3 วัน
-                                    </th>
-                                    <th rowspan="2" class="col-install-percent">ร้อยละการติดตั้งภายใน 3 วัน
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="col-sdp">กำหนด SDP/ODP (วัน)</th>
-                                    <th class="col-cable">โยงสาย (วัน)</th>
-                                    <th class="col-config">Config NMS (วัน)</th>
-                                    <th class="col-schedule">นัดหมายและกำหนดช่าง (วัน)</th>
-                                    <th class="col-wait-customer">รอลูกค้า (วัน)</th>
-                                    <th class="col-install">ลากสายและติดตั้ง ONT (วัน)</th>
-                                    <th class="col-close-job">ปิดงาน (วัน)</th>
-                                </tr>
-                            </thead>
-                            @php
-                                // แปลงข้อมูลจาก Collection เป็น Array
-                                $sectionsArray = $latestMonthData->toArray();
-                            @endphp
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="example2" class="table table-bordered table-hover">
+                <thead class="text-center ">
+                    <tr class='bg-dark'>
+                        <th rowspan="2" class="col-data ">ดูข้อมูล</th>
+                        <th rowspan="2" class="col-department">ส่วนงาน</th>
+                        <th rowspan="2" class="col-count">จำนวนวงจร</th>
+                        <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียมเอกสารรวม (วัน)</th>
+                        <th rowspan="2" class="col-process-time">ระยะเวลาดำเนินการรวม (วัน)</th>
+                        <th colspan="7">ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร</th>
+                        <th rowspan="2" class="col-total-time">รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร (วัน)
+                        </th>
+                        <th rowspan="2" class="col-install-count">จำนวนวงจรที่ติดตั้งภายใน 3 วัน
+                        </th>
+                        <th rowspan="2" class="col-install-percent">ร้อยละการติดตั้งภายใน 3 วัน
+                        </th>
+                    </tr>
+                    <tr class='bg-dark'>
+                        <th class="col-sdp">กำหนด SDP/ODP (วัน)</th>
+                        <th class="col-cable">โยงสาย (วัน)</th>
+                        <th class="col-config">Config NMS (วัน)</th>
+                        <th class="col-schedule">นัดหมายและกำหนดช่าง (วัน)</th>
+                        <th class="col-wait-customer">รอลูกค้า (วัน)</th>
+                        <th class="col-install">ลากสายและติดตั้ง ONT (วัน)</th>
+                        <th class="col-close-job">ปิดงาน (วัน)</th>
+                    </tr>
+                </thead>
+                @php
+                    // แปลงข้อมูลจาก Collection เป็น Array
+                    $sectionsArray = $latestMonthData->toArray();
 
-                            <tbody class="text-center align-items-center">
+                    // ใช้ usort เพื่อจัดเรียงตาม sum_installation_center
+                    usort($sectionsArray, function ($a, $b) {
+                        return strcoll($a['sum_installation_center'], $b['sum_installation_center']);
+                    });
+
+                    // ใช้ array_slice() เพื่อจำกัดการแสดงแค่ 22 ตัวแรก
+                    $sectionsArray = array_slice($sectionsArray, 0, 22);
+                @endphp
+
+                <tbody class="text-center align-items-center">
                                 @foreach ($sectionsArray as $section)
                                     @if ($section['sum_installation_center'] == 'รวม 3' || $section['sum_installation_center'] == 'รวม 2')
                                         <tr>
@@ -373,21 +449,97 @@
 
 
 
-                        </table>
-                    </div>
-                </div>
-
-
-
-
-            </div>
-
-
-
+            </table>
         </div>
-        </div>
-    </section>
-    </section>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalScrollable" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="modalScrollableTitle">คำอธิบายข้อมูล</h5>
+                              <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                              ></button>
+                            </div>
+                            <div class="modal-body text-dark">
+                              <p>
+                              รายงานระยะเวลาเฉลี่ยในการติดตั้ง
+                              หน้าหลัก  รายงานระยะเวลาเฉลี่ยในการติดตั้ง
+                              </p>
+                              <p>
+                              หมายเหตุ : รายงานระยะเวลาเฉลี่ยในการติดตั้ง ตามศูนย์บริการติดตั้ง
+                              </p>
+                              <p>
+                              • จำนวนวงจร : จะนับเฉพาะใบคำขอที่ทำการปิดงานเรียบร้อยบนระบบ FTTxSM เท่านั้น (ไม่รวมข้อมูลใบคำขอที import มาจากสผ.และใบคำขอที่ยังไม่เคยปิดงานเรียบร้อย) ตามช่วงเวลาที่เลือก
+                              </p>
+                              <p>
+                              • ระยะเวลาเตรียมข้อมูลรวม : ยอดรวมระยะเวลาที่ใช้ในเตรียมเอกสารของวงจรตามช่วงเวลาที่เลือก โดยนับระยะเวลาตั้งแต่วันที่สร้างคำขอ - รับชำระเงิน
+                              </p>
+                              <p>
+                              • ระยะเวลาดำเนินการรวม : ยอดรวมระยะเวลาที่ใช้ในการติดตั้งของวงจรตามช่วงเวลาที่เลือก โดยนับระยะเวลาตั้งแต่รับชำระเงิน - ปิดงานเรียบร้อย ยกเว้น ช่วงรอลูกค้า
+                              </p>
+                              <p>
+                              • ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร :
+                              
+                              </p>
+                              <p>
+                              - กำหนดSDP/ODP :
+                              </p>
+                              <p>
+                              >> กรณีส่งงานโยงสายถัดไป ยอดรวมจำนวนวัน นับจากวันที่รับชำระเงินจนถึงส่งงานโยงสาย หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              >> กรณีส่งงานNMSถัดไป ยอดรวมจำนวนวัน นับจากวันที่รับชำระเงินจนถึงส่งงาน NMS หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - โยงสาย (ถ้าส่งงาน) : ยอดรวมจำนวนวัน นับจากวันที่ส่งงานโยงสายจนถึงส่งงาน NMS หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - การดำเนินการของ NMS, นัดหมายและกำหนดช่าง, ปิดงาน : ยอดรวมจำนวนวัน นับจากวันที่รับงานมาดำเนินการจนถึงวันที่จ่ายงานให้งานถัดไป หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - รอลูกค้า :
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งเร็วกว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่ส่งงานลากสายและติดตั้งจนถึงวันที่ติดตั้ง หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งช้ากว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่ส่งงานลากสายและติดตั้งจนถึงวันที่นัดหมายลูกค้า หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              - ลากสายและติดตั้ง :
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งเร็วกว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่ติดตั้งจนถึงวันที่ส่งงานปิดงาน หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              >> กรณีติดตั้งช้ากว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่วันนัดหมายลูกค้าจนถึงวันที่ส่งงานปิดงาน หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              • รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร : ระยะเวลารวม (ช่องที่ 3) หารด้วย จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              • ร้อยละการติดตั้งภายใน 3 วัน : ร้อยละการปิดงานเรียบร้อยภายใน 3 วัน(รับชำระเงิน - ปิดงานเรียบร้อย ยกเว้นช่วงรอลูกค้า) เมื่อเทียบกับ จำนวนวงจร (ช่องที่ 1)
+                              </p>
+                              <p>
+                              • กรณีมีการติดตั้งวงจร แต่ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจรเท่ากับ 0.00 : ใช้ระยะเวลาในการดำเนินการเป็นระดับวินาที จึงไม่สามารถแสดงตัวเลขได้
+                              </p>
+                              <p>
+                              • รายงานเดือนตุลา ที่มีตัวเลขติดลบในบางพื้นที่ ทางระบบกำลังดำเนินการตรวจสอบและแก้ไขค่ะ เนื่องจากมีการเลือกวันที่ติดตั้งและส่งงานไม่ถูกต้อง
+                              </p>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
 @endsection
 
 @section('script')
@@ -422,19 +574,19 @@
         } else {
             // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
             const backgroundColors = dataArray.map(value =>
-                value > 85 ? 'rgba(61, 183, 71, 0.5)' :
-                value > 83 ? 'rgba(180, 255, 122, 0.5)' :
-                value > 80 ? 'rgba(255, 206, 86, 0.5)' :
-                value > 77 ? 'rgba(253, 144, 19, 0.5)' :
-                'rgba(255, 35, 82, 0.5)'
+                value > 85 ? 'rgba(68, 180, 40, 0.8)' :
+                value > 83 ? 'rgba(113, 221, 55, 0.8)' :
+                value > 80 ? 'rgba(255, 171, 0, 0.8)' :
+                value > 77 ? 'rgba(253, 126, 20, 0.8)' :
+                'rgba(255, 62, 29, 0.8)'
             );
     
             const borderColors = dataArray.map(value =>
-                value > 85 ? 'rgba(61, 183, 71, 1)' :
-                value > 83 ? 'rgba(180, 255, 122, 1)' :
-                value > 80 ? 'rgba(255, 206, 86, 1)' :
-                value > 77 ? 'rgb(253, 144, 19,1)' :
-                'rgba(255, 35, 82, 1)'
+                value > 85 ? 'rgba(79, 193, 51, 1)' :
+                value > 83 ? 'rgba(113, 221, 55, 1)' :
+                value > 80 ? 'rgba(255, 171, 0, 1)' :
+                value > 77 ? 'rgb(253, 126, 20, 1)' :
+                'rgba(255, 62, 29, 1)'
             );
     
             const ctx = document.getElementById('myChart');

@@ -119,9 +119,13 @@
 .text-green {
   color: #71dd37 !important;
 }
+.text-blackgreen {
+  color: #4fc133 !important;
+}
 .text-teal {
   color: #20c997 !important;
 }
+
 .text-cyan {
   color: #03c3ec !important;
 }
