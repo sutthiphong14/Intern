@@ -23,7 +23,7 @@ class ReportController extends Controller
 
 
 
-
+ 
 
     public function import(Request $request)
     {
@@ -40,7 +40,7 @@ class ReportController extends Controller
 
             $month = $request->month;
             $year = $request->year;
-
+    
             // ตรวจสอบข้อมูลในฐานข้อมูล
             $existingData = Installfttx::where('month', $month)->where('year', $year)->first();
             if ($existingData) {
@@ -48,13 +48,14 @@ class ReportController extends Controller
                 $filePath = $request->hasFile('import_file')
                     ? $request->file('import_file')->store('temp')
                     : null;
-
-                // ส่งตัวแปรเพื่อเปิด Modal ในหน้า importdata
-                return view('report.importdata', [
-                    'month' => $month,
-                    'year' => $year,
+    
+                // ส่งข้อมูลกลับเป็น JSON (เพื่อให้จัดการใน JS)
+                return response()->json([
+                   
                     'filePath' => $filePath,
-                    'showModal' => true // เพิ่มตัวแปรเพื่อเปิด Modal
+                    'showModal' => true,
+                    'month' => $month,
+                    'year' => $year
                 ]);
             }
 
@@ -69,22 +70,32 @@ class ReportController extends Controller
                 } catch (\Exception $e) {
                     // หากเกิดข้อผิดพลาดจะ rollback และไม่บันทึกข้อมูลในฐานข้อมูล
                     DB::rollback();
-
-                    return redirect()->route('importdata')->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลจำนวนแถวไม่ครบ ');
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'ไฟล์ที่คุณนำเข้ามีข้อมูลไม่สมบูรณ์' 
+                    ], 400); // รหัส 400 สำหรับข้อผิดพลาด
                 }
             }
 
             // Commit transaction เมื่อทุกอย่างสำเร็จ
             DB::commit();
-
-            return redirect()->route('viewInstallFTTx')->with('status', 'Import done!!!');
+    
+            return response()->json([
+                'status' => 'success',
+                'redirect_url' => route('viewInstallFTTx'),
+                'message' => 'นำเข้าไฟล์สำเร็จ!!!'
+            ]);
+    
         } catch (\Exception $e) {
             // หากเกิดข้อผิดพลาดที่ไม่เกี่ยวข้องกับการนำเข้าไฟล์
             DB::rollback();
-            return redirect()->route('importdata')->with('error', 'เกิดข้อผิดพลาด ');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'เกิดข้อผิดพลาด ' . $e->getMessage()
+            ], 500); // รหัส 500 สำหรับข้อผิดพลาดที่ไม่คาดคิด
         }
     }
-
+    
 
     public function importFile(Request $request)
     {
@@ -97,10 +108,16 @@ class ReportController extends Controller
         $month = $request->month;
         $year = $request->year;
 
-
         try {
             DB::beginTransaction(); // เริ่มต้น transaction
 
+            // ถ้าเลือก 'new' ให้ลบข้อมูลเก่าที่มีเดือนและปีนี้
+            if ($request->file_choice == 'new') {
+                Installfttx::where('month', $request->month)->where('year', $request->year)->delete();
+                SumInstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
+                Totalinstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
+                Exportinstllfttx::where('month', $request->month)->where('year', $request->year)->delete();
+            }
             // ถ้าเลือก 'new' ให้ลบข้อมูลเก่าที่มีเดือนและปีนี้
             if ($request->file_choice == 'new') {
                 Installfttx::where('month', $request->month)->where('year', $request->year)->delete();
@@ -114,19 +131,24 @@ class ReportController extends Controller
             Excel::import(new SumInstallfttxImport($month, $year), $filePath);
             Excel::import(new TotalfttxImport($month, $year), $filePath);
             Excel::import(new exportinstallfttximport($month, $year), $filePath);
+            // ใช้ไฟล์ที่รับจากฟอร์มและนำเข้าข้อมูล
+            Excel::import(new installfttxImport($month, $year), $filePath);
+            Excel::import(new SumInstallfttxImport($month, $year), $filePath);
+            Excel::import(new TotalfttxImport($month, $year), $filePath);
+            Excel::import(new exportinstallfttximport($month, $year), $filePath);
 
             DB::commit(); // commit เมื่อทุกอย่างเสร็จสมบูรณ์
 
-            return redirect()->route('viewInstallFTTx')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
+            return redirect()->route('importdata')->with('status', 'เพิ่มไฟล์ใหม่แทนที่แล้ว!!!');
         } catch (\Exception $e) {
             // หากเกิดข้อผิดพลาด, rollback การทำงานทั้งหมด
             DB::rollback();
 
-
             // ส่งข้อความผิดพลาดกลับไปยังผู้ใช้
-            return redirect()->back()->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลจำนวนแถวไม่ครบ ');
+            return redirect()->back()->with('error', 'ไฟล์ที่คุณนำเข้ามีข้อมูลไม่สมบูรณ์ ');
         }
     }
+
 
 
 
@@ -258,8 +280,11 @@ class ReportController extends Controller
 
 
 
+
+
         // ดึงข้อมูลที่มีปีตรงกับค่า year ที่ได้รับ
         $sumInstallfttx = SumInstallfttx::where('year', $year)->get();
+
 
 
         // ถ้าไม่มีข้อมูลในปีนั้น ให้แจ้งเตือน
@@ -293,6 +318,7 @@ class ReportController extends Controller
 
         // กรองข้อมูลที่มีเดือนล่าสุด
         $latestMonthData = $sumInstallfttx->where('month_number', $latestMonthNumber);
+
 
 
 
@@ -498,80 +524,14 @@ class ReportController extends Controller
         // ดึงข้อมูลสำหรับ labels และ data
         $labels = $installData->pluck('installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
         $data = $installData->pluck('installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
-
+        
+      
+    
         // ส่งข้อมูลไปยัง view
         return view('report.viewInstallFTTxcenter', compact('installData', 'labels', 'data', 'section', 'year', 'month'));
     }
-
-
-
-
-    // public function sortcenter($section, $year, $month)
-    // {
-    //     // กำจัดคำว่า "รวม " ออก
-    //     $section = str_replace('รวม ', '', $section);
-
-    //     // ดึงตัวเลขแรกจาก section
-    //     $firstNumber = substr($section, 0, 1);
-
-    //     // รายชื่อคอลัมน์ที่ต้องการตรวจสอบ
-    //     $columns = [
-    //         'num_of_circuits',
-    //         'total_preparation_time_days',
-    //         'total_processing_time_days',
-    //         'sdp_odp_deadline_days',
-    //         'wiring_time_days',
-    //         'config_nms_days',
-    //         'technician_appointment_and_scheduling_time_days',
-    //         'customer_waiting_time_days',
-    //         'cable_pulling_and_ont_installation_time_days',
-    //         'closing_work_time_days',
-    //         'total_average_time_per_circuit_days',
-    //         'num_of_circuits_installed_within_3_days',
-    //         'installation_percentage_within_3_days',
-    //     ];
-
-    //     // ถ้ามีการส่งตัวเลข 2 หรือ 3 มา, ตรวจหาข้อมูลจากตัวเลขแรก
-    //     if ($firstNumber == '2' || $firstNumber == '3') {
-    //         // ใช้ LIKE แบบละเอียด
-    //         $installData = Installfttx::where('region', 'LIKE', "%$firstNumber%")
-    //             ->where('year', '=', $year)
-    //             ->where('month', '=', $month)
-    //             ->where(function ($query) use ($columns) {
-    //                 foreach ($columns as $column) {
-    //                     $query->orWhere($column, '!=', 0);
-    //                 }
-    //             })
-    //             ->get();
-    //     } else {
-    //         // ถ้าไม่มีตัวเลข 2 หรือ 3, ใช้ section ตามปกติ
-    //         $installData = Installfttx::where('section', 'LIKE', "%$section%")
-    //             ->where('year', '=', $year)
-    //             ->where('month', '=', $month)
-    //             ->where(function ($query) use ($columns) {
-    //                 foreach ($columns as $column) {
-    //                     $query->orWhere($column, '!=', 0);
-    //                 }
-    //             })
-    //             ->get();
-    //     }
-
-    //     // ตรวจสอบว่ามีข้อมูลหรือไม่
-    //     if ($installData->isEmpty()) {
-    //         return response()->json(['message' => 'ไม่พบข้อมูลสำหรับตัวเลขนี้ในฐานข้อมูล']);
-    //     }
-
-    //     // ดึงข้อมูลสำหรับ labels และ data
-    //     $labels = $installData->pluck('installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
-    //     $data = $installData->pluck('installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
-
-
-
-    //     // ส่งข้อมูลไปยัง view
-    //     return view('report.viewInstallFTTxcenter', compact('installData', 'labels', 'data', 'section', 'year', 'month'));
-    // }
-
-
+    
+    
 
     public function getExistingMonths(Request $request)
     {
@@ -609,15 +569,18 @@ class ReportController extends Controller
         // รับค่าปีจากคำขอ
         $year = $request->input('year');
 
+
         // ดึงข้อมูลปีและเดือนที่ตรงกับปีที่ระบุ
         $data = Installfttx::where('year', $year)
             ->select('year', 'month')
             ->distinct() // ดึงเฉพาะค่าที่ไม่ซ้ำ
             ->get();
 
+
         // ส่งข้อมูลเป็น JSON response
         return response()->json($data);
     }
+
 
     public function exportview2(Request $request)
     {
@@ -625,6 +588,8 @@ class ReportController extends Controller
         $year = $request->input('year');
         $month = $request->input('month');
         $section = $request->input('section');
+
+
 
 
         // ตรวจสอบว่าได้รับค่าทั้งหมดครบถ้วน
@@ -645,14 +610,17 @@ class ReportController extends Controller
                 ->get();
         }
 
+
         // ถ้ามีข้อมูล ให้เรียกฟังก์ชัน export2
         if ($data->isNotEmpty()) {
             return $this->export2($year, $month, $section);
         }
 
+
         // ถ้าไม่มีข้อมูล แสดงข้อความ error
         return response()->json(['error' => 'No data found for the specified year, month, and section.'], 404);
     }
+
 
     // ฟังก์ชันสำหรับการส่งออกเป็น Excel
     public function export2($year, $month, $section)
