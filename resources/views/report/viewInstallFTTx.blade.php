@@ -6,13 +6,33 @@
     ติดตั้ง FTTx ได้ภายใน 3 วัน
 @endsection
 @section('css')
-   
 @endsection
 @section('content')
     <section class="content">
         <div class="container-fluid mb-3">
 
-        <div class="card card-dark mt-3">
+            <div class="card card-dark mt-3">
+
+                <div class="card card-dark">
+                    <div class="card-header">
+                        <h3 class="card-title">ตรวจแก้ FTTx ภายใน 3 วัน. : จังหวัด.
+                            กาฬสินธุ์
+
+                        </h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <h3 class="card-title">Bar Chart - การติดตั้งภายใน 3 วันเปรียบเทียบแต่ละเดือน</h3>
+                        <canvas id="myChart"
+                            style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                    </div>
+                </div>
 
                 <div class="card card-dark">
                     <div class="card-header">
@@ -20,11 +40,10 @@
                             @if ($latestMonthData->isEmpty())
                                 อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
                             @else
-                                อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน 3 วัน (ประจำเดือน
+                                อันดับการติดตั้ง FTTx ได้ภายใน 3 วัน (ประจำเดือน
                                 {{ $latestMonthData->first()->month }})
                             @endif
                         </h3>
-
 
                         <div class="card-tools">
                             @if (Auth::user()->permission['manage_dashboard'] ?? false)
@@ -32,7 +51,8 @@
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
                             @endif
-                            <button type="button" class="btn bg-gradient-warning">Export</button>
+                            <a href="{{ route('exportInstallFTTxcenter') }}"
+                                class="btn bg-gradient-warning text-dark">Export</a>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
@@ -256,19 +276,9 @@
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
                             @endif
-                            <form action="{{ route('export') }}" method="GET">
-                                @csrf
-                                <!-- ช่องป้อนข้อมูลปีและเดือน -->
-                                <input type="hidden" name="year"
-                                    value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
-                                <!-- ค่าปี -->
-                                <input type="hidden" name="month"
-                                    value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
-                                <!-- ค่าเดือน -->
+                            <a href="{{ route('exportInstallFTTxcenter') }}"
+                                class="btn bg-gradient-warning text-dark">Export</a>
 
-
-                                <button type="submit" class="btn bg-gradient-warning">Export</button>
-                            </form>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
@@ -305,114 +315,72 @@
                                 </tr>
                             </thead>
                             @php
-                            // แปลงข้อมูลจาก Collection เป็น Array
-                            $sectionsArray = $latestMonthData->toArray();
-                        
-                            // ใช้ usort เพื่อจัดเรียงตาม sum_installation_center
-                            usort($sectionsArray, function ($a, $b) {
-                                return strcoll($a['sum_installation_center'], $b['sum_installation_center']);
-                            });
-                        
-                            // ใช้ array_slice() เพื่อจำกัดการแสดงแค่ 22 ตัวแรก
-                            $sectionsArray = array_slice($sectionsArray, 0, 22);
-                        @endphp
-                        
-                        <tbody class="text-center align-items-center">
-                            @foreach ($sectionsArray as $section)
-                                <tr>
-                                    <td>
-                                        <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year']]) }}" class="btn btn-warning">
-                                            <i class="fas fa-search"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        @if ($section['sum_installation_center'] == 'รวม บภน.3.1 (ชภ.)')
-                                            ชัยภูมิ
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (นม.)')
-                                            นครราชสีมา
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (บร.)')
-                                            บุรีรัมย์
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.1 (สร.)')
-                                            สุรินทร์
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (ยส.)')
-                                            ยโสธร
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (ศก.)')
-                                            ศรีสะเกษ
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (อจ.)')
-                                            อำนาจเจริญ
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.3.2 (อบ.)')
-                                            อุบลราชธานี
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (กส.)')
-                                            กาฬสินธุ์
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (ขก.)')
-                                            ขอนแก่น
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (มค.)')
-                                            มหาสารคาม
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.1 (รอ.)')
-                                            ร้อยเอ็ด
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นค.)')
-                                            หนองคาย
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นพ.)')
-                                            นครพนม
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (นภ.)')
-                                            หนองบัวลำภู
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (บก.)')
-                                            บึงกาฬ
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (มห.)')
-                                            มุกดาหาร
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (ลย.)')
-                                            เลย
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (สน.)')
-                                            สกลนคร
-                                        @elseif ($section['sum_installation_center'] == 'รวม บภน.2.2 (อด.)')
-                                            อุดรธานี
-                                        @elseif ($section['sum_installation_center'] == 'รวม 3')
-                                            ภน.2.2
-                                        @elseif ($section['sum_installation_center'] == 'รวม 2')
-                                            ภน.2.1
-                                        @endif
-                                        </td>
-                                        <!-- ค่าอื่นๆ -->
-                                        <td>{{ $section['sum_num_of_circuits'] }}</td>
-                                        <td>{{ $section['sum_total_preparation_time_days'] }}</td>
-                                        <td>{{ $section['sum_total_processing_time_days'] }}</td>
-                                        <td>{{ $section['sum_sdp_odp_deadline_days'] }}</td>
-                                        <td>{{ $section['sum_wiring_time_days'] }}</td>
-                                        <td>{{ $section['sum_config_nms_days'] }}</td>
-                                        <td>{{ $section['sum_technician_appointment_and_scheduling_time_days'] }}</td>
-                                        <td>{{ $section['sum_customer_waiting_time_days'] }}</td>
-                                        <td>{{ $section['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
-                                        <td>{{ $section['sum_closing_work_time_days'] }}</td>
-                                        <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
-                                        <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
+                                // แปลงข้อมูลจาก Collection เป็น Array
+                                $sectionsArray = $latestMonthData->toArray();
+                            @endphp
 
-                                                    <td class="" style="background-color: {{
-                                $section['sum_installation_percentage_within_3_days'] > 85 ? 'rgba(61, 183, 71, 1)' :
-                                ($section['sum_installation_percentage_within_3_days'] > 83 ? 'rgb(142, 255, 56,1)' :
-                                    ($section['sum_installation_percentage_within_3_days'] > 80 ? 'rgba(255, 206, 86, 1)' :
-                                        ($section['sum_installation_percentage_within_3_days'] > 77 ? 'rgba(255, 165, 61, 1)' :
-                                            'rgba(255, 35, 82, 1)')))
-                            }}; color: white;">
-                                                        {{ $section['sum_installation_percentage_within_3_days'] }}%
-                                                    </td>
+                            <tbody class="text-center align-items-center">
+                                @foreach ($sectionsArray as $section)
+                                    @if ($section['sum_installation_center'] == 'รวม 3' || $section['sum_installation_center'] == 'รวม 2')
+                                        <tr>
+                                            <td>
+                                                <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year'], 'month' => $section['month']]) }}"
+                                                    class="btn btn-warning">
+                                                    <i class="fas fa-search"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @if ($section['sum_installation_center'] == 'รวม 3')
+                                                    ภน.2.2
+                                                @elseif ($section['sum_installation_center'] == 'รวม 2')
+                                                    ภน.2.1
+                                                @endif
+                                            </td>
+                                            <!-- ค่าอื่นๆ -->
+                                            <td>{{ $section['sum_num_of_circuits'] }}</td>
+                                            <td>{{ $section['sum_total_preparation_time_days'] }}</td>
+                                            <td>{{ $section['sum_total_processing_time_days'] }}</td>
+                                            <td>{{ $section['sum_sdp_odp_deadline_days'] }}</td>
+                                            <td>{{ $section['sum_wiring_time_days'] }}</td>
+                                            <td>{{ $section['sum_config_nms_days'] }}</td>
+                                            <td>{{ $section['sum_technician_appointment_and_scheduling_time_days'] }}</td>
+                                            <td>{{ $section['sum_customer_waiting_time_days'] }}</td>
+                                            <td>{{ $section['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
+                                            <td>{{ $section['sum_closing_work_time_days'] }}</td>
+                                            <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
+                                            <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
+
+                                            <td class=""
+                                                style="background-color: {{ $section['sum_installation_percentage_within_3_days'] > 85
+                                                    ? 'rgba(61, 183, 71, 1)'
+                                                    : ($section['sum_installation_percentage_within_3_days'] > 83
+                                                        ? 'rgb(142, 255, 56,1)'
+                                                        : ($section['sum_installation_percentage_within_3_days'] > 80
+                                                            ? 'rgba(255, 206, 86, 1)'
+                                                            : ($section['sum_installation_percentage_within_3_days'] > 77
+                                                                ? 'rgba(255, 165, 61, 1)'
+                                                                : 'rgba(255, 35, 82, 1)'))) }}; color: white;">
+                                                {{ $section['sum_installation_percentage_within_3_days'] }}%
+                                            </td>
 
 
-                                                </tr>
-                        @endforeach
-                    </tbody>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
 
 
 
 
 
-                </table>
+                        </table>
+                    </div>
+                </div>
+
+
+
+
             </div>
-        </div>
-
-
-
-
-    </div>
 
 
 
@@ -423,8 +391,6 @@
 @endsection
 
 @section('script')
-  
-
     <style>
         .text-warning {
             color: gold;
@@ -435,180 +401,73 @@
         }
     </style>
 
-    <script>
-        // ฟังก์ชันสำหรับแปลงค่าคะแนนเป็นดาว
-        function renderStarsForAll() {
-            const starContainers = document.querySelectorAll(".star-container");
-            starContainers.forEach(container => {
-                const rating = parseFloat(container.getAttribute("data-rating")); // รับค่าคะแนนจาก data-rating
-                container.innerHTML = ""; // เคลียร์ค่าก่อนหน้า
 
-            for (let i = 1; i <= 5; i++) {
-                const star = document.createElement("i");
-                if (i <= Math.floor(rating)) {
-                    star.className = "fas fa-star text-warning"; // ดาวเต็ม
-                } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
-                    star.className = "fas fa-star-half-alt text-warning"; // ดาวครึ่ง
-                } else {
-                    star.className = "fas fa-star text-dark"; // ดาวว่าง
-                }
-                container.appendChild(star);
-            }
-        });
-    }
-
-        // เรียกใช้งานเมื่อโหลดหน้าเสร็จ
-        renderStarsForAll();
-    </script>
-
-<script>
-    // ฟังก์ชันแสดงผลหลอดเปอร์เซ็นต์
-    function updateProgressBars() {
-        // ดึงองค์ประกอบทุก progress-container
-        const containers = document.querySelectorAll('.progress-container');
-
-        containers.forEach(container => {
-            const value = parseInt(container.getAttribute('data-value')); // รับค่าจาก data-value
-            const progressBar = container.querySelector('.progress-bar');
-
-            // ตั้งค่าขนาดและข้อความ
-            progressBar.style.width = value + '%';
-            progressBar.textContent = value + '%';
-
-            // กำหนดสีตามเงื่อนไข
-            if (value < 50) {
-                progressBar.className = 'progress-bar red';
-            } else if (value < 80) {
-                progressBar.className = 'progress-bar yellow';
-            } else {
-                progressBar.className = 'progress-bar green';
-            }
-        });
-    }
-
-    // เรียกใช้งานฟังก์ชันเมื่อโหลดหน้าเสร็จ
-    updateProgressBars();
-</script>
-
-<style>
-    .progress-container {
-        width: 100%;
-        max-width: 100%;
-        background-color: #e0e0e0;
-        border-radius: 8px;
-        overflow: hidden;
-        margin-bottom: 15px;
-    }
-
-    .progress-bar {
-        height: 25px;
-        width: 100;
-        text-align: center;
-        line-height: 30px;
-        color: white;
-        transition: width 0.3s ease;
-    }
-
-    .red {
-        background-color: Crimson;
-    }
-
-    .yellow {
-        background-color: gold;
-        color: black;
-    }
-
-    .green {
-        background-color: SeaGreen;
-    }
-</style>
+    <!-- ChartJS -->
+    <script src="plugins/chart.js/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // JavaScript ที่ใช้ในการกำหนดสีของหลอดตามเปอร์เซ็นต์
-        const bars = document.querySelectorAll('.performance-bar');
-        bars.forEach(bar => {
-            const width = parseInt(bar.style.width);
-            if (width >= 80) {
-                bar.classList.add('green');
-            } else if (width >= 50) {
-                bar.classList.add('yellow');
-            } else {
-                bar.classList.add('red');
-            }
-        });
-    </script>
-    <script>
-        $(function() {
-            var barChartCanvas = $('#barChart').get(0).getContext('2d');
-            var barChartData = {
-                labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ต.ค.', 'พ.ย.',
-                    'ธ.ค.'
-                ], // ป้ายกำกับเดือน
-                datasets: [{
-                        label: 'รายได้จริง',
-                        backgroundColor: 'rgb(60, 179, 113)', // สีสำหรับรายได้
-                        borderColor: 'rgb(60, 179, 113)',
-                        data: [46.83, 47.6, 48.2, 48.25, 46.83, 46.83, 46.83, 46.83, 46.83, 46.83, 46.83,
-                            46.83,
-                        ] // ข้อมูลรายได้
-                    },
-                    {
-                        label: 'เป้าหมาย',
-                        backgroundColor: 'rgba(210, 214, 222, 1)', // สีสำหรับเป้าหมาย
-                        borderColor: 'rgba(210, 214, 222, 1)',
-                        data: [52.34, 52.34, 52.34, 52.34, 52.34, 52.34, 52.34, 52.34, 52.34, 52.34, 52.34,
-                            52.34,
-                        ] // ข้อมูลเป้าหมาย
-                    }
-                ]
-            };
-
-            var barChartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                tooltips: {
-                    callbacks: {
-                        label: function(tooltipItem, data) {
-                            return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel
-                                .toLocaleString() + ' บาท';
+        // กรองค่า null ออกจาก labels และ data
+        const labels = @json($labels).filter(item => item !== null); // กรองค่า null ออกจาก labels
+        const data1 = @json($data1); // กรองค่า null ออกจาก data
+        const dataArray = Object.values(data1);
+        console.log(labels, dataArray); // ตรวจสอบค่าผ่าน Console
+    
+        // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
+        console.log('Labels length:', labels.length);
+        console.log('Data1 length:', dataArray.length);
+    
+        if (labels.length === 0 || dataArray.length === 0) {
+            console.warn('No data available for chart.');
+        } else {
+            // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
+            const backgroundColors = dataArray.map(value =>
+                value > 85 ? 'rgba(61, 183, 71, 0.5)' :
+                value > 83 ? 'rgba(180, 255, 122, 0.5)' :
+                value > 80 ? 'rgba(255, 206, 86, 0.5)' :
+                value > 77 ? 'rgba(253, 144, 19, 0.5)' :
+                'rgba(255, 35, 82, 0.5)'
+            );
+    
+            const borderColors = dataArray.map(value =>
+                value > 85 ? 'rgba(61, 183, 71, 1)' :
+                value > 83 ? 'rgba(180, 255, 122, 1)' :
+                value > 80 ? 'rgba(255, 206, 86, 1)' :
+                value > 77 ? 'rgb(253, 144, 19,1)' :
+                'rgba(255, 35, 82, 1)'
+            );
+    
+            const ctx = document.getElementById('myChart');
+    
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
+                        data: dataArray, // ใช้ data แทน data1
+                        backgroundColor: backgroundColors, // สีพื้นหลังแบบไดนามิก
+                        borderColor: borderColors, // สีเส้นขอบแบบไดนามิก
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100 // ปรับให้แกน Y มีค่าสูงสุดเป็น 100
                         }
                     }
-                },
-                // scales: {
-                //     yAxes: [{
-                //         ticks: {
-                //             beginAtZero: true, // เริ่มจาก 0
-                //             callback: function (value) {
-                //                 return value.toLocaleString() + ' บาท'; // แสดงตัวเลขแบบมีคอมม่า
-                //             }
-                //         },
-                //         // scaleLabel: {
-                //         //     display: true,
-                //         //     labelString: 'จำนวนเงิน (บาท)' // ชื่อแกน Y
-                //         // }
-                //     }],
-                //     xAxes: [{
-                //         scaleLabel: {
-                //             display: true,
-                //             labelString: 'เดือน' // ชื่อแกน X
-                //         }
-                //     }]
-                // }
-            };
-
-            new Chart(barChartCanvas, {
-                type: 'bar',
-                data: barChartData,
-                options: barChartOptions
+                }
             });
-        });
+        }
     </script>
     
 
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             @if (session('alert'))
                 Swal.fire({
                     icon: 'error',
@@ -620,86 +479,10 @@
         });
     </script>
 
-
-
-
-
     <script>
         // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
-        document.getElementById('yearInput').addEventListener('change', function () {
+        document.getElementById('yearInput').addEventListener('change', function() {
             document.getElementById('yearForm').submit();
         });
     </script>
-
-    <script src="plugins/chart.js/Chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            // ตรวจสอบว่ามีข้อมูลเพียงพอสำหรับการสร้างกราฟ
-            if (labels.length === 0 || data.length === 0) {
-                console.warn('No data available for chart.');
-                return;
-            }
-
-            // คำนวณค่าต่ำสุดใน data และลดลง 10
-            const minData = Math.min(...data); // ค่าต่ำสุดใน data
-            const yMin = minData - (minData % 10); // ปรับให้เป็น 10, 20, 30, ... ตามที่ต่ำสุดใน data
-
-            // กำหนดสีของแท่งกราฟตามเงื่อนไข
-            const backgroundColors = data.map(value =>
-                value > 80 ? 'rgba(61, 183, 71, 0.5)' :
-                    value > 50 ? 'rgba(255, 206, 86, 0.5)' :
-                        'rgba(255, 99, 132, 0.5)'
-            );
-            const borderColors = data.map(value =>
-                value > 80 ? 'rgba(61, 183, 71, 1)' :
-                    value > 50 ? 'rgba(255, 206, 86, 1)' :
-                        'rgba(255, 99, 132, 1)'
-            );
-
-            // สร้าง Bar Chart
-            const ctx = document.getElementById('barChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'เปอร์เซ็นต์การติดตั้งภายใน 3 วัน',
-                        data: data,
-                        backgroundColor: backgroundColors, // ใช้สีที่ตั้งตามเงื่อนไข
-                        borderColor: borderColors, // ใช้สีเส้นขอบที่ตั้งตามเงื่อนไข
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true, // เริ่มจาก 0
-                            min: 0, // กำหนดค่าต่ำสุดของแกน Y ตามที่คำนวณ
-                            max: 50, // กำหนดค่าบนสุดของแกน Y เป็น 100
-                            suggestedMax: 50, // แนะนำค่าบนสุดของแกน Y เป็น 100
-                            ticks: {
-                                stepSize: 10, // กำหนดให้ค่าบนแกน Y เพิ่มขึ้นทีละ 10
-                                callback: function (value) {
-                                    // จัดการแสดงค่าบนแกน Y ให้แสดงตั้งแต่ 0 ถึง 100
-                                    return value % 10 === 0 ? value : ''; // แสดงเฉพาะ 0, 10, 20, ...
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-
-
-    @endsection
+@endsection

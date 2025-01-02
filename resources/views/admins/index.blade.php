@@ -161,6 +161,7 @@
 <script src="{{ URL::asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ URL::asset('dist/js/adminlte.min.js') }}"></script>
+
 <!-- AdminLTE for demo purposes -->
 <script src="{{ URL::asset('dist/js/demo.js') }}"></script>
 <!-- Page specific script -->

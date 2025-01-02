@@ -15,49 +15,49 @@
                 <!-- BAR CHART -->
                 <div class="card card-dark">
                     <div class="card-header">
-                        <h3 class="card-title">ตรวจแก้ FTTx ภายใน 24 ชม. : จ. @if ($section == 'รวม บภน.2.1 (กส.)')
+                        <h3 class="card-title">ตรวจแก้ FTTx ภายใน 24 ชม. : จังหวัด  @if ($section == 'บภน.2.1 (กส.)')
                                 กาฬสินธุ์
-                            @elseif ($section == 'รวม บภน.2.1 (ขก.)')
+                            @elseif ($section == 'บภน.2.1 (ขก.)')
                                 ขอนแก่น
-                            @elseif ($section == 'รวม บภน.2.1 (มค.)')
+                            @elseif ($section == 'บภน.2.1 (มค.)')
                                 มหาสารคาม
-                            @elseif ($section == 'รวม บภน.2.1 (รอ.)')
+                            @elseif ($section == 'บภน.2.1 (รอ.)')
                                 ร้อยเอ็ด
-                            @elseif ($section == 'รวม บภน.2.2 (นค.)')
+                            @elseif ($section == 'บภน.2.2 (นค.)')
                                 หนองคาย
-                            @elseif ($section == 'รวม บภน.2.2 (นพ.)')
+                            @elseif ($section == 'บภน.2.2 (นพ.)')
                                 นครพนม
-                            @elseif ($section == 'รวม บภน.2.2 (นภ.)')
+                            @elseif ($section == 'บภน.2.2 (นภ.)')
                                 หนองบัวลำภู
-                            @elseif ($section == 'รวม บภน.2.2 (บก.)')
+                            @elseif ($section == 'บภน.2.2 (บก.)')
                                 บึงกาฬ
-                            @elseif ($section == 'รวม บภน.2.2 (มห.)')
+                            @elseif ($section == 'บภน.2.2 (มห.)')
                                 มุกดาหาร
-                            @elseif ($section == 'รวม บภน.2.2 (ลย.)')
+                            @elseif ($section == 'บภน.2.2 (ลย.)')
                                 เลย
-                            @elseif ($section == 'รวม บภน.2.2 (สน.)')
+                            @elseif ($section == 'บภน.2.2 (สน.)')
                                 สกลนคร
-                            @elseif ($section == 'รวม บภน.2.2 (อด.)')
+                            @elseif ($section == 'บภน.2.2 (อด.)')
                                 อุดรธานี
-                            @elseif ($section == 'รวม บภน.3.1 (ชภ.)')
+                            @elseif ($section == 'บภน.3.1 (ชภ.)')
                                 ชัยภูมิิ
-                            @elseif ($section == 'รวม บภน.3.1 (นม.)')
+                            @elseif ($section == 'บภน.3.1 (นม.)')
                                 นครราชสีมา
-                            @elseif ($section == 'รวม บภน.3.1 (บร.)')
+                            @elseif ($section == 'บภน.3.1 (บร.)')
                                 บุรีรัมย์
-                            @elseif ($section == 'รวม บภน.3.1 (สร.)')
+                            @elseif ($section == 'บภน.3.1 (สร.)')
                                 สุรินทร์
-                            @elseif ($section == 'รวม บภน.3.2 (ยส.)')
+                            @elseif ($section == 'บภน.3.2 (ยส.)')
                                 ยโสธร
-                            @elseif ($section == 'รวม บภน.3.2 (ศก.)')
+                            @elseif ($section == 'บภน.3.2 (ศก.)')
                                 ศรีสะเกษ
-                            @elseif ($section == 'รวม บภน.3.2 (อจ.)')
+                            @elseif ($section == 'บภน.3.2 (อจ.)')
                                 อำนาจเจริญ
-                            @elseif ($section == 'รวม บภน.3.2 (อบ.)')
+                            @elseif ($section == 'บภน.3.2 (อบ.)')
                                 อุบลราชธานี
-                            @elseif ($section == 'รวม 3')
+                            @elseif ($section == '3')
                                 ภน.2.2
-                            @elseif ($section == 'รวม 2')
+                            @elseif ($section == '2')
                                 ภน.2.1
                             @else
                                 {{ $section }}
@@ -71,11 +71,12 @@
 
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Bar Chart - การติดตั้งภายใน 3 วัน</h3>
-                    </div>
+                
+                
+                       
+        
                     <div class="card-body">
+                        <h3 class="card-title">Bar Chart - การติดตั้งภายใน 3 วัน</h3>
                     <canvas id="myChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
                     </div>
                 </div>
@@ -91,21 +92,8 @@
                                 <a href="importdata" class="btn bg-light mx-1">
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
-                                <form action="{{ route('export2') }}" method="GET">
-                                    @csrf
-                                    <!-- ค่าปี -->
-                                    <input type="hidden" name="year" value="{{ $installData->first() ? $installData->first()->year : null }}">
-                                
-                                    <!-- ค่าเดือน -->
-                                    <input type="hidden" name="month" value="{{ $installData->first() ? $installData->first()->month : null }}">
-                                
-                                    <!-- ค่า section -->
-                                    <input type="hidden" name="section" value="{{  $section ? $section : null }}">
-                                
-                                    <!-- ปุ่มส่งออก -->
-                                    <button type="submit" class="btn bg-gradient-warning">Export</button>
-                                </form>
-                                
+                                <a href="{{ route('exportInstallFTTxcenter') }}" class="btn bg-gradient-warning text-dark">Export</a>
+
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                     <i class="fas fa-minus"></i>
                                 </button>
