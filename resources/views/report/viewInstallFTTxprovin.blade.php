@@ -18,7 +18,11 @@
             หน้าแรก
         </a>
         /
-    </span> ติดตั้ง fttx ภายใน 3 วัน</h4>
+        <a href="{{ route('viewInstallFTTx') }}" class="">
+        ติดตั้ง fttx ภายใน 3 วัน
+        </a>
+        /
+    </span> ติดตั้ง fttx ภายใน 3 วันจังหวัด</h4>
 
 
 <div class='card'>

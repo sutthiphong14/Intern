@@ -428,16 +428,18 @@
 
                                             <td class=""
                                                 style="background-color: {{ $section['sum_installation_percentage_within_3_days'] > 85
-                                                    ? 'rgba(61, 183, 71, 1)'
+                                                    ? 'rgba(68, 180, 40, 1)'
                                                     : ($section['sum_installation_percentage_within_3_days'] > 83
-                                                        ? 'rgb(142, 255, 56,1)'
+                                                        ? 'rgb(113, 221, 55,1)'
                                                         : ($section['sum_installation_percentage_within_3_days'] > 80
-                                                            ? 'rgba(255, 206, 86, 1)'
+                                                            ? 'rgba(255, 171, 0, 1)'
                                                             : ($section['sum_installation_percentage_within_3_days'] > 77
-                                                                ? 'rgba(255, 165, 61, 1)'
-                                                                : 'rgba(255, 35, 82, 1)'))) }}; color: white;">
+                                                                ? 'rgba(253, 126, 20, 1)'
+                                                                : 'rgba(255, 62, 29, 1)'))) }}; color: white;">
                                                 {{ $section['sum_installation_percentage_within_3_days'] }}%
                                             </td>
+
+                                    
 
 
                                         </tr>
