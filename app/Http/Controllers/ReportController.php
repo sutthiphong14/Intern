@@ -190,7 +190,8 @@ class ReportController extends Controller
         ];
 
         // ดึงข้อมูลจาก SumInstallfttx
-        $currentYear = Carbon::now()->year; // ดึงปีปัจจุบันจาก Carbon
+        $currentYear = SumInstallfttx::max('year');  // ใช้ max() เพื่อดึงปีล่าสุด
+
 
         // ดึงข้อมูลที่มีปีตรงกับปีปัจจุบัน
         $sumInstallfttx = SumInstallfttx::where('year', $currentYear)->get();
