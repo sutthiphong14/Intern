@@ -29,9 +29,6 @@ Route::get('/', function (){
     return view('home');
 });
 
-
-
-
 Route::get('/home', function (){
     return view('home');
 });
@@ -76,10 +73,6 @@ Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
 
 Route::get('/profile', function (){
     return view('profile');
-});
-
-Route::get('/test', function (){
-    return view('admins.test');
 });
 
 
@@ -195,12 +188,15 @@ Route::get('/viewInstallFTTxcenter', [ReportController::class ,'datacenter']);
 
 Route::get('/viewInstallFTTxprovin',[ReportController::class ,'dataprovin'])->name('viewInstallFTTxprovin');
 
-Route::get('/viewInstallFTTxprovin/{section}/{year}',[ReportController::class ,'sortprovin'])->name('viewInstallFTTxprovin');
+Route::get('/viewInstallFTTxprovin/{section}/{year},{month}',[ReportController::class ,'sortprovin'])->name('viewInstallFTTxprovin');
+
+Route::get('/viewInstallFTTxprovinMonth/{section}/{year}', [ReportController::class ,'sortprovinmonth'])->name('viewInstallFTTxprovinSort');
 
 Route::get('/viewInstallFTTxcenter/{section}/{year}/{month}', [ReportController::class ,'sortcenter'])->name('viewInstallFTTxcenter');
 
 Route::get('/viewInstallFTTxcenter/{center}/{year}/{month}', [ReportController::class, 'viewInstallData']);
 
+Route::get('/ExportInstallFttxcenter', [ReportController::class, 'exportData'])->name('exportInstallFTTxcenter');;
 
 
 Route::get('/importdata', function () {
