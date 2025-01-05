@@ -1,4 +1,4 @@
-<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme ">
           <div class="app-brand demo ms-5">
             <a href="/" class="app-brand-link align-item-center">
             <img src="{{ URL::asset('dist/img/ntcolor.png') }}" alt="Logo" class="brand-image" style="height: 55px;">
@@ -10,7 +10,7 @@
             </a>
           </div>
 
-          <div class="menu-inner-shadow"></div>
+          <div class="menu-inner-shadow text-dark" ></div>
 
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
@@ -21,7 +21,7 @@
         </a>
     </li>
     <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">DashBoard</span>
+              <span class="menu-header-text text-dark">DashBoard</span>
             </li>
     <li class="menu-item {{ Request::is('incomecurrent') ? 'active' : '' }}">
         <a href="incomecurrent" class="menu-link">

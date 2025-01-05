@@ -1,28 +1,24 @@
 @extends('admins.index')
 @section('css')
-<!-- Google Font: Source Sans Pro -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-<!-- Font Awesome -->
-<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-<!-- Theme style -->
-<link rel="stylesheet" href="dist/css/adminlte.min.css">
-<link rel="stylesheet" href="{{ URL::asset('dist/css/adminlte.min.css') }}">
+
 @endsection
 @section('content')
+
 <section class="content">
-    <div class="container-fluid">
+<!-- navigate -->
+<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
+    <a href="home" class="">
+         หน้าแรก
+        </a> 
+        /
+    </span> รายได้รวม</h4>
         
-            <div class="col-md-12 mt-3">
+           
                 <!-- BAR CHART -->
                 <div class="card card-dark">
                     <div class="card-header">
-                        <h3 class="card-title">รายได้รวม</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                           
-                        </div>
+                        <h3 class="card-title text-warning">รายได้รวม</h3>
+                        
                     </div>
                     <div class="card-body">
                         <div class="chart">
@@ -33,23 +29,17 @@
 
 
 
-                <div class="card card-dark mt-3">
+                <div class="card card-dark mt-4">
 
                     <div class="card card-dark ">
-                        <div class="card-header text-center">
-                            <h3 class="card-title">ติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน เดือนนี้)</h3>
-                            <div class="card-tools">
-                            
-                            <button type="button" class="btn bg-gradient-warning">Export</button>
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
+                    <div class="card-header">
+                        <h3 class="card-title text-warning">รายได้รวม</h3>
+                        
+                    </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="example2" class="table table-bordered table-hover">
-                                    <thead class="text-center ">
+                                    <thead class="text-center bg-dark">
                                         <tr>
                                             <th>ดูข้อมูล</th>
                                             <th>พื้นที่</th>
@@ -189,9 +179,7 @@
 
                     </div>
                 </div>
-            </div>
-        
-    </div>
+            
 
     
 

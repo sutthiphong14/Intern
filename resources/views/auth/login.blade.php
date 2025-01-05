@@ -17,7 +17,7 @@
 
                 <!-- Username Field -->
                 <div class="mb-3">
-                    <label for="username" class="form-label">{{ __('Username') }}</label>
+                    <label for="username" class="form-label">{{ __('ชื่อผู้ใช้') }}</label>
                     <input id="username" type="text" 
                            class="form-control @error('username') is-invalid @enderror" 
                            name="username" value="{{ old('username') }}" 
@@ -31,7 +31,7 @@
 
                 <!-- Password Field -->
                 <div class="mb-3">
-                    <label for="password" class="form-label">{{ __('Password') }}</label>
+                    <label for="password" class="form-label">{{ __('รหัสผ่าน') }}</label>
                     <input id="password" type="password" 
                            class="form-control @error('password') is-invalid @enderror" 
                            name="password" required autocomplete="current-password">
@@ -49,22 +49,20 @@
                                name="remember" id="remember" 
                                {{ old('remember') ? 'checked' : '' }}>
                         <label class="form-check-label" for="remember">
-                            {{ __('Remember Me') }}
+                            {{ __('จดจำผู้ใช้') }}
                         </label>
                     </div>
-                    <a href="{{ route('password.request') }}" class="text-decoration-none">{{ __('Forgot Password?') }}</a>
+                    <a href="{{ route('insertRequests') }}" class="text-decoration-none">{{ __('ส่งคำขอเปิดใช้งาน') }}</a>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-100 mt-3" style="background-color: #646461; border: none;">
+                <button type="submit" class="btn btn-primary w-100 mt-3" style="background-color:rgb(45, 43, 49); border: none;">
                     {{ __('Login') }}
                 </button>
             </form>
 
-            <!-- Sign Up Link -->
-            <p class="text-center mt-4">
-                {{ __("Don't have an account?") }} <a href="{{ route('insertRequests') }}" class="text-decoration-none">{{ __('ส่งคำขอเปิดใช้งาน') }}</a>
-            </p>
+            
+            
         </div>
     </div>
 </div>

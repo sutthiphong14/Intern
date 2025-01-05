@@ -13,7 +13,7 @@
     <div class="navbar-nav align-items-center ">
     <li class="nav-item lh-1 me-3 ">
         <a href="home" class="">
-        <i class="fas fa-bars"></i> หน้าแรก
+        <i class="menu-icon tf-icons bx bx-home-circle"></i> หน้าแรก
         </a>
       </li>
       @if (Auth::check() && Auth::user()->permission['manage_users'] ?? false)

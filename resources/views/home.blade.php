@@ -9,45 +9,41 @@
 <div class="content-wrapper">
 <div class="card ">
 <div class="slide">
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="10000">
-                <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                </ol>
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src={{ asset('/img/banner_images/ceo_intranet.jpg') }} class="d-block w-100 rounded"
-                            alt="Banner 1">
-                    </div>
-                    <div class="carousel-item">
-                        <img src={{ asset('/img/banner_images/nt_net_ban.jpg') }} class="d-block w-100 rounded"
-                            alt="Banner 2">
-                    </div>
-                    <div class="carousel-item">
-                        <img src={{ asset('/img/banner_images/nt_sta-66.jpg') }} class="d-block w-100 rounded"
-                            alt="Banner 3">
-                    </div>
-                    <div class="carousel-item">
-                        <img src={{ asset('/img/banner_images/S__31670320.jpg') }} class="d-block w-100 rounded"
-                            alt="Banner 3">
-                    </div>
-                    <div class="carousel-item">
-                        <img src={{ asset('/img/banner_images/S__68780184V2.jpg') }} class="d-block w-100 rounded"
-                            alt="Banner 3">
-                    </div>
-                </div>
-                <a class="carousel-control-prev custom-control-prev" href="#carouselExampleIndicators" role="button"
-                    data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next custom-control-next" href="#carouselExampleIndicators" role="button"
-                    data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-interval="500">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{{ asset('/img/banner_images/1.png') }}" class="d-block w-100 rounded" alt="Banner 1">
+    </div>
+    <div class="carousel-item">
+      <img src="{{ asset('/img/banner_images/2.png') }}" class="d-block w-100 rounded" alt="Banner 2">
+    </div>
+    <div class="carousel-item">
+      <img src="{{ asset('/img/banner_images/3.png') }}" class="d-block w-100 rounded" alt="Banner 3">
+    </div>
+    <div class="carousel-item">
+      <img src="{{ asset('/img/banner_images/4.png') }}" class="d-block w-100 rounded" alt="Banner 4">
+    </div>
+    <div class="carousel-item">
+      <img src="{{ asset('/img/banner_images/5.png') }}" class="d-block w-100 rounded" alt="Banner 5">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
         </div>
         
 </div>
@@ -55,10 +51,10 @@
 
 <div class="nav-align-top mt-4">
                     <ul class="nav nav-tabs nav-fill" role="tablist">
-                      <li class="nav-item">
+                      <li class="nav-item ">
                         <button
                           type="button"
-                          class="nav-link active "
+                          class="nav-link active text-dark"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-justified-home"
@@ -72,7 +68,7 @@
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link"
+                          class="nav-link text-dark"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-justified-profile"
@@ -85,7 +81,7 @@
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link"
+                          class="nav-link text-dark"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-justified-messages"
@@ -170,6 +166,18 @@
       <br>
     </div>
   </div>
+  
+    <div class="card mt-4 text-center">
+      <br>
+      <br>
+      <br>
+      <h1>Content</h1>
+      <br>
+      <br>
+      <br>
+
+    </div>
+ 
 </div>
 
                 
@@ -177,8 +185,8 @@
    
    
              
-</div>
-</div>
-</div>
+
+
+
 </div>
 @endsection
