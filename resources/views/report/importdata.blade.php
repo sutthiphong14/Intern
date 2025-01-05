@@ -49,7 +49,7 @@
 
 
             
-                <table id="months-table" class="table table-bordered text-center">
+                <table id="months-table" class="table table-bordered table-hover text-center">
                     <thead>
                         <tr class='bg-dark text-light'>
 
@@ -62,7 +62,7 @@
                     <tbody>
                         <tr>
                             <td>มกราคม</td>
-                            <td>ไม่มีข้อมูล</td>
+                            <td ><div></div>ไม่มีข้อมูล</td>
                             <td>
                                 <button type="button" class="btn btn-success" value="มกราคม" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
@@ -344,6 +344,8 @@
                     $('#months-table tbody tr').each(function () {
                         $(this).find('td').eq(1).removeClass('text-success text-danger');
                         $(this).find('td').eq(1).text('ไม่มีข้อมูล');
+                        $(this).find('td').eq(1).addClass('text-danger');
+                        
                     });
 
                     // อัปเดตเดือนที่มีข้อมูล
@@ -351,6 +353,7 @@
                         $('#months-table tbody tr').each(function () {
                             const monthCell = $(this).find('td').eq(0);
                             if (monthCell.text() === item.month) {
+                                $(this).find('td').eq(1).removeClass('text-success text-danger');
                                 $(this).find('td').eq(1).text('มีข้อมูล');
                                 $(this).find('td').eq(1).addClass('text-success');
                             }
@@ -438,35 +441,42 @@
 
     // ฟังก์ชันเปิด Modal เมื่อเลือกเดือน
     function openImportModal(month) {
-        Swal.fire({
-            title: 'Confirm Import',
-            html: `
-            <label for="import_file">Choose File to Import:</label>
-            <input type="file" id="import_file" name="import_file"  class="swal2-input">
+    Swal.fire({
+        title: 'กรุณาเลือกไฟล์ที่อัพโหลด',
+        html: `
+            <div class="row">
+                <input class="form-control" type="file" id="import_file" name="import_file">
+            </div>
         `,
-            showCancelButton: true,
-            confirmButtonText: 'Submit',
-            cancelButtonText: 'Cancel',
-            preConfirm: () => {
-                const importFile = Swal.getPopup().querySelector('#import_file').files[0];
-                if (!importFile) {
-                    Swal.showValidationMessage('Please choose a file to import.');
-                }
-                return {
-                    month,
-                    importFile
-                };
+        showCancelButton: true,
+        cancelButtonText: 'Cancel',
+        confirmButtonText: 'Submit',
+        customClass: {
+            confirmButton: 'btn-success' // เพิ่มคลาส Bootstrap สีเขียว
+
+        },
+        preConfirm: () => {
+            const importFile = Swal.getPopup().querySelector('#import_file').files[0];
+            if (!importFile) {
+                Swal.showValidationMessage('Please choose a file to import.');
             }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const {
-                    month,
-                    importFile
-                } = result.value;
-                submitImportData(month, importFile);
-            }
-        });
-    }
+            return {
+                month,
+                importFile
+            };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const {
+                month,
+                importFile
+            } = result.value;
+            submitImportData(month, importFile);
+        }
+    });
+}
+
+    
 
 
     // ฟังก์ชันส่งข้อมูลไปยังเซิร์ฟเวอร์
