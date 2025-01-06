@@ -39,13 +39,12 @@
 
         <div class="d-flex align-items-center gap-2">
 
-
-             <!-- ฟอร์มเลือกปี -->
-             <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline"
+            <!-- ฟอร์มเลือกปี -->
+            <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline"
                 id="yearForm">
                 <input type="number" name="year" id="yearInput" placeholder="Enter year"
-                    value="{{ isset($message) ? now()->year : ($latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year) }}"
-                    class="form-control" style="width: 200px;" required min="2000" max="9999">
+                    value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}"
+                    class="form-control" style="width: 100px;" required min="2000" max="9999">
             </form>
 
             <!-- ปุ่ม Import -->
@@ -56,10 +55,17 @@
             @endif
 
             <!-- ฟอร์ม Export -->
-            <button type="button" class="btn bg-dark" data-toggle="modal" data-target="#exportModal">
-                <i class="fas fa-file-export"></i> Export
-            </button>
+            <form action="{{ route('export') }}" method="GET">
+                @csrf
+                <input type="hidden" name="year"
+                    value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
+                <input type="hidden" name="month"
+                    value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
+                <button type="button" class="btn bg-dark " data-target="#exportModal" data-toggle="modal">
+                    <i class="fas fa-file-export"></i> Export
+                </button>
 
+            </form>
             <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal" data-bs-target="#modalScrollable">
                 <i class="fas fa-question-circle"></i>
             </button>
@@ -75,24 +81,31 @@
 
 <hr class="my-3" />
 <div class="card ">
-    <div class="d-flex justify-content-between align-items-center gap-2">
+<div class="d-flex justify-content-between align-items-center gap-2">
         <!-- หัวข้อ -->
-        <h4 class="card-header text-warning">@if ($latestMonthData->isEmpty())
-            ข้อมูลการติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
-        @else
-            ข้อมูลการติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})
-        @endif</h4>
+        <h4 class="card-header text-warning">
+            @php
+    $latestMonthData = $latestMonthData ?? collect(); // กำหนดค่าเริ่มต้นเป็น Collection ว่าง
+@endphp
+            @if ($latestMonthData->isEmpty())
+                กกราฟแสดงข้อมูลการติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
+            @else
+                กราฟแสดงข้อมูลการติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})
+            @endif
+
+        </h4>
 
 
         <div class="d-flex align-items-center gap-2">
 
-  <!-- ฟอร์มเลือกปี -->
-  <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline"
-    id="yearForm1">
-    <input type="number" name="year" id="yearInput1" placeholder="Enter year"
-        value="{{ isset($message) ? now()->year : ($latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year) }}"
-        class="form-control" style="width: 200px;" required min="2000" max="9999">
-</form>
+            <!-- ฟอร์มเลือกปี -->
+            <form action="{{ route('viewInstallFTTxYear', ['year' => now()->year]) }}" method="GET" class="d-inline"
+                id="yearForm">
+                <input type="number" name="year" id="yearInput" placeholder="Enter year"
+                    value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}"
+                    class="form-control" style="width: 100px;" required min="2000" max="9999">
+            </form>
+
             <!-- ปุ่ม Import -->
             @if (Auth::user()->permission['manage_dashboard'] ?? false)
                 <a href="{{ route('importdata') }}" class="btn bg-yellow">
@@ -101,10 +114,17 @@
             @endif
 
             <!-- ฟอร์ม Export -->
-            <button type="button" class="btn bg-dark" data-toggle="modal" data-target="#exportModal">
-                <i class="fas fa-file-export"></i> Export
-            </button>
+            <form action="{{ route('export') }}" method="GET">
+                @csrf
+                <input type="hidden" name="year"
+                    value="{{ $latestMonthData->first() ? $latestMonthData->first()->year : null }}">
+                <input type="hidden" name="month"
+                    value="{{ $latestMonthData->first() ? $latestMonthData->first()->month : null }}">
+                <button type="button" class="btn bg-dark " data-target="#exportModal" data-toggle="modal">
+                    <i class="fas fa-file-export"></i> Export
+                </button>
 
+            </form>
             <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal" data-bs-target="#modalScrollable">
                 <i class="fas fa-question-circle"></i>
             </button>
