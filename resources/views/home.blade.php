@@ -82,11 +82,22 @@
     <div class="tab-content">
       <div class="tab-pane fade show active" id="navs-justified-home" role="tabpanel">
         <table id="example2" class="table table-hover align-items-center">
+          <thead class='text-center bg-dark'>
+            <tr class="col-12">
+
+              <th class='col-3'>หัวข้อ</th>
+              <th class='col-6'>คำอธิบาย</th>
+              <th class='col-2'>วันที่อัพโหลด</th>
+              <th class='col-1'>Action</th>
+
+
+            </tr>
+          </thead>
 
           <tbody class='align-items-center '>
-            @foreach ($data->take(10) as $item1)
-        <tr class=>
-          <td class='ms-5 text-center col-4'>
+            <tr>
+              @foreach ($data->take(10) as $item1)
+          <td class='ms-5 text-center'>
           <div>
             {{ $item1->name }}
             @if ($loop->index < 2)
@@ -94,22 +105,29 @@
       @endif
           </div>
           </td>
-          <td class='ms-5 text-center col-4'>
+          <td class='ms-5 text-center'>
           <div>
-            {{ $item1->created_at }}
+            {{ $item1->description }}
 
           </div>
           </td>
-          <td class='ms-5 text-center col-4'>
-    @if(Storage::disk('public')->exists($item1->file))
-        <a href="{{ route('admin.download', $item1->id) }}" class="btn btn-warning">
-            Download <i class="fas fa-arrow-down"></i>
+
+          <td class='ms-5 text-center'>
+          <div>
+            {{ \Carbon\Carbon::parse($item1->created_at)->format('Y-m-d') }}
+          </div>
+          </td>
+          <td class='ms-5 text-center'>
+          @if(Storage::disk('public')->exists($item1->file))
+        <a href="{{ route('admin.download', $item1->id) }}" class="btn btn-warning col-1" style="width: 130px;">
+        Download <i class="fas fa-arrow-down"></i>
         </a>
-    @else
-        <span class="text-danger">ไฟล์ไม่พบ</span>
+      @else
+      <span class="text-danger">ไฟล์ไม่พบ</span>
     @endif
-</td>
+          </td>
         </tr>
+
       @endforeach
           </tbody>
         </table>

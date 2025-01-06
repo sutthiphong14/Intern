@@ -63,33 +63,13 @@
                                                 @enderror
                                             </td>
 
-                                            <div class="form-group">
-                                                <td>
-                                                    <select class="form-control" name="category_id">
-                                                        <option value="" disabled {{ is_null(old('category_id', $oldnews->category_id)) ? 'selected' : '' }}>
-                                                            เลือก Category
-                                                        </option>
-                                                        @foreach ($categories as $category)
-                                                            <option value="{{ $category->id }}" 
-                                                                {{ old('category_id', $oldnews->category_id) == $category->id ? 'selected' : '' }}>
-                                                                {{ $category->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('category_id')
-                                                    <p class="text-danger my-2">
-                                                        <i class="fas fa-exclamation-circle"></i> {{ $message }}
-                                                    </p>
-                                                    @enderror
-                                                </td>
-
-                                            </div>
+                                          
 
 
                                             <td>
                                                 <div class="form-group">
                                                     <div class="custom-file">
-                                                        <textarea cols="30" rows="5" class="form-control" type="text" placeholder="Link" name="link">{{ $oldnews->link }}</textarea>
+                                                        <textarea cols="30" rows="5" class="form-control" type="text" placeholder="Link" name="link"></textarea>
                                                     </div>
                                                 </div>
                                                 @error('link')
