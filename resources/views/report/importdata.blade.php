@@ -66,7 +66,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="มกราคม" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                    <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('มกราคม')">
+                                        ลบ
+                                    </button>
                                
                             </td>
                         </tr>
@@ -76,7 +78,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="กุมภาพันธ์" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                    <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('กุมภาพันธ์')">
+                                        ลบ
+                                    </button>
                             </td>
                         </tr>
                         <tr>
@@ -85,7 +89,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="มีนาคม" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                    <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('มีนาคม')">
+                                        ลบ
+                                    </button>
                             </td>
                         </tr>
                         <tr>
@@ -94,7 +100,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="เมษายน" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                    <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('เมษายน')">
+                                        ลบ
+                                    </button>
                             </td>
                         </tr>
                         <tr>
@@ -103,7 +111,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="พฤษภาคม" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                     <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('พฤษภาคม')">
+                                    ลบ
+                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -112,7 +122,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="มิถุนายน" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                     <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('มิถุนายน')">
+                                    ลบ
+                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -121,7 +133,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="กรกฎาคม" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                     <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('กรกฎาคม')">
+                                    ลบ
+                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -130,7 +144,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="สิงหาคม" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                     <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('สิงหาคม')">
+                                    ลบ
+                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -139,7 +155,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="กันยายน" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                     <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('กันยายน')">
+                                    ลบ
+                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -148,7 +166,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="ตุลาคม" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                     <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('ตุลาคม')">
+                                    ลบ
+                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -157,7 +177,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="พฤศจิกายน" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                     <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('พฤศจิกายน')">
+                                    ลบ
+                                </button>
                             </td>
                         </tr>
                         <tr>
@@ -166,7 +188,9 @@
                             <td>
                                 <button type="button" class="btn btn-success" value="ธันวาคม" name="month"
                                     onclick="openImportModal(value)">อัปโหลด</button>
-                                    <button type="submit" class="btn btn-danger ">ลบ</button>
+                                     <button type="button" class="btn btn-danger" onclick="openDeleteConfirmation('ธันวาคม')">
+                                    ลบ
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -569,7 +593,66 @@
         }
     });
 </script>
+<script>
+    // ฟังก์ชันเปิด Modal เมื่อเลือกเดือน
+    // ฟังก์ชันเปิด Modal เมื่อเลือกเดือน
+    function openDeleteConfirmation(month) {
+        const year = document.getElementById('year').value;
 
+        Swal.fire({
+            title: 'ต้องการลบข้อมูล?',
+            text: `คุณต้องการลบข้อมูลใน เดือน ${month} ปี ${year}`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ลบ',
+            cancelButtonText: 'ยกเลิก',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // ส่งทั้งปี (year) และเดือน (month) ไปยังฟังก์ชัน deleteData
+                deleteData(year, month);
+
+            }
+        });
+    }
+
+
+
+    // ฟังก์ชันลบข้อมูล
+    function deleteData(year, month) {
+        // ส่งคำขอ DELETE ไปยังเซิร์ฟเวอร์
+        fetch(`/delete/${year},${month}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // ถ้าลบสำเร็จ
+                Swal.fire({
+                    icon: 'success',
+                    title: 'สำเร็จ!',
+                    text: `ลบข้อมูลในเดือน ${month} ปี ${year} แล้ว`,
+                    confirmButtonText: 'ตกลง',
+         
+                }).then(() => {
+                    // หลังจากแสดงข้อความเสร็จ จะรีโหลดหน้าใหม่
+                    location.reload();
+                });
+            })
+
+            .catch(error => {
+                // ถ้ามีข้อผิดพลาด
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong while deleting the data.',
+                });
+                console.error('Error:', error);
+            });
+    }
+</script>
 
 
 
