@@ -19,16 +19,74 @@
         </a>
         /
         <a href="{{ route('viewInstallFTTx') }}" class="">
-            ติดตั้ง fttx ภายใน 3 วัน
+            ข้อมูลการติดตั้ง fttx ภายใน 3 วัน
         </a>
         /
-    </span> ติดตั้ง fttx ภายใน 3 วันจังหวัด</h4>
+        <a href="javascript:history.go(-2)" class="">
+            ศูนย์ ภน.
+        </a>
+        /
+        <a href="javascript:history.back()" class="">
+            จังหวัด
+        </a>
+        /
+    </span> ศูนย์บริการ
+    
+
+</h4>
+
 
 
 <div class='card'>
     <div class="d-flex justify-content-between align-items-center gap-2">
         <!-- หัวข้อ -->
-        <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
+        <h4 class="card-header text-warning">กราฟข้อมูลการติดตั้ง fttx ภายใน 3 วัน จังหวัด
+            @if ($section == 'บภน.2.1 (กส.)')
+                กาฬสินธุ์ 
+            @elseif ($section == 'บภน.2.1 (ขก.)')
+                ขอนแก่น 
+            @elseif ($section == 'บภน.2.1 (มค.)')
+                มหาสารคาม 
+            @elseif ($section == 'บภน.2.1 (รอ.)')
+                ร้อยเอ็ด 
+            @elseif ($section == 'บภน.2.2 (นค.)')
+                หนองคาย 
+            @elseif ($section == 'บภน.2.2 (นพ.)')
+                นครพนม 
+            @elseif ($section == 'บภน.2.2 (นภ.)')
+                หนองบัวลำภู 
+            @elseif ($section == 'บภน.2.2 (บก.)')
+                บึงกาฬ 
+            @elseif ($section == 'บภน.2.2 (มห.)')
+                มุกดาหาร 
+            @elseif ($section == 'บภน.2.2 (ลย.)')
+                เลย 
+            @elseif ($section == 'บภน.2.2 (สน.)')
+                สกลนคร 
+            @elseif ($section == 'บภน.2.2 (อด.)')
+                อุดรธานี 
+            @elseif ($section == 'บภน.3.1 (ชภ.)')
+                ชัยภูมิ 
+            @elseif ($section == 'บภน.3.1 (นม.)')
+                นครราชสีมา 
+            @elseif ($section == 'บภน.3.1 (บร.)')
+                บุรีรัมย์ 
+            @elseif ($section == 'บภน.3.1 (สร.)')
+                สุรินทร์ 
+            @elseif ($section == 'บภน.3.2 (ยส.)')
+                ยโสธร 
+            @elseif ($section == 'บภน.3.2 (ศก.)')
+                ศรีสะเกษ 
+            @elseif ($section == 'บภน.3.2 (อจ.)')
+                อำนาจเจริญ 
+            @elseif ($section == 'บภน.3.2 (อบ.)')
+                อุบลราชธานี 
+            @else
+                {{ $section }}
+            @endif
+             (ข้อมูล ประจำเดือน {{ $month }} ปี {{ $year }})
+
+        </h4>
 
 
         <div class="d-flex align-items-center gap-2">
@@ -68,7 +126,54 @@
 <div class="card ">
     <div class="d-flex justify-content-between align-items-center gap-2">
         <!-- หัวข้อ -->
-        <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
+        <h4 class="card-header text-warning">กราฟข้อมูลการติดตั้ง fttx ภายใน 3 วัน จังหวัด
+            @if ($section == 'บภน.2.1 (กส.)')
+                กาฬสินธุ์ 
+            @elseif ($section == 'บภน.2.1 (ขก.)')
+                ขอนแก่น 
+            @elseif ($section == 'บภน.2.1 (มค.)')
+                มหาสารคาม 
+            @elseif ($section == 'บภน.2.1 (รอ.)')
+                ร้อยเอ็ด 
+            @elseif ($section == 'บภน.2.2 (นค.)')
+                หนองคาย 
+            @elseif ($section == 'บภน.2.2 (นพ.)')
+                นครพนม 
+            @elseif ($section == 'บภน.2.2 (นภ.)')
+                หนองบัวลำภู 
+            @elseif ($section == 'บภน.2.2 (บก.)')
+                บึงกาฬ 
+            @elseif ($section == 'บภน.2.2 (มห.)')
+                มุกดาหาร 
+            @elseif ($section == 'บภน.2.2 (ลย.)')
+                เลย 
+            @elseif ($section == 'บภน.2.2 (สน.)')
+                สกลนคร 
+            @elseif ($section == 'บภน.2.2 (อด.)')
+                อุดรธานี 
+            @elseif ($section == 'บภน.3.1 (ชภ.)')
+                ชัยภูมิ 
+            @elseif ($section == 'บภน.3.1 (นม.)')
+                นครราชสีมา 
+            @elseif ($section == 'บภน.3.1 (บร.)')
+                บุรีรัมย์ 
+            @elseif ($section == 'บภน.3.1 (สร.)')
+                สุรินทร์ 
+            @elseif ($section == 'บภน.3.2 (ยส.)')
+                ยโสธร 
+            @elseif ($section == 'บภน.3.2 (ศก.)')
+                ศรีสะเกษ 
+            @elseif ($section == 'บภน.3.2 (อจ.)')
+                อำนาจเจริญ 
+            @elseif ($section == 'บภน.3.2 (อบ.)')
+                อุบลราชธานี 
+            @else
+                {{ $section }}
+            @endif
+             (ข้อมูล ประจำเดือน {{ $month }} ปี {{ $year }})
+
+
+        </h4>
 
 
         <div class="d-flex align-items-center gap-2">

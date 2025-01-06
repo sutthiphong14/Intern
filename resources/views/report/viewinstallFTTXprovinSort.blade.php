@@ -19,16 +19,109 @@
         </a>
         /
         <a href="{{ route('viewInstallFTTx') }}" class="">
-            ติดตั้ง fttx ภายใน 3 วัน
+            ข้อมูลการติดตั้ง fttx ภายใน 3 วัน
         </a>
         /
-    </span> ติดตั้ง fttx ภายใน 3 วันจังหวัด</h4>
+        <a href="javascript:history.back()" class="">
+            ศูนย์ ภน.
+        </a>
+        /
+    </span> จังหวัด
+    @if ($section == 'รวม บภน.2.1 (กส.)')
+        กาฬสินธุ์
+    @elseif ($section == 'รวม บภน.2.1 (ขก.)')
+        ขอนแก่น
+    @elseif ($section == 'รวม บภน.2.1 (มค.)')
+        มหาสารคาม
+    @elseif ($section == 'รวม บภน.2.1 (รอ.)')
+        ร้อยเอ็ด
+    @elseif ($section == 'รวม บภน.2.2 (นค.)')
+        หนองคาย
+    @elseif ($section == 'รวม บภน.2.2 (นพ.)')
+        นครพนม
+    @elseif ($section == 'รวม บภน.2.2 (นภ.)')
+        หนองบัวลำภู
+    @elseif ($section == 'รวม บภน.2.2 (บก.)')
+        บึงกาฬ
+    @elseif ($section == 'รวม บภน.2.2 (มห.)')
+        มุกดาหาร
+    @elseif ($section == 'รวม บภน.2.2 (ลย.)')
+        เลย
+    @elseif ($section == 'รวม บภน.2.2 (สน.)')
+        สกลนคร
+    @elseif ($section == 'รวม บภน.2.2 (อด.)')
+        อุดรธานี
+    @elseif ($section == 'รวม บภน.3.1 (ชภ.)')
+        ชัยภูมิ
+    @elseif ($section == 'รวม บภน.3.1 (นม.)')
+        นครราชสีมา
+    @elseif ($section == 'รวม บภน.3.1 (บร.)')
+        บุรีรัมย์
+    @elseif ($section == 'รวม บภน.3.1 (สร.)')
+        สุรินทร์
+    @elseif ($section == 'รวม บภน.3.2 (ยส.)')
+        ยโสธร
+    @elseif ($section == 'รวม บภน.3.2 (ศก.)')
+        ศรีสะเกษ
+    @elseif ($section == 'รวม บภน.3.2 (อจ.)')
+        อำนาจเจริญ
+    @elseif ($section == 'รวม บภน.3.2 (อบ.)')
+        อุบลราชธานี
+    @endif
+
+
+</h4>
 
 
 <div class='card'>
     <div class="d-flex justify-content-between align-items-center gap-2">
         <!-- หัวข้อ -->
-        <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
+        <h4 class="card-header text-warning">กราฟข้อมูลการติดตั้ง fttx ภายใน 3 วัน จังหวัด
+            @if ($section == 'รวม บภน.2.1 (กส.)')
+                กาฬสินธุ์ 
+            @elseif ($section == 'รวม บภน.2.1 (ขก.)')
+                ขอนแก่น 
+            @elseif ($section == 'รวม บภน.2.1 (มค.)')
+                มหาสารคาม 
+            @elseif ($section == 'รวม บภน.2.1 (รอ.)')
+                ร้อยเอ็ด 
+            @elseif ($section == 'รวม บภน.2.2 (นค.)')
+                หนองคาย 
+            @elseif ($section == 'รวม บภน.2.2 (นพ.)')
+                นครพนม 
+            @elseif ($section == 'รวม บภน.2.2 (นภ.)')
+                หนองบัวลำภู 
+            @elseif ($section == 'รวม บภน.2.2 (บก.)')
+                บึงกาฬ 
+            @elseif ($section == 'รวม บภน.2.2 (มห.)')
+                มุกดาหาร 
+            @elseif ($section == 'รวม บภน.2.2 (ลย.)')
+                เลย 
+            @elseif ($section == 'รวม บภน.2.2 (สน.)')
+                สกลนคร 
+            @elseif ($section == 'รวม บภน.2.2 (อด.)')
+                อุดรธานี 
+            @elseif ($section == 'รวม บภน.3.1 (ชภ.)')
+                ชัยภูมิ 
+            @elseif ($section == 'รวม บภน.3.1 (นม.)')
+                นครราชสีมา 
+            @elseif ($section == 'รวม บภน.3.1 (บร.)')
+                บุรีรัมย์ 
+            @elseif ($section == 'รวม บภน.3.1 (สร.)')
+                สุรินทร์ 
+            @elseif ($section == 'รวม บภน.3.2 (ยส.)')
+                ยโสธร 
+            @elseif ($section == 'รวม บภน.3.2 (ศก.)')
+                ศรีสะเกษ 
+            @elseif ($section == 'รวม บภน.3.2 (อจ.)')
+                อำนาจเจริญ 
+            @elseif ($section == 'รวม บภน.3.2 (อบ.)')
+                อุบลราชธานี 
+            @endif
+             ปี {{ $year }}
+            
+
+        </h4>
 
 
         <div class="d-flex align-items-center gap-2">
@@ -68,7 +161,51 @@
 <div class="card ">
     <div class="d-flex justify-content-between align-items-center gap-2">
         <!-- หัวข้อ -->
-        <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
+        <h4 class="card-header text-warning">ข้อมูลการติดตั้ง fttx ภายใน 3 วัน จังหวัด
+            @if ($section == 'รวม บภน.2.1 (กส.)')
+                กาฬสินธุ์
+            @elseif ($section == 'รวม บภน.2.1 (ขก.)')
+                ขอนแก่น
+            @elseif ($section == 'รวม บภน.2.1 (มค.)')
+                มหาสารคาม
+            @elseif ($section == 'รวม บภน.2.1 (รอ.)')
+                ร้อยเอ็ด
+            @elseif ($section == 'รวม บภน.2.2 (นค.)')
+                หนองคาย
+            @elseif ($section == 'รวม บภน.2.2 (นพ.)')
+                นครพนม
+            @elseif ($section == 'รวม บภน.2.2 (นภ.)')
+                หนองบัวลำภู
+            @elseif ($section == 'รวม บภน.2.2 (บก.)')
+                บึงกาฬ
+            @elseif ($section == 'รวม บภน.2.2 (มห.)')
+                มุกดาหาร
+            @elseif ($section == 'รวม บภน.2.2 (ลย.)')
+                เลย
+            @elseif ($section == 'รวม บภน.2.2 (สน.)')
+                สกลนคร
+            @elseif ($section == 'รวม บภน.2.2 (อด.)')
+                อุดรธานี
+            @elseif ($section == 'รวม บภน.3.1 (ชภ.)')
+                ชัยภูมิ
+            @elseif ($section == 'รวม บภน.3.1 (นม.)')
+                นครราชสีมา
+            @elseif ($section == 'รวม บภน.3.1 (บร.)')
+                บุรีรัมย์
+            @elseif ($section == 'รวม บภน.3.1 (สร.)')
+                สุรินทร์
+            @elseif ($section == 'รวม บภน.3.2 (ยส.)')
+                ยโสธร
+            @elseif ($section == 'รวม บภน.3.2 (ศก.)')
+                ศรีสะเกษ
+            @elseif ($section == 'รวม บภน.3.2 (อจ.)')
+                อำนาจเจริญ
+            @elseif ($section == 'รวม บภน.3.2 (อบ.)')
+                อุบลราชธานี
+            @endif
+            ปี {{ $year }}
+
+        </h4>
 
 
         <div class="d-flex align-items-center gap-2">
@@ -130,71 +267,72 @@
 
 
                 <tbody class="text-center align-middle">
-                                    @php
-                                    $centers = [
-                                        'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
-                                        'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
-                                        'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
-                                        'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
-                                        'รวม บภน.2.2 (นค.)' => 'หนองคาย',
-                                        'รวม บภน.2.2 (นพ.)' => 'นครพนม',
-                                        'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
-                                        'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
-                                        'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
-                                        'รวม บภน.2.2 (ลย.)' => 'เลย',
-                                        'รวม บภน.2.2 (สน.)' => 'สกลนคร',
-                                        'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
-                                        'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
-                                        'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
-                                        'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
-                                        'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
-                                        'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
-                                        'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
-                                        'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
-                                        'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
-                                    ];
-                                
-                                    // กรองข้อมูลเพื่อแสดงเฉพาะค่าใน $centers
-                                    $filteredData = $sumData->filter(function ($item) use ($centers) {
-                                        return isset($centers[$item->sum_installation_center]);
-                                    });
-                                @endphp
-                                
-                                @foreach ($filteredData as $item)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('viewInstallFTTxcenter', ['section' => $item['sum_installation_center'], 'year' => $item['year'], 'month' => $item['month']]) }}"
-                                                class="btn btn-warning">
-                                                <i class="fas fa-search"></i>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            {{ $centers[$item->sum_installation_center] }}
-                                        </td>
-                                        <td>{{ $item->month }}</td>
-                                        <td>{{ $item->sum_num_of_circuits }}</td>
-                                        <td>{{ $item->sum_total_preparation_time_days }}</td>
-                                        <td>{{ $item->sum_total_processing_time_days }}</td>
-                                        <td>{{ $item->sum_sdp_odp_deadline_days }}</td>
-                                        <td>{{ $item->sum_wiring_time_days }}</td>
-                                        <td>{{ $item->sum_config_nms_days }}</td>
-                                        <td>{{ $item->sum_technician_appointment_and_scheduling_time_days }}</td>
-                                        <td>{{ $item->sum_customer_waiting_time_days }}</td>
-                                        <td>{{ $item->sum_cable_pulling_and_ont_installation_time_days }}</td>
-                                        <td>{{ $item->sum_closing_work_time_days }}</td>
-                                        <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
-                                        <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
-                                        <td
-                                            class="{{ $item['sum_installation_percentage_within_3_days'] > 80 ? 'bg-success' : ($item['sum_installation_percentage_within_3_days'] > 60 ? 'bg-warning' : 'bg-danger') }}">
-                                            {{ $item->sum_installation_percentage_within_3_days }}%</td>
-                                    </tr>
-                                @endforeach
-                                
+                    @php
+                        $centers = [
+                            'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
+                            'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
+                            'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
+                            'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
+                            'รวม บภน.2.2 (นค.)' => 'หนองคาย',
+                            'รวม บภน.2.2 (นพ.)' => 'นครพนม',
+                            'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
+                            'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
+                            'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
+                            'รวม บภน.2.2 (ลย.)' => 'เลย',
+                            'รวม บภน.2.2 (สน.)' => 'สกลนคร',
+                            'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
+                            'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
+                            'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
+                            'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
+                            'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
+                            'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
+                            'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
+                            'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
+                            'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
+                        ];
+
+                        // กรองข้อมูลเพื่อแสดงเฉพาะค่าใน $centers
+                        $filteredData = $sumData->filter(function ($item) use ($centers) {
+                            return isset($centers[$item->sum_installation_center]);
+                        });
+                    @endphp
+
+                    @foreach ($filteredData as $item)
+                        <tr>
+                            <td>
+                                <a href="{{ route('viewInstallFTTxcenter', ['section' => $item['sum_installation_center'], 'year' => $item['year'], 'month' => $item['month']]) }}"
+                                    class="btn btn-warning">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                            </td>
+                            <td>
+                                {{ $centers[$item->sum_installation_center] }}
+                            </td>
+                            <td>{{ $item->month }}</td>
+                            <td>{{ $item->sum_num_of_circuits }}</td>
+                            <td>{{ $item->sum_total_preparation_time_days }}</td>
+                            <td>{{ $item->sum_total_processing_time_days }}</td>
+                            <td>{{ $item->sum_sdp_odp_deadline_days }}</td>
+                            <td>{{ $item->sum_wiring_time_days }}</td>
+                            <td>{{ $item->sum_config_nms_days }}</td>
+                            <td>{{ $item->sum_technician_appointment_and_scheduling_time_days }}</td>
+                            <td>{{ $item->sum_customer_waiting_time_days }}</td>
+                            <td>{{ $item->sum_cable_pulling_and_ont_installation_time_days }}</td>
+                            <td>{{ $item->sum_closing_work_time_days }}</td>
+                            <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
+                            <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
+                            <td
+                                class="{{ $item['sum_installation_percentage_within_3_days'] > 80 ? 'bg-success' : ($item['sum_installation_percentage_within_3_days'] > 60 ? 'bg-warning' : 'bg-danger') }}">
+                                {{ $item->sum_installation_percentage_within_3_days }}%
+                            </td>
+                        </tr>
+                    @endforeach
 
 
 
-                                    <!-- เพิ่มข้อมูลอื่น ๆ -->
-                                </tbody>
+
+                    <!-- เพิ่มข้อมูลอื่น ๆ -->
+                </tbody>
 
 
 
@@ -333,19 +471,19 @@
         } else {
             // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
             const backgroundColors = data.map(value =>
-            value > 85 ? 'rgba(68, 180, 40, 0.8)' :
-                value > 83 ? 'rgba(113, 221, 55, 0.8)' :
-                value > 80 ? 'rgba(255, 196, 0,0.8)' :
-                value > 77 ? 'rgba(253, 126, 20, 0.8)' :
-                'rgba(255, 62, 29, 0.8)'
+                value > 85 ? 'rgba(68, 180, 40, 0.8)' :
+                    value > 83 ? 'rgba(113, 221, 55, 0.8)' :
+                        value > 80 ? 'rgba(255, 196, 0,0.8)' :
+                            value > 77 ? 'rgba(253, 126, 20, 0.8)' :
+                                'rgba(255, 62, 29, 0.8)'
             );
 
             const borderColors = data.map(value =>
-            value > 85 ? 'rgba(79, 193, 51, 1)' :
-                value > 83 ? 'rgba(113, 221, 55, 1)' :
-                value > 80 ? 'rgba(255, 196, 0,1)' :
-                value > 77 ? 'rgb(253, 126, 20, 1)' :
-                'rgba(255, 62, 29, 1)'
+                value > 85 ? 'rgba(79, 193, 51, 1)' :
+                    value > 83 ? 'rgba(113, 221, 55, 1)' :
+                        value > 80 ? 'rgba(255, 196, 0,1)' :
+                            value > 77 ? 'rgb(253, 126, 20, 1)' :
+                                'rgba(255, 62, 29, 1)'
             );
 
             const ctx = document.getElementById('myChart');

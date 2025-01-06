@@ -19,16 +19,36 @@
         </a>
         /
         <a href="{{ route('viewInstallFTTx') }}" class="">
-            ติดตั้ง fttx ภายใน 3 วัน
+        ข้อมูลการติดตั้ง fttx ภายใน 3 วัน
         </a>
         /
-    </span> ติดตั้ง fttx ภายใน 3 วันจังหวัด</h4>
+    </span>
+    @if ($section == '2')
+        ภน.2.1
+    @elseif ($section == '3')
+        ภน.2.2
+    @else
+        {{ $section }}
+        <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
+    @endif
+
+</h4>
 
 
 <div class='card'>
     <div class="d-flex justify-content-between align-items-center gap-2">
         <!-- หัวข้อ -->
-        <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
+        <h4 class="card-header text-warning">
+            @if ($section == '2')
+                กราฟแสดงข้อมูลการติดตั้ง fttx ภายใน 3 วัน ภน.2.1 
+            @elseif ($section == '3')
+                กราฟแสดงข้อมูลการติดตั้ง fttx ภายใน 3 วัน ภน.2.2 
+            @else
+                {{ $section }}
+                <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
+            @endif
+            (ข้อมูล ประจำเดือน {{ $month }} ปี {{ $year }})
+        </h4>
 
 
         <div class="d-flex align-items-center gap-2">
@@ -68,7 +88,18 @@
 <div class="card ">
     <div class="d-flex justify-content-between align-items-center gap-2">
         <!-- หัวข้อ -->
-        <h4 class="card-header text-warning">ติดตั้ง fttx ภายใน 3 วัน</h4>
+        <h4 class="card-header text-warning">
+            @if ($section == '2')
+                ข้อมูลการติดตั้ง fttx ภายใน 3 วัน ภน.2.1 
+            @elseif ($section == '3')
+                ข้อมูลการติดตั้ง fttx ภายใน 3 วัน ภน.2.2 
+            @else
+                {{ $section }}
+                <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->
+            @endif
+            (ข้อมูล ประจำเดือน {{ $month }} ปี {{ $year }})
+            
+        </h4>
 
 
         <div class="d-flex align-items-center gap-2">
@@ -341,19 +372,19 @@
         } else {
             // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
             const backgroundColors = data.map(value =>
-            value > 85 ? 'rgba(68, 180, 40, 0.8)' :
-                value > 83 ? 'rgba(113, 221, 55, 0.8)' :
-                value > 80 ? 'rgba(255, 196, 0,0.8)' :
-                value > 77 ? 'rgba(253, 126, 20, 0.8)' :
-                'rgba(255, 62, 29, 0.8)'
+                value > 85 ? 'rgba(68, 180, 40, 0.8)' :
+                    value > 83 ? 'rgba(113, 221, 55, 0.8)' :
+                        value > 80 ? 'rgba(255, 196, 0,0.8)' :
+                            value > 77 ? 'rgba(253, 126, 20, 0.8)' :
+                                'rgba(255, 62, 29, 0.8)'
             );
 
             const borderColors = data.map(value =>
-            value > 85 ? 'rgba(79, 193, 51, 1)' :
-                value > 83 ? 'rgba(113, 221, 55, 1)' :
-                value > 80 ? 'rgba(255, 196, 0,1)' :
-                value > 77 ? 'rgb(253, 126, 20, 1)' :
-                'rgba(255, 62, 29, 1)'
+                value > 85 ? 'rgba(79, 193, 51, 1)' :
+                    value > 83 ? 'rgba(113, 221, 55, 1)' :
+                        value > 80 ? 'rgba(255, 196, 0,1)' :
+                            value > 77 ? 'rgb(253, 126, 20, 1)' :
+                                'rgba(255, 62, 29, 1)'
             );
 
             const ctx = document.getElementById('myChart');
