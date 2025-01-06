@@ -200,7 +200,7 @@ Route::get('/viewInstallFTTxcenter/{section}/{year}/{month}', [ReportController:
 Route::get('/viewInstallFTTxcenter/{center}/{year}/{month}', [ReportController::class, 'viewInstallData']);
 
 Route::get('/ExportInstallFttxcenter', [ReportController::class, 'exportData'])->name('exportInstallFTTxcenter');;
-
+Route::delete('/delete/{year},{month}', [ReportController::class, 'delete_data'])->name('delete_data');
 
 Route::get('/importdata', function () {
     return view('report.importdata');
