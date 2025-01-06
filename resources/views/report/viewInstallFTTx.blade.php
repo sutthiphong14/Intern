@@ -41,7 +41,7 @@
                 id="yearForm">
                 <input type="number" name="year" id="yearInput" placeholder="Enter year"
                     value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}"
-                    class="form-control" style="width: 200px;" required min="2000" max="9999">
+                    class="form-control" style="width: 100px;" required min="2000" max="9999">
             </form>
 
             <!-- ปุ่ม Import -->
@@ -93,7 +93,7 @@
                 id="yearForm">
                 <input type="number" name="year" id="yearInput" placeholder="Enter year"
                     value="{{ $latestMonthData->isEmpty() ? '' : $latestMonthData->first()->year }}"
-                    class="form-control" style="width: 200px;" required min="2000" max="9999">
+                    class="form-control" style="width: 100px;" required min="2000" max="9999">
             </form>
 
             <!-- ปุ่ม Import -->

@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Newsfeed;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
+
+
 
 class AdminController extends Controller
 {
@@ -143,4 +147,25 @@ class AdminController extends Controller
 
         return view('newsfeed.listnewsfeed', compact('data'));
     }
+
+    public function downloadFile($id)
+{
+    // ดึงข้อมูลจากฐานข้อมูล
+    $newsfeed = DB::table('newsfeeds')->where('id', $id)->first();
+
+    // ตรวจสอบว่ามีข้อมูลและไฟล์อยู่จริงหรือไม่
+    if ($newsfeed && Storage::disk('public')->exists($newsfeed->file)) {
+        $path = storage_path('app/public/' . $newsfeed->file);
+        $filename = basename($newsfeed->file); // ชื่อไฟล์ต้นฉบับ
+
+        // ส่งคืนไฟล์ให้ดาวน์โหลด
+        return response()->download($path, $filename);
+    }
+
+    // หากไม่พบไฟล์ ส่งกลับพร้อมข้อความผิดพลาด
+    return redirect()->back()->with('error', 'ไม่พบไฟล์');
+}
+
+
+
 }

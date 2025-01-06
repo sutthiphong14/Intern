@@ -14,7 +14,7 @@
 
 <!-- navigate -->
 <h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
-        <a href="home" class="">
+        <a href="{{ route('home') }}" class="">
             หน้าแรก
         </a>
         /
@@ -131,7 +131,7 @@
 
             <!-- ปุ่ม Import -->
             @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                <a href="{{ route('importdata') }}" class="btn bg-yellow">
+                <a href="{{ route('importdata') }}" class="btn bg-yellow" style="width: 150px;">
                     <i class="fas fa-file-import"></i> Import
                 </a>
             @endif
@@ -140,7 +140,7 @@
             <form action="{{ route('export') }}" method="GET">
                 @csrf
 
-                <button type="submit" class="btn bg-dark ">
+                <button type="submit" class="btn bg-dark " style="width: 150px;">
                     <i class="fas fa-file-export"></i> Export
                 </button>
 
@@ -215,7 +215,7 @@
 
             <!-- ปุ่ม Import -->
             @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                <a href="{{ route('importdata') }}" class="btn bg-yellow">
+                <a href="{{ route('importdata') }}" class="btn bg-yellow" style="width: 150px;">
                     <i class="fas fa-file-import"></i> Import
                 </a>
             @endif
@@ -224,7 +224,7 @@
             <form action="{{ route('export') }}" method="GET">
                 @csrf
 
-                <button type="submit" class="btn bg-dark ">
+                <button type="submit" class="btn bg-dark " style="width: 150px;">
                     <i class="fas fa-file-export"></i> Export
                 </button>
 

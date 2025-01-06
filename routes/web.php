@@ -75,6 +75,9 @@ Route::get('/profile', function (){
     return view('profile');
 });
 
+Route::get('/download/{id}', [AdminController::class, 'downloadFile'])->name('admin.download');
+
+
 
 Route::post('/createnews',[AdminController::class , 'createnews'])->name('createnews');
 
@@ -285,11 +288,6 @@ Route::get('/search', [CategoryController::class, 'search'])->name('categories.s
 Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->name('categories.delete');
 
 
-    
-
-
-
-    
 
     Route::get('/requests', [RequestsController::class, 'index'])->name('requests.list');
     Route::get('/requests/create', [RequestsController::class, 'create'])->name('insertRequests');
