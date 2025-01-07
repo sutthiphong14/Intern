@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     public function listUsers()
-    {
-        $users = User::all();
-        return view('users.listusers', compact('users'));
-    }
+{
+    $users = User::paginate(10); // Adjust the number per page as needed
+    return view('users.listusers', compact('users'));
+}
 
     function delete($id)
     {

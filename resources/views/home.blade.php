@@ -80,6 +80,7 @@
 
     </ul>
     <div class="tab-content">
+      
       <div class="tab-pane fade show active" id="navs-justified-home" role="tabpanel">
         <table id="example2" class="table table-hover align-items-center">
           <thead class='text-center bg-dark'>
@@ -141,6 +142,10 @@
         <p>
           --------
         </p>
+      </div>
+
+      <div>
+        <a href="newsfeed" class="text-warning">แสดงเพิ่มเติม</a>
       </div>
     </div>
   </div>

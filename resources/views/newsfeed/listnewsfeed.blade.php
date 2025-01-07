@@ -41,13 +41,12 @@
             </thead>
             <tbody>
                 @forelse ($data as $item)
-                    <tr class='text-center'>
-
+                    <tr class="text-center">
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->description }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
                         <td>{{ $item->status == 1 ? 'แสดง' : 'ซ่อน' }}</td>
-                        <td class='align-items-center text-center'>
+                        <td class="align-items-center text-center">
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                     <i class="bx bx-dots-vertical-rounded"></i>
@@ -79,7 +78,6 @@
                                     </form>
                                 </div>
                             </div>
-
                         </td>
                     </tr>
                 @empty
@@ -91,13 +89,44 @@
 
         </table>
 
+       
 
-        
+
 
 
 
     </div>
     <!-- /.card-body -->
+    
+
+<!-- Pagination -->
+<div class="d-flex justify-content-center align-items-center me-4">
+<nav aria-label="Page navigation ">
+    <ul class="pagination">
+        <li class="page-item {{ $data->onFirstPage() ? 'disabled' : '' }}">
+            <a class="page-link" href="{{ $data->previousPageUrl() }}"><i
+                    class="tf-icon bx bx-chevrons-left"></i></a>
+        </li>
+        <li class="page-item {{ $data->onFirstPage() ? 'disabled' : '' }}">
+            <a class="page-link" href="{{ $data->previousPageUrl() }}"><i
+                    class="tf-icon bx bx-chevron-left"></i></a>
+        </li>
+        @foreach ($data->getUrlRange(1, $data->lastPage()) as $page => $url)
+            <li class="page-item {{ $page == $data->currentPage() ? 'active' : '' }}">
+                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+            </li>
+        @endforeach
+        <li class="page-item {{ $data->hasMorePages() ? '' : 'disabled' }}">
+            <a class="page-link" href="{{ $data->nextPageUrl() }}"><i
+                    class="tf-icon bx bx-chevron-right"></i></a>
+        </li>
+        <li class="page-item {{ $data->hasMorePages() ? '' : 'disabled' }}">
+            <a class="page-link" href="{{ $data->nextPageUrl() }}"><i
+                    class="tf-icon bx bx-chevrons-right"></i></a>
+        </li>
+    </ul>
+</nav>
+</div>
 
 
 </div>
@@ -140,18 +169,18 @@
             },
             body: JSON.stringify({})
         })
-        .then(response => {
-            if (response.ok) {
-                // รีเฟรชหน้าเว็บเมื่อคำขอสำเร็จ
-                location.reload();
-            } else {
-                alert('เกิดข้อผิดพลาดในการเปลี่ยนสถานะ');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
-        });
+            .then(response => {
+                if (response.ok) {
+                    // รีเฟรชหน้าเว็บเมื่อคำขอสำเร็จ
+                    location.reload();
+                } else {
+                    alert('เกิดข้อผิดพลาดในการเปลี่ยนสถานะ');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+            });
     }
 </script>
 @endsection

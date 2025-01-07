@@ -57,52 +57,76 @@
                 </tr>
             </thead>
             <tbody class='table-border-bottom-0 text-center'>
-                @forelse($users as $user)
-                    <tr>
+    @forelse($users as $user)
+        <tr>
+            <td>{{ $user->username }}</td>
+            <td class="text-center">
+                <img id="profile-image" src="{{ $user->profile_image ?? 'dist/img/defult_profile.jpg' }}" alt="Profile Image" class="user-profile-image">
+            </td>
+            <td>{{ $user->name }}</td>
+            <td>{{ $user->email }}</td>
 
-                        <td>{{ $user->username }}</td>
-                        <td class="text-center">
-                            <img id="profile-image" src="{{ $user->profile_image ?? 'dist/img/defult_profile.jpg' }}"
-                                alt="Profile Image" class="user-profile-image">
-                        </td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
+            <td>
+                <div class="dropdown">
+                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                        <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <!-- Edit link -->
+                        <a class="dropdown-item" href="{{ route('users.edit', $user->id) }}">
+                            <i class="bx bx-edit-alt me-1"></i> แก้ไข
+                        </a>
 
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <!-- Edit link -->
-                                    <a class="dropdown-item" href="{{ route('users.edit', $user->id) }}">
-                                        <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                                    </a>
+                        <!-- Delete form -->
+                        <form action="{{ route('delete', $user->id) }}" method="POST" class="d-inline delete-form">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="dropdown-item text-danger" style="border: none; background: none;">
+                                <i class="bx bx-trash me-1"></i> ลบ
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="5" class="text-center">ไม่มีข้อมูล</td>
+        </tr>
+    @endforelse
+</tbody>
 
-                                    <!-- Delete form -->
-                                    <form action="{{ route('delete', $user->id) }}" method="POST"
-                                        class="d-inline delete-form">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger"
-                                            style="border: none; background: none;">
-                                            <i class="bx bx-trash me-1"></i> ลบ
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="text-center">ไม่มีข้อมูล</td>
-                    </tr>
-                @endforelse
-            </tbody>
 
 
         </table>
     </div>
+    </div>
+
+
+    <!-- Pagination -->
+<div class="d-flex justify-content-center align-items-center me-4">
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li class="page-item {{ $users->onFirstPage() ? 'disabled' : '' }}">
+            <a class="page-link" href="{{ $users->previousPageUrl() }}"><i class="tf-icon bx bx-chevrons-left"></i></a>
+        </li>
+        <li class="page-item {{ $users->onFirstPage() ? 'disabled' : '' }}">
+            <a class="page-link" href="{{ $users->previousPageUrl() }}"><i class="tf-icon bx bx-chevron-left"></i></a>
+        </li>
+        @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
+            <li class="page-item {{ $page == $users->currentPage() ? 'active' : '' }}">
+                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+            </li>
+        @endforeach
+        <li class="page-item {{ $users->hasMorePages() ? '' : 'disabled' }}">
+            <a class="page-link" href="{{ $users->nextPageUrl() }}"><i class="tf-icon bx bx-chevron-right"></i></a>
+        </li>
+        <li class="page-item {{ $users->hasMorePages() ? '' : 'disabled' }}">
+            <a class="page-link" href="{{ $users->nextPageUrl() }}"><i class="tf-icon bx bx-chevrons-right"></i></a>
+        </li>
+    </ul>
+</nav>
+</div>
     
 </div>
 

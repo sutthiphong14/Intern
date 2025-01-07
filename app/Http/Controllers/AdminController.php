@@ -11,16 +11,17 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class AdminController extends Controller
 {
     function listnewsfeed()
-    {
-        $data = DB::table('newsfeeds')->get();
-        return view('newsfeed.listnewsfeed', compact('data'));
-    }
+{
+    $data = DB::table('newsfeeds')->paginate(10); // Adjust the number per page as needed
+    return view('newsfeed.listnewsfeed', compact('data'));
+}
 
-    function newsfeed()
-    {
-        $data = DB::table('newsfeeds')->get();
-        return view('newsfeed.newsfeed', compact('data'));
-    }
+function newsfeed()
+{
+    $data = DB::table('newsfeeds')->paginate(10); // Adjust the number per page as needed
+    return view('newsfeed.newsfeed', compact('data'));
+}
+
 
     function createnews(Request $request)
     {
