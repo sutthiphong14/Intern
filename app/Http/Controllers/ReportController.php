@@ -372,9 +372,9 @@ class ReportController extends Controller
                 return !is_null($labels[$key]);
             });
 
-
+            $latestYear = $latestMonthData->first()->year; // เลือกปีจากข้อมูลล่าสุดใน Collection
         // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
-        return view('report.viewInstallFTTx', compact('installationCenters', 'labels', 'data1', 'sortedDataMax', 'latestMonthData', 'sortedDataMin'));
+        return view('report.viewInstallFTTx', compact('installationCenters', 'labels', 'data1', 'sortedDataMax', 'latestMonthData', 'sortedDataMin','latestYear'));
     }
 
 
