@@ -167,9 +167,9 @@
                                         </td>
                                         <td>
                                             @if ($section['sum_installation_center'] == 'รวม ตป.1')
-                                                รวม ตป.1
+                                                ตป.1
                                             @elseif ($section['sum_installation_center'] == 'รวม ตป.2')
-                                                รวม ตป.2
+                                                ตป.2
                                             @endif
                                         </td>
                                         <!-- ค่าอื่นๆ -->
