@@ -359,7 +359,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success">Confirm Export</button>
+                    <button type="submit" class="btn btn-success" id="confirmExport" disabled>Confirm Export</button>
                 </div>
                 </form>
 
@@ -486,121 +486,103 @@
     </script>
 
 
+<script>
+    $(document).ready(function() {
+           const latestYear = @json($latestYear ?? ''); // ใช้ปีปัจจุบันถ้าตัวแปรไม่มีค่า
+           const confirmExportBtn = $('#confirmExport'); // ปุ่ม Confirm Export
+           const month = $('#month'); // ปุ่ม Confirm Export
 
-    <script>
-        $(document).ready(function() {
-            const latestYear = @json($latestYear); // ดึงปีที่เลือกจาก Collection
-            fetchMonths(latestYear); // ดึงข้อมูลเดือนเมื่อเปิด Modal
-    
+        fetchMonths(latestYear); // ดึงข้อมูลเดือนเมื่อเปิด Modal
+
     $('#year').val(latestYear); // ตั้งค่าปีเริ่มต้นเป็นปีที่ดึงมาจาก latestMonthData
-            // กำหนดสไตล์ CSS สำหรับ SweetAlert
-            $('<style>')
-                .text(`
-            .swal2-container {
-                z-index: 2000 !important;
+
+        function fetchMonths(year) {
+            // ตรวจสอบค่าของ year ก่อน
+            if (!year || year.length !== 4 || isNaN(year)) {
+                console.warn("Invalid year:", year);
+                return; // ไม่ทำงานถ้าค่า year ไม่ถูกต้อง
             }
-            .modal {
-                z-index: 1050;
-            }
-            .modal-backdrop.show {
-                z-index: 1040;
-            }
-            .swal2-backdrop-show {
-                z-index: 1999 !important;
-            }
-        `)
-                .appendTo('head');
 
-            function fetchMonths(year) {
-                // ตรวจสอบค่าของ year ก่อน
-                if (!year || year.length !== 4 || isNaN(year)) {
-                    console.warn("Invalid year:", year);
-                    return; // ไม่ทำงานถ้าค่า year ไม่ถูกต้อง
-                }
+            $.ajax({
+                url: "{{ route('api.existing.months') }}",
+                method: "GET",
+                data: {
+                    year: year
+                },
+                success: function(response) {
+                    const monthsWithData = response.map(item => item.month);
+                    const monthSelect = $('#month');
 
-                $.ajax({
-                    url: "{{ route('api.existing.months') }}",
-                    method: "GET",
-                    data: {
-                        year: year
-                    },
-                    success: function(response) {
-                        const monthsWithData = response.map(item => item.month);
-                        const monthSelect = $('#month');
+                    // เคลียร์ตัวเลือกเดิม
+                    monthSelect.empty();
 
-                        // เคลียร์ตัวเลือกเดิม
-                        monthSelect.empty();
-
-                        if (monthsWithData.length === 0) {
-                            Swal.fire({
-                                icon: 'warning',
-                                title: 'ไม่มีข้อมูล',
-                                text: `ไม่มีข้อมูลสำหรับปี ${year}`,
-                                confirmButtonText: 'ตกลง',
-                                customClass: {
-                                    container: 'my-swal-container',
-                                    popup: 'my-swal-popup'
-                                },
-                                backdrop: true,
-                                allowOutsideClick: false,
-                            });
-                            // เพิ่ม option ว่าไม่มีข้อมูล
-                            monthSelect.append(
-                                '<option disabled>ไม่มีข้อมูลในปีนี้</option>');
-                            return;
-                        }
-
-                        // กรองค่าซ้ำจาก monthsWithData โดยใช้ Set
-                        const uniqueMonths = [...new Set(monthsWithData)];
-
-                        // เพิ่ม months ที่มีข้อมูล
-                        uniqueMonths.forEach(function(month) {
-                            monthSelect.append(`<option value="${month}">${month}</option>`);
-                        });
-                    },
-                    error: function(error) {
-                        console.error("Error fetching data:", error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'เกิดข้อผิดพลาด',
-                            text: 'ไม่สามารถดึงข้อมูลได้ โปรดลองอีกครั้ง',
-                            confirmButtonText: 'ตกลง',
-                            customClass: {
-                                container: 'my-swal-container',
-                                popup: 'my-swal-popup'
-                            },
-                            backdrop: true
-                        });
+                    if (monthsWithData.length === 0) {
+                        
+                            
+                      
+                        // เพิ่ม option ว่าไม่มีข้อมูล
+                         // ปิดการใช้งานปุ่ม Confirm Export
+                         $('#no-data-msg').remove();
+                        confirmExportBtn.prop('disabled', true);
+                       
+                        monthSelect.after('<p id="no-data-msg" class="text-danger">ไม่มีข้อมูลในปีนี้</p>');
+                        return;
                     }
-                });
-            }
+                    $('#no-data-msg').remove();
 
-            // ดึงข้อมูลเมื่อ Modal เปิด
-            $('#myModal').on('shown.bs.modal', function() {
-                const selectedYear = $('#year').val();
-           
-            });
-
-            // อัปเดตข้อมูลเมื่อป้อนหรือเปลี่ยนค่าปี
-            $('#year').on('keydown', function(event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    const selectedYear = $(this).val();
-                    if (selectedYear.length === 4 && !isNaN(selectedYear)) {
-                        fetchMonths(selectedYear);
-                    }
+                    // เปิดใช้งานปุ่ม Confirm Export
+                    confirmExportBtn.prop('disabled', false);
+                    // กรองค่าซ้ำจาก monthsWithData โดยใช้ Set
+                    const uniqueMonths = [...new Set(monthsWithData)];
+                    // เพิ่ม months ที่มีข้อมูล
+                    uniqueMonths.forEach(function(month) {
+                        monthSelect.append(`<option value="${month}">${month}</option>`);
+                    });
+                },
+                error: function(error) {
+                    console.error("Error fetching data:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: 'ไม่สามารถดึงข้อมูลได้ โปรดลองอีกครั้ง',
+                        confirmButtonText: 'ตกลง',
+                        customClass: {
+                            container: 'my-swal-container',
+                            popup: 'my-swal-popup'
+                        },
+                        backdrop: true
+                    });
                 }
             });
+        }
 
-            $('#year').on('change', function() {
+        // ดึงข้อมูลเมื่อ Modal เปิด
+        $('#myModal').on('shown.bs.modal', function() {
+            const selectedYear = $('#year').val();
+       
+        });
+
+        // อัปเดตข้อมูลเมื่อป้อนหรือเปลี่ยนค่าปี
+        $('#year').on('keydown', function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
                 const selectedYear = $(this).val();
                 if (selectedYear.length === 4 && !isNaN(selectedYear)) {
                     fetchMonths(selectedYear);
                 }
-            });
-            fetchMonths(selectedYear);
+            }
         });
-    </script>
+
+        $('#year').on('change', function() {
+            const selectedYear = $(this).val();
+            if (selectedYear.length === 4 && !isNaN(selectedYear)) {
+                fetchMonths(selectedYear);
+            }
+        });
+        fetchMonths(selectedYear);
+    });
+</script>
+
 
 
     <script>

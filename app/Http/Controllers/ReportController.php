@@ -247,7 +247,7 @@ class ReportController extends Controller
                 // ตรวจสอบให้แน่ใจว่า $labels ที่ตรงกันไม่ใช่ null และค่าของ sum_installation_percentage_within_3_days ไม่เป็น null
                 return !is_null($labels[$key]);
             });
-            $latestYear = $latestMonthData->first()->year; // เลือกปีจากข้อมูลล่าสุดใน Collection
+            $latestYear = $latestMonthData->first()->year ?? ''; // เลือกปีจากข้อมูลล่าสุดใน Collection
 
      
 
@@ -372,7 +372,7 @@ class ReportController extends Controller
                 return !is_null($labels[$key]);
             });
 
-            $latestYear = $latestMonthData->first()->year; // เลือกปีจากข้อมูลล่าสุดใน Collection
+            $latestYear = $latestMonthData->first()->year ?? ''; // เลือกปีจากข้อมูลล่าสุดใน Collection
         // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
         return view('report.viewInstallFTTx', compact('installationCenters', 'labels', 'data1', 'sortedDataMax', 'latestMonthData', 'sortedDataMin','latestYear'));
     }
