@@ -336,7 +336,7 @@
                         <div class="form-group">
                             <label for="year">ปี</label>
                             <input type="number" id="year" name="year" min="2014" max="3000"
-                                value="2024" class="form-control" required>
+                                class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="month">เดือน</label>
@@ -489,9 +489,10 @@
 
     <script>
         $(document).ready(function() {
-            const currentYear = new Date().getFullYear();
-            $('#year').val(currentYear); // ตั้งค่าปีเริ่มต้นเป็นปีปัจจุบัน
-
+            const latestYear = @json($latestYear); // ดึงปีที่เลือกจาก Collection
+            fetchMonths(latestYear); // ดึงข้อมูลเดือนเมื่อเปิด Modal
+    
+    $('#year').val(latestYear); // ตั้งค่าปีเริ่มต้นเป็นปีที่ดึงมาจาก latestMonthData
             // กำหนดสไตล์ CSS สำหรับ SweetAlert
             $('<style>')
                 .text(`
@@ -545,7 +546,7 @@
                             });
                             // เพิ่ม option ว่าไม่มีข้อมูล
                             monthSelect.append(
-                                '<option value="" disabled>ไม่มีข้อมูลเดือนในปีนี้</option>');
+                                '<option disabled>ไม่มีข้อมูลในปีนี้</option>');
                             return;
                         }
 
@@ -577,7 +578,7 @@
             // ดึงข้อมูลเมื่อ Modal เปิด
             $('#myModal').on('shown.bs.modal', function() {
                 const selectedYear = $('#year').val();
-                fetchMonths(selectedYear); // ดึงข้อมูลเดือนเมื่อเปิด Modal
+           
             });
 
             // อัปเดตข้อมูลเมื่อป้อนหรือเปลี่ยนค่าปี
@@ -597,6 +598,7 @@
                     fetchMonths(selectedYear);
                 }
             });
+            fetchMonths(selectedYear);
         });
     </script>
 
