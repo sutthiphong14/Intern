@@ -6,22 +6,10 @@
 รายการข้อมูล
 @endsection
 @section('css')
-<!-- Google Font: Source Sans Pro -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-<!-- Font Awesome -->
-<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-<!-- DataTables -->
-<link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-<link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-<!-- Theme style -->
-<link rel="stylesheet" href="dist/css/adminlte.min.css">
+
 @endsection
 @section('content')
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
+
                 <div class="card card-warning mt-2">
                     <div class="card card-warning">
                         <div class="card-header">
@@ -147,10 +135,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 @endsection
 
 @section('script')
