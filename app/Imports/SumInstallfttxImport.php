@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithLimit;
 
-class SumInstallfttxImport implements ToCollection, WithStartRow, WithLimit
+class SumInstallfttxImport implements ToCollection, WithStartRow
 {
     protected $month;
     protected $year;
@@ -25,10 +25,7 @@ class SumInstallfttxImport implements ToCollection, WithStartRow, WithLimit
         return 4; // เริ่มที่แถว 4
     }
 
-    public function limit(): int
-    {
-        return 91; // อ่าน 91 แถว
-    }
+   
 
     public function collection(Collection $rows)
     {

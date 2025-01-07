@@ -71,8 +71,8 @@ class ReportController extends Controller
                     // หากเกิดข้อผิดพลาดจะ rollback และไม่บันทึกข้อมูลในฐานข้อมูล
                     DB::rollback();
                     return response()->json([
-                        'status' => 'error',
-                        'message' => 'ไฟล์ที่คุณนำเข้ามีข้อมูลไม่สมบูรณ์' 
+                        'status' => 'error',    
+                        'message' => $e->getMessage(), // แสดงข้อความข้อผิดพลาด
                     ], 400); // รหัส 400 สำหรับข้อผิดพลาด
                 }
             }
@@ -95,7 +95,6 @@ class ReportController extends Controller
             ], 500); // รหัส 500 สำหรับข้อผิดพลาดที่ไม่คาดคิด
         }
     }
-    
 
     public function importFile(Request $request)
     {
@@ -118,24 +117,14 @@ class ReportController extends Controller
                 Totalinstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
                 Exportinstllfttx::where('month', $request->month)->where('year', $request->year)->delete();
             }
-            // ถ้าเลือก 'new' ให้ลบข้อมูลเก่าที่มีเดือนและปีนี้
-            if ($request->file_choice == 'new') {
-                Installfttx::where('month', $request->month)->where('year', $request->year)->delete();
-                SumInstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
-                Totalinstallfttx::where('month', $request->month)->where('year', $request->year)->delete();
-                Exportinstllfttx::where('month', $request->month)->where('year', $request->year)->delete();
-            }
+          
 
             // ใช้ไฟล์ที่รับจากฟอร์มและนำเข้าข้อมูล
             Excel::import(new installfttxImport($month, $year), $filePath);
             Excel::import(new SumInstallfttxImport($month, $year), $filePath);
             Excel::import(new TotalfttxImport($month, $year), $filePath);
             Excel::import(new exportinstallfttximport($month, $year), $filePath);
-            // ใช้ไฟล์ที่รับจากฟอร์มและนำเข้าข้อมูล
-            Excel::import(new installfttxImport($month, $year), $filePath);
-            Excel::import(new SumInstallfttxImport($month, $year), $filePath);
-            Excel::import(new TotalfttxImport($month, $year), $filePath);
-            Excel::import(new exportinstallfttximport($month, $year), $filePath);
+         
 
             DB::commit(); // commit เมื่อทุกอย่างเสร็จสมบูรณ์
 
@@ -167,7 +156,7 @@ class ReportController extends Controller
     {
         // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
         // และกรองค่าซ้ำ
-        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม ภน.3.1', 'รวม ภน.3.2'])
+        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ตป.1','รวม ตป.2'])
             ->distinct() // กรองค่าซ้ำ
             ->pluck('sum_installation_center');
 
@@ -211,40 +200,40 @@ class ReportController extends Controller
         // จัดเรียงข้อมูลตาม installation_percentage_within_3_days จากมากไปน้อย
         $sortedDataMax = $latestMonthData
             ->reject(function ($item) {
-                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
+                return in_array($item->sum_installation_center, ['รวม ตป.1','รวม ตป.2', 'รวม']);
             })
             ->sortByDesc('sum_installation_percentage_within_3_days')
             ->take(5);
 
         $sortedDataMin = $latestMonthData
             ->reject(function ($item) {
-                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
+                return in_array($item->sum_installation_center, ['รวม ตป.1','รวม ตป.2', 'รวม']);
             })
             ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
             ->take(1); // เลือก 1 รายการแรก
 
         // กำหนดแผนที่ระหว่างรหัสกับชื่อจังหวัด
         $content = [
-            'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
-            'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
-            'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
-            'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
-            'รวม บภน.2.2 (นค.)' => 'หนองคาย',
-            'รวม บภน.2.2 (นพ.)' => 'นครพนม',
-            'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
-            'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
-            'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
-            'รวม บภน.2.2 (ลย.)' => 'เลย',
-            'รวม บภน.2.2 (สน.)' => 'สกลนคร',
-            'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
-            'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
-            'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
-            'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
-            'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
-            'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
-            'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
-            'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
-            'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
+            'รวม บตป.1 (กส.)' => 'กาฬสินธุ์',
+            'รวม บตป.1 (ขก.)' => 'ขอนแก่น',
+            'รวม บตป.1 (นค.)' => 'หนองคาย',
+            'รวม บตป.1 (นพ.)' => 'นครพนม',
+            'รวม บตป.1 (นภ.)' => 'หนองบัวลำภู',
+            'รวม บตป.1 (บก.)' => 'บึงกาฬ',
+            'รวม บตป.1 (มค.)' => 'มหาสารคาม',
+            'รวม บตป.1 (มห.)' => 'มุกดาหาร',
+            'รวม บตป.1 (รอ.)' => 'ร้อยเอ็ด',
+            'รวม บตป.1 (ลย.)' => 'เลย',
+            'รวม บตป.1 (สน.)' => 'สกลนคร',
+            'รวม บตป.1 (อด.)' => 'อุดรธานี',
+            'รวม บตป.2 (ชภ.)' => 'ชัยภูมิ',
+            'รวม บตป.2 (นม.)' => 'นครราชสีมา',
+            'รวม บตป.2 (บร.)' => 'บุรีรัมย์',
+            'รวม บตป.2 (ยส.)' => 'ยโสธร',
+            'รวม บตป.2 (ศก.)' => 'ศรีสะเกษ',
+            'รวม บตป.2 (สร.)' => 'สุรินทร์',
+            'รวม บตป.2 (อจ.)' => 'อำนาจเจริญ',
+            'รวม บตป.2 (อบ.)' => 'อุบลราชธานี',
         ];
 
         // การแปลงข้อมูลจาก sum_installation_center ให้เป็นชื่อจังหวัด
@@ -290,7 +279,7 @@ class ReportController extends Controller
         }
 
         // ดึงข้อมูลจาก model SumInstallfttx ที่มีค่า 'sum_installation_center' เป็น "รวม ภน"
-        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ภน.2.1', 'รวม ภน.2.2', 'รวม ภน.3.1', 'รวม ภน.3.2'])
+        $installationCenters = SumInstallfttx::whereIn('sum_installation_center', ['รวม ตป.1','รวม ตป.2'])
             ->distinct() // กรองค่าซ้ำ
             ->pluck('sum_installation_center');
 
@@ -333,43 +322,43 @@ class ReportController extends Controller
         // การจัดเรียงและคำนวณข้อมูลที่เหลือ
         $sortedDataMax = $latestMonthData
             ->reject(function ($item) {
-                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
+                return in_array($item->sum_installation_center, ['รวม ตป.1','รวม ตป.2', 'รวม']);
             })
             ->sortByDesc('sum_installation_percentage_within_3_days')
             ->take(5);
 
         $sortedDataMin = $latestMonthData
             ->reject(function ($item) {
-                return in_array($item->sum_installation_center, ['รวม ภน.2.1', 'รวม ภน.2.2',  'รวม ภน.3.1', 'รวม ภน.3.2', 'รวม']);
+                return in_array($item->sum_installation_center, ['รวม ตป.1','รวม ตป.2', 'รวม']);
             })
             ->sortBy('sum_installation_percentage_within_3_days') // ใช้ sortBy เพื่อเรียงจากน้อยไปมาก
             ->take(1); // เลือก 1 รายการแรก
 
 
+       
         // กำหนดแผนที่ระหว่างรหัสกับชื่อจังหวัด
         $content = [
-            'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
-            'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
-            'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
-            'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
-            'รวม บภน.2.2 (นค.)' => 'หนองคาย',
-            'รวม บภน.2.2 (นพ.)' => 'นครพนม',
-            'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
-            'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
-            'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
-            'รวม บภน.2.2 (ลย.)' => 'เลย',
-            'รวม บภน.2.2 (สน.)' => 'สกลนคร',
-            'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
-            'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
-            'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
-            'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
-            'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
-            'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
-            'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
-            'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
-            'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
+            'รวม บตป.1 (กส.)' => 'กาฬสินธุ์',
+            'รวม บตป.1 (ขก.)' => 'ขอนแก่น',
+            'รวม บตป.1 (นค.)' => 'หนองคาย',
+            'รวม บตป.1 (นพ.)' => 'นครพนม',
+            'รวม บตป.1 (นภ.)' => 'หนองบัวลำภู',
+            'รวม บตป.1 (บก.)' => 'บึงกาฬ',
+            'รวม บตป.1 (มค.)' => 'มหาสารคาม',
+            'รวม บตป.1 (มห.)' => 'มุกดาหาร',
+            'รวม บตป.1 (รอ.)' => 'ร้อยเอ็ด',
+            'รวม บตป.1 (ลย.)' => 'เลย',
+            'รวม บตป.1 (สน.)' => 'สกลนคร',
+            'รวม บตป.1 (อด.)' => 'อุดรธานี',
+            'รวม บตป.2 (ชภ.)' => 'ชัยภูมิ',
+            'รวม บตป.2 (นม.)' => 'นครราชสีมา',
+            'รวม บตป.2 (บร.)' => 'บุรีรัมย์',
+            'รวม บตป.2 (ยส.)' => 'ยโสธร',
+            'รวม บตป.2 (ศก.)' => 'ศรีสะเกษ',
+            'รวม บตป.2 (สร.)' => 'สุรินทร์',
+            'รวม บตป.2 (อจ.)' => 'อำนาจเจริญ',
+            'รวม บตป.2 (อบ.)' => 'อุบลราชธานี',
         ];
-
         // การแปลงข้อมูลจาก sum_installation_center ให้เป็นชื่อจังหวัด
         $labels = $latestMonthData->pluck('sum_installation_center')->map(function ($item) use ($content) {
             return isset($content[$item]) ? $content[$item] : null;  // ถ้าไม่พบก็จะใช้ค่าเดิม
@@ -406,62 +395,35 @@ class ReportController extends Controller
         // กำจัดคำว่า "รวม " ออก
         $section = str_replace('รวม ', '', $section);
 
-        // ดึงตัวเลขแรกจาก section
-        $firstNumber = substr($section, 0, 1);
-
-        // รายชื่อคอลัมน์ที่ต้องการตรวจสอบ
-        $columns = [
-            'sum_num_of_circuits',
-            'sum_total_preparation_time_days',
-            'sum_total_processing_time_days',
-            'sum_sdp_odp_deadline_days',
-            'sum_wiring_time_days',
-            'sum_config_nms_days',
-            'sum_technician_appointment_and_scheduling_time_days',
-            'sum_customer_waiting_time_days',
-            'sum_cable_pulling_and_ont_installation_time_days',
-            'sum_closing_work_time_days',
-            'sum_total_average_time_per_circuit_days',
-            'sum_num_of_circuits_installed_within_3_days',
-            'sum_installation_percentage_within_3_days',
-        ];
         // ใช้ LIKE แบบละเอียด
-        $sumData = SumInstallfttx::where('sum_installation_center', 'LIKE', "%$firstNumber.%")
+        $sumData = SumInstallfttx::where('sum_installation_center', 'LIKE', "%$section%")
             ->where('year', '=', $year)
             ->where('month', '=', $month)
-            ->where(function ($query) use ($columns) {
-                foreach ($columns as $column) {
-                    $query->orWhere($column, '!=', 0);
-                }
-            })
-
             ->get();
-
-
 
 
         // กำหนดแผนที่ระหว่างรหัสกับชื่อจังหวัด
         $content = [
-            'รวม บภน.2.1 (กส.)' => 'กาฬสินธุ์',
-            'รวม บภน.2.1 (ขก.)' => 'ขอนแก่น',
-            'รวม บภน.2.1 (มค.)' => 'มหาสารคาม',
-            'รวม บภน.2.1 (รอ.)' => 'ร้อยเอ็ด',
-            'รวม บภน.2.2 (นค.)' => 'หนองคาย',
-            'รวม บภน.2.2 (นพ.)' => 'นครพนม',
-            'รวม บภน.2.2 (นภ.)' => 'หนองบัวลำภู',
-            'รวม บภน.2.2 (บก.)' => 'บึงกาฬ',
-            'รวม บภน.2.2 (มห.)' => 'มุกดาหาร',
-            'รวม บภน.2.2 (ลย.)' => 'เลย',
-            'รวม บภน.2.2 (สน.)' => 'สกลนคร',
-            'รวม บภน.2.2 (อด.)' => 'อุดรธานี',
-            'รวม บภน.3.1 (ชภ.)' => 'ชัยภูมิ',
-            'รวม บภน.3.1 (นม.)' => 'นครราชสีมา',
-            'รวม บภน.3.1 (บร.)' => 'บุรีรัมย์',
-            'รวม บภน.3.1 (สร.)' => 'สุรินทร์',
-            'รวม บภน.3.2 (ยส.)' => 'ยโสธร',
-            'รวม บภน.3.2 (ศก.)' => 'ศรีสะเกษ',
-            'รวม บภน.3.2 (อจ.)' => 'อำนาจเจริญ',
-            'รวม บภน.3.2 (อบ.)' => 'อุบลราชธานี',
+            'รวม บตป.1 (กส.)' => 'กาฬสินธุ์',
+            'รวม บตป.1 (ขก.)' => 'ขอนแก่น',
+            'รวม บตป.1 (นค.)' => 'หนองคาย',
+            'รวม บตป.1 (นพ.)' => 'นครพนม',
+            'รวม บตป.1 (นภ.)' => 'หนองบัวลำภู',
+            'รวม บตป.1 (บก.)' => 'บึงกาฬ',
+            'รวม บตป.1 (มค.)' => 'มหาสารคาม',
+            'รวม บตป.1 (มห.)' => 'มุกดาหาร',
+            'รวม บตป.1 (รอ.)' => 'ร้อยเอ็ด',
+            'รวม บตป.1 (ลย.)' => 'เลย',
+            'รวม บตป.1 (สน.)' => 'สกลนคร',
+            'รวม บตป.1 (อด.)' => 'อุดรธานี',
+            'รวม บตป.2 (ชภ.)' => 'ชัยภูมิ',
+            'รวม บตป.2 (นม.)' => 'นครราชสีมา',
+            'รวม บตป.2 (บร.)' => 'บุรีรัมย์',
+            'รวม บตป.2 (ยส.)' => 'ยโสธร',
+            'รวม บตป.2 (ศก.)' => 'ศรีสะเกษ',
+            'รวม บตป.2 (สร.)' => 'สุรินทร์',
+            'รวม บตป.2 (อจ.)' => 'อำนาจเจริญ',
+            'รวม บตป.2 (อบ.)' => 'อุบลราชธานี',
         ];
 
         // การแปลงข้อมูลจาก sum_installation_center ให้เป็นชื่อจังหวัด
@@ -469,14 +431,7 @@ class ReportController extends Controller
             return isset($content[$item]) ? $content[$item] : null;  // ถ้าไม่พบก็จะใช้ค่าเดิม
         });
 
-
-
-
-
-
         $data = $sumData->pluck('sum_installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์รวม
-
-        
 
         return view('report.viewInstallFTTxprovin', compact('sumData', 'labels', 'data', 'section', 'year', 'month'));
     }
