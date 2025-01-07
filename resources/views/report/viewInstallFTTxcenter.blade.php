@@ -41,47 +41,47 @@
     <div class="d-flex justify-content-between align-items-center gap-2">
         <!-- หัวข้อ -->
         <h4 class="card-header text-warning">กราฟข้อมูลการติดตั้ง fttx ภายใน 3 วัน จังหวัด
-            @if ($section == 'บภน.2.1 (กส.)')
-                กาฬสินธุ์ 
-            @elseif ($section == 'บภน.2.1 (ขก.)')
-                ขอนแก่น 
-            @elseif ($section == 'บภน.2.1 (มค.)')
-                มหาสารคาม 
-            @elseif ($section == 'บภน.2.1 (รอ.)')
-                ร้อยเอ็ด 
-            @elseif ($section == 'บภน.2.2 (นค.)')
-                หนองคาย 
-            @elseif ($section == 'บภน.2.2 (นพ.)')
-                นครพนม 
-            @elseif ($section == 'บภน.2.2 (นภ.)')
-                หนองบัวลำภู 
-            @elseif ($section == 'บภน.2.2 (บก.)')
-                บึงกาฬ 
-            @elseif ($section == 'บภน.2.2 (มห.)')
-                มุกดาหาร 
-            @elseif ($section == 'บภน.2.2 (ลย.)')
-                เลย 
-            @elseif ($section == 'บภน.2.2 (สน.)')
-                สกลนคร 
-            @elseif ($section == 'บภน.2.2 (อด.)')
-                อุดรธานี 
-            @elseif ($section == 'บภน.3.1 (ชภ.)')
-                ชัยภูมิ 
-            @elseif ($section == 'บภน.3.1 (นม.)')
-                นครราชสีมา 
-            @elseif ($section == 'บภน.3.1 (บร.)')
-                บุรีรัมย์ 
-            @elseif ($section == 'บภน.3.1 (สร.)')
-                สุรินทร์ 
-            @elseif ($section == 'บภน.3.2 (ยส.)')
-                ยโสธร 
-            @elseif ($section == 'บภน.3.2 (ศก.)')
-                ศรีสะเกษ 
-            @elseif ($section == 'บภน.3.2 (อจ.)')
-                อำนาจเจริญ 
-            @elseif ($section == 'บภน.3.2 (อบ.)')
-                อุบลราชธานี 
-            @else
+            @if ($section == 'บตป.1 (กส.)')
+            กาฬสินธุ์
+        @elseif ($section == 'บตป.1 (ขก.)')
+            ขอนแก่น
+        @elseif ($section == 'บตป.1 (นค.)')
+            หนองคาย
+        @elseif ($section == 'บตป.1 (นพ.)')
+            นครพนม
+        @elseif ($section == 'บตป.1 (นภ.)')
+            หนองบัวลำภู
+        @elseif ($section == 'บตป.1 (บก.)')
+            บึงกาฬ
+        @elseif ($section == 'บตป.1 (มค.)')
+            มหาสารคาม
+        @elseif ($section == 'บตป.1 (มห.)')
+            มุกดาหาร
+        @elseif ($section == 'บตป.1 (รอ.)')
+            ร้อยเอ็ด
+        @elseif ($section == 'บตป.1 (ลย.)')
+            เลย
+        @elseif ($section == 'บตป.1 (สน.)')
+            สกลนคร
+        @elseif ($section == 'บตป.1 (อด.)')
+            อุดรธานี
+        @elseif ($section == 'บตป.2 (ชภ.)')
+            ชัยภูมิ
+        @elseif ($section == 'บตป.2 (นม.)')
+            นครราชสีมา
+        @elseif ($section == 'บตป.2 (บร.)')
+            บุรีรัมย์
+        @elseif ($section == 'บตป.2 (ยส.)')
+            ยโสธร
+        @elseif ($section == 'บตป.2 (ศก.)')
+            ศรีสะเกษ
+        @elseif ($section == 'บตป.2 (สร.)')
+            สุรินทร์
+        @elseif ($section == 'บตป.2 (อจ.)')
+            อำนาจเจริญ
+        @elseif ($section == 'บตป.2 (อบ.)')
+            อุบลราชธานี
+        @else
                 {{ $section }}
             @endif
              (ข้อมูล ประจำเดือน {{ $month }} ปี {{ $year }})
@@ -127,47 +127,47 @@
     <div class="d-flex justify-content-between align-items-center gap-2">
         <!-- หัวข้อ -->
         <h4 class="card-header text-warning">กราฟข้อมูลการติดตั้ง fttx ภายใน 3 วัน จังหวัด
-            @if ($section == 'บภน.2.1 (กส.)')
-                กาฬสินธุ์ 
-            @elseif ($section == 'บภน.2.1 (ขก.)')
-                ขอนแก่น 
-            @elseif ($section == 'บภน.2.1 (มค.)')
-                มหาสารคาม 
-            @elseif ($section == 'บภน.2.1 (รอ.)')
-                ร้อยเอ็ด 
-            @elseif ($section == 'บภน.2.2 (นค.)')
-                หนองคาย 
-            @elseif ($section == 'บภน.2.2 (นพ.)')
-                นครพนม 
-            @elseif ($section == 'บภน.2.2 (นภ.)')
-                หนองบัวลำภู 
-            @elseif ($section == 'บภน.2.2 (บก.)')
-                บึงกาฬ 
-            @elseif ($section == 'บภน.2.2 (มห.)')
-                มุกดาหาร 
-            @elseif ($section == 'บภน.2.2 (ลย.)')
-                เลย 
-            @elseif ($section == 'บภน.2.2 (สน.)')
-                สกลนคร 
-            @elseif ($section == 'บภน.2.2 (อด.)')
-                อุดรธานี 
-            @elseif ($section == 'บภน.3.1 (ชภ.)')
-                ชัยภูมิ 
-            @elseif ($section == 'บภน.3.1 (นม.)')
-                นครราชสีมา 
-            @elseif ($section == 'บภน.3.1 (บร.)')
-                บุรีรัมย์ 
-            @elseif ($section == 'บภน.3.1 (สร.)')
-                สุรินทร์ 
-            @elseif ($section == 'บภน.3.2 (ยส.)')
-                ยโสธร 
-            @elseif ($section == 'บภน.3.2 (ศก.)')
-                ศรีสะเกษ 
-            @elseif ($section == 'บภน.3.2 (อจ.)')
-                อำนาจเจริญ 
-            @elseif ($section == 'บภน.3.2 (อบ.)')
-                อุบลราชธานี 
-            @else
+            @if ($section == 'บตป.1 (กส.)')
+            กาฬสินธุ์
+        @elseif ($section == 'บตป.1 (ขก.)')
+            ขอนแก่น
+        @elseif ($section == 'บตป.1 (นค.)')
+            หนองคาย
+        @elseif ($section == 'บตป.1 (นพ.)')
+            นครพนม
+        @elseif ($section == 'บตป.1 (นภ.)')
+            หนองบัวลำภู
+        @elseif ($section == 'บตป.1 (บก.)')
+            บึงกาฬ
+        @elseif ($section == 'บตป.1 (มค.)')
+            มหาสารคาม
+        @elseif ($section == 'บตป.1 (มห.)')
+            มุกดาหาร
+        @elseif ($section == 'บตป.1 (รอ.)')
+            ร้อยเอ็ด
+        @elseif ($section == 'บตป.1 (ลย.)')
+            เลย
+        @elseif ($section == 'บตป.1 (สน.)')
+            สกลนคร
+        @elseif ($section == 'บตป.1 (อด.)')
+            อุดรธานี
+        @elseif ($section == 'บตป.2 (ชภ.)')
+            ชัยภูมิ
+        @elseif ($section == 'บตป.2 (นม.)')
+            นครราชสีมา
+        @elseif ($section == 'บตป.2 (บร.)')
+            บุรีรัมย์
+        @elseif ($section == 'บตป.2 (ยส.)')
+            ยโสธร
+        @elseif ($section == 'บตป.2 (ศก.)')
+            ศรีสะเกษ
+        @elseif ($section == 'บตป.2 (สร.)')
+            สุรินทร์
+        @elseif ($section == 'บตป.2 (อจ.)')
+            อำนาจเจริญ
+        @elseif ($section == 'บตป.2 (อบ.)')
+            อุบลราชธานี
+        @else
                 {{ $section }}
             @endif
              (ข้อมูล ประจำเดือน {{ $month }} ปี {{ $year }})

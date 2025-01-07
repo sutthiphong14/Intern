@@ -2,13 +2,12 @@
 
 namespace App\Imports;
 
-use App\Models\Totalinstallfttx;
+use App\Models\TotalInstallFTTx;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithLimit;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class totalfttximport implements ToCollection, WithStartRow, WithLimit
+class TotalFttxImport implements ToCollection, WithStartRow
 {
     protected $month;
     protected $year;
@@ -21,21 +20,24 @@ class totalfttximport implements ToCollection, WithStartRow, WithLimit
 
     public function startRow(): int
     {
-        return 55; // เริ่มที่แถว 69
-    }
-
-    public function limit(): int
-    {
-        return 1; // อ่านข้อมูลแค่แถวเดียว
+        return 4; // เริ่มที่แถว 4
     }
 
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            if (empty($row[2])) {
+            // ตรวจสอบว่าแถวนี้มีคำว่า "รวม" ในคอลัมน์ที่ 4 และไม่มีค่าอื่นตามหลัง
+            if ($this->isSummaryRow($row[4])) {
                 $this->saveToTotalInstallfttx($row);
             }
         }
+    }
+
+    private function isSummaryRow($value): bool
+    {
+        // ตรวจสอบว่าค่าในคอลัมน์ 4 คือ "รวม" และไม่มีข้อความอื่นตามหลัง
+        $value = trim($value); // ลบช่องว่างรอบข้าง
+        return $value === 'รวม'; // ตรวจสอบว่าค่าตรงกับคำว่า "รวม" อย่างเดียว
     }
 
     private function saveToTotalInstallfttx($row)
@@ -73,5 +75,4 @@ class totalfttximport implements ToCollection, WithStartRow, WithLimit
             return 0; // หากไม่ใช่ตัวเลข คืนค่า 0
         }
     }
-    
 }
