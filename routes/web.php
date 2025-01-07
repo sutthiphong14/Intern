@@ -168,7 +168,7 @@ Auth::routes();
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-
+Route::post('/news/status/{id}', [AdminController::class, 'changenews']);
 
 /* ************************************************************report************************************************************ */
 Route::get('/listreport', function () {

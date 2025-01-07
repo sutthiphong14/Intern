@@ -34,7 +34,8 @@
 
                     <th class='col-3'>ชื่อข่าว</th>
                     <th class='col-4'>คำอธิบาย</th>
-                    <th class='col-2'>เวลาลงข้อมูล</th>
+                    <th class='col-1'>สถานะข้อมูล</th>
+                    <th class='col-1'>เวลาลงข้อมูล</th>
                     <th class='col-3'>Action</th>
                 </tr>
             </thead>
@@ -45,6 +46,7 @@
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->description }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
+                        <td>{{ $item->status == 1 ? 'แสดง' : 'ซ่อน' }}</td>
                         <td class='align-items-center text-center'>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -53,9 +55,9 @@
                                 <div class="dropdown-menu">
                                     <!-- Toggle news status button -->
                                     <button onclick="changeNewsStatus({{ $item->id }})"
-                                        class="dropdown-item {{ $item->status ? 'text-success' : 'text-dark' }}">
+                                        class="dropdown-item {{ $item->status ? 'text-dark' : 'text-dark' }}">
                                         <i class="{{ $item->status ? 'fas fa-eye-slash' : 'far fa-eye' }} me-1"></i>
-                                        {{ $item->status ? 'แสดง' : 'ซ่อน' }}
+                                        {{ $item->status ? 'ซ่อน' : 'แสดง' }}
                                     </button>
 
                                     <!-- Edit link -->
@@ -88,6 +90,12 @@
             </tbody>
 
         </table>
+
+
+        
+
+
+
     </div>
     <!-- /.card-body -->
 
@@ -123,33 +131,27 @@
 
 <script>
     function changeNewsStatus(id) {
-        fetch(`/changenews/${id}`, {
+        // ส่งคำขอไปยังเส้นทาง API ผ่าน AJAX
+        fetch(`/news/status/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' // ป้องกัน CSRF
             },
+            body: JSON.stringify({})
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // ค้นหาและอัปเดตปุ่มในแถวที่เกี่ยวข้อง
-                    const button = document.querySelector(`button[onclick="changeNewsStatus(${id})"]`);
-                    if (data.status) {
-                        button.className = "align-items-center";
-                        button.innerHTML = '<i class="fas fa-eye-slash"></i> ซ่อน';
-                    } else {
-                        button.className = "align-items-center";
-                        button.innerHTML = '<i class="far fa-eye"></i> แสดง';
-                    }
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('เกิดข้อผิดพลาด โปรดลองใหม่อีกครั้ง');
-            });
+        .then(response => {
+            if (response.ok) {
+                // รีเฟรชหน้าเว็บเมื่อคำขอสำเร็จ
+                location.reload();
+            } else {
+                alert('เกิดข้อผิดพลาดในการเปลี่ยนสถานะ');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+        });
     }
 </script>
 @endsection
