@@ -298,4 +298,5 @@ Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->nam
     Route::get('/requests/search', [RequestsController::class, 'search'])->name('requests.search');
     Route::post('/requests/{id}/approve', [RequestsController::class, 'approve'])->name('requests.approve');
     
-
+Route::get('/news/search', [AdminController::class, 'search'])->name('news.search');
+Route::delete('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');

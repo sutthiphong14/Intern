@@ -126,15 +126,15 @@ function newsfeed()
         return redirect('/listnewsfeed');
     }
 
-    function search(Request $request)
-    {
-        $query = $request->input('search');
-        $data = Newsfeed::when($query, function ($q) use ($query) {
-            $q->where('name', 'like', '%' . $query . '%');
-        })->get();
+    public function search(Request $request)
+{
+    $query = $request->input('query');
+    $data = DB::table('newsfeeds')
+        ->where('name', 'LIKE', "%{$query}%")
+        ->paginate(10);  // ใช้ paginate แทน get()
 
-        return view('newsfeed.listnewsfeed', compact('data'));
-    }
+    return view('newsfeed.listnewsfeed', compact('data'));
+}
 
     public function downloadFile($id)
     {
@@ -148,4 +148,6 @@ function newsfeed()
 
         return redirect()->back()->with('error', 'ไม่พบไฟล์');
     }
+
+   
 }
