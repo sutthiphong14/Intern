@@ -7,7 +7,7 @@
 @endsection
 
 @section('css')
-< @endsection @section('content')
+@endsection @section('content')
 
 
 
@@ -16,13 +16,6 @@
         <div class="card-header d-flex justify-content-between align-items-center ">
             <h3 class="card-title col-5">ข่าวประชาสัมพันธ์ </h3>
 
-
-
-
-
-            <a href="insertnewsfeed" class="btn bg-success col-2">
-                <i class="d-flex justify-content-end "></i> เพิ่มเอกสาร
-            </a>
         </div>
 
         <!-- /.card-header -->
