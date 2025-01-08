@@ -118,8 +118,10 @@ class UserController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
-        $users = User::where('username', 'LIKE', "%{$query}%")->get();
-
+        // เปลี่ยนจาก get() เป็น paginate()
+        $users = User::where('username', 'LIKE', "%{$query}%")
+                     ->paginate(10);  // ใช้การแบ่งหน้าเหมือนกับเมธอด listUsers
+    
         return view('users.listusers', compact('users'));
     }
     public function updateProfileImage(Request $request)
