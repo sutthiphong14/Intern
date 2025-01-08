@@ -7,131 +7,107 @@
 @endsection
 
 @section('css')
-<!-- Google Font: Source Sans Pro -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-<!-- Font Awesome -->
-<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-<!-- DataTables -->
-<link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-<link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-<!-- Theme style -->
-<link rel="stylesheet" href="dist/css/adminlte.min.css">
-@endsection
-@section('content')
+< @endsection @section('content')
 
 
 
-                    <div class="card-header d-flex justify-content-between align-items-center ">
-                        <h3 class="card-title col-6">เอกสาร </h3>
+    <div class="card card-warning mt-3 mb-3 ">
 
-
-                        <select class="custom-select">
-                            <option>All</option>
-                            <option>ผลการดำเนินงาน สายงาน ภน.</option>
-                            <option>ผลการดำเนินงานด้านการตลาดสายงาน ภน.</option>
-                            <option>คุณภาพบริการ</option>
-
-                        </select>
-
-
-                        <div class="input-group col-3">
-                            <input type="text" class="form-control">
-                            <span class="input-group-append">
-                                <button type="button" class="btn btn-info btn-dark">Search</button>
-                            </span>
-                        </div>
+        <div class="card-header d-flex justify-content-between align-items-center ">
+            <h3 class="card-title col-5">ข่าวประชาสัมพันธ์ </h3>
 
 
 
 
-                    </div>
 
-                    <!-- /.card-header -->
-                    <div class="card-body ">
-                        <table id="example2" class="table table-bordered table-hover ">
-                            <thead class='text-center col-12'>
-                                <tr class ='bg-dark'>
-                                    <th class='col-3'>Name</th>
-                                    <th class='col-4'>Description</th>
-                                    <th class='col-2'>Date</th>
-                                    <th class='col-1'>Download</th>
-                                </tr>
-                            <tbody class = 'text-center'>
-                                <tr >
-                                    @foreach ($data as $item)
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->description }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i:s') }}</td>
-                                            <td class='ms-5 text-center'>
+            <a href="insertnewsfeed" class="btn bg-success col-2">
+                <i class="d-flex justify-content-end "></i> เพิ่มเอกสาร
+            </a>
+        </div>
+
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="example2" class="table table-hover ">
+                <thead class='text-center col-12 bg-dark'>
+                    <tr>
+
+                        <th class='col-3'>หัวข้อ</th>
+                        <th class='col-6'>คำอธิบาย</th>
+                        <th class='col-2'>วันที่อัพโหลด</th>
+                        <th class='col-1'>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($data as $item)
+                        <tr class="text-center">
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->description }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
+                            <td class='ms-5 text-center'>
                                 @if(Storage::disk('public')->exists($item->file))
-                                    <a href="{{ asset('storage/' . $item->file) }}" class="btn btn-warning" download
-                                        target="_blank">
+                                    <a href="{{ route('admin.download', $item->id) }}" class="btn btn-warning col-1"
+                                        style="width: 130px;">
                                         Download <i class="fas fa-arrow-down"></i>
                                     </a>
                                 @else
                                     <span class="text-danger">ไฟล์ไม่พบ</span>
                                 @endif
                             </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">No results found</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+
+            </table>
 
 
 
-                                </tr>
-                                    @endforeach
-                            </tbody>
-                            </thead>
-                        </table>
-                    </div>
-
-                    </thead>
-                    </table>
-                </div>
-                <!-- /.card-body -->
 
 
-            </div>
-            <!-- /.card -->
 
 
-@endsection
+        </div>
+        <!-- /.card-body -->
 
-@section('script')
 
-<!-- DataTables  & Plugins -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="plugins/jszip/jszip.min.js"></script>
-<script src="plugins/pdfmake/pdfmake.min.js"></script>
-<script src="plugins/pdfmake/vfs_fonts.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
-<!-- Page specific script -->
-<script>
-    $(function () {
-        $("#example1").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-        });
-    });
-</script>
-@endsection
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center align-items-center me-4">
+            <nav aria-label="Page navigation ">
+                <ul class="pagination">
+                    <li class="page-item {{ $data->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $data->previousPageUrl() }}"><i
+                                class="tf-icon bx bx-chevrons-left"></i></a>
+                    </li>
+                    <li class="page-item {{ $data->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $data->previousPageUrl() }}"><i
+                                class="tf-icon bx bx-chevron-left"></i></a>
+                    </li>
+                    @foreach ($data->getUrlRange(1, $data->lastPage()) as $page => $url)
+                        <li class="page-item {{ $page == $data->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        </li>
+                    @endforeach
+                    <li class="page-item {{ $data->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $data->nextPageUrl() }}"><i
+                                class="tf-icon bx bx-chevron-right"></i></a>
+                    </li>
+                    <li class="page-item {{ $data->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $data->nextPageUrl() }}"><i
+                                class="tf-icon bx bx-chevrons-right"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+
+    </div>
+
+
+    @endsection
+
+    @section('script')
+
+    @endsection

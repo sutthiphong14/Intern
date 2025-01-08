@@ -487,20 +487,20 @@ button.list-group-item-primary.active {
 }
 
 .form-check-input:focus {
-  border-color: #696cff;
-  box-shadow: 0 2px 4px 0 rgba(105, 108, 255, 0.4);
+  border-color: #ffab00;
+  box-shadow: 0 2px 4px 0 rgba(255, 213, 1, 0.4);
 }
 .form-check-input:disabled {
   background-color: #eceef1;
 }
 .form-check-input:checked, .form-check-input[type=checkbox]:indeterminate {
-  background-color: #696cff;
-  border-color: #696cff;
-  box-shadow: 0 2px 4px 0 rgba(105, 108, 255, 0.4);
+  background-color: #ffab00;
+  border-color: #ffab00;
+  box-shadow: 0 2px 4px 0 rgba(255, 213, 1, 0.4);
 }
 
 .custom-option.checked {
-  border: 1px solid #696cff;
+  border: 1px solid #ffab00;
 }
 
 .form-switch .form-check-input:focus {

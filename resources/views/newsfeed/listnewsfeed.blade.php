@@ -14,29 +14,34 @@
 
 <div class="card card-warning mt-3 mb-3 ">
 
-    <div class="card-header d-flex justify-content-between align-items-center ">
-        <h3 class="card-title col-5">รายชื่อผู้ใช้ </h3>
+    <div class="d-flex justify-content-between align-items-center gap-2">
+        <h3 class="card-header col-5">จัดการประชาสัมพันธ์ </h3>
+        <div class="d-flex align-items-center gap-2">
 
 
 
 
 
-        <a href="insertnewsfeed" class="btn bg-success col-2">
+        <a href="insertnewsfeed" class="btn bg-success">
             <i class="d-flex justify-content-end "></i> เพิ่มเอกสาร
         </a>
-    </div>
+        <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal" data-bs-target="#modalScrollable">
+            <i class="fas fa-question-circle"></i>
+        </button>
+        </div>
 
+    </div>
     <!-- /.card-header -->
     <div class="card-body">
         <table id="example2" class="table table-hover ">
             <thead class='text-center col-12 bg-dark'>
                 <tr>
 
-                    <th class='col-3'>ชื่อข่าว</th>
-                    <th class='col-4'>คำอธิบาย</th>
+                    <th class='col-2'>ชื่อข่าว</th>
+                    <th class='col-5 '>คำอธิบาย</th>
                     <th class='col-1'>สถานะข้อมูล</th>
-                    <th class='col-1'>เวลาลงข้อมูล</th>
-                    <th class='col-3'>Action</th>
+                    <th class='col-2'>เวลาลงข้อมูล</th>
+                    <th class='col-1'>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,8 +49,8 @@
                     <tr class="text-center">
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->description }}</td>
-                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
                         <td>{{ $item->status == 1 ? 'แสดง' : 'ซ่อน' }}</td>
+                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
                         <td class="align-items-center text-center">
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -89,7 +94,7 @@
 
         </table>
 
-       
+
 
 
 
@@ -97,40 +102,63 @@
 
     </div>
     <!-- /.card-body -->
-    
 
-<!-- Pagination -->
-<div class="d-flex justify-content-center align-items-center me-4">
-<nav aria-label="Page navigation ">
-    <ul class="pagination">
-        <li class="page-item {{ $data->onFirstPage() ? 'disabled' : '' }}">
-            <a class="page-link" href="{{ $data->previousPageUrl() }}"><i
-                    class="tf-icon bx bx-chevrons-left"></i></a>
-        </li>
-        <li class="page-item {{ $data->onFirstPage() ? 'disabled' : '' }}">
-            <a class="page-link" href="{{ $data->previousPageUrl() }}"><i
-                    class="tf-icon bx bx-chevron-left"></i></a>
-        </li>
-        @foreach ($data->getUrlRange(1, $data->lastPage()) as $page => $url)
-            <li class="page-item {{ $page == $data->currentPage() ? 'active' : '' }}">
-                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-            </li>
-        @endforeach
-        <li class="page-item {{ $data->hasMorePages() ? '' : 'disabled' }}">
-            <a class="page-link" href="{{ $data->nextPageUrl() }}"><i
-                    class="tf-icon bx bx-chevron-right"></i></a>
-        </li>
-        <li class="page-item {{ $data->hasMorePages() ? '' : 'disabled' }}">
-            <a class="page-link" href="{{ $data->nextPageUrl() }}"><i
-                    class="tf-icon bx bx-chevrons-right"></i></a>
-        </li>
-    </ul>
-</nav>
-</div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center align-items-center me-4">
+        <nav aria-label="Page navigation ">
+            <ul class="pagination">
+                <li class="page-item {{ $data->onFirstPage() ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ $data->previousPageUrl() }}"><i
+                            class="tf-icon bx bx-chevrons-left"></i></a>
+                </li>
+                <li class="page-item {{ $data->onFirstPage() ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ $data->previousPageUrl() }}"><i
+                            class="tf-icon bx bx-chevron-left"></i></a>
+                </li>
+                @foreach ($data->getUrlRange(1, $data->lastPage()) as $page => $url)
+                    <li class="page-item {{ $page == $data->currentPage() ? 'active' : '' }}">
+                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                    </li>
+                @endforeach
+                <li class="page-item {{ $data->hasMorePages() ? '' : 'disabled' }}">
+                    <a class="page-link" href="{{ $data->nextPageUrl() }}"><i
+                            class="tf-icon bx bx-chevron-right"></i></a>
+                </li>
+                <li class="page-item {{ $data->hasMorePages() ? '' : 'disabled' }}">
+                    <a class="page-link" href="{{ $data->nextPageUrl() }}"><i
+                            class="tf-icon bx bx-chevrons-right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 
 
 </div>
 <!-- /.card -->
+
+
+
+<div class="modal fade" id="modalScrollable" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalScrollableTitle">การใช้งานหน้าจัดการข่าวประชาสัมพันธ์</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-dark">
+                    <p>
+                        วิธีเพิ่มข้อมูล
+                    </p>
+                    <p>
+                        ------------
+                    </p>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
 @endsection
