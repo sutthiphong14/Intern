@@ -101,15 +101,10 @@
                 </a>
             @endif
 
-            <!-- ฟอร์ม Export -->
-            <form action="{{ route('export') }}" method="GET">
-                @csrf
-
-                <button type="submit" class="btn bg-dark " style="width: 150px;">
-                    <i class="fas fa-file-export"></i> Export
-                </button>
-
-            </form>
+          <!-- ฟอร์ม Export -->
+          <button type="button" class="btn bg-dark" data-toggle="modal" data-target="#exportModal">
+            <i class="fas fa-file-export"></i> Export
+        </button>
             <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal" data-bs-target="#modalScrollable">
                 <i class="fas fa-question-circle"></i>
             </button>
@@ -188,15 +183,10 @@
                 </a>
             @endif
 
-            <!-- ฟอร์ม Export -->
-            <form action="{{ route('export') }}" method="GET">
-                @csrf
-
-                <button type="submit" class="btn bg-dark " style="width: 150px;">
-                    <i class="fas fa-file-export"></i> Export
-                </button>
-
-            </form>
+           <!-- ฟอร์ม Export -->
+           <button type="button" class="btn bg-dark" data-toggle="modal" data-target="#exportModal">
+            <i class="fas fa-file-export"></i> Export
+        </button>
             <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal" data-bs-target="#modalScrollable">
                 <i class="fas fa-question-circle"></i>
             </button>
@@ -377,6 +367,54 @@
         </div>
     </div>
 </div>
+
+  <!-- Modal Export -->
+  <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportModalLabel">Export ข้อมูล</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- ฟิลด์สำหรับกรอกข้อมูล -->
+                <form action="{{ route('export') }}" method="get" enctype="multipart/form-data"
+                    class="form-group">
+                    @csrf
+                    <div class="form-group">
+                        <label for="year">ปี</label>
+                        <input type="number" id="year" name="year" min="2014" max="3000"
+                            class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="month">เดือน</label>
+                        <select id="month" name="month" class="form-control" required>
+                            <option value="" disabled selected>เลือกเดือน</option>
+                            <option value="มกราคม">มกราคม</option>
+                            <option value="กุมภาพันธ์">กุมภาพันธ์</option>
+                            <option value="มีนาคม">มีนาคม</option>
+                            <option value="เมษายน">เมษายน</option>
+                            <option value="พฤษภาคม">พฤษภาคม</option>
+                            <option value="มิถุนายน">มิถุนายน</option>
+                            <option value="กรกฎาคม">กรกฎาคม</option>
+                            <option value="สิงหาคม">สิงหาคม</option>
+                            <option value="กันยายน">กันยายน</option>
+                            <option value="ตุลาคม">ตุลาคม</option>
+                            <option value="พฤศจิกายน">พฤศจิกายน</option>
+                            <option value="ธันวาคม">ธันวาคม</option>
+                        </select>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-success" id="confirmExport" disabled>Confirm Export</button>
+            </div>
+            </form>
+
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('script')
@@ -493,6 +531,103 @@
     // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
     document.getElementById('yearInput').addEventListener('change', function () {
         document.getElementById('yearForm').submit();
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+           const year = @json($year ?? ''); // ใช้ปีปัจจุบันถ้าตัวแปรไม่มีค่า
+           const confirmExportBtn = $('#confirmExport'); // ปุ่ม Confirm Export
+           const month = $('#month'); // ปุ่ม Confirm Export
+
+        fetchMonths(year); // ดึงข้อมูลเดือนเมื่อเปิด Modal
+
+    $('#year').val(year); // ตั้งค่าปีเริ่มต้นเป็นปีที่ดึงมาจาก latestMonthData
+
+        function fetchMonths(year) {
+            // ตรวจสอบค่าของ year ก่อน
+            if (!year || year.length !== 4 || isNaN(year)) {
+                console.warn("Invalid year:", year);
+                return; // ไม่ทำงานถ้าค่า year ไม่ถูกต้อง
+            }
+
+            $.ajax({
+                url: "{{ route('api.existing.months') }}",
+                method: "GET",
+                data: {
+                    year: year
+                },
+                success: function(response) {
+                    const monthsWithData = response.map(item => item.month);
+                    const monthSelect = $('#month');
+
+                    // เคลียร์ตัวเลือกเดิม
+                    monthSelect.empty();
+
+                    if (monthsWithData.length === 0) {
+                        
+                            
+                      
+                        // เพิ่ม option ว่าไม่มีข้อมูล
+                         // ปิดการใช้งานปุ่ม Confirm Export
+                         $('#no-data-msg').remove();
+                        confirmExportBtn.prop('disabled', true);
+                       
+                        monthSelect.after('<p id="no-data-msg" class="text-danger">ไม่มีข้อมูลในปีนี้</p>');
+                        return;
+                    }
+                    $('#no-data-msg').remove();
+
+                    // เปิดใช้งานปุ่ม Confirm Export
+                    confirmExportBtn.prop('disabled', false);
+                    // กรองค่าซ้ำจาก monthsWithData โดยใช้ Set
+                    const uniqueMonths = [...new Set(monthsWithData)];
+                    // เพิ่ม months ที่มีข้อมูล
+                    uniqueMonths.forEach(function(month) {
+                        monthSelect.append(`<option value="${month}">${month}</option>`);
+                    });
+                },
+                error: function(error) {
+                    console.error("Error fetching data:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: 'ไม่สามารถดึงข้อมูลได้ โปรดลองอีกครั้ง',
+                        confirmButtonText: 'ตกลง',
+                        customClass: {
+                            container: 'my-swal-container',
+                            popup: 'my-swal-popup'
+                        },
+                        backdrop: true
+                    });
+                }
+            });
+        }
+
+        // ดึงข้อมูลเมื่อ Modal เปิด
+        $('#myModal').on('shown.bs.modal', function() {
+            const selectedYear = $('#year').val();
+       
+        });
+
+        // อัปเดตข้อมูลเมื่อป้อนหรือเปลี่ยนค่าปี
+        $('#year').on('keydown', function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                const selectedYear = $(this).val();
+                if (selectedYear.length === 4 && !isNaN(selectedYear)) {
+                    fetchMonths(selectedYear);
+                }
+            }
+        });
+
+        $('#year').on('change', function() {
+            const selectedYear = $(this).val();
+            if (selectedYear.length === 4 && !isNaN(selectedYear)) {
+                fetchMonths(selectedYear);
+            }
+        });
+        fetchMonths(selectedYear);
     });
 </script>
 @endsection
