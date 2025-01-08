@@ -77,10 +77,12 @@
         <div class="layout-container">
         @include('admins.layout-menu')
         <div class="layout-page">
-
-        @include('admins.layout-Navbar')
+        
+        
+        
         
         <div class="container-xxl flex-grow-1 container-p-y">
+        @include('admins.layout-Navbar')
                 @yield('content')
                 </div>
             @include('admins.footer')
