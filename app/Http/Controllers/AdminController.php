@@ -11,16 +11,16 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class AdminController extends Controller
 {
     function listnewsfeed()
-{
-    $data = DB::table('newsfeeds')->paginate(10); // Adjust the number per page as needed
-    return view('newsfeed.listnewsfeed', compact('data'));
-}
+    {
+        $data = DB::table('newsfeeds')->paginate(10); // Adjust the number per page as needed
+        return view('newsfeed.listnewsfeed', compact('data'));
+    }
 
-function newsfeed()
-{
-    $data = DB::table('newsfeeds')->paginate(10); // Adjust the number per page as needed
-    return view('newsfeed.newsfeed', compact('data'));
-}
+    function newsfeed()
+    {
+        $data = DB::table('newsfeeds')->paginate(10); // Adjust the number per page as needed
+        return view('newsfeed.newsfeed', compact('data'));
+    }
 
 
     function createnews(Request $request)
@@ -28,15 +28,18 @@ function newsfeed()
         $request->validate([
             'name' => 'required|max:50',
             'description' => 'required',
+            'categories' => 'required|in:ข่าว,เอกสาร',
             'file' => 'required|file|mimes:pdf,jpg,png,xlsx|max:10240',
         ], [
             'name.required' => 'กรุณาระบุชื่อ',
-            'name.max' => 'ความยาวของชื่อไม่ควรเกิน 50 ตัวอักษร',
             'description.required' => 'กรุณาระบุคำอธิบาย',
+            'categories.required' => 'กรุณาเลือกหมวดหมู่',
+            'categories.in' => 'หมวดหมู่ต้องเป็น ข่าว หรือ เอกสาร',
             'file.required' => 'กรุณาระบุไฟล์',
             'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
             'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 10MB',
         ]);
+        
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
@@ -46,8 +49,9 @@ function newsfeed()
         $data = [
             'name' => $request->name,
             'description' => $request->description,
+            'categories' => $request->categories, // เพิ่มหมวดหมู่
             'file' => $filePath,
-            'status' => 1, // กำหนดค่าเริ่มต้นเป็นแสดง
+            'status' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -94,47 +98,48 @@ function newsfeed()
     }
 
     function updatenews(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|max:50',
-            'description' => 'required',
-            'category_id' => 'required',
-            'file' => 'nullable|file|mimes:pdf,jpg,png,xlsx|max:2048',
-        ], [
-            'name.required' => 'กรุณาระบุชื่อ',
-            'name.max' => 'ความยาวของชื่อไม่ควรเกิน 50 ตัวอักษร',
-            'description.required' => 'กรุณาระบุคำอธิบาย',
-            'category_id.required' => 'กรุณาเลือกประเภท',
-            'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
-            'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 2MB',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|max:50',
+        'description' => 'required',
+        'categories' => 'required|max:255',
+        'file' => 'nullable|file|mimes:pdf,jpg,png,xlsx|max:2048',
+    ], [
+        'name.required' => 'กรุณาระบุชื่อ',
+        'name.max' => 'ความยาวของชื่อไม่ควรเกิน 50 ตัวอักษร',
+        'description.required' => 'กรุณาระบุคำอธิบาย',
+        'categories.required' => 'กรุณาระบุหมวดหมู่',
+        'categories.max' => 'หมวดหมู่ต้องไม่เกิน 255 ตัวอักษร',
+        'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
+        'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 2MB',
+    ]);
 
-        $data = [
-            'name' => $request->name,
-            'description' => $request->description,
-            'category_id' => $request->category_id,
-            'updated_at' => now(),
-        ];
+    $data = [
+        'name' => $request->name,
+        'description' => $request->description,
+        'categories' => $request->categories,
+        'updated_at' => now(),
+    ];
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $filePath = $file->storeAs('newsfeeds', time() . '_' . $file->getClientOriginalName(), 'public');
-            $data['file'] = $filePath;
-        }
-
-        DB::table('newsfeeds')->where('id', $id)->update($data);
-        return redirect('/listnewsfeed');
+    if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $filePath = $file->storeAs('newsfeeds', time() . '_' . $file->getClientOriginalName(), 'public');
+        $data['file'] = $filePath;
     }
 
-    public function search(Request $request)
-{
-    $query = $request->input('query');
-    $data = DB::table('newsfeeds')
-        ->where('name', 'LIKE', "%{$query}%")
-        ->paginate(10);  // ใช้ paginate แทน get()
-
-    return view('newsfeed.listnewsfeed', compact('data'));
+    DB::table('newsfeeds')->where('id', $id)->update($data);
+    return redirect('/listnewsfeed');
 }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $data = DB::table('newsfeeds')
+            ->where('name', 'LIKE', "%{$query}%")
+            ->paginate(10);  // ใช้ paginate แทน get()
+
+        return view('newsfeed.listnewsfeed', compact('data'));
+    }
 
     public function downloadFile($id)
     {
@@ -149,5 +154,5 @@ function newsfeed()
         return redirect()->back()->with('error', 'ไม่พบไฟล์');
     }
 
-   
+
 }

@@ -36,9 +36,10 @@
                     <tr>
                         <th class="col-3">ชื่อข่าว</th>
                         <th class="col-4">คำอธิบาย</th>
-                        <th class="col-1">เวลาลงข้อมูล</th>
+                        <th class="col-1">หมวดหมู่</th>
+                        <th class="col-2">เวลาลงข้อมูล</th>
                         <th class="col-1">สถานะข้อมูล</th>
-                        <th class="col-3">การดำเนินการ</th>
+                        <th class="col-1">การดำเนินการ</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0 text-center">
@@ -46,6 +47,7 @@
                         <tr>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->description }}</td>
+                            <td>{{ $item->categories }}</td>
                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y') }}</td>
                             <td>{{ $item->status == 1 ? 'แสดง' : 'ซ่อน' }}</td>
                             <td>
