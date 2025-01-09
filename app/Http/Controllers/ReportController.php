@@ -433,7 +433,7 @@ class ReportController extends Controller
         // หารผลรวมด้วยจำนวนเดือนที่มี
         $data1 = [];
         foreach ($combinedData as $label => $sum) {
-            $data1[$label] = $sum / $countOfMonths;
+            $data1[$label] = number_format($sum / $countOfMonths, 2);  // แปลงผลลัพธ์เป็นทศนิยม 2 ตำแหน่ง
         }
         $latestYear = $latestMonthData->first()->year ?? ''; // เลือกปีจากข้อมูลล่าสุดใน Collection
         // คืนค่าผลลัพธ์ไปยัง view พร้อมกับทั้งสองตัวแปร
