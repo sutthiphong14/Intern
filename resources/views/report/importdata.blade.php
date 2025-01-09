@@ -22,7 +22,7 @@
     <div class="card ">
     <div class="d-flex justify-content-between align-items-center gap-2">
     
-    <h4 class="card-header text-warning">จัดการ dashboard ติดตั้ง fttx ภายใน 3 วัน</h4>
+    <h5 class="card-header text-dark">จัดการ dashboard ติดตั้ง fttx ภายใน 3 วัน</h4>
 
     
     <div class="d-flex align-items-center gap-2">

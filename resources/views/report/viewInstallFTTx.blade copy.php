@@ -252,7 +252,7 @@
                             </form>
 
                             @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                                <a href="{{ route('importdata') }}" class="btn bg-light mx-1 ">
+                                <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-light mx-1 ">
                                     <i class="d-flex justify-content-end "></i> Import
                                 </a>
                             @endif

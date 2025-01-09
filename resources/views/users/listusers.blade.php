@@ -60,7 +60,7 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
-                                <div class="dropdown">
+                                <div class="dropdown-menu-start">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" 
                                             data-bs-toggle="dropdown">
                                         <i class="bx bx-dots-vertical-rounded"></i>

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ URL::asset('custom/css/custom-style.css') }}">
 @endsection
 @section('content')
-    <!-- navigate -->
+
     <h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
             <a href="{{ route('home') }}" class="">
                 หน้าแรก
@@ -20,7 +20,7 @@
             </a>
             /
             <a href="javascript:history.back()" class="">
-                ศูนย์ ภน.
+                ศูนย์ ตป.
             </a>
             /
         </span> จังหวัด
@@ -73,7 +73,7 @@
     <div class='card'>
         <div class="d-flex justify-content-between align-items-center gap-2">
             <!-- หัวข้อ -->
-            <h4 class="card-header text-warning">กราฟข้อมูลการติดตั้ง fttx ภายใน 3 วัน จังหวัด
+            <h5 class="card-header text-dark">กราฟข้อมูลการติดตั้ง fttx ภายใน 3 วัน จังหวัด
                 @if ($section == 'รวม บตป.1 (กส.)')
                     กาฬสินธุ์
                 @elseif ($section == 'รวม บตป.1 (ขก.)')
@@ -129,14 +129,14 @@
 
                 <!-- ปุ่ม Import -->
                 @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                    <a href="{{ route('importdata') }}" class="btn bg-yellow" style="width: 150px;">
+                    <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow" style="width: 150px;">
                         <i class="fas fa-file-import"></i> Import
                     </a>
                 @endif
 
 
                 <!-- ฟอร์ม Export -->
-                <button type="button" class="btn bg-dark" data-toggle="modal" data-target="#exportModal">
+                <button type="button" class="btn bg-dark btn-fixed-size" data-toggle="modal" data-target="#exportModal">
                     <i class="fas fa-file-export"></i> Export
                 </button>
                 <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal" data-bs-target="#modalScrollable">
@@ -155,7 +155,7 @@
     <div class="card ">
         <div class="d-flex justify-content-between align-items-center gap-2">
             <!-- หัวข้อ -->
-            <h4 class="card-header text-warning">ข้อมูลการติดตั้ง fttx ภายใน 3 วัน จังหวัด
+            <h5 class="card-header text-dark">ข้อมูลการติดตั้ง fttx ภายใน 3 วัน จังหวัด
                 @if ($section == 'รวม บตป.1 (กส.)')
                     กาฬสินธุ์
                 @elseif ($section == 'รวม บตป.1 (ขก.)')
@@ -210,14 +210,14 @@
 
                 <!-- ปุ่ม Import -->
                 @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                    <a href="{{ route('importdata') }}" class="btn bg-yellow" style="width: 150px;">
+                    <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow" style="width: 150px;">
                         <i class="fas fa-file-import"></i> Import
                     </a>
                 @endif
 
 
                 <!-- ฟอร์ม Export -->
-                <button type="button" class="btn bg-dark" data-toggle="modal" data-target="#exportModal">
+                <button type="button" class="btn bg-dark btn-fixed-size" data-toggle="modal" data-target="#exportModal">
                     <i class="fas fa-file-export"></i> Export
                 </button>
                 <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal" data-bs-target="#modalScrollable">
@@ -232,7 +232,6 @@
                     <thead class="text-center ">
                         <tr class='bg-dark'>
                             <th rowspan="2" class="col-data ">ดูข้อมูล</th>
-
                             <th rowspan="2" class="col-department">เดือน</th>
                             <th rowspan="2" class="col-count">จำนวนวงจร</th>
                             <th rowspan="2" class="col-doc-time">ระยะเวลาเตรียมเอกสารรวม (วัน)</th>

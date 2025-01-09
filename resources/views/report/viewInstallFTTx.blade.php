@@ -7,6 +7,9 @@
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('custom/css/custom-style.css') }}">
+    <style>
+    
+</style>
 @endsection
 @section('content')
 
@@ -24,17 +27,17 @@
     <div class='card'>
         <div class="d-flex justify-content-between align-items-center gap-2">
             <!-- หัวข้อ -->
-            <h4 class="card-header text-warning">
+            <h5 class="card-header text-dark">
                 @php
                     $latestMonthData = $latestMonthData ?? collect(); // กำหนดค่าเริ่มต้นเป็น Collection ว่าง
                 @endphp
                 @if ($latestMonthData->isEmpty())
                     กกราฟแสดงข้อมูลการติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
                 @else
-                    กราฟแสดงข้อมูลการติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})
+                    กราฟแสดงข้อมูลเปอร์เซ็นเฉลี่ยการติดตั้ง FTTx ได้ภายใน 3 วัน ประจำปี
                 @endif
 
-            </h4>
+            </h5>
 
 
             <div class="d-flex align-items-center gap-2">
@@ -50,13 +53,13 @@
 
                 <!-- ปุ่ม Import -->
                 @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                    <a href="{{ route('importdata') }}" class="btn bg-yellow">
-                        <i class="fas fa-file-import"></i> Import
-                    </a>
+                <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow btn-fixed-size">
+    <i class="fas fa-file-import"></i> Import
+</a>
                 @endif
 
                 <!-- ฟอร์ม Export -->
-                <button type="button" class="btn bg-dark" data-toggle="modal" data-target="#exportModal">
+                <button type="button" class="btn bg-dark btn-fixed-size" data-toggle="modal" data-target="#exportModal">
                     <i class="fas fa-file-export"></i> Export
                 </button>
 
@@ -77,13 +80,13 @@
     <div class="card ">
         <div class="d-flex justify-content-between align-items-center gap-2">
             <!-- หัวข้อ -->
-            <h4 class="card-header text-warning">
+            <h5 class="card-header text-dark">
                 @if ($latestMonthData->isEmpty())
                     ข้อมูลการติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
                 @else
                     ข้อมูลการติดตั้ง FTTx ได้ภายใน 3 วัน (ข้อมูล ประจำเดือน {{ $latestMonthData->first()->month }})
                 @endif
-            </h4>
+            </h5>
 
 
             <div class="d-flex align-items-center gap-2">
@@ -97,13 +100,13 @@
                 </form>
                 <!-- ปุ่ม Import -->
                 @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                    <a href="{{ route('importdata') }}" class="btn bg-yellow">
+                    <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow">
                         <i class="fas fa-file-import"></i> Import
                     </a>
                 @endif
 
                 <!-- ฟอร์ม Export -->
-                <button type="button" class="btn bg-dark" data-toggle="modal" data-target="#exportModal">
+                <button type="button" class="btn bg-dark btn-fixed-size" data-toggle="modal" data-target="#exportModal">
                     <i class="fas fa-file-export"></i> Export
                 </button>
 

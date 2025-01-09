@@ -26,7 +26,7 @@
 
       @if (Auth::check() && Auth::user()->permission['manage_dashboard'] ?? false)
       <li class="nav-item lh-1 me-3">
-        <a href="{{ route('importdata') }}" class="">
+        <a href="{{ route('importdata') }}" class="btn-fixed-size ">
           <i class="fas fa-users-cog"></i> จัดการ Dashboard
         </a>
       </li>

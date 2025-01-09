@@ -35,7 +35,7 @@
     <div class='card'>
         <div class="d-flex justify-content-between align-items-center gap-2">
             <!-- หัวข้อ -->
-            <h4 class="card-header text-warning">
+            <h5 class="card-header text-dark">
                 @if ($section == '2')
                     กราฟแสดงข้อมูลการติดตั้ง fttx ภายใน 3 วัน ภน.2.1
                 @elseif ($section == '3')
@@ -55,14 +55,14 @@
 
                 <!-- ปุ่ม Import -->
                 @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                    <a href="{{ route('importdata') }}" class="btn bg-yellow" style="width: 150px;">
+                    <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow" style="width: 150px;">
                         <i class="fas fa-file-import"></i> Import
                     </a>
                 @endif
 
             
                 <!-- ฟอร์ม Export -->
-                <button type="button" class="btn bg-dark" data-toggle="modal" data-target="#exportModal">
+                <button type="button" class="btn bg-dark btn-fixed-size" data-toggle="modal" data-target="#exportModal">
                     <i class="fas fa-file-export"></i> Export
                 </button>
                 <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal" data-bs-target="#modalScrollable">
@@ -81,7 +81,7 @@
     <div class="card ">
         <div class="d-flex justify-content-between align-items-center gap-2">
             <!-- หัวข้อ -->
-            <h4 class="card-header text-warning">
+            <h5 class="card-header text-dark">
                 @if ($section == '2')
                     ข้อมูลการติดตั้ง fttx ภายใน 3 วัน ภน.2.1
                 @elseif ($section == '3')
@@ -102,13 +102,13 @@
 
                 <!-- ปุ่ม Import -->
                 @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                    <a href="{{ route('importdata') }}" class="btn bg-yellow" style="width: 150px;">
+                    <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow" style="width: 150px;">
                         <i class="fas fa-file-import"></i> Import
                     </a>
                 @endif
 
                  <!-- ฟอร์ม Export -->
-                 <button type="button" class="btn bg-dark" data-toggle="modal" data-target="#exportModal">
+                 <button type="button" class="btn bg-dark btn-fixed-size" data-toggle="modal" data-target="#exportModal">
                     <i class="fas fa-file-export"></i> Export
                 </button>
                 <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal" data-bs-target="#modalScrollable">
