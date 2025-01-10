@@ -9,33 +9,45 @@ use Illuminate\Support\Facades\Auth;
 class UserObserver
 {
     public function created(User $user)
+    {
+
+        UserLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'เพิ่มผู้ใช้งาน',
+            'model' => 'จัดการผู้ใช้งาน',
+            'data' => json_encode([
+                'username' => $user->name,
+                'message' => 'เพิ่มผู้ใช้' 
+
+            ]), 
+        ]);
+    }
+
+    public function updated(User $user)
 {
-    
     UserLog::create([
         'user_id' => Auth::id(),
-        'action' => 'created',
-        'model' => 'User',
-        'data' => json_encode($user->toArray()),
+        'action' => 'แก้ไขผู้ใช้งาน',
+        'model' => 'จัดการผู้ใช้งาน',
+        'data' => json_encode([
+            'username' => $user->name,
+            'message' => 'แก้ไขผู้ใช้งาน'
+        ]),
     ]);
 }
 
-    public function updated(User $user)
-    {
-        UserLog::create([
-            'user_id' => Auth::id(),
-            'action' => 'updated',
-            'model' => 'User',
-            'data' => json_encode($user->getChanges()),
-        ]);
-    }
 
-    public function deleted(User $user)
-    {
-        UserLog::create([
-            'user_id' => Auth::id(),
-            'action' => 'deleted',
-            'model' => 'User',
-            'data' => json_encode($user->toArray()),
-        ]);
-    }
+public function deleted(User $user)
+{
+    UserLog::create([
+        'user_id' => Auth::id(),
+        'action' => 'ลบผู้ใช้งาน',
+        'model' => 'จัดการผู้ใช้งาน',
+        'data' => json_encode([
+            'username' => $user->name,
+            'message' => 'ลบผู้ใช้งาน'
+        ]),
+    ]);
+}
+
 }

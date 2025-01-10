@@ -4,10 +4,11 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
-
+use App\Models\UserLog;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RequestsController;
 use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,7 +19,11 @@ use Illuminate\Support\Facades\Auth;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/user-logs', function () {
+    // Eager load the user relationship to avoid N+1 query problem
+    $logs = UserLog::with('user')->orderBy('created_at', 'desc')->get();
+    return view('user-logs.listlogs', compact('logs'));
+});
 
 
 Route::get('/admins', function () {
