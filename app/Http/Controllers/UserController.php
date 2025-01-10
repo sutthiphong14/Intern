@@ -16,11 +16,12 @@ class UserController extends Controller
     return view('users.listusers', compact('users'));
 }
 
-    function delete($id)
-    {
-        DB::table('users')->where('id', $id)->delete();
-        return redirect('/listusers');
-    }
+function delete($id)
+{
+    $user = User::findOrFail($id); // ค้นหา User โดยใช้ Eloquent
+    $user->delete();              // ลบผ่าน Eloquent ซึ่งจะเรียก Observer
+    return redirect('/listusers');
+}
 
     public function store(Request $request)
     {

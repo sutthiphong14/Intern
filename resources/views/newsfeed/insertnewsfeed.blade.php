@@ -15,58 +15,52 @@
         <h3 class="card-title">เพิ่มเอกสาร</h3>
     </div>
 
+    <hr class="my-2" />
+
     <!-- /.card-header -->
     <div class="card-body">
-    <table id="example2" class="table table-bordered">
-    <thead class="text-center bg-dark">
-        <tr>
-            <th>หัวข้อ</th>
-            <th>คำอธิบาย</th>
-            <th>หมวดหมู่</th>
-            <th>ไฟล์</th>
-        </tr>
-    </thead>
-    <tbody class="align-items-center">
-        <form action="{{ route('createnews') }}" class="form-group" method="POST" enctype="multipart/form-data">
-            @csrf
-            <tr>
-                <td>
-                    <input class="form-control" type="text" placeholder="Name" name="name" value="{{ old('name') }}">
-                    @error('name')
-                        <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
-                    @enderror
-                </td>
-                <td>
-                    <input class="form-control" type="text" placeholder="Description" name="description" value="{{ old('description') }}">
-                    @error('description')
-                        <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
-                    @enderror
-                </td>
-                <td>
-                    <select class="form-control" name="categories" required>
-                        <option value="" disabled selected>เลือกหมวดหมู่</option>
-                        <option value="ข่าว" {{ old('categories') == 'ข่าว' ? 'selected' : '' }}>ข่าว</option>
-                        <option value="เอกสาร" {{ old('categories') == 'เอกสาร' ? 'selected' : '' }}>เอกสาร</option>
-                    </select>
-                    @error('categories')
-                        <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
-                    @enderror
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input class="form-control" type="file" id="import_file" name="file">
-                        @error('file')
-                            <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
-                        @enderror
-                    </div>
-                </td>
-            </tr>
-            
+    <form action="{{ route('createnews') }}" class="form-group" method="POST" enctype="multipart/form-data">
+        @csrf
         
-    </tbody>
-</table>
+        <div class="form-group">
+            <label for="name">หัวข้อ</label>
+            <input class="form-control" type="text" placeholder="Name" name="name" value="{{ old('name') }}">
+            @error('name')
+                <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+            @enderror
+        </div>
+        
+        <div class="form-group">
+            <label for="description">คำอธิบาย</label>
+            <input class="form-control" type="text" placeholder="Description" name="description" value="{{ old('description') }}">
+            @error('description')
+                <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+            @enderror
+        </div>
+        
+        <div class="form-group">
+            <label for="categories">หมวดหมู่</label>
+            <select class="form-control" name="categories" required>
+                <option value="" disabled selected>เลือกหมวดหมู่</option>
+                <option value="ข่าว" {{ old('categories') == 'ข่าว' ? 'selected' : '' }}>ข่าว</option>
+                <option value="เอกสาร" {{ old('categories') == 'เอกสาร' ? 'selected' : '' }}>เอกสาร</option>
+            </select>
+            @error('categories')
+                <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+            @enderror
+        </div>
+        
+        <div class="form-group">
+            <label for="file">ไฟล์</label>
+            <input class="form-control" type="file" id="import_file" name="file">
+            @error('file')
+                <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+            @enderror
+        </div>
 
-    </div>
+    </form>
+</div>
+
 
     </tbody>
     </table>

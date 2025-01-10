@@ -39,7 +39,7 @@
                         <th class="col-1">หมวดหมู่</th>
                         <th class="col-2">เวลาลงข้อมูล</th>
                         <th class="col-1">สถานะข้อมูล</th>
-                        <th class="col-1">การดำเนินการ</th>
+                        <th class="col-1">Action</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0 text-center">
