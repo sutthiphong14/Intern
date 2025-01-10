@@ -14,6 +14,8 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Admin User',
             'username' => 'admin',
+            'emp_id' => '00001',
+            'department' => 'Admin',
             'email' => 'admin@example.com',
             'password' => Hash::make('admin_password'),
             'permission' => json_encode([
@@ -21,20 +23,7 @@ class UserSeeder extends Seeder
                 'manage_dashboard' => true,
                 'manage_newsfeed' => true
             ]),
-        ]);
-
-        // Create a user with limited permissions
-        User::create([
-            'name' => 'Limited User',
-            'username' => 'limited',
-            'email' => 'limited@example.com',
-            'password' => Hash::make('limited_password'),
-            'permission' => json_encode([
-                'manage_users' => false,
-                'manage_dashboard' => true,
-                'manage_newsfeed' => false
-            ]),
-          
+            
         ]);
     }
 }

@@ -11,38 +11,41 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     public function listUsers()
-{
-    $users = User::paginate(10); // Adjust the number per page as needed
-    return view('users.listusers', compact('users'));
-}
+    {
+        $users = User::paginate(10); // Adjust the number per page as needed
+        return view('users.listusers', compact('users'));
+    }
 
-function delete($id)
-{
-    $user = User::findOrFail($id); // ค้นหา User โดยใช้ Eloquent
-    $user->delete();              // ลบผ่าน Eloquent ซึ่งจะเรียก Observer
-    return redirect('/listusers');
-}
+    function delete($id)
+    {
+        $user = User::findOrFail($id); // ค้นหา User โดยใช้ Eloquent
+        $user->delete();              // ลบผ่าน Eloquent ซึ่งจะเรียก Observer
+        return redirect('/listusers');
+    }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'username' => 'required|string|max:255',
             'name' => 'required|string|max:255',
+            'emp_id' => 'required|string|max:255', // Ensure emp_id is included
+            'department' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'password' => 'required|string|min:8',
         ]);
-    
+
         if ($request->hasFile('profile_image')) {
             // แปลงรูปเป็น Base64
             $image = $request->file('profile_image');
             $imageData = base64_encode(file_get_contents($image));
             $imageSrc = 'data:image/' . $image->getClientOriginalExtension() . ';base64,' . $imageData;
         }
-    
+
         $user = User::create([
             'username' => $validatedData['username'],
             'name' => $validatedData['name'],
+            'emp_id' => $validatedData['emp_id'],
+            'department' => $validatedData['department'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
             'profile_image' => $imageSrc ?? null,
@@ -52,10 +55,10 @@ function delete($id)
                 'manage_newsfeed' => $request->has('manage_newsfeed_permission') ? 1 : 0,
             ]),
         ]);
-    
+
         return redirect()->route('users.list')->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
     }
-    
+
 
     public function edit($id)
     {
@@ -67,10 +70,11 @@ function delete($id)
     {
         $validatedData = $request->validate([
             'username' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'email' => 'required|string|max:255',
             'name' => 'required|string|max:255',
-            'password' => 'nullable|string|min:6',
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'emp_id' => 'required|string|max:255', // Ensure emp_id is included
+            'department' => 'required|string|max:255',
+            
         ]);
 
         // ค้นหาผู้ใช้ที่ต้องการอัปเดต
@@ -80,6 +84,8 @@ function delete($id)
         $user->username = $validatedData['username'];
         $user->email = $validatedData['email'];
         $user->name = $validatedData['name'];
+        $user->emp_id = $validatedData['emp_id'];
+        $user->department = $validatedData['department'];
 
         if (!empty($validatedData['password'])) {
             $user->password = Hash::make($validatedData['password']);
@@ -121,8 +127,8 @@ function delete($id)
         $query = $request->input('query');
         // เปลี่ยนจาก get() เป็น paginate()
         $users = User::where('username', 'LIKE', "%{$query}%")
-                     ->paginate(10);  // ใช้การแบ่งหน้าเหมือนกับเมธอด listUsers
-    
+            ->paginate(10);  // ใช้การแบ่งหน้าเหมือนกับเมธอด listUsers
+
         return view('users.listusers', compact('users'));
     }
     public function updateProfileImage(Request $request)

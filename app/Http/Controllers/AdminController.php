@@ -69,7 +69,7 @@ class AdminController extends Controller
         DB::table('newsfeeds')->insert($data);
 
         // Log the creation
-        $this->logAction('created', 'Newsfeed', $data);
+        $this->logAction('เพิ่มเอกสาร', 'จัดการประชาสัมพันธ์', $data);
 
         return redirect('/listnewsfeed');
     }

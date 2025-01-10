@@ -19,27 +19,42 @@
         <form method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="row">
-                <div class="mb-3 ">
-                    <label for="firstName" class="form-label text-dark">ชื่อผู้ใช้</label>
+                <div class="mb-3">
+                    <label for="username" class="form-label text-dark">ชื่อผู้ใช้</label>
                     <input type="text" class="form-control" id="username" name="username" placeholder="กรอกชื่อผู้ใช้"
                         required value="{{ old('username') }}">
                 </div>
 
-                <div class="mb-3 ">
-                    <label for="lastName" class="form-label text-dark">ชื่อ-นามสกุล</label>
+                <div class="mb-3">
+                    <label for="name" class="form-label text-dark">ชื่อ-นามสกุล</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="กรอกชื่อ-นามสกุล"
                         required value="{{ old('name') }}">
                 </div>
-                <div class="mb-3 ">
-                    <label for="organization" class="form-label text-dark">รหัสผ่าน</label>
+
+                <div class="mb-3">
+                    <label for="emp_id" class="form-label text-dark">รหัสพนักงาน</label>
+                    <input type="text" class="form-control" id="emp_id" name="emp_id" placeholder="กรอกรหัสพนักงาน"
+                        required value="{{ old('emp_id') }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="department" class="form-label text-dark">แผนก</label>
+                    <input type="text" class="form-control" id="department" name="department" placeholder="กรอกแผนก"
+                        required value="{{ old('department') }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label text-dark">รหัสผ่าน</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="กรอกรหัสผ่าน"
                         required>
                 </div>
-                <div class="mb-3 ">
+
+                <div class="mb-3">
                     <label for="email" class="form-label text-dark">อีเมล</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="กรอกอีเมล" required
                         value="{{ old('email') }}">
                 </div>
+
                 <hr class="my-3" />
                 <h4 class="card-header">ให้สิทธิ์การใช้งาน</h4>
                 <div class="table-responsive">
@@ -99,9 +114,10 @@
                     </table>
                 </div>
                 <div class="card-footer align-items-center text-center">
-                                <button type="button" class="btn btn-danger" onclick="window.location='{{ route('users.list') }}'">ยกเลิก</button>
-                                <button type="submit" class="btn btn-success">ยืนยัน</button>
-                            </div>
+                    <button type="button" class="btn btn-danger"
+                        onclick="window.location='{{ route('users.list') }}'">ยกเลิก</button>
+                    <button type="submit" class="btn btn-success">ยืนยัน</button>
+                </div>
 
 
         </form>

@@ -36,7 +36,7 @@
                                         @php
                                             $data = json_decode($log->data, true);
                                         @endphp
-                                        {{ $data['message'] ?? 'ไม่มีข้อความ' }} {{ $data['name'] ?? 'N/A' }}
+                                        {{ $data['message'] ?? 'ไม่มีข้อความ' }} {{ $data['username'] ?? 'N/A' }}
 
                                     </td>
 

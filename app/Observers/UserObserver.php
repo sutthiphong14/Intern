@@ -16,7 +16,7 @@ class UserObserver
             'action' => 'เพิ่มผู้ใช้งาน',
             'model' => 'จัดการผู้ใช้งาน',
             'data' => json_encode([
-                'username' => $user->name,
+                'username' => $user->username,
                 'message' => 'เพิ่มผู้ใช้' 
 
             ]), 
@@ -30,7 +30,7 @@ class UserObserver
         'action' => 'แก้ไขผู้ใช้งาน',
         'model' => 'จัดการผู้ใช้งาน',
         'data' => json_encode([
-            'username' => $user->name,
+            'username' => $user->username,
             'message' => 'แก้ไขผู้ใช้งาน'
         ]),
     ]);
@@ -44,7 +44,7 @@ public function deleted(User $user)
         'action' => 'ลบผู้ใช้งาน',
         'model' => 'จัดการผู้ใช้งาน',
         'data' => json_encode([
-            'username' => $user->name,
+            'username' => $user->username,
             'message' => 'ลบผู้ใช้งาน'
         ]),
     ]);
