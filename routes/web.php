@@ -8,7 +8,7 @@ use App\Models\UserLog;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RequestsController;
 use Illuminate\Support\Facades\Auth;
-
+use App\Http\Controllers\SlideshowController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -308,5 +308,8 @@ Route::delete('/deletenews/{id}', [AdminController::class, 'deletenews'])->name(
 
 Route::get('/edit_banner', function () {
     return view('manage_images.edit_banner');
-});
+})->name('edit_banner');
 
+
+Route::post('/slideshows/store', [SlideshowController::class, 'store'])->name('slideshows.store');
+Route::get('/edit_banner', [SlideshowController::class, 'showBanners'])->name('edit_banner');

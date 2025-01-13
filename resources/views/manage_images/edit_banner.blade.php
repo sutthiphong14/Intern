@@ -7,6 +7,13 @@
 @endsection
 @section('css')
 <style>
+    .carousel-inner img.fixed-size {
+        width: 1600px;
+        height: 400px;
+        object-fit: cover;
+        /* Ensures image covers the dimensions without distortion */
+    }
+
     .carousel-control-prev,
     .carousel-control-next {
         width: 5%;
@@ -50,6 +57,13 @@
             height: 25px;
         }
     }
+
+    .custom-size {
+        width: 160px;
+        height: 40px;
+        object-fit: cover;
+        /* เพื่อให้ภาพไม่บิดเบี้ยว */
+    }
 </style>
 
 @endsection
@@ -70,94 +84,140 @@
             </div>
         </div>
         <div class="card-body">
-        <div class="slide"> 
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-pause="true" data-bs-interval="false">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{{ asset('/img/banner_images/1.png') }}" class="d-block w-100 rounded" alt="Banner 1">
+            <div class="slide">
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-pause="true"
+                    data-bs-interval="false">
+                    <div class="carousel-inner">
+                        @if ($slideshows->isEmpty())
+                            <div class="carousel-item active">
+                                <img src="{{ asset('storage/slideshow_images/10.png') }}" class="d-block w-100 rounded fixed-size"
+                                    alt="Default Banner">
+                            </div>
+                        @else
+                            @foreach ($slideshows as $index => $slideshow)
+                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                    <a href="{{ $slideshow->slideshow_link }}" target="_blank">
+                                        <img src="{{ asset('storage/' . $slideshow->slideshow_image) }}"
+                                            class="d-block w-100 rounded fixed-size" alt="Banner {{ $index + 1 }}">
+                                    </a>
+                                </div>
+                            @endforeach
+                        @endif
+
+
+
+
+                    </div>
+
+                </div>
             </div>
-            <div class="carousel-item">
-                <img src="{{ asset('/img/banner_images/2.png') }}" class="d-block w-100 rounded" alt="Banner 2">
-            </div>
-            <div class="carousel-item">
-                <img src="{{ asset('/img/banner_images/3.png') }}" class="d-block w-100 rounded" alt="Banner 3">
-            </div>
-            <div class="carousel-item">
-                <img src="{{ asset('/img/banner_images/4.png') }}" class="d-block w-100 rounded" alt="Banner 4">
-            </div>
-            <div class="carousel-item">
-                <img src="{{ asset('/img/banner_images/5.png') }}" class="d-block w-100 rounded" alt="Banner 5">
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
 
-        
 
 
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="button-container d-flex flex-nowrap justify-content-start gap-2 py-3 overflow-auto">
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                            aria-label="Slide 1" class="p-0 border-0">
-                            <img src="{{ asset('/img/banner_images/1.png') }}" style="width: 160px; height: 40px;"
-                                class="rounded" alt="Banner 1">
-                        </button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                            aria-label="Slide 2" class="p-0 border-0">
-                            <img src="{{ asset('/img/banner_images/2.png') }}" style="width: 160px; height: 40px;"
-                                class="rounded" alt="Banner 2">
-                        </button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                            aria-label="Slide 3" class="p-0 border-0">
-                            <img src="{{ asset('/img/banner_images/3.png') }}" style="width: 160px; height: 40px;"
-                                class="rounded" alt="Banner 3">
-                        </button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
-                            aria-label="Slide 4" class="p-0 border-0">
-                            <img src="{{ asset('/img/banner_images/4.png') }}" style="width: 160px; height: 40px;"
-                                class="rounded" alt="Banner 4">
-                        </button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4"
-                            aria-label="Slide 5" class="p-0 border-0">
-                            <img src="{{ asset('/img/banner_images/5.png') }}" style="width: 160px; height: 40px;"
-                                class="rounded" alt="Banner 5">
-                        </button>
-                        <button type="button" style="width: 160px; height: 40px;"
-                            data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"
-                            class="p-0 border-0 bg-dark">
-                            +
-                        </button>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="button-container d-flex flex-nowrap justify-content-start gap-2 py-3 overflow-auto">
+                            @foreach ($slideshows as $index => $slideshow)
+                                <button type="button" data-bs-target="#carouselExampleIndicators"
+                                    data-bs-slide-to="{{ $index }}" aria-label="Slide {{ $index + 1 }}"
+                                    class="p-0 border-0">
+                                    <img src="{{ asset('storage/' . $slideshow->slideshow_image) }}"
+                                        style="width: 160px; height: 40px;" class="rounded" alt="Banner {{ $index + 1 }}">
+                                </button>
+                            @endforeach
+                            <button type="button" style="width: 160px; height: 40px;" data-bs-toggle="modal"
+                                data-bs-target="#exportModal" class="btn btn-dark flex-shrink-0">
+                                เพิ่มหน้า
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <hr>
+            <h4>จัดการรูปภาพ</h4>
+            <div class="mb-3">
+                <label for="" class="form-label text-dark">เลือกไฟล์รูปภาพ</label>
+                <input class="form-control" type="file" id="import_file" name="import_file">
+            </div>
+
+            <div class="mb-3">
+                <label for="" class="form-label text-dark">เชื่อม Link ไปยังหน้าอื่น</label>
+                <input type="text" class="form-control" id="" name="" placeholder="กรอก Link" required value="">
+            </div>
+            <div class="card-footer align-items-center text-center">
+                <button type="button" class="btn btn-danger" onclick="">ลบ</button>
+                <button type="submit" class="btn btn-success">แก้ไข</button>
+            </div>
+
+
+
+
+
+
+
         </div>
-        <hr>
-        <div class="mb-3">
-            <label for="" class="form-label text-dark">เลือกไฟล์รูปภาพ</label>
-            <input class="form-control" type="file" id="import_file" name="import_file">
-        </div>
-
-        <div class="mb-3">
-            <label for="" class="form-label text-dark">เชื่อม Link ดาวโหลด</label>
-            <input type="text" class="form-control" id="" name="" placeholder="กรอกชื่อ-นามสกุล" required
-                value="">
-        </div>
-
-       
-
-
-
-
 
     </div>
-
-</div>
 </div>
 
+<div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form action="{{ route('slideshows.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="exportModalLabel">เพิ่มข้อมูล</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="slideshow_image" class="form-label text-dark">เลือกไฟล์รูปภาพ</label>
+                        <input class="form-control" type="file" id="slideshow_image" name="slideshow_image" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="slideshow_link" class="form-label text-dark">เชื่อม Link ไปยังหน้าอื่น</label>
+                        <input type="url" class="form-control" id="slideshow_link" name="slideshow_link"
+                            placeholder="กรอก Link" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="slideshow_status" class="form-label text-dark">สถานะ</label>
+                        <select class="form-select" id="slideshow_status" name="slideshow_status" required>
+                            <option value="1">เปิดใช้งาน</option>
+                            <option value="0">ปิดใช้งาน</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" class="btn btn-success">ยืนยัน</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script>
+    // ตัวอย่างการเปิด modal ด้วย JavaScript
+    $(document).ready(function () {
+        $('#exportModal').modal('show');
+    });
+</script>
 
 @endsection
