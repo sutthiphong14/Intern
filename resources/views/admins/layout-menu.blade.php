@@ -24,7 +24,7 @@
               <span class="menu-header-text text-dark">DashBoard</span>
             </li>
     <li class="menu-item {{ Request::is('incomecurrent') ? 'active' : '' }}">
-        <a href="incomecurrent" class="menu-link">
+        <a href="{{route('incomecurrent')}}" class="menu-link">
 
             <i class='menu-icon bx bx-money'></i>
             <div data-i18n="Analytics">รายได้รวม</div>

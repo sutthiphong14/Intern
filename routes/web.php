@@ -25,20 +25,20 @@ Route::get('/admins', function () {
     return view('admins.index');
 });
 
-Route::get('/', function (){
+Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/home', function (){
+Route::get('/home', function () {
     return view('home');
 });
 
-Route::get('/structure', function (){
-    return view('structure') ;
+Route::get('/structure', function () {
+    return view('structure');
 })->name('structure');
 
 
-Route::get('/tableusers', function (){
+Route::get('/tableusers', function () {
     return view('users.tableusers');
 });
 
@@ -51,27 +51,27 @@ Route::get('/insertusers', function () {
 
 Route::get('/listusers', [UserController::class, 'listUsers'])->name('users.list');
 
-Route::get('/permissionsusers', function (){
+Route::get('/permissionsusers', function () {
     return view('users.permissionsusers');
 });
 
-Route::get('/updatenewsfeed', function (){
+Route::get('/updatenewsfeed', function () {
     return view('newsfeed.updatenewsfeed');
 });
 
-Route::get('/listnewsfeed',[AdminController::class , 'listnewsfeed'])->name('listnewsfeed');
+Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
 
-Route::get('/insertnewsfeed', function (){
+Route::get('/insertnewsfeed', function () {
     return view('newsfeed.insertnewsfeed');
 });
 
-Route::get('/newsfeed', function (){
+Route::get('/newsfeed', function () {
     return view('newsfeed.newsfeed');
 });
 
-Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
+Route::get('/newsfeed', [AdminController::class, 'newsfeed'])->name('newsfeed');
 
-Route::get('/profile', function (){
+Route::get('/profile', function () {
     return view('profile');
 });
 
@@ -79,16 +79,16 @@ Route::get('/download/{id}', [AdminController::class, 'downloadFile'])->name('ad
 
 
 
-Route::post('/createnews',[AdminController::class , 'createnews'])->name('createnews');
+Route::post('/createnews', [AdminController::class, 'createnews'])->name('createnews');
 
 Route::post('/changenews/{id}', [AdminController::class, 'changenews']);
 
 
-Route::get('/deletenews/{id}',[AdminController::class , 'deletenews'])->name('deletenews');
+Route::get('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');
 
-Route::get('/editnews/{id}',[AdminController::class , 'editnews'])->name('editnews');
+Route::get('/editnews/{id}', [AdminController::class, 'editnews'])->name('editnews');
 
-Route::post('/updatenews/{id}',[AdminController::class , 'updatenews'])->name('updatenews');
+Route::post('/updatenews/{id}', [AdminController::class, 'updatenews'])->name('updatenews');
 
 Route::get('/search', [AdminController::class, 'search'])->name('search');
 
@@ -183,19 +183,19 @@ Route::get('/viewreport1', function () {
     return view('report.viewreport1');
 });
 
-Route::get('/viewInstallFTTx',[ReportController::class , 'datainstallfttx'])->name('viewInstallFTTx');
+Route::get('/viewInstallFTTx', [ReportController::class, 'datainstallfttx'])->name('viewInstallFTTx');
 
-Route::get('/viewInstallFTTx/{year}',[ReportController::class , 'datainstallfttxYear'])->name('viewInstallFTTxYear');
+Route::get('/viewInstallFTTx/{year}', [ReportController::class, 'datainstallfttxYear'])->name('viewInstallFTTxYear');
 
-Route::get('/viewInstallFTTxcenter', [ReportController::class ,'datacenter']);
+Route::get('/viewInstallFTTxcenter', [ReportController::class, 'datacenter']);
 
-Route::get('/viewInstallFTTxprovin',[ReportController::class ,'dataprovin'])->name('viewInstallFTTxprovin');
+Route::get('/viewInstallFTTxprovin', [ReportController::class, 'dataprovin'])->name('viewInstallFTTxprovin');
 
-Route::get('/viewInstallFTTxprovin/{section}/{year},{month}',[ReportController::class ,'sortprovin'])->name('viewInstallFTTxprovin');
+Route::get('/viewInstallFTTxprovin/{section}/{year},{month}', [ReportController::class, 'sortprovin'])->name('viewInstallFTTxprovin');
 
-Route::get('/viewInstallFTTxprovinMonth/{section}/{year}', [ReportController::class ,'sortprovinmonth'])->name('viewInstallFTTxprovinSort');
+Route::get('/viewInstallFTTxprovinMonth/{section}/{year}', [ReportController::class, 'sortprovinmonth'])->name('viewInstallFTTxprovinSort');
 
-Route::get('/viewInstallFTTxcenter/{section}/{year}/{month}', [ReportController::class ,'sortcenter'])->name('viewInstallFTTxcenter');
+Route::get('/viewInstallFTTxcenter/{section}/{year}/{month}', [ReportController::class, 'sortcenter'])->name('viewInstallFTTxcenter');
 
 Route::get('/viewInstallFTTxcenter/{center}/{year}/{month}', [ReportController::class, 'viewInstallData']);
 
@@ -208,8 +208,8 @@ Route::get('/importdata', function () {
 
 
 
-Route::post('/importdata', [ReportController::class ,'import']);
-Route::post('/importdata2', [ReportController::class ,'importFile'])->name('importdata2');
+Route::post('/importdata', [ReportController::class, 'import']);
+Route::post('/importdata2', [ReportController::class, 'importFile'])->name('importdata2');
 
 Route::get('/api/existing-months', [ReportController::class, 'getExistingMonths'])->name('api.existing.months');
 
@@ -226,14 +226,14 @@ Route::get('/data/export2', [ReportController::class, 'export2']); // Export Exc
 
 
 Route::get('/incomecurrent', function () {
-    return view('report.incomecurrent');
-});
+    return view('income.incomecurrent');
+})->name('incomecurrent');
 Route::get('/users', [UserController::class, 'listUsers'])->name('users.list');
 
 Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('delete');
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
-Route::get('/users/{id}/edit',[UserController::class,'edit'])->name('users.edit');
+Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
 // Example route protection
 Route::middleware(['auth', 'check.permission:manage_users'])->group(function () {
@@ -253,7 +253,7 @@ Route::middleware(['auth', 'check.permission:manage_dashboard'])->group(function
 });
 
 Route::middleware(['auth', 'check.permission:manage_newsfeed'])->group(function () {
-    
+
     Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
     // Other news-related routes
 });
@@ -267,7 +267,7 @@ Route::get('/viewreport3', function () {
     return view('report.viewreport3');
 });
 
-Route::get('/viewreport3',[ReportController::class , 'viewreport3'])->name('viewreport3');
+Route::get('/viewreport3', [ReportController::class, 'viewreport3'])->name('viewreport3');
 
 Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
@@ -276,8 +276,8 @@ Route::post('/profile/update-image', [UserController::class, 'updateProfileImage
     ->middleware('auth');
 
 Route::get('/profile', [UserController::class, 'showProfile'])
- ->name('profile')
-->middleware('auth'); // Pastikan hanya pengguna yang login yang dapat mengaksesRoute::prefix('categories')->group(function () {
+    ->name('profile')
+    ->middleware('auth'); // Pastikan hanya pengguna yang login yang dapat mengaksesRoute::prefix('categories')->group(function () {
 Route::get('/listcategories', [CategoryController::class, 'listcategories'])->name('categories.listcategories');
 Route::get('/create', [CategoryController::class, 'create'])->name('categories.create');
 Route::post('/store', [CategoryController::class, 'store'])->name('categories.store');
@@ -289,14 +289,14 @@ Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->nam
 
 
 
-    Route::get('/requests', [RequestsController::class, 'index'])->name('requests.list');
-    Route::get('/requests/create', [RequestsController::class, 'create'])->name('insertRequests');
-    Route::post('/requests', [RequestsController::class, 'store'])->name('requests.store');
-    Route::get('/requests/{id}/edit', [RequestsController::class, 'edit'])->name('requests.edit');
-    Route::put('/requests/{id}', [RequestsController::class, 'update'])->name('requests.update');
-    Route::delete('/requests/{id}', [RequestsController::class, 'destroy'])->name('requests.delete');
-    Route::get('/requests/search', [RequestsController::class, 'search'])->name('requests.search');
-    Route::post('/requests/{id}/approve', [RequestsController::class, 'approve'])->name('requests.approve');
-    
+Route::get('/requests', [RequestsController::class, 'index'])->name('requests.list');
+Route::get('/requests/create', [RequestsController::class, 'create'])->name('insertRequests');
+Route::post('/requests', [RequestsController::class, 'store'])->name('requests.store');
+Route::get('/requests/{id}/edit', [RequestsController::class, 'edit'])->name('requests.edit');
+Route::put('/requests/{id}', [RequestsController::class, 'update'])->name('requests.update');
+Route::delete('/requests/{id}', [RequestsController::class, 'destroy'])->name('requests.delete');
+Route::get('/requests/search', [RequestsController::class, 'search'])->name('requests.search');
+Route::post('/requests/{id}/approve', [RequestsController::class, 'approve'])->name('requests.approve');
+
 Route::get('/news/search', [AdminController::class, 'search'])->name('news.search');
 Route::delete('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');
