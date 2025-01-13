@@ -305,3 +305,8 @@ Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->nam
     
 Route::get('/news/search', [AdminController::class, 'search'])->name('news.search');
 Route::delete('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');
+
+Route::get('/edit_banner', function () {
+    return view('manage_images.edit_banner');
+});
+
