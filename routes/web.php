@@ -311,5 +311,12 @@ Route::get('/edit_banner', function () {
 })->name('edit_banner');
 
 
-Route::post('/slideshows/store', [SlideshowController::class, 'store'])->name('slideshows.store');
 Route::get('/edit_banner', [SlideshowController::class, 'showBanners'])->name('edit_banner');
+Route::post('/slideshow', [SlideshowController::class, 'store'])->name('slideshows.store');
+Route::put('/slideshow/{id}', [SlideshowController::class, 'update'])->name('slideshow.update');
+
+Route::get('/slideshow/{id}/edit', [SlideshowController::class, 'edit'])->name('slideshow.edit');
+Route::delete('/slideshow/{id}', [SlideshowController::class, 'destroy'])->name('slideshow.destroy');
+
+
+

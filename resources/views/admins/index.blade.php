@@ -70,6 +70,7 @@
         integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         @yield('css') <!-- ย้ายมาไว้ตรงนี้หลังจากโหลด CSS หลัก -->
+        
 </head>
 
 <body class="hold-transition layout-fixed ">

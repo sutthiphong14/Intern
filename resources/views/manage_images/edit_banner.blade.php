@@ -7,6 +7,14 @@
 @endsection
 @section('css')
 <style>
+    .carousel-inner img {
+        object-fit: cover;
+        width: 100%;
+        /* Ensures proper scaling */
+        max-height: 400px;
+        /* Prevents overflow */
+    }
+
     .carousel-inner img.fixed-size {
         width: 1600px;
         height: 400px;
@@ -62,12 +70,13 @@
         width: 160px;
         height: 40px;
         object-fit: cover;
-        /* เพื่อให้ภาพไม่บิดเบี้ยว */
+
     }
 </style>
 
 @endsection
 @section('content')
+
 <div class="content-wrapper">
     <div class="card">
         <div class="d-flex justify-content-between align-items-center gap-2">
@@ -76,6 +85,17 @@
                 จัดการ Slideshow
             </h3>
             <div class="d-flex align-items-center gap-2">
+            @foreach ($slideshows as $slideshow)
+    <button type="button" class="btn btn-danger" onclick="deleteSlide({{ $slideshow->slideshow_id }})">
+        ลบ
+    </button>
+@endforeach
+
+
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#edit"
+                    onclick="selectSlide(slideshowId)">
+                    แก้ไข
+                </button>
 
                 <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal"
                     data-bs-target="#modalScrollable">
@@ -90,8 +110,8 @@
                     <div class="carousel-inner">
                         @if ($slideshows->isEmpty())
                             <div class="carousel-item active">
-                                <img src="{{ asset('storage/slideshow_images/10.png') }}" class="d-block w-100 rounded fixed-size"
-                                    alt="Default Banner">
+                                <img src="{{ asset('storage/slideshow_images/10.png') }}"
+                                    class="d-block w-100 rounded fixed-size" alt="Default Banner">
                             </div>
                         @else
                             @foreach ($slideshows as $index => $slideshow)
@@ -104,30 +124,22 @@
                             @endforeach
                         @endif
 
-
-
-
                     </div>
 
                 </div>
             </div>
 
-
-
-
-
-
-
             <div class="container">
                 <div class="row">
                     <div class="col-12">
                         <div class="button-container d-flex flex-nowrap justify-content-start gap-2 py-3 overflow-auto">
-                            @foreach ($slideshows as $index => $slideshow)
+                            @foreach ($slideshows as $slideshow)
                                 <button type="button" data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide-to="{{ $index }}" aria-label="Slide {{ $index + 1 }}"
-                                    class="p-0 border-0">
+                                    data-bs-slide-to="{{ $loop->index }}" aria-label="Slide {{ $loop->index + 1 }}"
+                                    class="p-0 border-0" onclick="selectSlide({{ $slideshow->slideshow_id }})">
                                     <img src="{{ asset('storage/' . $slideshow->slideshow_image) }}"
-                                        style="width: 160px; height: 40px;" class="rounded" alt="Banner {{ $index + 1 }}">
+                                        style="width: 160px; height: 40px;" class="rounded"
+                                        alt="Banner {{ $loop->index + 1 }}">
                                 </button>
                             @endforeach
                             <button type="button" style="width: 160px; height: 40px;" data-bs-toggle="modal"
@@ -138,22 +150,14 @@
                     </div>
                 </div>
             </div>
+            <div id="slideshowInfo" style="margin-top: 20px; font-size: 16px;">
+                <!-- ข้อมูลของ slideshow ที่จะถูกแสดงที่นี่ -->
+            </div>
 
             <hr>
-            <h4>จัดการรูปภาพ</h4>
-            <div class="mb-3">
-                <label for="" class="form-label text-dark">เลือกไฟล์รูปภาพ</label>
-                <input class="form-control" type="file" id="import_file" name="import_file">
-            </div>
 
-            <div class="mb-3">
-                <label for="" class="form-label text-dark">เชื่อม Link ไปยังหน้าอื่น</label>
-                <input type="text" class="form-control" id="" name="" placeholder="กรอก Link" required value="">
-            </div>
-            <div class="card-footer align-items-center text-center">
-                <button type="button" class="btn btn-danger" onclick="">ลบ</button>
-                <button type="submit" class="btn btn-success">แก้ไข</button>
-            </div>
+
+
 
 
 
@@ -187,16 +191,9 @@
                     <div class="mb-3">
                         <label for="slideshow_link" class="form-label text-dark">เชื่อม Link ไปยังหน้าอื่น</label>
                         <input type="url" class="form-control" id="slideshow_link" name="slideshow_link"
-                            placeholder="กรอก Link" required>
+                            placeholder="กรอก Link">
                     </div>
 
-                    <div class="mb-3">
-                        <label for="slideshow_status" class="form-label text-dark">สถานะ</label>
-                        <select class="form-select" id="slideshow_status" name="slideshow_status" required>
-                            <option value="1">เปิดใช้งาน</option>
-                            <option value="0">ปิดใช้งาน</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
@@ -207,17 +204,138 @@
     </div>
 </div>
 
+<div class="modal fade" id="edit" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
+
+
+            <form id="editSlideshowForm"
+                action="{{ $slideshows->isNotEmpty() ? route('slideshow.update', ['id' => $selectedSlideshow->slideshow_id ?? $slideshows->first()->slideshow_id]) : '#' }}"
+                method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportModalLabel">แก้ไข</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    @if ($slideshows->isNotEmpty())
+                        <!-- แสดงภาพแบนเนอร์ที่เลือก -->
+                        <div class="mb-3">
+                            <img id="imagePreview"
+                                src="{{ isset($selectedSlideshow) ? asset('storage/' . $selectedSlideshow->slideshow_image) : asset('storage/' . $slideshows->first()->slideshow_image) }}"
+                                style="width: 480px; height: 120px;" class="rounded mt-2">
+                            <label for="slideshow_image" class="form-label text-dark">เลือกไฟล์รูปภาพ</label>
+                            <input class="form-control" type="file" id="slideshow_image" name="slideshow_image">
+                        </div>
+
+                        <!-- ช่องกรอก URL (ลิงก์) -->
+                        <div class="mb-3">
+                            <label for="slideshow_link" class="form-label text-dark">เชื่อม Link ไปยังหน้าอื่น</label>
+                            <input type="url" class="form-control" id="slideshow_link" name="slideshow_link"
+                                placeholder="กรอก Link">
+                        </div>
+
+                    @else
+                        <p>ไม่มีข้อมูลแบนเนอร์ให้เลือก</p>
+                    @endif
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" class="btn btn-success" {{ $slideshows->isEmpty() ? 'disabled' : '' }}>ยืนยัน</button>
+                </div>
+            </form>
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+</div>
 
 
 
 
 
 <script>
+
     // ตัวอย่างการเปิด modal ด้วย JavaScript
     $(document).ready(function () {
         $('#exportModal').modal('show');
     });
+
+
+    // เมื่อเลือกแบนเนอร์
+    let selectedSlideId = null; // ตัวแปรสำหรับเก็บ ID ของสไลด์ที่เลือก
+
+function selectSlide(slideshowId) {
+    selectedSlideId = slideshowId; // ตั้งค่า ID ของสไลด์ที่เลือก
+    let slideshow = @json($slideshows);
+
+    if (!Array.isArray(slideshow) || slideshow.length === 0) {
+        console.log("ไม่มีข้อมูลแบนเนอร์");
+        return;
+    }
+
+    let selectedSlideshow = slideshow.find(slide => slide.slideshow_id === slideshowId);
+
+    if (selectedSlideshow) {
+        let form = document.getElementById('editSlideshowForm');
+        form.action = "/slideshow/" + selectedSlideshow.slideshow_id;
+
+        let imagePreview = document.getElementById('imagePreview');
+        imagePreview.style.display = 'block';
+        imagePreview.src = '/storage/' + selectedSlideshow.slideshow_image;
+
+        document.getElementById('slideshow_link').value = selectedSlideshow.slideshow_link;
+    } else {
+        console.log("ไม่พบแบนเนอร์ที่เลือก");
+    }
+}
+
+    // ฟังก์ชันนี้จะทำให้ข้อมูลแรกแสดงเมื่อเริ่มต้น
+    window.onload = function () {
+        // ตรวจสอบว่า $slideshows มีข้อมูลหรือไม่ก่อนเรียกฟังก์ชัน selectSlide
+        @if($slideshows->isNotEmpty())
+            selectSlide({{ $slideshows->first()->slideshow_id }});
+        @else
+            console.log("ไม่มีข้อมูลแบนเนอร์");
+        @endif
+    };
+
+
+
+
+    function deleteSlide(slideshowId) {
+    if (confirm('คุณต้องการลบสไลด์นี้หรือไม่?')) {
+        fetch(`/slideshow/${slideshowId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to delete slideshow.');
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message || 'ลบสำเร็จ');
+                location.reload();
+            })
+            .catch(error => console.error('Error deleting slideshow:', error));
+    }
+}
+
+
 </script>
 
 @endsection

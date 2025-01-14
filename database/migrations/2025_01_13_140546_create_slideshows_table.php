@@ -6,21 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     public function up()
-{
-    Schema::create('slideshows', function (Blueprint $table) {
-        $table->id('slideshow_id');
-        $table->string('slideshow_image');
-        $table->string('slideshow_link');
-        $table->boolean('slideshow_status')->default(1); // 1 = Active, 0 = Inactive
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('slideshows', function (Blueprint $table) {
+            $table->id('slideshow_id');
+            $table->string('slideshow_image');
+            $table->string('slideshow_link')->nullable(); // ทำให้คอลัมน์ slideshow_link รองรับค่า null
+            $table->timestamps();
+        });
+    }
 
-public function down()
-{
-    Schema::dropIfExists('slideshows');
-}
-
+    public function down()
+    {
+        Schema::dropIfExists('slideshows');
+    }
 };
