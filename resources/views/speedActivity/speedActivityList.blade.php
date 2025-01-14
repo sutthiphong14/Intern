@@ -27,7 +27,8 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                            <a href="{{ route('priceactivityList') }}" class="btn btn-success btn-sm">เพิ่มหมวดหมู่</a>
+
+                            <a href="{{ route('priceactivityList', ['speed_id' => $row->speed_id, 'promotion_id' => $promotion_id]) }}" class="btn btn-success btn-sm">เพิ่มหมวดหมู่</a>
                         </td>
                         </form>
                     </td>

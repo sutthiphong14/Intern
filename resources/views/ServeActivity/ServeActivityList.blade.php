@@ -24,7 +24,8 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                            <a href="{{ route('promotionactivityList') }}" class="btn btn-success btn-sm">เพิ่มหมวดหมู่</a>
+                            <a href="{{ route('promotionactivityList', ['service_id' => $row->service_id, 'type_id' => $typeId]) }}" class="btn btn-success btn-sm">เพิ่มหมวดหมู่</a>
+
                         </form>
                     </td>
                 </tr>

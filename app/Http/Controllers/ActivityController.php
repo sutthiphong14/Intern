@@ -14,11 +14,25 @@ use Illuminate\Http\Request;
 class ActivityController extends Controller
 
 {
-    public function index()
+    public function index($id)
     {
-        $data = ServeActivity::all();
-        return view('ServeActivity.ServeActivityList', compact('data'));
+        $typeId = typeActivity::where('type_id', $id)->value('type_id');
+        // ดึง service_id ที่สัมพันธ์กับ typeId
+        $service_id = typeActivity::where('type_id', $typeId)->value('service_id');
+       
+        if ($service_id) {
+            // กรณี service_id มีค่า
+            $data = ServeActivity::where('service_id', $service_id)->get();
+        } else {
+            // กรณี service_id เป็น null
+            $data = ServeActivity::all();
+        }
+        
+        
+        return view('ServeActivity.ServeActivityList', compact('data','typeId'));
     }
+
+    
 
     public function create()
     {
@@ -34,7 +48,7 @@ class ActivityController extends Controller
         ]);
 
         ServeActivity::create($request->all());
-        return redirect()->route('severactivityList')
+        return view('ServeActivity.ServeActivitylist')
             ->with('success', 'Serve activity created successfully!');
     }
 
@@ -122,11 +136,20 @@ class ActivityController extends Controller
 
 
     //จัดการโปรโมชัน
-    public function indexpromotion()
+    public function indexpromotion($type_id,$service_id)
     {
-      
-        $data = PromotionActivity::all();
-        return view('promotionActivity.promotionActivityList', compact('data'));
+        // ดึง service_id ที่สัมพันธ์กับ typeId
+        $promotion_id = ServeActivity::where('service_id', $service_id)->value('promotion_id');
+        
+        $typeSelect = typeActivity::where('type_id', $type_id)
+        ->update(['service_id' => $service_id]);
+        if($promotion_id){
+            $data = PromotionActivity::where('promotion_id', $promotion_id)->get();
+        }else{
+            $data = PromotionActivity::all();
+        }
+       
+        return view('promotionActivity.promotionActivityList', compact('data' ,'service_id'));
     }
 
     public function  createpromotion()
@@ -175,10 +198,12 @@ class ActivityController extends Controller
     }
 
     //จัดการความเร็ว
-    public function indexspeed()
+    public function indexspeed($service_id,$promotion_id)
     {
+        $promotionSelect = ServeActivity::where('service_id', $service_id)
+        ->update(['promotion_id' => $promotion_id]);
         $data = SpeedActivity::all();
-        return view('speedActivity.speedActivityList', compact('data'));
+        return view('speedActivity.speedActivityList', compact('data','promotion_id'));
     }
     public function  createspeed()
     {
@@ -226,7 +251,7 @@ class ActivityController extends Controller
     }
 
     //จัดการราคา
-    public function indexprice()
+    public function indexprice($promotion_id,$speed_id)
     {
         $data = PriceActivity::all();
         return view('priceActivity.priceActivityList', compact('data'));

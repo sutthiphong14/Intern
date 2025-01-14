@@ -315,7 +315,7 @@ Route::put('/typeactivityedit/{id}',[ActivityController::class , 'updatetype'])-
 
 
 //ส่วนที่ใช้ส่วนบริการ
-Route::get('/severactivityList',[ActivityController::class , 'index'])->name('severactivityList');
+Route::get('/severactivityList/{id}',[ActivityController::class , 'index'])->name('severactivityList');
 Route::get('/severactivitylnsert',[ActivityController::class , 'create'])->name('serve.create');
 Route::post('/severactivityadd',[ActivityController::class , 'store'])->name('serve.store');
 Route::delete('/severactivitydelete/{id}',[ActivityController::class , 'destroy'])->name('serve.destroy');
@@ -323,7 +323,7 @@ Route::get('/severactivityedit/{id}',[ActivityController::class , 'edit'])->name
 Route::put('/severactivityputedit/{id}',[ActivityController::class , 'update'])->name('serve.update');
 
 //ส่วนโปรโมชัน
-Route::get('/promotionactivityList',[ActivityController::class , 'indexpromotion'])->name('promotionactivityList');
+Route::get('/promotionactivityList/{type_id}/{service_id}',[ActivityController::class , 'indexpromotion'])->name('promotionactivityList');
 Route::get('/promotionactivitylnsert',[ActivityController::class , 'createpromotion'])->name('promotionactivitylnsert');
 Route::post('/promotionactivityadd',[ActivityController::class , 'storepromotion'])->name('promotionactivityadd');
 Route::delete('/promotionactivitydelete/{id}',[ActivityController::class , 'destroypromotion'])->name('promotionactivitydelete');
@@ -332,7 +332,7 @@ Route::put('/promotionactivityputedit/{id}',[ActivityController::class , 'update
 
 
 //ส่วนสปีด
-Route::get('/speedactivityList',[ActivityController::class , 'indexspeed'])->name('speedactivityList');
+Route::get('/speedactivityList/{service_id}/{promotion_id}',[ActivityController::class , 'indexspeed'])->name('speedactivityList');
 Route::get('/speedactivitylnsert',[ActivityController::class , 'createspeed'])->name('speedactivitylnsert');
 Route::post('/speedactivityadd',[ActivityController::class , 'storespeed'])->name('speedactivityadd');
 Route::delete('/speedactivitydelete/{id}',[ActivityController::class , 'destroyspeed'])->name('speedactivitydelete');
@@ -341,7 +341,7 @@ Route::put('/speedactivityputedit/{id}',[ActivityController::class , 'updatespee
 
 
 //ราคา
-Route::get('/priceactivityList',[ActivityController::class , 'indexprice'])->name('priceactivityList');
+Route::get('/priceactivityList/{promotion_id}/{speed_id}',[ActivityController::class , 'indexprice'])->name('priceactivityList');
 Route::get('/priceactivitylnsert',[ActivityController::class , 'creatprice'])->name('priceactivitylnsert');
 Route::post('/priceactivityadd',[ActivityController::class , 'storeprice'])->name('priceactivityadd');
 Route::delete('/priceactivitydelete/{id}',[ActivityController::class , 'destroyprice'])->name('priceactivitydelete');

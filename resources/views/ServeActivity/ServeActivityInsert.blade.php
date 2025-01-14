@@ -15,7 +15,7 @@
         </div>
         
         <button type="submit" class="btn btn-success">Save</button>
-        <a href="{{ route('severactivityList') }}" class="btn btn-secondary">Back</a>
+        <a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
     </form>
 </div>
 @endsection
