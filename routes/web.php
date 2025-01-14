@@ -4,7 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
-
+use App\Http\Controllers\ActivityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RequestsController;
 use Illuminate\Support\Facades\Auth;
@@ -300,3 +300,57 @@ Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->nam
     
 Route::get('/news/search', [AdminController::class, 'search'])->name('news.search');
 Route::delete('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('serve', ServeActivityController::class);
+});
+//ส่วนที่ใช้กิจกรรม
+Route::get('/typeactivityList',[ActivityController::class , 'indextype'])->name('typeactivityList');
+Route::get('/typeactivitylnsert',[ActivityController::class , 'createtype'])->name('typeactivitylnsert');
+Route::post('/typeactivityadd',[ActivityController::class , 'storetype'])->name('typeactivityadd');
+Route::delete('/typeactivitydelete/{id}',[ActivityController::class , 'destroytype'])->name('typeactivitydelete');
+Route::get('/typeactivityedit/{id}',[ActivityController::class , 'edittype'])->name('typeactivityedit');
+Route::put('/typeactivityedit/{id}',[ActivityController::class , 'updatetype'])->name('typeactivityupdate');
+
+
+//ส่วนที่ใช้ส่วนบริการ
+Route::get('/severactivityList',[ActivityController::class , 'index'])->name('severactivityList');
+Route::get('/severactivitylnsert',[ActivityController::class , 'create'])->name('serve.create');
+Route::post('/severactivityadd',[ActivityController::class , 'store'])->name('serve.store');
+Route::delete('/severactivitydelete/{id}',[ActivityController::class , 'destroy'])->name('serve.destroy');
+Route::get('/severactivityedit/{id}',[ActivityController::class , 'edit'])->name('serve.edit');
+Route::put('/severactivityputedit/{id}',[ActivityController::class , 'update'])->name('serve.update');
+
+//ส่วนโปรโมชัน
+Route::get('/promotionactivityList',[ActivityController::class , 'indexpromotion'])->name('promotionactivityList');
+Route::get('/promotionactivitylnsert',[ActivityController::class , 'createpromotion'])->name('promotionactivitylnsert');
+Route::post('/promotionactivityadd',[ActivityController::class , 'storepromotion'])->name('promotionactivityadd');
+Route::delete('/promotionactivitydelete/{id}',[ActivityController::class , 'destroypromotion'])->name('promotionactivitydelete');
+Route::get('/promotionractivityedit/{id}',[ActivityController::class , 'editpromotion'])->name('promotionactivityedit');
+Route::put('/promotionactivityputedit/{id}',[ActivityController::class , 'updatepromotion'])->name('promotionactivityupdate');
+
+
+//ส่วนสปีด
+Route::get('/speedactivityList',[ActivityController::class , 'indexspeed'])->name('speedactivityList');
+Route::get('/speedactivitylnsert',[ActivityController::class , 'createspeed'])->name('speedactivitylnsert');
+Route::post('/speedactivityadd',[ActivityController::class , 'storespeed'])->name('speedactivityadd');
+Route::delete('/speedactivitydelete/{id}',[ActivityController::class , 'destroyspeed'])->name('speedactivitydelete');
+Route::get('/speedactivityedit/{id}',[ActivityController::class , 'editspeed'])->name('speedactivityedit');
+Route::put('/speedactivityputedit/{id}',[ActivityController::class , 'updatespeed'])->name('speedactivityupdate');
+
+
+//ราคา
+Route::get('/priceactivityList',[ActivityController::class , 'indexprice'])->name('priceactivityList');
+Route::get('/priceactivitylnsert',[ActivityController::class , 'creatprice'])->name('priceactivitylnsert');
+Route::post('/priceactivityadd',[ActivityController::class , 'storeprice'])->name('priceactivityadd');
+Route::delete('/priceactivitydelete/{id}',[ActivityController::class , 'destroyprice'])->name('priceactivitydelete');
+Route::get('/priceactivityedit/{id}',[ActivityController::class , 'editprice'])->name('priceactivityedit');
+Route::put('/priceactivityputedit/{id}',[ActivityController::class , 'updateprice'])->name('priceactivityupdate');
+
+
+
+
+
+
+
