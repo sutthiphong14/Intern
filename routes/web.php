@@ -5,6 +5,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\ProvinceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RequestsController;
 use Illuminate\Support\Facades\Auth;
@@ -353,4 +354,22 @@ Route::put('/priceactivityputedit/{id}',[ActivityController::class , 'updatepric
 
 
 
+
+
+//จังหวัด
+Route::get('/provinceactivityList',[ProvinceController::class , 'indexprovince'])->name('provinceactivityList');
+Route::get('/provinceactivitylnsert',[ProvinceController::class , 'createprovince'])->name('provinceactivitylnsert');
+Route::post('/provincactivityadd',[ProvinceController::class , 'storeprovince'])->name('provinceactivityadd');
+Route::delete('/provincactivitydelete/{id}',[ProvinceController::class , 'destroyprovince'])->name('provinceactivitydelete');
+Route::get('/provincactivityedit/{id}',[ProvinceController::class , 'editprovince'])->name('provinceactivityedit');
+Route::put('/provincactivityputedit/{id}',[ProvinceController::class , 'updateprovince'])->name('provinceactivityupdate');
+
+
+//ศูนย์บริการ
+Route::get('/servicecenteractivityList',[ProvinceController::class , 'indexservicecenter'])->name('servicecenteractivityList');
+Route::get('/servicecenteractivitylnsert',[ProvinceController::class , 'createservicecenter'])->name('servicecenteractivitylnsert');
+Route::post('/servicecenteractivityadd',[ProvinceController::class , 'storeservicecenter'])->name('servicecenteractivityadd');
+Route::delete('/servicecenteractivitydelete/{id}',[ProvinceController::class , 'destroyservicecenter'])->name('servicecenteractivitydelete');
+Route::get('/servicecenteractivityedit/{id}',[ProvinceController::class , 'editservicecenter'])->name('servicecenteractivityedit');
+Route::put('/servicecenteractivityputedit/{id}',[ProvinceController::class , 'updateservicecenter'])->name('servicecenteractivityupdate');
 
