@@ -19,7 +19,7 @@ class HomeController extends Controller
         ->get();
 
     // ดึงข้อมูลแบนเนอร์
-    $banners = Slideshow::orderBy('slideshow_id', 'desc')->get();
+    $banners = Slideshow::orderBy('slideshow_id', 'asc')->get();
 
     // ส่งข้อมูลทั้งสองไปยัง View
     return view('home', compact('data', 'banners'));

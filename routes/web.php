@@ -310,12 +310,13 @@ Route::get('/edit_banner', function () {
     return view('manage_images.edit_banner');
 })->name('edit_banner');
 
-
 Route::get('/edit_banner', [SlideshowController::class, 'showBanners'])->name('edit_banner');
 Route::post('/slideshow', [SlideshowController::class, 'store'])->name('slideshows.store');
 Route::put('/slideshow/{id}', [SlideshowController::class, 'update'])->name('slideshow.update');
 
 Route::get('/slideshow/{id}/edit', [SlideshowController::class, 'edit'])->name('slideshow.edit');
+Route::delete('/slideshow/{id}', [SlideshowController::class, 'destroy'])->name('slideshow.destroy');
+Route::delete('/edit_banner/{id}', [SlideshowController::class, 'destroy'])->name('edit_banner.destroy');
 Route::delete('/slideshow/{id}', [SlideshowController::class, 'destroy'])->name('slideshow.destroy');
 
 

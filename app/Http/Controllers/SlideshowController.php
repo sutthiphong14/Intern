@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Slideshow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class SlideshowController extends Controller
 {
@@ -76,7 +77,7 @@ public function destroy($id)
 
     // ลบไฟล์ภาพ
     if ($slideshow->slideshow_image) {
-        Storage::delete($slideshow->slideshow_image);
+        Storage::disk('public')->delete($slideshow->slideshow_image);
     }
 
     // ลบแถวในฐานข้อมูล

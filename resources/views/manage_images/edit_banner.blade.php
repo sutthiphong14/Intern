@@ -72,6 +72,23 @@
         object-fit: cover;
 
     }
+
+    .image-container {
+        position: relative;
+    }
+
+    .image-number {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(0, 0, 0, 0.6);
+        /* พื้นหลังโปร่งแสง */
+        color: #fff;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 2px 5px;
+        border-radius: 5px;
+    }
 </style>
 
 @endsection
@@ -85,11 +102,51 @@
                 จัดการ Slideshow
             </h3>
             <div class="d-flex align-items-center gap-2">
-            @foreach ($slideshows as $slideshow)
-    <button type="button" class="btn btn-danger" onclick="deleteSlide({{ $slideshow->slideshow_id }})">
-        ลบ
-    </button>
-@endforeach
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    ลบ
+                </button>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">ลบสไลด์</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                
+                            <form id="deleteSlideForm" method="POST" action="{{ route('slideshow.destroy', ['id' => 'PLACEHOLDER_ID']) }}">
+    @csrf
+    @method('DELETE')
+    <select id="slideId" name="slideId" class="form-select" onchange="updateSlideDetails()" required>
+        <option value="" disabled selected>เลือกสไลด์...</option>
+        @foreach ($slideshows as $slideshow)
+            <option value="{{ $slideshow->slideshow_id }}"
+                data-image="{{ asset('storage/' . $slideshow->slideshow_image) }}"
+                data-number="{{ $loop->index + 1 }}">
+                ลำดับ {{ $loop->index + 1 }} - {{ $slideshow->slideshow_link }}
+            </option>
+        @endforeach
+    </select>
+    <div class="mt-3">
+        <img id="selectedSlideImage" src="" alt="Preview" style="display: none; max-width: 100%; max-height: 200px; border: 1px solid #ddd; padding: 5px;">
+        <p id="selectedSlideText" style="display: none; margin-top: 10px;"></p>
+    </div>
+</form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="button" class="btn btn-danger"
+                                    onclick="confirmDelete()">ยืนยันการลบ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
 
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#edit"
@@ -133,15 +190,20 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="button-container d-flex flex-nowrap justify-content-start gap-2 py-3 overflow-auto">
-                            @foreach ($slideshows as $slideshow)
-                                <button type="button" data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide-to="{{ $loop->index }}" aria-label="Slide {{ $loop->index + 1 }}"
-                                    class="p-0 border-0" onclick="selectSlide({{ $slideshow->slideshow_id }})">
-                                    <img src="{{ asset('storage/' . $slideshow->slideshow_image) }}"
-                                        style="width: 160px; height: 40px;" class="rounded"
-                                        alt="Banner {{ $loop->index + 1 }}">
-                                </button>
-                            @endforeach
+                            <div class="image-container">
+                                @foreach ($slideshows as $slideshow)
+                                    <button type="button" data-bs-target="#carouselExampleIndicators"
+                                        data-bs-slide-to="{{ $loop->index }}" aria-label="Slide {{ $loop->index + 1 }}"
+                                        class="p-0 border-0 position-relative"
+                                        onclick="selectSlide({{ $slideshow->slideshow_id }})">
+                                        <img src="{{ asset('storage/' . $slideshow->slideshow_image) }}"
+                                            style="width: 160px; height: 40px;" class="rounded"
+                                            alt="Banner {{ $loop->index + 1 }}">
+                                        <span class="image-number">{{ $loop->index + 1 }}</span>
+                                    </button>
+                                @endforeach
+                            </div>
+
                             <button type="button" style="width: 160px; height: 40px;" data-bs-toggle="modal"
                                 data-bs-target="#exportModal" class="btn btn-dark flex-shrink-0">
                                 เพิ่มหน้า
@@ -155,15 +217,6 @@
             </div>
 
             <hr>
-
-
-
-
-
-
-
-
-
 
         </div>
 
@@ -276,30 +329,30 @@
     // เมื่อเลือกแบนเนอร์
     let selectedSlideId = null; // ตัวแปรสำหรับเก็บ ID ของสไลด์ที่เลือก
 
-function selectSlide(slideshowId) {
-    selectedSlideId = slideshowId; // ตั้งค่า ID ของสไลด์ที่เลือก
-    let slideshow = @json($slideshows);
+    function selectSlide(slideshowId) {
+        selectedSlideId = slideshowId; // ตั้งค่า ID ของสไลด์ที่เลือก
+        let slideshow = @json($slideshows);
 
-    if (!Array.isArray(slideshow) || slideshow.length === 0) {
-        console.log("ไม่มีข้อมูลแบนเนอร์");
-        return;
+        if (!Array.isArray(slideshow) || slideshow.length === 0) {
+            console.log("ไม่มีข้อมูลแบนเนอร์");
+            return;
+        }
+
+        let selectedSlideshow = slideshow.find(slide => slide.slideshow_id === slideshowId);
+
+        if (selectedSlideshow) {
+            let form = document.getElementById('editSlideshowForm');
+            form.action = "/slideshow/" + selectedSlideshow.slideshow_id;
+
+            let imagePreview = document.getElementById('imagePreview');
+            imagePreview.style.display = 'block';
+            imagePreview.src = '/storage/' + selectedSlideshow.slideshow_image;
+
+            document.getElementById('slideshow_link').value = selectedSlideshow.slideshow_link;
+        } else {
+            console.log("ไม่พบแบนเนอร์ที่เลือก");
+        }
     }
-
-    let selectedSlideshow = slideshow.find(slide => slide.slideshow_id === slideshowId);
-
-    if (selectedSlideshow) {
-        let form = document.getElementById('editSlideshowForm');
-        form.action = "/slideshow/" + selectedSlideshow.slideshow_id;
-
-        let imagePreview = document.getElementById('imagePreview');
-        imagePreview.style.display = 'block';
-        imagePreview.src = '/storage/' + selectedSlideshow.slideshow_image;
-
-        document.getElementById('slideshow_link').value = selectedSlideshow.slideshow_link;
-    } else {
-        console.log("ไม่พบแบนเนอร์ที่เลือก");
-    }
-}
 
     // ฟังก์ชันนี้จะทำให้ข้อมูลแรกแสดงเมื่อเริ่มต้น
     window.onload = function () {
@@ -315,25 +368,71 @@ function selectSlide(slideshowId) {
 
 
     function deleteSlide(slideshowId) {
-    if (confirm('คุณต้องการลบสไลด์นี้หรือไม่?')) {
+        if (confirm('คุณต้องการลบสไลด์นี้หรือไม่?')) {
+            fetch(`/slideshow/${slideshowId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to delete slideshow.');
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message || 'ลบสำเร็จ');
+                    location.reload();
+                })
+                .catch(error => console.error('Error deleting slideshow:', error));
+        }
+    }
+
+    function updateSlideDetails() {
+    const slideSelect = document.getElementById('slideId');
+    const selectedOption = slideSelect.options[slideSelect.selectedIndex];
+
+    if (selectedOption.value) {
+        // ดึงข้อมูลรูปภาพและลำดับจาก data-attribute
+        const imageSrc = selectedOption.getAttribute('data-image');
+        const slideNumber = selectedOption.getAttribute('data-number');
+
+        // แสดงข้อมูลในฟอร์ม
+        const slideImage = document.getElementById('selectedSlideImage');
+        const slideText = document.getElementById('selectedSlideText');
+
+        slideImage.src = imageSrc;
+        slideImage.style.display = 'block';
+        slideText.textContent = `ลำดับ: ${slideNumber}`;
+        slideText.style.display = 'block';
+    } else {
+        // ซ่อนข้อมูลถ้ายังไม่ได้เลือก
+        document.getElementById('selectedSlideImage').style.display = 'none';
+        document.getElementById('selectedSlideText').style.display = 'none';
+    }
+}
+
+    function confirmDelete() {
+        const slideSelect = document.getElementById('slideId');
+        if (!slideSelect.value) {
+            alert('กรุณาเลือกรายการที่ต้องการลบ');
+            return;
+        }
+
+        const slideshowId = slideSelect.value; // Get selected slideshow ID
         fetch(`/slideshow/${slideshowId}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Content-Type': 'application/json',
             },
         })
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to delete slideshow.');
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 alert(data.message || 'ลบสำเร็จ');
-                location.reload();
+                location.reload(); // Reload page to reflect changes
             })
-            .catch(error => console.error('Error deleting slideshow:', error));
+            .catch(error => console.error('Error:', error));
     }
-}
 
 
 </script>

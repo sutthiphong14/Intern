@@ -8,34 +8,43 @@
 @section('content')
 <div class="content-wrapper">
   <div class="card ">
-  <div class="slide">
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-interval="500">
+    <div class="slide">
+      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-interval="500">
         <div class="carousel-indicators">
-            @foreach($banners as $key => $banner)
-                <button type="button" data-bs-target="#carouselExampleIndicators" 
-                    data-bs-slide-to="{{ $key }}" 
-                    class="{{ $key === 0 ? 'active' : '' }}" 
-                    aria-current="{{ $key === 0 ? 'true' : 'false' }}" 
-                    aria-label="Slide {{ $key + 1 }}"></button>
-            @endforeach
+          @foreach($banners as $key => $banner)
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $key }}"
+        class="{{ $key === 0 ? 'active' : '' }}" aria-current="{{ $key === 0 ? 'true' : 'false' }}"
+        aria-label="Slide {{ $key + 1 }}"></button>
+      @endforeach
         </div>
         <div class="carousel-inner">
-            @foreach($banners as $key => $banner)
-                <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-                    <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded" alt="Banner {{ $key + 1 }}">
-                </div>
-            @endforeach
+          @foreach($banners as $key => $banner)
+        <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+        @if($banner->slideshow_link)
+      <a href="{{ $banner->slideshow_link }}" target="_blank">
+        <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded"
+        alt="Banner {{ $key + 1 }}">
+      </a>
+    @else
+    <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded"
+      alt="Banner {{ $key + 1 }}">
+  @endif
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+      @endforeach
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
         </button>
+      </div>
     </div>
-</div>
+
 
 
   </div>
@@ -65,7 +74,7 @@
 
     </ul>
     <div class="tab-content">
-      
+
       <div class="tab-pane fade show active" id="navs-justified-home" role="tabpanel">
         <table id="example2" class="table table-hover align-items-center">
           <thead class='text-center bg-dark'>

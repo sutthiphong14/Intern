@@ -164,7 +164,7 @@
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark d-flex justify-content-center align-items-center w-100">
-        <h3 class="modal-title text-white text-center" id="exampleModalLabel4">
+        <h3 class="modal-title text-white text-center pb-3" id="exampleModalLabel4">
           <i class="fas fa-grip-horizontal"></i> แอปจัดการทำงาน
         </h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
