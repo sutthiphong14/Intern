@@ -4,7 +4,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ProvinceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RequestsController;
@@ -303,9 +302,7 @@ Route::get('/news/search', [AdminController::class, 'search'])->name('news.searc
 Route::delete('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');
 
 
-Route::middleware(['auth'])->group(function () {
-    Route::resource('serve', ServeActivityController::class);
-});
+
 
 //จังหวัด
 Route::get('/provinceactivityList',[ProvinceController::class , 'indexprovince'])->name('provinceactivityList');
