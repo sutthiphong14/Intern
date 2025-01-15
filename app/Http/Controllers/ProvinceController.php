@@ -109,6 +109,35 @@ public function indexservicecenter()
             ->with('success', 'Serve activity updated successfully!');
     }
 
+   
 
+public function createServiceCenterForProvince($province_id)
+{
+    $province = ProvinceActivity::findOrFail($province_id);
+    return view('servicecenterActivity.createForProvince', compact('province'));
+}
+
+
+
+public function viewServiceCenters($province_id)
+{
+    $province = ProvinceActivity::with('centers')->findOrFail($province_id);
+    return view('provinceActivity.viewServiceCenters', compact('province'));
+}
+
+public function storeServiceCenterForProvince(Request $request, $province_id)
+{
+    $request->validate([
+        'center_name' => 'required|string|max:255',
+    ]);
+
+    ServiceCenterActivity::create([
+        'center_name' => $request->center_name,
+        'province_id' => $province_id
+    ]);
+
+    return redirect()->route('province.viewServiceCenters', $province_id)
+        ->with('success', 'เพิ่มศูนย์บริการสำเร็จ');
+}
 
 }

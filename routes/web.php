@@ -373,3 +373,8 @@ Route::delete('/servicecenteractivitydelete/{id}',[ProvinceController::class , '
 Route::get('/servicecenteractivityedit/{id}',[ProvinceController::class , 'editservicecenter'])->name('servicecenteractivityedit');
 Route::put('/servicecenteractivityputedit/{id}',[ProvinceController::class , 'updateservicecenter'])->name('servicecenteractivityupdate');
 
+Route::get('/province/{id}/service-centers', [ProvinceController::class, 'viewServiceCenters'])->name('province.viewServiceCenters');
+Route::get('/province/{id}/service-center/create', [ProvinceController::class, 'createServiceCenterForProvince'])
+    ->name('province.createServiceCenter');
+Route::post('/province/{id}/service-center', [ProvinceController::class, 'storeServiceCenterForProvince'])
+    ->name('province.storeServiceCenter');

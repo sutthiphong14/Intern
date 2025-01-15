@@ -11,15 +11,10 @@ class ProvinceActivity extends Model
 
     protected $table = 'province_activity';
     protected $primaryKey = 'province_id';
-    protected $fillable = ['province_name', 'center_id'];
+    protected $fillable = ['province_name']; // ลบ center_id ออก
 
-    public function center()
+    public function centers()
     {
-        return $this->belongsTo(ServiceCenterActivity::class, 'center_id');
-    }
-
-    public function users()
-    {
-        return $this->hasMany(UserActivity::class, 'province_id');
+        return $this->hasMany(ServiceCenterActivity::class, 'province_id');
     }
 }

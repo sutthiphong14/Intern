@@ -11,10 +11,10 @@ class ServiceCenterActivity extends Model
 
     protected $table = 'serviceCenter_activity';
     protected $primaryKey = 'center_id';
-    protected $fillable = ['center_name'];
+    protected $fillable = ['center_name', 'province_id'];
 
-    public function provinces()
+    public function province()
     {
-        return $this->hasMany(ProvinceActivity::class, 'center_id');
+        return $this->belongsTo(ProvinceActivity::class, 'province_id');
     }
 }
