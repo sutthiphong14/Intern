@@ -39,13 +39,13 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required|max:50',
             'description' => 'required',
-            'categories' => 'required|in:ข่าว,เอกสาร',
+            'categories' => 'required|in:ข่าว,เอกสาร,แบบฟอร์ม',
             'file' => 'required|file|mimes:pdf,jpg,png,xlsx|max:10240',
         ], [
             'name.required' => 'กรุณาระบุชื่อ',
             'description.required' => 'กรุณาระบุคำอธิบาย',
             'categories.required' => 'กรุณาเลือกหมวดหมู่',
-            'categories.in' => 'หมวดหมู่ต้องเป็น ข่าว หรือ เอกสาร',
+            'categories.in' => 'หมวดหมู่ต้องเป็น ข่าว เอกสาร หรือ แบบฟอร์ม',
             'file.required' => 'กรุณาระบุไฟล์',
             'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
             'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 10MB',

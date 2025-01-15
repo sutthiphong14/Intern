@@ -5,16 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Newsfeed; // Assuming you have a Newsfeed model
 
+use App\Models\Slideshow; // Import the Slideshow model
+
 class HomeController extends Controller
 {
     
     public function index()
-    {
-        // Fetch the latest 10 news items
-        $data = Newsfeed::where('status', true)
+{
+    // ดึงข้อมูลข่าวสาร
+    $data = Newsfeed::where('status', true)
         ->orderBy('id', 'desc')
         ->take(10)
         ->get();
-        return view('home', compact('data'));
-    }
+
+    // ดึงข้อมูลแบนเนอร์
+    $banners = Slideshow::orderBy('slideshow_id', 'desc')->get();
+
+    // ส่งข้อมูลทั้งสองไปยัง View
+    return view('home', compact('data', 'banners'));
+}
+
+
+
+
 }

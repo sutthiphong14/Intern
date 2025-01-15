@@ -43,7 +43,8 @@
             <select class="form-control" name="categories" required>
                 <option value="" disabled selected>เลือกหมวดหมู่</option>
                 <option value="ข่าว" {{ old('categories') == 'ข่าว' ? 'selected' : '' }}>ข่าว</option>
-                <option value="เอกสาร" {{ old('categories') == 'เอกสาร' ? 'selected' : '' }}>เอกสาร</option>
+                <option value="เอกสาร" {{ old('categories') == 'เอกสาร' ? 'selected' : '' }}>เอกสาร ไม่เป็นสาธารณะ</option>
+                <option value="แบบฟอร์ม" {{ old('categories') == 'แบบฟอร์ม' ? 'selected' : '' }}>แบบฟอร์ม</option>
             </select>
             @error('categories')
                 <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>

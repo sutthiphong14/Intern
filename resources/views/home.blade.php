@@ -8,50 +8,35 @@
 @section('content')
 <div class="content-wrapper">
   <div class="card ">
-    <div class="slide">
-      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-interval="500">
+  <div class="slide">
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-interval="500">
         <div class="carousel-indicators">
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-            aria-current="true" aria-label="Slide 1"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-            aria-label="Slide 2"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-            aria-label="Slide 3"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
-            aria-label="Slide 4"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4"
-            aria-label="Slide 5"></button>
+            @foreach($banners as $key => $banner)
+                <button type="button" data-bs-target="#carouselExampleIndicators" 
+                    data-bs-slide-to="{{ $key }}" 
+                    class="{{ $key === 0 ? 'active' : '' }}" 
+                    aria-current="{{ $key === 0 ? 'true' : 'false' }}" 
+                    aria-label="Slide {{ $key + 1 }}"></button>
+            @endforeach
         </div>
         <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="{{ asset('/img/banner_images/1.png') }}" class="d-block w-100 rounded" alt="Banner 1">
-          </div>
-          <div class="carousel-item">
-            <img src="{{ asset('/img/banner_images/2.png') }}" class="d-block w-100 rounded" alt="Banner 2">
-          </div>
-          <div class="carousel-item">
-            <img src="{{ asset('/img/banner_images/3.png') }}" class="d-block w-100 rounded" alt="Banner 3">
-          </div>
-          <div class="carousel-item">
-            <img src="{{ asset('/img/banner_images/4.png') }}" class="d-block w-100 rounded" alt="Banner 4">
-          </div>
-          <div class="carousel-item">
-            <img src="{{ asset('/img/banner_images/5.png') }}" class="d-block w-100 rounded" alt="Banner 5">
-          </div>
+            @foreach($banners as $key => $banner)
+                <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+                    <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded" alt="Banner {{ $key + 1 }}">
+                </div>
+            @endforeach
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-          data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-          data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
         </button>
-      </div>
-
     </div>
+</div>
+
 
   </div>
 
