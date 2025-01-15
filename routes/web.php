@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
@@ -310,3 +311,36 @@ Route::get('/edit_banner', function () {
     return view('manage_images.edit_banner');
 });
 
+
+
+//ส่วนที่ใช้ส่วนบริการ
+Route::get('/severactivity_list',[ActivityController::class , 'ListService'])->name('service_list');
+Route::get('/severactivity_view_create',[ActivityController::class , 'ServiceCreate'])->name('service_create');
+Route::post('/severactivity_insert',[ActivityController::class , 'ServiceInsert'])->name('service_insert');
+Route::delete('/severactivity_delete/{service_id}',[ActivityController::class , 'ServiceDelete'])->name('service_delete');
+Route::get('/severactivity_edit/{service_id}',[ActivityController::class , 'ServiceEdit'])->name('service_edit');
+Route::put('/severactivityputedit/{service_id}',[ActivityController::class , 'Serviceupdate'])->name('serve_update');
+
+//ส่วนโปรโมชัน
+Route::get('/promotion_list/{service_id}',[ActivityController::class , 'ListPromotion'])->name('promotion_list');
+Route::get('/promotion_view_create/{service_id}',[ActivityController::class , 'PromotionCreate'])->name('promotion_create');
+Route::post('/promotion_insert/{service_id}',[ActivityController::class , 'PromotionInsert'])->name('promotion_insert');
+Route::delete('/promotion_delete/{service_id}/{promotion_id}',[ActivityController::class , 'PromotionDelete'])->name('promotion_delete');
+Route::get('/promotion_edit/{service_id}/{promotion_id}',[ActivityController::class , 'PromotionEdit'])->name('promotion_edit');
+Route::put('/promotion_update/{service_id}/{promotion_id}',[ActivityController::class , 'PromotionUpdate'])->name('promotion_update');
+
+//ส่วนสปีด
+Route::get('/speed_list/{service_id}/{promotion_id}',[ActivityController::class , 'ListSpeed'])->name('speed_list');
+Route::get('/speed_view_create/{service_id}/{promotion_id}',[ActivityController::class , 'SpeedCreate'])->name('speed_create');
+Route::post('/speed_insert/{service_id}/{promotion_id}',[ActivityController::class , 'SpeedInsert'])->name('speed_insert');
+Route::delete('/speed_delete/{service_id}/{promotion_id}/{speed_id}',[ActivityController::class , 'SpeedDelete'])->name('speed_delete');
+Route::get('/speed_edit/{service_id}/{promotion_id}/{speed_id}',[ActivityController::class , 'SpeedEdit'])->name('speed_edit');
+Route::put('/speed_update/{service_id}/{promotion_id}/{speed_id}',[ActivityController::class , 'SpeedUpdate'])->name('speed_update');
+
+//ราคา
+Route::get('/price_list/{speed_id}',[ActivityController::class , 'ListPrice'])->name('price_list');
+Route::get('/price_view_create/{speed_id}',[ActivityController::class , 'PriceCreate'])->name('price_create');
+Route::post('/price_insert/{speed_id}',[ActivityController::class , 'PriceInsert'])->name('price_insert');
+Route::delete('/price_delete/{speed_id}/{price_id}',[ActivityController::class , 'PriceDelete'])->name('price_delete');
+Route::get('/price_edit/{speed_id}/{price_id}',[ActivityController::class , 'PriceEdit'])->name('price_edit');
+Route::put('/price_update/{speed_id}/{price_id}',[ActivityController::class , 'PriceUpdate'])->name('price_update');

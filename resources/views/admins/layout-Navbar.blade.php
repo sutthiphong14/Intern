@@ -42,8 +42,18 @@
           </a>
         </li>
         @endif
-      </ul>
 
+        @if (Auth::check() && Auth::user()->permission['manage_newsfeed'] ?? false)
+        <li class="nav-item">
+          <a class="nav-link text-dark" aria-current="page" href="{{ route('service_list') }}"
+            onmouseover="this.classList.replace('text-dark', 'text-warning')"
+            onmouseout="this.classList.replace('text-warning', 'text-dark')">
+            <i class="fas fa-newspaper"></i> จัดการบริการ
+          </a>
+        </li>
+        @endif
+      </ul>
+      
       @auth
       <div class="dropdown">
         <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" id="userDropdown"
