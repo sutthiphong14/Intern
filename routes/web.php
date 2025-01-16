@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProvinceController;
 use App\Models\UserLog;
 use Illuminate\Support\Facades\Route;
@@ -380,3 +381,12 @@ Route::get('/province/{id}/service-center/create', [ProvinceController::class, '
     ->name('province.createServiceCenter');
 Route::post('/province/{id}/service-center', [ProvinceController::class, 'storeServiceCenterForProvince'])
     ->name('province.storeServiceCenter');
+
+
+//ลูกค้า
+Route::get('/customer_list',[CustomerController::class , 'CustomerList'])->name('customer_list');
+Route::get('/customer_create_view',[CustomerController::class , 'CustomerCreate'])->name('customer_create');
+Route::post('/customer_insert',[CustomerController::class , 'CustomerInsert'])->name('customer_insert');
+Route::delete('/customer_delete/{cus_id}',[CustomerController::class , 'CustomerDelete'])->name('customer_delete');
+Route::get('/customer_edit/{cus_id}',[CustomerController::class , 'CustomerEdit'])->name('customer_edit');
+Route::put('/customer_update/{cus_id}',[CustomerController::class , 'CustomerUpdate'])->name('customer_update');
