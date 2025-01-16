@@ -329,7 +329,7 @@
         <div class="row">
 
           <div class="col-3 mb-4">
-            <a href="{{ route('importdata') }}" class="text-decoration-none">
+            <a href="{{ route('newsfeed') }}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-pink d-flex justify-content-center align-items-center">
@@ -345,7 +345,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="{{ route('importdata') }}" class="text-decoration-none">
+            <a href="{{ route('listnewsfeed') }}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-pink d-flex justify-content-center align-items-center">

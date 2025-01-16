@@ -35,71 +35,86 @@ class AdminController extends Controller
     }
 
     function createnews(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|max:50',
-            'description' => 'required',
-            'categories' => 'required|in:ข่าว,เอกสาร,แบบฟอร์ม',
-            'file' => 'required|file|mimes:pdf,jpg,png,xlsx|max:10240',
-        ], [
-            'name.required' => 'กรุณาระบุชื่อ',
-            'description.required' => 'กรุณาระบุคำอธิบาย',
-            'categories.required' => 'กรุณาเลือกหมวดหมู่',
-            'categories.in' => 'หมวดหมู่ต้องเป็น ข่าว เอกสาร หรือ แบบฟอร์ม',
-            'file.required' => 'กรุณาระบุไฟล์',
-            'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
-            'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 10MB',
-        ]);
+{
+    $request->validate([
+    'name' => 'required|max:50',
+    'description' => 'required',
+    'categories' => 'required|in:ข่าว,เอกสาร,แบบฟอร์ม',
+    'content_type' => 'required|in:file,link,youtube',
+    'file' => 'nullable|file|mimes:pdf,jpg,png,xlsx|max:10240',
+    'link' => 'nullable|url',
+    'youtube' => 'nullable|url|',
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $filePath = $file->storeAs('newsfeeds', time() . '_' . $file->getClientOriginalName(), 'public');
-        }
+], [
+    'name.required' => 'กรุณาระบุชื่อ',
+    'description.required' => 'กรุณาระบุคำอธิบาย',
+    'categories.required' => 'กรุณาเลือกหมวดหมู่',
+    'content_type.required' => 'กรุณาเลือกประเภทข้อมูล',
+    'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
+    'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 10MB',
+    'link.url' => 'กรุณาระบุลิงก์ให้ถูกต้อง',
+    'youtube.regex' => 'ลิงก์ YouTube ไม่ถูกต้อง',
+]);
 
-        $data = [
-            'name' => $request->name,
-            'description' => $request->description,
-            'categories' => $request->categories,
-            'file' => $filePath,
-            'status' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ];
+    $data = [
+        'name' => $request->name,
+        'description' => $request->description,
+        'categories' => $request->categories,
+        'content_type' => $request->content_type,
+        'status' => 1,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ];
 
-        DB::table('newsfeeds')->insert($data);
-
-        // Log the creation
-        $this->logAction('เพิ่มเอกสาร', 'จัดการประชาสัมพันธ์', $data);
-
-        return redirect('/listnewsfeed');
+    if ($request->content_type === 'file' && $request->hasFile('file')) {
+        $file = $request->file('file');
+        $filePath = $file->storeAs('newsfeeds', time() . '_' . $file->getClientOriginalName(), 'public');
+        $data['file'] = $filePath;
+    } elseif ($request->content_type === 'link') {
+        $data['link'] = $request->link;
+    } elseif ($request->content_type === 'youtube') {
+        $data['youtube'] = $request->youtube;
     }
 
-    public function changenews($id)
-    {
-        $news = DB::table('newsfeeds')->where('id', $id)->first();
+    DB::table('newsfeeds')->insert($data);
 
-        if ($news) {
-            $newStatus = !$news->status;
-            DB::table('newsfeeds')->where('id', $id)->update(['status' => $newStatus]);
+    // Log the creation
+    $this->logAction('เพิ่มเอกสาร', 'จัดการประชาสัมพันธ์', $data);
 
-            // Log the status change
-            $this->logAction('chang_status', 'Newsfeed', [
-                'id' => $id,
-                'old_status' => $news->status,
-                'new_status' => $newStatus,
-            ]);
+    return redirect('/listnewsfeed');
+}
 
-            return response()->json([
-                'success' => true,
-                'status' => $newStatus,
-            ]);
-        }
+public function changenews(Request $request, $id)
+{
+    // ค้นหาข้อมูลของข่าวจากฐานข้อมูล
+    $news = DB::table('newsfeeds')->where('id', $id)->first();
+
+    if ($news) {
+        // ตรวจสอบว่าได้รับค่าใหม่สำหรับสถานะ
+        $newStatus = $request->input('status') !== null ? $request->input('status') : !$news->status;
+
+        // อัพเดตสถานะใหม่ในฐานข้อมูล
+        DB::table('newsfeeds')->where('id', $id)->update(['status' => $newStatus]);
+
+        // Log การเปลี่ยนแปลงสถานะ
+        $this->logAction('chang_status', 'Newsfeed', [
+            'id' => $id,
+            'old_status' => $news->status,
+            'new_status' => $newStatus,
+        ]);
 
         return response()->json([
-            'success' => false,
-            'message' => 'ไม่พบข้อมูล',
+            'success' => true,
+            'status' => $newStatus,
         ]);
     }
+
+    return response()->json([
+        'success' => false,
+        'message' => 'ไม่พบข้อมูล',
+    ]);
+}
+
 
     function deletenews($id)
     {

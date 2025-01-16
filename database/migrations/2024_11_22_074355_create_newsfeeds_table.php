@@ -16,11 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->string('categories');
-            $table->string('file');
+            $table->string('content_type')->default('file'); // เพิ่มคอลัมน์ content_type
+            $table->string('link')->nullable(); // เพิ่มคอลัมน์ link
+            $table->string('youtube')->nullable(); // เพิ่มคอลัมน์ youtube
+            $table->string('file')->nullable(); // เปลี่ยนให้ file nullable
             $table->boolean('status')->default(true);
             $table->timestamps();
-
-
         });
     }
 

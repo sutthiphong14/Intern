@@ -1,158 +1,131 @@
 @extends('admins.index')
 @section('title')
-    รายการข้อมูล
+แก้ไขข้อมูล
 @endsection
 @section('header')
-    รายการข้อมูล
+แก้ไขข้อมูล
 @endsection
 @section('css')
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+
 @endsection
 @section('content')
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card card-warning mt-2 ">
-                        <div class="card-header d-flex justify-content-between align-items-center ">
-                            <h3 class="card-title ">เพิ่มเอกสาร </h3>
 
+<div class="card card-warning mt-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title">แก้ไขเอกสาร</h3>
+    </div>
 
-                        </div>
+    <hr class="my-2" />
 
-                        <!-- /.card-header -->
-                        <div class="card-body">
+    <div class="card-body">
+        <form action="{{ route('updatenews', $oldnews->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
 
-
-                            <table id="example2" class="table table-bordered ">
-                                <thead class="text-center">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Category</th>
-                                        <th>Upload</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="align-items-center">
-                                    <form action="{{ route('updatenews', $oldnews->id) }}" class="form-group" method="POST">
-                                        @csrf
-                                        <tr>
-                                            <td>
-                                                <input class="form-control" type="text" placeholder="Name" name="name"
-                                                    value="{{ $oldnews->name }}">
-                                                @error('name')
-                                                    <p class="text-danger my-2"><i
-                                                            class="fas fa-exclamation-circle"></i>{{ $message }}</p>
-                                                @enderror
-                                            </td>
-                                            <td>
-                    
-                                                    <textarea name="description"  cols="30" rows="5">{{ $oldnews->description }}</textarea>
-                                                @error('description')
-                                                    <p class="text-danger my-2"><i
-                                                            class="fas fa-exclamation-circle"></i>{{ $message }}</p>
-                                                @enderror
-                                            </td>
-
-                                          
-
-
-                                            <td>
-                                                <div class="form-group">
-                                                    <div class="custom-file">
-                                                        <textarea cols="30" rows="5" class="form-control" type="text" placeholder="Link" name="link"></textarea>
-                                                    </div>
-                                                </div>
-                                                @error('link')
-                                                    <p class="text-danger my-2"><i
-                                                            class="fas fa-exclamation-circle"></i>{{ $message }}</p>
-                                                @enderror
-                                            </td>
-                                        </tr>
-
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                        </tbody>
-
-
-                        </table>
-
-                        <div class="col-12 mb-3 text-center ">
-                            <a href="/listnewsfeed" class="btn bg-danger ">
-                                Cancel
-                            </a>
-                            <input type="submit" class=" btn btn-success" value="Submit">
-
-                        </div>
-                        </form>
-
-
-
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
+            <div class="form-group">
+                <label for="name">หัวข้อ</label>
+                <input class="form-control" type="text" placeholder="Name" name="name"
+                    value="{{ old('name', $oldnews->name) }}">
+                @error('name')
+                    <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+                @enderror
             </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
-        </div>
-        <!-- /.container-fluid -->
-    </section>
+
+            <div class="form-group">
+                <label for="description">คำอธิบาย</label>
+                <input class="form-control" type="text" placeholder="Description" name="description"
+                    value="{{ old('description', $oldnews->description) }}">
+                @error('description')
+                    <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="status">สถานะ</label>
+                <select class="form-control" name="status" id="status">
+                    <option value="1" {{ $oldnews->status == 1 ? 'selected' : '' }}>Active</option>
+                    <option value="0" {{ $oldnews->status == 0 ? 'selected' : '' }}>Inactive</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="categories">หมวดหมู่</label>
+                <select class="form-control" name="categories" required>
+                    <option value="" disabled>เลือกหมวดหมู่</option>
+                    <option value="ข่าว" {{ old('categories', $oldnews->categories) == 'ข่าว' ? 'selected' : '' }}>ข่าว
+                    </option>
+                    <option value="เอกสาร" {{ old('categories', $oldnews->categories) == 'เอกสาร' ? 'selected' : '' }}>
+                        เอกสาร</option>
+                    <option value="แบบฟอร์ม" {{ old('categories', $oldnews->categories) == 'แบบฟอร์ม' ? 'selected' : '' }}>แบบฟอร์ม</option>
+                </select>
+                @error('categories')
+                    <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="content_type">ประเภทข้อมูล</label>
+                <select class="form-control" name="content_type" id="content_type" required>
+                    <option value="" disabled>เลือกประเภทข้อมูล</option>
+                    <option value="file" {{ old('content_type', $oldnews->content_type) == 'file' ? 'selected' : '' }}>
+                        ไฟล์</option>
+                    <option value="link" {{ old('content_type', $oldnews->content_type) == 'link' ? 'selected' : '' }}>
+                        ลิงก์</option>
+                    <option value="youtube" {{ old('content_type', $oldnews->content_type) == 'youtube' ? 'selected' : '' }}>วิดีโอ YouTube</option>
+                </select>
+                @error('content_type')
+                    <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="form-group" id="file_input"
+                style="display: {{ $oldnews->content_type == 'file' ? 'block' : 'none' }};">
+                <label for="file">ไฟล์</label>
+                <input class="form-control" type="file" name="file">
+                @error('file')
+                    <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="form-group" id="link_input"
+                style="display: {{ $oldnews->content_type == 'link' ? 'block' : 'none' }};">
+                <label for="link">ลิงก์</label>
+                <input class="form-control" type="url" name="link" placeholder="https://example.com"
+                    value="{{ old('link', $oldnews->link) }}">
+                @error('link')
+                    <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="form-group" id="youtube_input"
+                style="display: {{ $oldnews->content_type == 'youtube' ? 'block' : 'none' }};">
+                <label for="youtube">ลิงก์วิดีโอ YouTube</label>
+                <input class="form-control" type="url" name="youtube" placeholder="https://youtube.com/watch?v=..."
+                    value="{{ old('youtube', $oldnews->youtube) }}">
+                @error('youtube')
+                    <p class="text-danger my-2"><i class="fas fa-exclamation-circle"></i>{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="col-12 mb-3 text-center">
+                <a href="/listnewsfeed" class="btn bg-danger">Cancel</a>
+                <input type="submit" class="btn btn-success" value="Submit">
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
 
 @section('script')
-    <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- DataTables  & Plugins -->
-    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="plugins/jszip/jszip.min.js"></script>
-    <script src="plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="dist/js/demo.js"></script>
-    <!-- Page specific script -->
-    <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
-    </script>
+
+<script>
+    document.getElementById('content_type').addEventListener('change', function () {
+        const value = this.value;
+        document.getElementById('file_input').style.display = value === 'file' ? 'block' : 'none';
+        document.getElementById('link_input').style.display = value === 'link' ? 'block' : 'none';
+        document.getElementById('youtube_input').style.display = value === 'youtube' ? 'block' : 'none';
+    });
+</script>
+
 @endsection

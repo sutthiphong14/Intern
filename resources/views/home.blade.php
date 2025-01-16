@@ -90,41 +90,61 @@
           </thead>
 
           <tbody class='align-items-center '>
-            <tr>
-              @foreach ($data->take(10) as $item1)
-          <td class='ms-5 text-center'>
-          <div>
-            {{ $item1->name }}
-            @if ($loop->index < 2)
-        <!-- <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-danger">New</span> -->
-      @endif
-          </div>
-          </td>
-          <td class='ms-5 text-center'>
-          <div>
-            {{ $item1->description }}
-
-          </div>
-          </td>
-
-          <td class='ms-5 text-center'>
-          <div>
-            {{ \Carbon\Carbon::parse($item1->created_at)->format('Y-m-d') }}
-          </div>
-          </td>
-          <td class='ms-5 text-center'>
-          @if(Storage::disk('public')->exists($item1->file))
-        <a href="{{ route('admin.download', $item1->id) }}" class="btn btn-warning col-1" style="width: 130px;">
-        Download <i class="fas fa-arrow-down"></i>
-        </a>
-      @else
-      <span class="text-danger">ไฟล์ไม่พบ</span>
-    @endif
-          </td>
+    @foreach ($data->take(10) as $item1)
+        <tr>
+            <td class='ms-5 text-center'>
+                <div>
+                    {{ $item1->name }}
+                    @if ($loop->index < 2)
+                        <!-- <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-danger">New</span> -->
+                    @endif
+                </div>
+            </td>
+            <td class='ms-5 text-center'>
+                <div>
+                    {{ $item1->description }}
+                </div>
+            </td>
+            <td class='ms-5 text-center'>
+                <div>
+                    {{ \Carbon\Carbon::parse($item1->created_at)->format('Y-m-d') }}
+                </div>
+            </td>
+            <td class='ms-5 text-center'>
+                <div>
+                    @if ($item1->content_type === 'file')
+                        @if(Storage::disk('public')->exists($item1->file))
+                            <a href="{{ route('admin.download', $item1->id) }}" class="btn btn-warning col-1" style="width: 130px;">
+                                Download <i class="fas fa-arrow-down"></i>
+                            </a>
+                        @else
+                            <span class="text-danger">ไฟล์ไม่พบ</span>
+                        @endif
+                    @elseif ($item1->content_type === 'link')
+                        @if (!empty($item1->link))
+                            <a href="{{ $item1->link }}" target="_blank" class="btn btn-info col-1" style="width: 130px;">
+                                Go to Link <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        @else
+                            <span class="text-danger">ลิงก์ไม่พบ</span>
+                        @endif
+                    @elseif ($item1->content_type === 'youtube')
+                        @if (!empty($item1->youtube))
+                            <a href="{{ $item1->youtube }}" target="_blank" class="btn btn-danger col-1" style="width: 130px;">
+                                Watch Video <i class="fab fa-youtube"></i>
+                            </a>
+                        @else
+                            <span class="text-danger">วิดีโอไม่พบ</span>
+                        @endif
+                    @else
+                        <span class="text-muted">ประเภทไม่ถูกต้อง</span>
+                    @endif
+                </div>
+            </td>
         </tr>
+    @endforeach
+</tbody>
 
-      @endforeach
-          </tbody>
         </table>
       </div>
       <div class="tab-pane fade" id="navs-justified-profile" role="tabpanel">

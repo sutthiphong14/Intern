@@ -94,7 +94,7 @@ Route::get('/deletenews/{id}',[AdminController::class , 'deletenews'])->name('de
 Route::get('/editnews/{id}',[AdminController::class , 'editnews'])->name('editnews');
 
 Route::post('/updatenews/{id}',[AdminController::class , 'updatenews'])->name('updatenews');
-
+Route::put('/updatenews/{id}', [AdminController::class, 'updatenews'])->name('updatenews');
 Route::get('/search', [AdminController::class, 'search'])->name('search');
 
 
