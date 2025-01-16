@@ -167,7 +167,7 @@
                     <div class="carousel-inner">
                         @if ($slideshows->isEmpty())
                             <div class="carousel-item active">
-                                <img src="{{ asset('storage/slideshow_images/10.png') }}"
+                                <img src="{{ asset('storage/slideshow_images/none.png') }}"
                                     class="d-block w-100 rounded fixed-size" alt="Default Banner">
                             </div>
                         @else
