@@ -8,42 +8,52 @@
 @section('content')
 <div class="content-wrapper">
   <div class="card ">
-    <div class="slide">
-      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-interval="500">
+  <div class="slide">
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-interval="500">
         <div class="carousel-indicators">
-          @foreach($banners as $key => $banner)
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $key }}"
-        class="{{ $key === 0 ? 'active' : '' }}" aria-current="{{ $key === 0 ? 'true' : 'false' }}"
-        aria-label="Slide {{ $key + 1 }}"></button>
-      @endforeach
+            @if($banners->isNotEmpty())
+                @foreach($banners as $key => $banner)
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $key }}"
+                            class="{{ $key === 0 ? 'active' : '' }}" aria-current="{{ $key === 0 ? 'true' : 'false' }}"
+                            aria-label="Slide {{ $key + 1 }}"></button>
+                @endforeach
+            @endif
         </div>
         <div class="carousel-inner">
-          @foreach($banners as $key => $banner)
-        <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-        @if($banner->slideshow_link)
-      <a href="{{ $banner->slideshow_link }}" target="_blank">
-        <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded"
-        alt="Banner {{ $key + 1 }}">
-      </a>
-    @else
-    <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded"
-      alt="Banner {{ $key + 1 }}">
-  @endif
-        </div>
-      @endforeach
+            @if($banners->isNotEmpty())
+                @foreach($banners as $key => $banner)
+                    <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+                        @if($banner->slideshow_link)
+                            <a href="{{ $banner->slideshow_link }}" target="_blank">
+                                <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded"
+                                     alt="Banner {{ $key + 1 }}">
+                            </a>
+                        @else
+                            <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded"
+                                 alt="Banner {{ $key + 1 }}">
+                        @endif
+                    </div>
+                @endforeach
+            @else
+                <div class="carousel-item active">
+                    <img src="{{ asset('storage/slideshow_images/none.png') }}" class="d-block w-100 rounded"
+                         alt="Default Banner">
+                </div>
+            @endif
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-          data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
+                data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-          data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
+                data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
         </button>
-      </div>
     </div>
+</div>
+
 
 
 
