@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id('center_id');
             $table->string('center_name');
             $table->unsignedBigInteger('province_id');
-            $table->foreign('province_id')->references('province_id')->on('province_activity');
+            $table->foreign('province_id')->references('province_id')->on('province_activity')->onDelete('cascade');
             $table->timestamps();
         });
     }
