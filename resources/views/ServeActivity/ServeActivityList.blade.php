@@ -13,7 +13,7 @@
         <table class="table table-bordered ">
             <thead>
                 <tr class="bg-dark text-light">
-                    <th>ชื่อกิจกรรม</th>
+                    <th>ชื่อบริการ</th>
                     <th>เครื่องมือ</th>
                 </tr>
             </thead>

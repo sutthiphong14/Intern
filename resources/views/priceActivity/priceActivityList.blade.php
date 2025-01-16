@@ -12,8 +12,9 @@
         @endif
         <table class="table table-bordered">
             <thead>
-                <tr>
+                <tr class="bg-dark text-light">
                     <th>ชื่อราคา</th>
+                    <th>เครื่องมือ</th>
                 </tr>
             </thead>
             <tbody>
