@@ -138,44 +138,71 @@ public function changenews(Request $request, $id)
         return view('newsfeed.editnews', compact('oldnews', 'categories'));
     }
 
-    function updatenews(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|max:50',
-            'description' => 'required',
-            'categories' => 'required|max:255',
-            'file' => 'nullable|file|mimes:pdf,jpg,png,xlsx|max:2048',
-        ], [
-            'name.required' => 'กรุณาระบุชื่อ',
-            'name.max' => 'ความยาวของชื่อไม่ควรเกิน 50 ตัวอักษร',
-            'description.required' => 'กรุณาระบุคำอธิบาย',
-            'categories.required' => 'กรุณาระบุหมวดหมู่',
-            'categories.max' => 'หมวดหมู่ต้องไม่เกิน 255 ตัวอักษร',
-            'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
-            'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 2MB',
-        ]);
+    public function updatenews(Request $request, $id)
+{
+    $request->validate([
+        'name' => 'required|max:50',
+        'description' => 'required',
+        'categories' => 'required|max:255',
+        'content_type' => 'required|in:file,link,youtube',
+        'file' => 'nullable|file|mimes:pdf,jpg,png,xlsx|max:2048',
+        'link' => 'nullable|url',
+        'youtube' => 'nullable|url|regex:/^https:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+$/', // Valid YouTube link
+    ], [
+        'name.required' => 'กรุณาระบุชื่อ',
+        'description.required' => 'กรุณาระบุคำอธิบาย',
+        'categories.required' => 'กรุณาระบุหมวดหมู่',
+        'content_type.required' => 'กรุณาระบุประเภทข้อมูล',
+        'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
+        'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 2MB',
+        'link.url' => 'กรุณาระบุลิงก์ให้ถูกต้อง',
+        'youtube.regex' => 'ลิงก์ YouTube ไม่ถูกต้อง',
+    ]);
 
-        $data = [
-            'name' => $request->name,
-            'description' => $request->description,
-            'categories' => $request->categories,
-            'updated_at' => now(),
-        ];
+    // Fetch old data for checking and logging purposes
+    $oldData = DB::table('newsfeeds')->where('id', $id)->first();
 
+    // Initialize the data array with new values
+    $data = [
+        'name' => $request->name,
+        'description' => $request->description,
+        'categories' => $request->categories,
+        'content_type' => $request->content_type, // Keep content_type
+        'updated_at' => now(),
+    ];
+
+    // Handle different content types
+    if ($request->content_type === 'file') {
+        // Handle file upload
         if ($request->hasFile('file')) {
+            // If the old content type was 'file', delete the old file
+            if ($oldData->content_type === 'file' && $oldData->file) {
+                Storage::disk('public')->delete($oldData->file);
+            }
             $file = $request->file('file');
             $filePath = $file->storeAs('newsfeeds', time() . '_' . $file->getClientOriginalName(), 'public');
             $data['file'] = $filePath;
+        } else {
+            // If no new file uploaded, set 'file' to null
+            $data['file'] = null;
         }
-
-        $oldData = DB::table('newsfeeds')->where('id', $id)->first();
-        DB::table('newsfeeds')->where('id', $id)->update($data);
-
-        // Log the update
-        $this->logAction('updated', 'Newsfeed', ['old' => $oldData, 'new' => $data]);
-
-        return redirect('/listnewsfeed');
+    } elseif ($request->content_type === 'link') {
+        // Handle link
+        $data['link'] = $request->link;
+    } elseif ($request->content_type === 'youtube') {
+        // Handle YouTube link
+        $data['youtube'] = $request->youtube;
     }
+
+    // Update the news feed in the database
+    DB::table('newsfeeds')->where('id', $id)->update($data);
+
+    // Log the update action
+    $this->logAction('updated', 'Newsfeed', ['old' => $oldData, 'new' => $data]);
+
+    return redirect('/listnewsfeed');
+}
+
 
     public function search(Request $request)
     {

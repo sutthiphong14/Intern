@@ -55,20 +55,20 @@
       <li class="nav-item ">
         <button type="button" class="nav-link active text-dark" role="tab" data-bs-toggle="tab"
           data-bs-target="#navs-justified-home" aria-controls="navs-justified-home" aria-selected="true">
-          <i class="tf-icons bx bx-home"></i> ประกาศ
+          <i class="tf-icons bx bx-home">ประกาศ</i> 
           <!-- <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-danger">3</span> -->
         </button>
       </li>
       <li class="nav-item">
         <button type="button" class="nav-link text-dark" role="tab" data-bs-toggle="tab"
           data-bs-target="#navs-justified-profile" aria-controls="navs-justified-profile" aria-selected="false">
-          <i class="tf-icons bx bx-user"></i> เอกสาร
+          <i class="tf-icons bx bx-user">เอกสาร</i> 
         </button>
       </li>
       <li class="nav-item">
         <button type="button" class="nav-link text-dark" role="tab" data-bs-toggle="tab"
           data-bs-target="#navs-justified-messages" aria-controls="navs-justified-messages" aria-selected="false">
-          <i class="tf-icons bx bx-message-square"></i> แบบฟอร์ม
+          <i class="tf-icons bx bx-message-square">แบบฟอร์ม</i> 
         </button>
       </li>
 
@@ -123,7 +123,7 @@
                     @elseif ($item1->content_type === 'link')
                         @if (!empty($item1->link))
                             <a href="{{ $item1->link }}" target="_blank" class="btn btn-info col-1" style="width: 130px;">
-                                Go to Link <i class="fas fa-external-link-alt"></i>
+                                Link <i class="fas fa-external-link-alt"></i>
                             </a>
                         @else
                             <span class="text-danger">ลิงก์ไม่พบ</span>
@@ -131,7 +131,7 @@
                     @elseif ($item1->content_type === 'youtube')
                         @if (!empty($item1->youtube))
                             <a href="{{ $item1->youtube }}" target="_blank" class="btn btn-danger col-1" style="width: 130px;">
-                                Watch Video <i class="fab fa-youtube"></i>
+                                Video <i class="fab fa-youtube"></i>
                             </a>
                         @else
                             <span class="text-danger">วิดีโอไม่พบ</span>
