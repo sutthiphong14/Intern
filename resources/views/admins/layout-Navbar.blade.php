@@ -59,6 +59,8 @@
     /* สี warning */
   }
 
+  
+
   .modal-content {
   height: 90vh; /* กำหนดความสูงคงที่ 80% ของหน้าจอ */
   max-height: 110vh; /* จำกัดไม่ให้เกิน 90% ของหน้าจอ */
@@ -92,11 +94,13 @@
             <i class="menu-icon tf-icons bx bx-home-circle"></i> หน้าแรก
           </a>
         </li>
+        @if (Auth::check())
         <li class="nav-item">
           <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#exLargeModal">
           <i class="fas fa-th"> แอป</i> 
           </button>
         </li>
+        @endif
 
 
         @if (Auth::check() && Auth::user()->permission['manage_users'] ?? false)

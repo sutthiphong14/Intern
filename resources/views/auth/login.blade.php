@@ -3,7 +3,28 @@
 <title>Nt |@yield('title')</title>
 @section('content')
 
-<div class="d-flex justify-content-center align-items-center" style="height: 100vh; background: linear-gradient(135deg, #ecd716, #ddc806);">
+
+<style>
+    .custom-btn {
+        background-color: rgb(45, 43, 49);
+        border: none;
+        color: #fff;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .custom-btn:hover {
+        background-color: rgb(60, 57, 65);
+        transform: scale(1.05); /* ขยายปุ่มเล็กน้อย */
+    }
+
+    .custom-btn:active {
+        transform: scale(0.95); /* ย่อเล็กลงเมื่อกด */
+    }
+</style>
+
+<div class="d-flex justify-content-center align-items-center" 
+     style="height: 100vh; background: url('{{ asset('dist/img/backlogin.png') }}') no-repeat center center fixed; 
+            background-size: cover;">
     <div class="login-card card" style="width: 500px; padding: 2rem; border-radius: 15px; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
         
         <!-- โลโก้ตรงกลาง -->
@@ -31,16 +52,21 @@
 
                 <!-- Password Field -->
                 <div class="mb-3">
-                    <label for="password" class="form-label">{{ __('รหัสผ่าน') }}</label>
-                    <input id="password" type="password" 
-                           class="form-control @error('password') is-invalid @enderror" 
-                           name="password" required autocomplete="current-password">
-                    @error('password')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
+    <label for="password" class="form-label">{{ __('รหัสผ่าน') }}</label>
+    <div class="input-group">
+        <input id="password" type="password" 
+               class="form-control @error('password') is-invalid @enderror" 
+               name="password" required autocomplete="current-password">
+        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+            {{ __('แสดง') }}
+        </button>
+    </div>
+    @error('password')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
 
                 <!-- Remember Me Checkbox -->
                 <div class="d-flex justify-content-between align-items-center">
@@ -56,9 +82,11 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-100 mt-3" style="background-color:rgb(45, 43, 49); border: none;">
-                    {{ __('Login') }}
-                </button>
+                <button type="submit" 
+        class="btn btn-primary w-100 mt-3 custom-btn">
+    {{ __('Login') }}
+</button>
+
             </form>
 
             
@@ -66,4 +94,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('password');
+        const isPasswordVisible = passwordInput.type === 'password';
+        passwordInput.type = isPasswordVisible ? 'text' : 'password';
+        this.textContent = isPasswordVisible ? '{{ __('ซ่อน') }}' : '{{ __('แสดง') }}';
+    });
+</script>
 @endsection

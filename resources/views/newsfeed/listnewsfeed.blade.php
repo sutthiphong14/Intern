@@ -22,7 +22,7 @@
                     value="{{ request('query') }}">
                 <button type="submit" class="btn btn-info btn-dark">ค้นหา</button>
             </form>
-            
+
             <a href="insertnewsfeed" class="btn bg-success col-4 me-4">
                 <i class="d-flex justify-content-end"></i> เพิ่มเอกสาร
             </a>
@@ -52,7 +52,8 @@
                             <td>{{ $item->status == 1 ? 'แสดง' : 'ซ่อน' }}</td>
                             <td>
                                 <div class="dropdown-menu-start">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                        data-bs-toggle="dropdown">
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu">
@@ -73,7 +74,7 @@
                                             class="d-inline delete-form">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="dropdown-item text-danger" 
+                                            <button type="submit" class="dropdown-item text-danger"
                                                 onclick="return confirm('ต้องการลบข้อมูล {{ $item->name }} หรือไม่?')">
                                                 <i class="bx bx-trash me-1"></i> ลบ
                                             </button>
@@ -161,28 +162,28 @@
             },
             body: JSON.stringify({})
         })
-        .then(response => {
-            if (response.ok) {
-                location.reload();
-            } else {
-                alert('เกิดข้อผิดพลาดในการเปลี่ยนสถานะ');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
-        });
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('เกิดข้อผิดพลาดในการเปลี่ยนสถานะ');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+            });
     }
 </script>
 
 @if(session('success'))
-<script>
-    Swal.fire({
-        icon: 'success',
-        title: 'สำเร็จ!',
-        text: '{{ session('success') }}',
-        confirmButtonText: 'ตกลง'
-    });
-</script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'สำเร็จ!',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'ตกลง'
+        });
+    </script>
 @endif
 @endsection

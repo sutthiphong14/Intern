@@ -28,11 +28,27 @@ class AdminController extends Controller
         return view('newsfeed.listnewsfeed', compact('data'));
     }
 
-    function newsfeed()
+    public function newsfeed(Request $request)
     {
-        $data = DB::table('newsfeeds')->paginate(10);
-        return view('newsfeed.newsfeed', compact('data'));
+        $data_announce = Newsfeed::where('status', true)
+            ->where('categories', 'ข่าว')  // Filter by category 'ข่าว'
+            ->orderBy('id', 'desc')
+            ->paginate(10); // Use paginate to manage pagination
+
+        $data_document = Newsfeed::where('status', true)
+            ->where('categories', 'เอกสาร')  // Filter by category 'ข่าว'
+            ->orderBy('id', 'desc')
+            ->paginate(10); // Use paginate to manage pagination
+
+        $data_form = Newsfeed::where('status', true)
+            ->where('categories', 'แบบฟอร์ม')  // Filter by category 'ข่าว'
+            ->orderBy('id', 'desc')
+            ->paginate(10); // Use paginate to manage pagination
+
+        return view('newsfeed.newsfeed', compact('data_announce','data_document', 'data_form'));
     }
+
+
 
     function createnews(Request $request)
 {
