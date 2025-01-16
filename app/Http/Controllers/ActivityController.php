@@ -95,7 +95,7 @@ class ActivityController extends Controller
         ]);
         $data = PromotionActivity::all();
         return redirect()->route('promotion_list',compact('data','service_id'))
-            ->with('success', 'เพิ่มบริการสำเร็จ');
+            ->with('success', 'เพิ่มโปรโมชั่นสำเร็จ');
     }
     
     public function PromotionDelete($service_id,$promotion_id){
@@ -104,7 +104,7 @@ class ActivityController extends Controller
         ->delete();
         $data = PromotionActivity::all();
         return redirect()->route('promotion_list',compact('data','service_id'))
-            ->with('success', 'เพิ่มบริการสำเร็จ');
+            ->with('success', 'ลบโปรโมชั่นสำเร็จ');
     }
 
     public function PromotionEdit($service_id,$promotion_id){
@@ -127,7 +127,7 @@ class ActivityController extends Controller
         ]);
         $data = PromotionActivity::all();
         return redirect()->route('promotion_list',compact('data','service_id'))
-            ->with('success', 'เพิ่มบริการสำเร็จ');
+            ->with('success', 'อัปเดตโปรโมชั่นสำเร็จ');
     }
     
     //ความเร็ว
@@ -157,7 +157,7 @@ class ActivityController extends Controller
         ]);
         $data = SpeedActivity::all();
         return redirect()->route('speed_list',compact('data','service_id','promotion_id'))
-            ->with('success', 'เพิ่มบริการสำเร็จ');
+            ->with('success', 'เพิ่มความเร็วสำเร็จ');
     }
 
     public function SpeedDelete($service_id,$promotion_id,$speed_id){
@@ -166,7 +166,7 @@ class ActivityController extends Controller
         ->delete();
         $data = SpeedActivity::all();
         return redirect()->route('speed_list',compact('data','promotion_id','service_id'))
-            ->with('success', 'เพิ่มบริการสำเร็จ');
+            ->with('success', 'ลบความเร็วสำเร็จ');
     }
 
     public function SpeedEdit($speed_id,$promotion_id,$service_id){
@@ -187,7 +187,7 @@ class ActivityController extends Controller
         ]);
         $data = SpeedActivity::all();
         return redirect()->route('speed_list',compact('service_id','promotion_id'))
-            ->with('success', 'เพิ่มบริการสำเร็จ');
+            ->with('success', 'อัปเดตความเร็วสำเร็จ');
     }
 
      //ราคา
@@ -211,7 +211,7 @@ class ActivityController extends Controller
         ]);
         $data = PriceActivity::all();
         return redirect()->route('price_list',compact('data','speed_id'))
-            ->with('success', 'เพิ่มบริการสำเร็จ');
+            ->with('success', 'เพิ่มราคาสำเร็จ');
     }
 
     public function PriceDelete($speed_id,$price_id){
@@ -220,7 +220,7 @@ class ActivityController extends Controller
         ->delete();
         $data = SpeedActivity::all();
         return redirect()->route('price_list',compact('data','speed_id'))
-            ->with('success', 'เพิ่มบริการสำเร็จ');
+            ->with('success', 'ลบราคาสำเร็จ');
     }
 
     public function PriceEdit($speed_id,$price_id){
@@ -239,6 +239,6 @@ class ActivityController extends Controller
         ]);
         $data = PriceActivity::all();
         return redirect()->route('price_list',compact('data','speed_id'))
-            ->with('success', 'เพิ่มบริการสำเร็จ');
+            ->with('success', 'อัปเดตราคาสำเร็จ');
     }
 }

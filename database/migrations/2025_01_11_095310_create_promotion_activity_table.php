@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
 
             
-            $table->foreign('service_id')->references('service_id')->on('serve_activity');
+            $table->foreign('service_id')->references('service_id')->on('serve_activity')->onDelete('cascade');
         });
     }
 

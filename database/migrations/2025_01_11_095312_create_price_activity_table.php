@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('speed_id');  // รหัสความเร็ว (Foreign Key)
             $table->timestamps();
 
-            $table->foreign('speed_id')->references('speed_id')->on('speed_activity');  // เชื่อมต่อกับ speed_activity
+            $table->foreign('speed_id')->references('speed_id')->on('speed_activity')->onDelete('cascade');  // เชื่อมต่อกับ speed_activity
         });
     }
 

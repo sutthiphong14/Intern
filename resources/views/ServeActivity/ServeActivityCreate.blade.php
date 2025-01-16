@@ -9,7 +9,6 @@
             @csrf
             <div class="mb-3">
                 <label for="service_name" class="form-label">ชื่อบริการ</label>
-               
                 <input type="text" class="form-control" id="service_name" name="service_name" required>
                 <input type="hidden" name="created_at" value="{{ \Carbon\Carbon::now() }}">
                 <input type="hidden" name="updated_at" value="{{ \Carbon\Carbon::now() }}">
