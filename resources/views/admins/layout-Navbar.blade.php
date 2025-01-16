@@ -26,14 +26,14 @@
   a:hover .app-icon {
     transform: scale(1.2);
     /* ขยายไอคอนเมื่อวางเมาส์ */
-    background-color: #f39c12;
+    background-color:rgb(255, 187, 0);
     /* เปลี่ยนสีพื้นหลัง */
   }
 
   /* ขยายข้อความแต่ไม่ให้ขยับแถว */
   a:hover h5,
   a:hover h6 {
-    color: #f39c12;
+    color:rgb(255, 183, 0);
     /* เปลี่ยนสีข้อความ */
     transform: scale(1.1);
     /* ขยายข้อความเล็กน้อย */
@@ -58,6 +58,21 @@
     color: #f39c12;
     /* สี warning */
   }
+
+  .modal-content {
+  height: 90vh; /* กำหนดความสูงคงที่ 80% ของหน้าจอ */
+  max-height: 110vh; /* จำกัดไม่ให้เกิน 90% ของหน้าจอ */
+
+}
+
+.modal-body {
+  overflow-y: auto; /* เปิดให้เลื่อนเฉพาะส่วนเนื้อหา */
+}
+
+
+
+
+
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm rounded border p-2">
@@ -195,6 +210,22 @@
                 <div class="row align-items-center">
                   <div class="col-auto">
                     <div class="app-icon bg-orange d-flex justify-content-center align-items-center">
+                      <i class="fas fa-user-edit"></i>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <h5 class="mb-1">จัดการผู้ใช้งาน</h5>
+                    <h6 class="text-muted mb-0">เพิ่ม ลบ แก้ไข หรือ ให้สิทธิการใช้งานแก่ผู้ใช้</h6>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div class="col-3 mb-4">
+              <a href="{{ route('insertusers') }}" class="text-decoration-none">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <div class="app-icon bg-orange d-flex justify-content-center align-items-center">
                       <i class="fas fa-user-plus"></i>
                     </div>
                   </div>
@@ -211,44 +242,12 @@
                 <div class="row align-items-center">
                   <div class="col-auto">
                     <div class="app-icon bg-orange d-flex justify-content-center align-items-center">
-                      <i class="fas fa-user-edit"></i>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <h5 class="mb-1">แก้ไขผู้ใช้งาน</h5>
-                    <h6 class="text-muted mb-0">แก้ไขผู้ใช้งานในระบบ</h6>
-                  </div>
-                </div>
-              </a>
-            </div>
-
-            <div class="col-3 mb-4">
-              <a href="{{ route('insertusers') }}" class="text-decoration-none">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <div class="app-icon bg-orange d-flex justify-content-center align-items-center">
-                      <i class="fas fa-user-slash"></i>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <h5 class="mb-1">ลบผู้ใช้งาน</h5>
-                    <h6 class="text-muted mb-0">ลบผู้ใช้งานในระบบ</h6>
-                  </div>
-                </div>
-              </a>
-            </div>
-
-            <div class="col-3 mb-4">
-              <a href="{{ route('insertusers') }}" class="text-decoration-none">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <div class="app-icon bg-orange d-flex justify-content-center align-items-center">
                       <i class="fas fa-user-check"></i>
                     </div>
                   </div>
                   <div class="col">
-                    <h5 class="mb-1">อนุมัติให้สิทธิการใช้งาน</h5>
-                    <h6 class="text-muted mb-0">เพิ่มผู้ใช้งานในระบบ</h6>
+                    <h5 class="mb-1">อนุมัติสิทธิการใช้งาน</h5>
+                    <h6 class="text-muted mb-0">อนุมัติคำขอเข้าใช้งานระบบ</h6>
                   </div>
                 </div>
               </a>
@@ -286,7 +285,7 @@
                 </div>
                 <div class="col">
                   <h5 class="mb-1">จัดการ Dashboard</h5>
-                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของผู้ใช้งาน</h6>
+                  <h6 class="text-muted mb-0">เพิ่ม ลบ แก้ไข Dashboard</h6>
                 </div>
               </div>
             </a>
@@ -302,7 +301,7 @@
                 </div>
                 <div class="col">
                   <h5 class="mb-1">ติดตั้งภายใน 3 วัน</h5>
-                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของผู้ใช้งาน</h6>
+                  <h6 class="text-muted mb-0">ข้อมูลการติดตั้ง fttx ภายใน 3 วัน</h6>
                 </div>
               </div>
             </a>
@@ -318,7 +317,7 @@
                 </div>
                 <div class="col">
                   <h5 class="mb-1">ประวัติการทำงาน</h5>
-                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของผู้ใช้งาน</h6>
+                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของข้อมูล Dashboard</h6>
                 </div>
               </div>
             </a>
@@ -339,7 +338,7 @@
                 </div>
                 <div class="col">
                   <h5 class="mb-1">รายการข่าวสาร</h5>
-                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของผู้ใช้งาน</h6>
+                  <h6 class="text-muted mb-0">แสดงข้อมูลรายการ ข่าวสาร เอกสาร และแบบฟร์อม</h6>
                 </div>
               </div>
             </a>
@@ -355,7 +354,7 @@
                 </div>
                 <div class="col">
                   <h5 class="mb-1">จัดการข่าวสาร</h5>
-                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของผู้ใช้งาน</h6>
+                  <h6 class="text-muted mb-0">เพิ่ม ลบ แก้ไข ข่าวสาร</h6>
                 </div>
               </div>
             </a>
@@ -371,7 +370,7 @@
                 </div>
                 <div class="col">
                   <h5 class="mb-1">ประวัติการทำงาน</h5>
-                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของผู้ใช้งาน</h6>
+                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของจัดการข่าวสาร</h6>
                 </div>
               </div>
             </a>
@@ -409,7 +408,7 @@
                 </div>
                 <div class="col">
                   <h5 class="mb-1">ประวัติการทำงาน</h5>
-                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของผู้ใช้งาน</h6>
+                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของจัดการรูปภาพ</h6>
                 </div>
               </div>
             </a>
@@ -417,11 +416,91 @@
 
         </div>
 
+        <h4><i class="fas fa-calendar-alt"></i> จัดการกิจกรรม</h4>
+        <hr>
+        <div class="row">
 
+          <div class="col-3 mb-4">
+            <a href="{{ route('edit_banner') }}" class="text-decoration-none">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
+                  <i class="fas fa-calendar-plus"></i>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5 class="mb-1">จัดการกิจกรรม</h5>
+                  <h6 class="text-muted mb-0">เพิ่ม ลบ แก้ไข หมวดหมู่กิจกรรม</h6>
+                </div>
+              </div>
+            </a>
+          </div>
 
+          <div class="col-3 mb-4">
+            <a href="{{ route('edit_banner') }}" class="text-decoration-none">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
+                  <i class="fas fa-tags"></i>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5 class="mb-1">จัดการประเภทบริการ</h5>
+                  <h6 class="text-muted mb-0">เพิ่ม ลบ แก้ไข ประเภทบริการ</h6>
+                </div>
+              </div>
+            </a>
+          </div>
 
+          <div class="col-3 mb-4">
+            <a href="{{ route('edit_banner') }}" class="text-decoration-none">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
+                  <i class="fas fa-map-marker-alt"></i>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5 class="mb-1">จัดการข้อมูลจังหวัด</h5>
+                  <h6 class="text-muted mb-0">จัดการข้อมูลของจังหวัดและศูนย์บริการ</h6>
+                </div>
+              </div>
+            </a>
+          </div>
 
+          <div class="col-3 mb-4">
+            <a href="{{ route('insertusers') }}" class="text-decoration-none">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
+                  <i class="fas fa-file-alt"></i>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5 class="mb-1">แบบฟอร์มกิจกรรม</h5>
+                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของกิจกรรม</h6>
+                </div>
+              </div>
+            </a>
+          </div>
 
+          <div class="col-3 mb-4">
+            <a href="{{ route('insertusers') }}" class="text-decoration-none">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
+                    <i class="fas fa-history"></i>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5 class="mb-1">ประวัติการทำงาน</h5>
+                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของผู้ใช้งาน</h6>
+                </div>
+              </div>
+            </a>
+          </div>
+
+        </div>
 
       </div>
 
