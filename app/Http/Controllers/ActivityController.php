@@ -6,11 +6,74 @@ use App\Models\PriceActivity;
 use App\Models\PromotionActivity;
 use App\Models\ServeActivity;
 use App\Models\SpeedActivity;
+use App\Models\Typeactivity;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 
 class ActivityController extends Controller
 {
+     //กิจกรรม
+     public function ListType(){
+        $data = Typeactivity::all();
+        
+        return view('typeActivity.TypeActivityList', compact('data'));
+    }
+
+    public function TypeCreate(){
+        return view('typeActivity.TypeActivityCreate');
+    }
+
+    public function TypeInsert(Request $request){
+        $request->validate([
+            'type_name' => 'required|string|max:255',
+            
+        ]);
+
+        Typeactivity::create($request->all());
+        $data = Typeactivity::all();
+        return redirect()->route('type_list',compact('data'))
+            ->with('success', 'เพิ่มบริการสำเร็จ');
+    }
+
+    public function TypeDelete($type_id){
+        $data = Typeactivity::where('type_id',$type_id);
+        
+        $data->delete();
+        return redirect()->route('type_list')->with('success', 'ลบบริการสำเร็จ');
+    
+    }
+
+    public function TypeEdit($type_id){
+        $data = Typeactivity::where('type_id',$type_id)->first();
+
+        return view('typeActivity.TypeActivityEdit', compact('data'));
+    }
+
+    public function Typeupdate(Request $request, $type_id)
+    {
+        $request->validate([
+            'type_name' => 'required|string|max:255',
+        ]);
+    
+        $type_name = $request->input('type_name');  // ดึงค่าจากฟอร์ม
+    
+        // หาแถวที่ตรงกับ service_id
+        $data = Typeactivity::where('type_id',$type_id)->first();
+    
+    
+        if ($data) {
+            Typeactivity::where('type_id',$type_id)->update(['type_name' => $type_name]);
+        } else {
+            return redirect()->route('type_list')
+                ->with('error', 'Type not found');
+        }
+    
+        return redirect()->route('type_list')
+            ->with('success', 'อัพเดทบริการสำเร็จ!');
+    }
+
+
+
     //บริการ
     public function ListService(){
         $data = ServeActivity::all();

@@ -313,13 +313,22 @@ Route::get('/edit_banner', function () {
 
 
 
+//ส่วนกิจกรรม
+Route::get('/typeactivity_list',[ActivityController::class , 'ListType'])->name('type_list');
+Route::get('/typeactivity_view_create',[ActivityController::class , 'TypeCreate'])->name('type_create');
+Route::post('/typeactivity_insert',[ActivityController::class , 'TypeInsert'])->name('type_insert');
+Route::delete('/typeactivity_delete/{type_id}',[ActivityController::class , 'TypeDelete'])->name('type_delete');
+Route::get('/typeactivity_edit/{type_id}',[ActivityController::class , 'TypeEdit'])->name('type_edit');
+Route::put('/typeactivity_update/{type_id}',[ActivityController::class , 'Typeupdate'])->name('type_update');
+
+
 //ส่วนที่ใช้ส่วนบริการ
 Route::get('/severactivity_list',[ActivityController::class , 'ListService'])->name('service_list');
 Route::get('/severactivity_view_create',[ActivityController::class , 'ServiceCreate'])->name('service_create');
 Route::post('/severactivity_insert',[ActivityController::class , 'ServiceInsert'])->name('service_insert');
 Route::delete('/severactivity_delete/{service_id}',[ActivityController::class , 'ServiceDelete'])->name('service_delete');
 Route::get('/severactivity_edit/{service_id}',[ActivityController::class , 'ServiceEdit'])->name('service_edit');
-Route::put('/severactivityputedit/{service_id}',[ActivityController::class , 'Serviceupdate'])->name('serve_update');
+Route::put('/severactivity_update/{service_id}',[ActivityController::class , 'Serviceupdate'])->name('serve_update');
 
 //ส่วนโปรโมชัน
 Route::get('/promotion_list/{service_id}',[ActivityController::class , 'ListPromotion'])->name('promotion_list');

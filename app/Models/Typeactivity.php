@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Typeactivity extends Model
+{
+    use HasFactory;
+    protected $table = 'type_activity';
+    protected $fillable = ['type_name'];
+    public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล
+}
