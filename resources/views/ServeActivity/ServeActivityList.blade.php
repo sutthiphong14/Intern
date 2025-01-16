@@ -18,25 +18,32 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $row)
+                @if ($data->count() > 0)
+                    @foreach ($data as $row)
+                        <tr>
+
+                            <td class="col-5">{{ $row->service_name }}</td>
+
+                            <td>
+                                <a href="{{ route('service_edit', $row->service_id) }}"
+                                    class="btn btn-warning btn-sm">แก้ไข</a>
+                                <form action="{{ route('service_delete', $row->service_id) }}" method="POST"
+                                    style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure?')">ลบ</button>
+                                </form>
+                                <a href="{{ route('promotion_list', $row->service_id) }}"
+                                    class="btn btn-info btn-sm">ดูโปรโมชั่น</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
                     <tr>
-
-                        <td class="col-5">{{ $row->service_name }}</td>
-
-                        <td>
-                            <a href="{{ route('service_edit', $row->service_id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('service_delete', $row->service_id) }}" method="POST"
-                                style="display: inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
-                            <a href="{{ route('promotion_list', $row->service_id) }}"
-                                class="btn btn-success btn-sm">เพิ่มโปรโมชั่น</a>
-                        </td>
+                        <td colspan="2" class="text-center">ไม่มีข้อมูลบริการ</td>
                     </tr>
-                @endforeach
+                @endif
             </tbody>
         </table>
     </div>

@@ -86,9 +86,11 @@ public function indexservicecenter()
 
     public function destroyservicecenter($id)
     {
+    
         $data = ServiceCenterActivity::findOrFail($id);
         $data->delete();
-        return redirect()->route('servicecenteractivityList')
+        $id = $data->province_id;
+        return redirect()->route('province.viewServiceCenters',compact('id'))
             ->with('success', 'Serve activity deleted successfully!');
     }
 
@@ -105,7 +107,8 @@ public function indexservicecenter()
         ]);
         $data = ServiceCenterActivity::findOrFail($id);
         $data->update($request->all());
-        return redirect()->route('servicecenteractivityList')
+        $id = $data->province_id;
+        return redirect()->route('province.viewServiceCenters',compact('id'))
             ->with('success', 'Serve activity updated successfully!');
     }
 

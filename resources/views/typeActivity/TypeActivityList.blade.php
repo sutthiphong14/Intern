@@ -18,21 +18,27 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $row)
+                @if ($data->count() > 0)
+                    @foreach ($data as $row)
+                        <tr>
+                            <td class="col-5">{{ $row->type_name }}</td>
+                            <td>
+                                <a href="{{ route('type_edit', $row->type_id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('type_delete', $row->type_id) }}" method="POST"
+                                    style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure?')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
                     <tr>
-                        <td class="col-5">{{ $row->type_name }}</td>
-                        <td>
-                            <a href="{{ route('type_edit', $row->type_id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('type_delete', $row->type_id) }}" method="POST"
-                                style="display: inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
-                        </td>
+                        <td colspan="2" class="text-center">ไม่มีข้อมูลกิจกรรม</td>
                     </tr>
-                @endforeach
+                @endif
             </tbody>
         </table>
     </div>

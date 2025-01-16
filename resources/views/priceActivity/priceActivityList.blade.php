@@ -5,6 +5,7 @@
     <div class="container">
         <h2>จัดการราคา</h2>
         <a href="{{ route('price_create', $speed_id) }}" class="btn btn-primary mb-3">เพิ่มราคา</a>
+        <a href="{{ url()->previous() }}" class="btn btn-secondary mb-3">Back</a>
         @if (session('success'))
             <div class="alert alert-success" role="alert">
                 {{ session('success') }}
@@ -18,6 +19,7 @@
                 </tr>
             </thead>
             <tbody>
+                @if ($data->count() > 0)
                 @foreach ($data as $row)
                     <tr>
 
@@ -37,6 +39,11 @@
                         </td>
                     </tr>
                 @endforeach
+                @else
+                <tr>
+                    <td colspan="2" class="text-center">ไม่มีข้อมูลราคา</td>
+                </tr>
+            @endif
             </tbody>
         </table>
     </div>
