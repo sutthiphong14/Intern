@@ -8,14 +8,16 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>ชื่อจังหวัด</th>             
+                <th>#</th> <!-- เพิ่มคอลัมน์สำหรับลำดับ -->
+                <th>ชื่อจังหวัด</th>
                 <th>การจัดการ</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($data as $row)
                 <tr>
-                    <td>{{ $row->province_name }}</td>                    
+                    <td>{{ $loop->iteration }}</td> <!-- ใช้ $loop->iteration แสดงลำดับ -->
+                    <td>{{ $row->province_name }}</td>
                     <td>
                         <a href="{{ route('provinceactivityedit', $row->province_id) }}" class="btn btn-warning btn-sm">แก้ไข</a>
                         <form action="{{ route('provinceactivitydelete', $row->province_id) }}" method="POST" style="display: inline-block;">

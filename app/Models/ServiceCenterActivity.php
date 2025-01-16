@@ -9,7 +9,7 @@ class ServiceCenterActivity extends Model
 {
     use HasFactory;
 
-    protected $table = 'serviceCenter_activity';
+    protected $table = 'servicecenter_activity';
     protected $primaryKey = 'center_id';
     protected $fillable = ['center_name', 'province_id'];
 
