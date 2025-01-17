@@ -133,14 +133,14 @@
 
     <ul class="navbar-nav me-auto mb-2 mb-lg-0 custom-navbar">
       <li class="nav-item">
-        <a class="nav-link-main text-dark" aria-current="page" href="{{ route('home') }}">
+        <a class="nav-link-main " aria-current="page" href="{{ route('home') }}">
           <i class="menu-icon tf-icons bx bx-home-circle"></i>
           หน้าแรก
         </a>
       </li>
       @if (Auth::check())
       <li class="nav-item">
-        <a class="nav-link-main text-dark" href="#" data-bs-toggle="modal" data-bs-target="#exLargeModal">
+        <a class="nav-link-main " href="#" data-bs-toggle="modal" data-bs-target="#exLargeModal">
           <i class="fas fa-th"></i>
           แอป
         </a>
