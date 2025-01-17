@@ -44,16 +44,21 @@ class CustomerController extends Controller
         // Validate the incoming request
         $request->validate([
             'cus_fullname' => 'required|string|max:255',
-            'id_card' => 'required|unique:customers,id_card|max:13',
+            'id_card' => 'required|max:13',
             'cus_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'cus_address' => 'required|string|max:500',
             'type_id' => 'required|exists:type_activity,type_id',
-            'service_id' => 'required|exists:serve_activity,service_id',
-            'province_id' => 'required|exists:province_activity,province_id',
         ]);
 
         // Prepare data for insertion
-        $data = $request->only(['cus_fullname', 'id_card', 'cus_address', 'center_id','type_id', 'service_id', 'province_id','promotion_id','speed_id','price_id']);
+        $data = $request->only(['cus_fullname', 'id_card', 'cus_address', 'center_id', 'type_id', 'service_id', 'province_id', 'promotion_id', 'speed_id', 'price_id', 'other']);
+
+        // Check if province_id and center_id are provided
+        if ($request->filled('province_id') && $request->filled('center_id')) {
+            $data['other'] = null; // ถ้ามีการระบุจังหวัดและศูนย์บริการ ให้ other เป็น null
+        } else {
+            $data['other'] = $request->input('other'); // ถ้าไม่มี ให้ other เก็บค่าที่ส่งมา
+        }
 
         if ($request->hasFile('cus_photo')) {
             $file = $request->file('cus_photo');
@@ -61,12 +66,12 @@ class CustomerController extends Controller
             $path = $file->storeAs('customer_images', $filename, 'public');
             $data['cus_photo'] = $path; // เก็บชื่อไฟล์ในฐานข้อมูลตามที่ต้องการ เช่น customer_images/filename
         }
-        
+
 
         // Insert into database
         Customer::create($data);
 
-        return redirect()->route('customer_list')->with('success', 'Customer added successfully');
+        return redirect()->route('customer_list')->with('success', 'เพิ่มข้อมูลลูกค้าสำเร็จ');
     }
 
     public function CustomerDelete($cus_id)
@@ -77,7 +82,7 @@ class CustomerController extends Controller
         if ($customer) {
             // Delete the customer
             $customer->delete();
-            return redirect()->route('customer_list')->with('success', 'Customer deleted successfully');
+            return redirect()->route('customer_list')->with('success', 'ลบข้อมูลสำเร็จ');
         } else {
             return redirect()->route('customer_list')->with('error', 'Customer not found');
         }
@@ -117,7 +122,11 @@ class CustomerController extends Controller
         $customer->cus_address = $request->input('cus_address');
         $customer->type_id = $request->input('type_id');
         $customer->service_id = $request->input('service_id');
-        $customer->province_id = $request->input('province_id');
+
+        // รองรับ null สำหรับ province_id และ center_id
+        $customer->province_id = $request->input('province_id') == "null" ? null : $request->input('province_id');
+        $customer->center_id = $request->input('center_id') == "null" ? null : $request->input('center_id');
+        $customer->other = $request->input('other');
 
         // ตรวจสอบว่ามีไฟล์รูปภาพอัปโหลดไหม
         if ($request->hasFile('cus_photo')) {
@@ -125,7 +134,6 @@ class CustomerController extends Controller
             $filename = time() . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('customer_images', $filename, 'public');
             $customer->cus_photo = $path; // อัปเดตชื่อไฟล์ในฐานข้อมูล
-
         }
 
         // อัปเดตข้อมูล
@@ -136,6 +144,7 @@ class CustomerController extends Controller
 
         return redirect()->route('customer_list')->with('success', 'อัปเดตข้อมูลลูกค้าเรียบร้อยแล้ว');
     }
+
 
 
 

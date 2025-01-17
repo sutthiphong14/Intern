@@ -28,6 +28,7 @@ class Customer extends Model
         'price_id',
         'province_id',
         'center_id',
+        'other'
 
     ];
 
