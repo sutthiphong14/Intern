@@ -435,7 +435,7 @@
         <div class="row">
 
           <div class="col-3 mb-4">
-            <a href="#" class="text-decoration-none">
+            <a href="{{ route('type_list') }}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
@@ -451,7 +451,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="#" class="text-decoration-none">
+            <a href="{{ route('service_list') }}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
@@ -467,7 +467,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="#" class="text-decoration-none">
+            <a href="{{ route('provinceactivityList') }}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
@@ -483,7 +483,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="#" class="text-decoration-none">
+            <a href="customer_list" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">

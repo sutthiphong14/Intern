@@ -78,55 +78,5 @@
 
 
 @section('script')
-    <script>
-        document.getElementById('addTypeForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // ป้องกันการรีเฟรชหน้า
-            const formData = new FormData(this);
 
-            fetch(this.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // ปิด Modal ด้วย JavaScript หลังจากการบันทึกเสร็จ
-                        $('#addTypeModal').modal('hide');
-
-                        // แสดงข้อความสำเร็จด้วย SweetAlert
-                        Swal.fire('สำเร็จ!', data.message, 'success');
-
-
-                        // เพิ่มข้อมูลใหม่ลงในตารางโดยไม่ต้องรีเฟรช
-                        const tableBody = document.querySelector('table tbody');
-                        const newRow = `
-                    <tr>
-                        <td class="col-5">${formData.get('type_name')}</td>
-                        <td>
-                                <a href="{{ route('type_edit', $row->type_id+1) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('type_delete', $row->type_id+1) }}" method="POST"
-                                    style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Are you sure?')">Delete</button>
-                                </form>
-                        </td>
-                    </tr>
-                `;
-
-                        tableBody.insertAdjacentHTML('beforeend', newRow);
-                    } else {
-                        Swal.fire('ผิดพลาด!', data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire('ผิดพลาด!', 'เกิดข้อผิดพลาดบางอย่าง', 'error');
-                });
-        });
-    </script>
 @endsection
