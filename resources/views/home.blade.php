@@ -280,6 +280,7 @@
 
         <!-- Pagination -->
         <div class="d-flex justify-content-center align-items-center me-4">
+
           <nav aria-label="Page navigation">
             <ul class="pagination">
               @if ($data_document->onFirstPage())

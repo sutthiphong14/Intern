@@ -9,9 +9,14 @@
 @section('css')
 @endsection
 @section('content')
-
+<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light"></span>
+<a href="{{ route('home') }}" class="">
+                หน้าแรก
+            </a>
+            /
+        </span> รายการข่าว</h4>
 <div class="card mt-3 mb-3">
-  <div class="d-flex justify-content-between align-items-center gap-2">
+  <div class="d-flex justify-content-between align-items-center gap-1 pt-1">
     <!-- หัวข้อ -->
     <h3 class="card-header">รายการข่าว</h3>
 
@@ -70,36 +75,104 @@
           </div>
         </td>
         <td class="ms-5 text-center">
-          <div>
-          @if ($item->content_type === 'file')
+    <div>
+        @if(Auth::check())
+            @if ($item->categories === 'เอกสาร')
+            <div>
+            @if ($item->content_type === 'file')
         @if(Storage::disk('public')->exists($item->file))
-      <a href="{{ route('admin.download', $item->id) }}" class="btn btn-warning col-1" style="width: 130px;">
+      <a href="{{ route('admin.download', $item->id) }}" class="btn btn-warning col-1"
+      style="width: 130px;">
       Download <i class="fas fa-arrow-down"></i>
       </a>
     @else
     <span class="text-danger">ไฟล์ไม่พบ</span>
   @endif
       @elseif ($item->content_type === 'link')
-      @if (!empty($item->link))
-      <a href="{{ $item->link }}" target="_blank" class="btn btn-info col-1" style="width: 130px;">
-      Link <i class="fas fa-external-link-alt"></i>
-      </a>
-    @else
-      <span class="text-danger">ลิงก์ไม่พบ</span>
-    @endif
-    @elseif ($item->content_type === 'youtube')
-      @if (!empty($item->youtube))
-      <a href="{{ $item->youtube }}" target="_blank" class="btn btn-danger col-1" style="width: 130px;">
-      Video <i class="fas fa-play-circle"></i>
-      </a>
-    @else
-      <span class="text-danger">วิดีโอไม่พบ</span>
-    @endif
-    @else
-      <span class="text-muted">ประเภทไม่ถูกต้อง</span>
-    @endif
+    @if (!empty($item->link))
+    <a href="{{ $item->link }}" target="_blank" class="btn btn-info col-1" style="width: 130px;">
+    Link <i class="fas fa-external-link-alt"></i>
+    </a>
+  @else
+  <span class="text-danger">ลิงก์ไม่พบ</span>
+@endif
+  @elseif ($item->content_type === 'youtube')
+  @if (!empty($item->youtube))
+    <a href="{{ $item->youtube }}" target="_blank" class="btn btn-danger col-1" style="width: 130px;">
+    Video <i class="fas fa-play-circle"></i>
+    </a>
+  @else
+    <span class="text-danger">วิดีโอไม่พบ</span>
+  @endif
+@else
+  <span class="text-muted">ประเภทไม่ถูกต้อง</span>
+@endif
           </div>
-        </td>
+            @else
+                @if ($item->content_type === 'file')
+                    @if(Storage::disk('public')->exists($item->file))
+                        <a href="{{ route('admin.download', $item->id) }}" class="btn btn-warning col-1" style="width: 130px;">
+                            Download <i class="fas fa-arrow-down"></i>
+                        </a>
+                    @else
+                        <span class="text-danger">ไฟล์ไม่พบ</span>
+                    @endif
+                @elseif ($item->content_type === 'link')
+                    @if (!empty($item->link))
+                        <a href="{{ $item->link }}" target="_blank" class="btn btn-info col-1" style="width: 130px;">
+                            Link <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    @else
+                        <span class="text-danger">ลิงก์ไม่พบ</span>
+                    @endif
+                @elseif ($item->content_type === 'youtube')
+                    @if (!empty($item->youtube))
+                        <a href="{{ $item->youtube }}" target="_blank" class="btn btn-danger col-1" style="width: 130px;">
+                            Video <i class="fas fa-play-circle"></i>
+                        </a>
+                    @else
+                        <span class="text-danger">วิดีโอไม่พบ</span>
+                    @endif
+                @else
+                    <span class="text-muted">ประเภทไม่ถูกต้อง</span>
+                @endif
+            @endif
+        @else
+            @if ($item->categories === 'เอกสาร')
+                <button class="btn btn-secondary" onclick="showUnauthorizedAlert()">None</button>
+            @else
+                @if ($item->content_type === 'file')
+                    @if(Storage::disk('public')->exists($item->file))
+                        <a href="{{ route('admin.download', $item->id) }}" class="btn btn-warning col-1" style="width: 130px;">
+                            Download <i class="fas fa-arrow-down"></i>
+                        </a>
+                    @else
+                        <span class="text-danger">ไฟล์ไม่พบ</span>
+                    @endif
+                @elseif ($item->content_type === 'link')
+                    @if (!empty($item->link))
+                        <a href="{{ $item->link }}" target="_blank" class="btn btn-info col-1" style="width: 130px;">
+                            Link <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    @else
+                        <span class="text-danger">ลิงก์ไม่พบ</span>
+                    @endif
+                @elseif ($item->content_type === 'youtube')
+                    @if (!empty($item->youtube))
+                        <a href="{{ $item->youtube }}" target="_blank" class="btn btn-danger col-1" style="width: 130px;">
+                            Video <i class="fas fa-play-circle"></i>
+                        </a>
+                    @else
+                        <span class="text-danger">วิดีโอไม่พบ</span>
+                    @endif
+                @else
+                    <span class="text-muted">ประเภทไม่ถูกต้อง</span>
+                @endif
+            @endif
+        @endif
+    </div>
+</td>
+
         </tr>
       @endforeach
         </tbody>

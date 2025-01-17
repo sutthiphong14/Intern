@@ -23,7 +23,7 @@ Route::get('/user-logs', function () {
     // Eager load the user relationship to avoid N+1 query problem
     $logs = UserLog::with('user')->orderBy('created_at', 'desc')->get();
     return view('user-logs.listlogs', compact('logs'));
-});
+})->name('user-logs');
 
 
 Route::get('/admins', function () {

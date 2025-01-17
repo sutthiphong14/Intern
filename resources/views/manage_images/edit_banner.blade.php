@@ -93,6 +93,12 @@
 
 @endsection
 @section('content')
+<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light"></span>
+<a href="{{ route('home') }}" class="">
+                หน้าแรก
+            </a>
+            /
+        </span> จัดการ Slideshow</h4>
 
 <div class="content-wrapper">
     <div class="card">

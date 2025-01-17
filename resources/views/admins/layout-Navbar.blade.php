@@ -123,7 +123,7 @@
   }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm rounded border p-1">
+<nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm rounded border p-3">
   <div class="container-fluid">
     <div class="layout-menu-toggle navbar-nav me-xl-0 d-xl-none">
       <a class="navbar-brand nav-link-main px-0 me-xl-4" href="javascript:void(0)">
@@ -268,7 +268,7 @@
             </div>
 
             <div class="col-3 mb-4">
-              <a href="{{ route('insertusers') }}" class="text-decoration-none">
+              <a href="{{ route('user-logs') }}" class="text-decoration-none">
                 <div class="row align-items-center">
                   <div class="col-auto">
                     <div class="app-icon bg-orange d-flex justify-content-center align-items-center">
@@ -322,7 +322,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="{{ route('insertusers') }}" class="text-decoration-none">
+            <a href="{{ route('user-logs') }}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-cyan d-flex justify-content-center align-items-center">
@@ -375,7 +375,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="{{ route('insertusers') }}" class="text-decoration-none">
+            <a href="{{ route('user-logs') }}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-pink d-flex justify-content-center align-items-center">
@@ -413,7 +413,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="{{ route('insertusers') }}" class="text-decoration-none">
+            <a href="{{ route('user-logs') }}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-green d-flex justify-content-center align-items-center">
@@ -435,7 +435,7 @@
         <div class="row">
 
           <div class="col-3 mb-4">
-            <a href="{{ route('edit_banner') }}" class="text-decoration-none">
+            <a href="#" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
@@ -451,7 +451,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="{{ route('edit_banner') }}" class="text-decoration-none">
+            <a href="#" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
@@ -467,7 +467,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="{{ route('edit_banner') }}" class="text-decoration-none">
+            <a href="#" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
@@ -483,7 +483,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="{{ route('insertusers') }}" class="text-decoration-none">
+            <a href="#" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
@@ -499,7 +499,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="{{ route('insertusers') }}" class="text-decoration-none">
+            <a href="{{ route('user-logs') }}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
