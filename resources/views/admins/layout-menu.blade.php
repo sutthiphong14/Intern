@@ -23,9 +23,14 @@
     <li class="menu-header small text-uppercase">
               <span class="menu-header-text text-dark">DashBoard</span>
             </li>
+    <li class="menu-item {{ Request::is('customer_list') ? 'active' : '' }}">
+            <a href="  customer_list" class="menu-link">
+                 <i class="menu-icon  fas fa-users"></i>
+                  <div data-i18n="Analytics">ลูกค้า</div>
+            </a>
+    </li>
     <li class="menu-item {{ Request::is('incomecurrent') ? 'active' : '' }}">
         <a href="incomecurrent" class="menu-link">
-
             <i class='menu-icon bx bx-money'></i>
             <div data-i18n="Analytics">รายได้รวม</div>
         </a>
@@ -36,6 +41,8 @@
             <div>ติดตั้ง FTTx ได้ภายใน 3 วัน</div>
         </a>
     </li>
+
+  
 
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
