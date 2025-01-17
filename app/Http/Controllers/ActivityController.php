@@ -23,17 +23,24 @@ class ActivityController extends Controller
         return view('typeActivity.TypeActivityCreate');
     }
 
-    public function TypeInsert(Request $request){
+    public function TypeInsert(Request $request)
+    {
         $request->validate([
             'type_name' => 'required|string|max:255',
-            
         ]);
-
-        Typeactivity::create($request->all());
-        $data = Typeactivity::all();
-        return redirect()->route('type_list',compact('data'))
-            ->with('success', 'เพิ่มบริการสำเร็จ');
+    
+        try {
+            // บันทึกข้อมูล
+            Typeactivity::create($request->all());
+    
+            // ส่งข้อมูลสำเร็จกลับไปในรูปแบบ JSON
+            return response()->json(['success' => true, 'message' => 'เพิ่มกิจกรรมสำเร็จ']);
+        } catch (\Exception $e) {
+            // กรณีเกิดข้อผิดพลาด
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
+    
 
     public function TypeDelete($type_id){
         $data = Typeactivity::where('type_id',$type_id);
