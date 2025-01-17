@@ -21,6 +21,7 @@
                     <th>Address</th>
                     <th>Type</th>
                     <th>Service</th>
+                    <th>Promotion</th>
                     <th>Province</th>
                     <th>Speed</th>
                     <th>Price</th>
@@ -37,14 +38,15 @@
                             <td>{{ $customer->id_card }}</td>
                             <td>
                                 @if ($customer->cus_photo)
-                                    <img src="{{ asset('storage/' . $customer->cus_photo) }}" alt="Photo" style="width: 50px; height: 50px;">
-                                @else
-                                    No Photo
-                                @endif
+                                <img src="{{ asset('storage/' . $customer->cus_photo) }}" alt="Photo" style="width: 50px; height: 50px;">
+                            @else
+                                No Photo
+                            @endif                            
                             </td>
                             <td>{{ $customer->cus_address }}</td>
                             <td>{{ $customer->type->type_name ?? 'N/A' }}</td>
                             <td>{{ $customer->service->service_name ?? 'N/A' }}</td>
+                            <td>{{ $customer->promotion->promotion_name ?? 'N/A' }}</td>
                             <td>{{ $customer->province->province_name ?? 'N/A' }}</td>
                             <td>{{ $customer->speed->speed_name ?? 'N/A' }}</td> <!-- ดึงชื่อจากสัมพันธ์ speed -->
                             <td>{{ $customer->price->price_name ?? 'N/A' }}</td> <!-- ดึงชื่อจากสัมพันธ์ price -->

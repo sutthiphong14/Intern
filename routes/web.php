@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::get('/user-logs', function () {
     // Eager load the user relationship to avoid N+1 query problem
     $logs = UserLog::with('user')->orderBy('created_at', 'desc')->get();
@@ -33,20 +34,20 @@ Route::get('/admins', function () {
     return view('admins.index');
 });
 
-Route::get('/', function (){
+Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/home', function (){
+Route::get('/home', function () {
     return view('home');
 });
 
-Route::get('/structure', function (){
-    return view('structure') ;
+Route::get('/structure', function () {
+    return view('structure');
 })->name('structure');
 
 
-Route::get('/tableusers', function (){
+Route::get('/tableusers', function () {
     return view('users.tableusers');
 });
 
@@ -59,27 +60,27 @@ Route::get('/insertusers', function () {
 
 Route::get('/listusers', [UserController::class, 'listUsers'])->name('users.list');
 
-Route::get('/permissionsusers', function (){
+Route::get('/permissionsusers', function () {
     return view('users.permissionsusers');
 });
 
-Route::get('/updatenewsfeed', function (){
+Route::get('/updatenewsfeed', function () {
     return view('newsfeed.updatenewsfeed');
 });
 
-Route::get('/listnewsfeed',[AdminController::class , 'listnewsfeed'])->name('listnewsfeed');
+Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
 
-Route::get('/insertnewsfeed', function (){
+Route::get('/insertnewsfeed', function () {
     return view('newsfeed.insertnewsfeed');
 });
 
-Route::get('/newsfeed', function (){
+Route::get('/newsfeed', function () {
     return view('newsfeed.newsfeed');
 });
 
-Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
+Route::get('/newsfeed', [AdminController::class, 'newsfeed'])->name('newsfeed');
 
-Route::get('/profile', function (){
+Route::get('/profile', function () {
     return view('profile');
 });
 
@@ -87,16 +88,16 @@ Route::get('/download/{id}', [AdminController::class, 'downloadFile'])->name('ad
 
 
 
-Route::post('/createnews',[AdminController::class , 'createnews'])->name('createnews');
+Route::post('/createnews', [AdminController::class, 'createnews'])->name('createnews');
 
 Route::post('/changenews/{id}', [AdminController::class, 'changenews']);
 
 
-Route::get('/deletenews/{id}',[AdminController::class , 'deletenews'])->name('deletenews');
+Route::get('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');
 
-Route::get('/editnews/{id}',[AdminController::class , 'editnews'])->name('editnews');
+Route::get('/editnews/{id}', [AdminController::class, 'editnews'])->name('editnews');
 
-Route::post('/updatenews/{id}',[AdminController::class , 'updatenews'])->name('updatenews');
+Route::post('/updatenews/{id}', [AdminController::class, 'updatenews'])->name('updatenews');
 
 Route::get('/search', [AdminController::class, 'search'])->name('search');
 
@@ -191,19 +192,19 @@ Route::get('/viewreport1', function () {
     return view('report.viewreport1');
 });
 
-Route::get('/viewInstallFTTx',[ReportController::class , 'datainstallfttx'])->name('viewInstallFTTx');
+Route::get('/viewInstallFTTx', [ReportController::class, 'datainstallfttx'])->name('viewInstallFTTx');
 
-Route::get('/viewInstallFTTx/{year}',[ReportController::class , 'datainstallfttxYear'])->name('viewInstallFTTxYear');
+Route::get('/viewInstallFTTx/{year}', [ReportController::class, 'datainstallfttxYear'])->name('viewInstallFTTxYear');
 
-Route::get('/viewInstallFTTxcenter', [ReportController::class ,'datacenter']);
+Route::get('/viewInstallFTTxcenter', [ReportController::class, 'datacenter']);
 
-Route::get('/viewInstallFTTxprovin',[ReportController::class ,'dataprovin'])->name('viewInstallFTTxprovin');
+Route::get('/viewInstallFTTxprovin', [ReportController::class, 'dataprovin'])->name('viewInstallFTTxprovin');
 
-Route::get('/viewInstallFTTxprovin/{section}/{year},{month}',[ReportController::class ,'sortprovin'])->name('viewInstallFTTxprovin');
+Route::get('/viewInstallFTTxprovin/{section}/{year},{month}', [ReportController::class, 'sortprovin'])->name('viewInstallFTTxprovin');
 
-Route::get('/viewInstallFTTxprovinMonth/{section}/{year}', [ReportController::class ,'sortprovinmonth'])->name('viewInstallFTTxprovinSort');
+Route::get('/viewInstallFTTxprovinMonth/{section}/{year}', [ReportController::class, 'sortprovinmonth'])->name('viewInstallFTTxprovinSort');
 
-Route::get('/viewInstallFTTxcenter/{section}/{year}/{month}', [ReportController::class ,'sortcenter'])->name('viewInstallFTTxcenter');
+Route::get('/viewInstallFTTxcenter/{section}/{year}/{month}', [ReportController::class, 'sortcenter'])->name('viewInstallFTTxcenter');
 
 Route::get('/viewInstallFTTxcenter/{center}/{year}/{month}', [ReportController::class, 'viewInstallData']);
 
@@ -216,8 +217,8 @@ Route::get('/importdata', function () {
 
 
 
-Route::post('/importdata', [ReportController::class ,'import']);
-Route::post('/importdata2', [ReportController::class ,'importFile'])->name('importdata2');
+Route::post('/importdata', [ReportController::class, 'import']);
+Route::post('/importdata2', [ReportController::class, 'importFile'])->name('importdata2');
 
 Route::get('/api/existing-months', [ReportController::class, 'getExistingMonths'])->name('api.existing.months');
 
@@ -241,7 +242,7 @@ Route::get('/users', [UserController::class, 'listUsers'])->name('users.list');
 Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('delete');
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
-Route::get('/users/{id}/edit',[UserController::class,'edit'])->name('users.edit');
+Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
 // Example route protection
 Route::middleware(['auth', 'check.permission:manage_users'])->group(function () {
@@ -261,7 +262,7 @@ Route::middleware(['auth', 'check.permission:manage_dashboard'])->group(function
 });
 
 Route::middleware(['auth', 'check.permission:manage_newsfeed'])->group(function () {
-    
+
     Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
     // Other news-related routes
 });
@@ -275,7 +276,7 @@ Route::get('/viewreport3', function () {
     return view('report.viewreport3');
 });
 
-Route::get('/viewreport3',[ReportController::class , 'viewreport3'])->name('viewreport3');
+Route::get('/viewreport3', [ReportController::class, 'viewreport3'])->name('viewreport3');
 
 Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
@@ -284,8 +285,8 @@ Route::post('/profile/update-image', [UserController::class, 'updateProfileImage
     ->middleware('auth');
 
 Route::get('/profile', [UserController::class, 'showProfile'])
- ->name('profile')
-->middleware('auth'); // Pastikan hanya pengguna yang login yang dapat mengaksesRoute::prefix('categories')->group(function () {
+    ->name('profile')
+    ->middleware('auth'); // Pastikan hanya pengguna yang login yang dapat mengaksesRoute::prefix('categories')->group(function () {
 Route::get('/listcategories', [CategoryController::class, 'listcategories'])->name('categories.listcategories');
 Route::get('/create', [CategoryController::class, 'create'])->name('categories.create');
 Route::post('/store', [CategoryController::class, 'store'])->name('categories.store');
@@ -297,15 +298,15 @@ Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->nam
 
 
 
-    Route::get('/requests', [RequestsController::class, 'index'])->name('requests.list');
-    Route::get('/requests/create', [RequestsController::class, 'create'])->name('insertRequests');
-    Route::post('/requests', [RequestsController::class, 'store'])->name('requests.store');
-    Route::get('/requests/{id}/edit', [RequestsController::class, 'edit'])->name('requests.edit');
-    Route::put('/requests/{id}', [RequestsController::class, 'update'])->name('requests.update');
-    Route::delete('/requests/{id}', [RequestsController::class, 'destroy'])->name('requests.delete');
-    Route::get('/requests/search', [RequestsController::class, 'search'])->name('requests.search');
-    Route::post('/requests/{id}/approve', [RequestsController::class, 'approve'])->name('requests.approve');
-    
+Route::get('/requests', [RequestsController::class, 'index'])->name('requests.list');
+Route::get('/requests/create', [RequestsController::class, 'create'])->name('insertRequests');
+Route::post('/requests', [RequestsController::class, 'store'])->name('requests.store');
+Route::get('/requests/{id}/edit', [RequestsController::class, 'edit'])->name('requests.edit');
+Route::put('/requests/{id}', [RequestsController::class, 'update'])->name('requests.update');
+Route::delete('/requests/{id}', [RequestsController::class, 'destroy'])->name('requests.delete');
+Route::get('/requests/search', [RequestsController::class, 'search'])->name('requests.search');
+Route::post('/requests/{id}/approve', [RequestsController::class, 'approve'])->name('requests.approve');
+
 Route::get('/news/search', [AdminController::class, 'search'])->name('news.search');
 Route::delete('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');
 
@@ -316,65 +317,65 @@ Route::get('/edit_banner', function () {
 
 
 //ส่วนกิจกรรม
-Route::get('/typeactivity_list',[ActivityController::class , 'ListType'])->name('type_list');
-Route::get('/typeactivity_view_create',[ActivityController::class , 'TypeCreate'])->name('type_create');
-Route::post('/typeactivity_insert',[ActivityController::class , 'TypeInsert'])->name('type_insert');
-Route::delete('/typeactivity_delete/{type_id}',[ActivityController::class , 'TypeDelete'])->name('type_delete');
-Route::get('/typeactivity_edit/{type_id}',[ActivityController::class , 'TypeEdit'])->name('type_edit');
-Route::put('/typeactivity_update/{type_id}',[ActivityController::class , 'Typeupdate'])->name('type_update');
+Route::get('/typeactivity_list', [ActivityController::class, 'ListType'])->name('type_list');
+Route::get('/typeactivity_view_create', [ActivityController::class, 'TypeCreate'])->name('type_create');
+Route::post('/typeactivity_insert', [ActivityController::class, 'TypeInsert'])->name('type_insert');
+Route::delete('/typeactivity_delete/{type_id}', [ActivityController::class, 'TypeDelete'])->name('type_delete');
+Route::get('/typeactivity_edit/{type_id}', [ActivityController::class, 'TypeEdit'])->name('type_edit');
+Route::put('/typeactivity_update/{type_id}', [ActivityController::class, 'Typeupdate'])->name('type_update');
 
 
 //ส่วนที่ใช้ส่วนบริการ
-Route::get('/severactivity_list',[ActivityController::class , 'ListService'])->name('service_list');
-Route::get('/severactivity_view_create',[ActivityController::class , 'ServiceCreate'])->name('service_create');
-Route::post('/severactivity_insert',[ActivityController::class , 'ServiceInsert'])->name('service_insert');
-Route::delete('/severactivity_delete/{service_id}',[ActivityController::class , 'ServiceDelete'])->name('service_delete');
-Route::get('/severactivity_edit/{service_id}',[ActivityController::class , 'ServiceEdit'])->name('service_edit');
-Route::put('/severactivity_update/{service_id}',[ActivityController::class , 'Serviceupdate'])->name('serve_update');
+Route::get('/severactivity_list', [ActivityController::class, 'ListService'])->name('service_list');
+Route::get('/severactivity_view_create', [ActivityController::class, 'ServiceCreate'])->name('service_create');
+Route::post('/severactivity_insert', [ActivityController::class, 'ServiceInsert'])->name('service_insert');
+Route::delete('/severactivity_delete/{service_id}', [ActivityController::class, 'ServiceDelete'])->name('service_delete');
+Route::get('/severactivity_edit/{service_id}', [ActivityController::class, 'ServiceEdit'])->name('service_edit');
+Route::put('/severactivity_update/{service_id}', [ActivityController::class, 'Serviceupdate'])->name('serve_update');
 
 //ส่วนโปรโมชัน
-Route::get('/promotion_list/{service_id}',[ActivityController::class , 'ListPromotion'])->name('promotion_list');
-Route::get('/promotion_view_create/{service_id}',[ActivityController::class , 'PromotionCreate'])->name('promotion_create');
-Route::post('/promotion_insert/{service_id}',[ActivityController::class , 'PromotionInsert'])->name('promotion_insert');
-Route::delete('/promotion_delete/{service_id}/{promotion_id}',[ActivityController::class , 'PromotionDelete'])->name('promotion_delete');
-Route::get('/promotion_edit/{service_id}/{promotion_id}',[ActivityController::class , 'PromotionEdit'])->name('promotion_edit');
-Route::put('/promotion_update/{service_id}/{promotion_id}',[ActivityController::class , 'PromotionUpdate'])->name('promotion_update');
+Route::get('/promotion_list/{service_id}', [ActivityController::class, 'ListPromotion'])->name('promotion_list');
+Route::get('/promotion_view_create/{service_id}', [ActivityController::class, 'PromotionCreate'])->name('promotion_create');
+Route::post('/promotion_insert/{service_id}', [ActivityController::class, 'PromotionInsert'])->name('promotion_insert');
+Route::delete('/promotion_delete/{service_id}/{promotion_id}', [ActivityController::class, 'PromotionDelete'])->name('promotion_delete');
+Route::get('/promotion_edit/{service_id}/{promotion_id}', [ActivityController::class, 'PromotionEdit'])->name('promotion_edit');
+Route::put('/promotion_update/{service_id}/{promotion_id}', [ActivityController::class, 'PromotionUpdate'])->name('promotion_update');
 
 //ส่วนสปีด
-Route::get('/speed_list/{service_id}/{promotion_id}',[ActivityController::class , 'ListSpeed'])->name('speed_list');
-Route::get('/speed_view_create/{service_id}/{promotion_id}',[ActivityController::class , 'SpeedCreate'])->name('speed_create');
-Route::post('/speed_insert/{service_id}/{promotion_id}',[ActivityController::class , 'SpeedInsert'])->name('speed_insert');
-Route::delete('/speed_delete/{service_id}/{promotion_id}/{speed_id}',[ActivityController::class , 'SpeedDelete'])->name('speed_delete');
-Route::get('/speed_edit/{service_id}/{promotion_id}/{speed_id}',[ActivityController::class , 'SpeedEdit'])->name('speed_edit');
-Route::put('/speed_update/{service_id}/{promotion_id}/{speed_id}',[ActivityController::class , 'SpeedUpdate'])->name('speed_update');
+Route::get('/speed_list/{service_id}/{promotion_id}', [ActivityController::class, 'ListSpeed'])->name('speed_list');
+Route::get('/speed_view_create/{service_id}/{promotion_id}', [ActivityController::class, 'SpeedCreate'])->name('speed_create');
+Route::post('/speed_insert/{service_id}/{promotion_id}', [ActivityController::class, 'SpeedInsert'])->name('speed_insert');
+Route::delete('/speed_delete/{service_id}/{promotion_id}/{speed_id}', [ActivityController::class, 'SpeedDelete'])->name('speed_delete');
+Route::get('/speed_edit/{service_id}/{promotion_id}/{speed_id}', [ActivityController::class, 'SpeedEdit'])->name('speed_edit');
+Route::put('/speed_update/{service_id}/{promotion_id}/{speed_id}', [ActivityController::class, 'SpeedUpdate'])->name('speed_update');
 
 //ราคา
-Route::get('/price_list/{speed_id}',[ActivityController::class , 'ListPrice'])->name('price_list');
-Route::get('/price_view_create/{speed_id}',[ActivityController::class , 'PriceCreate'])->name('price_create');
-Route::post('/price_insert/{speed_id}',[ActivityController::class , 'PriceInsert'])->name('price_insert');
-Route::delete('/price_delete/{speed_id}/{price_id}',[ActivityController::class , 'PriceDelete'])->name('price_delete');
-Route::get('/price_edit/{speed_id}/{price_id}',[ActivityController::class , 'PriceEdit'])->name('price_edit');
-Route::put('/price_update/{speed_id}/{price_id}',[ActivityController::class , 'PriceUpdate'])->name('price_update');
+Route::get('/price_list/{speed_id}', [ActivityController::class, 'ListPrice'])->name('price_list');
+Route::get('/price_view_create/{speed_id}', [ActivityController::class, 'PriceCreate'])->name('price_create');
+Route::post('/price_insert/{speed_id}', [ActivityController::class, 'PriceInsert'])->name('price_insert');
+Route::delete('/price_delete/{speed_id}/{price_id}', [ActivityController::class, 'PriceDelete'])->name('price_delete');
+Route::get('/price_edit/{speed_id}/{price_id}', [ActivityController::class, 'PriceEdit'])->name('price_edit');
+Route::put('/price_update/{speed_id}/{price_id}', [ActivityController::class, 'PriceUpdate'])->name('price_update');
 
 
 
 
 //จังหวัด
-Route::get('/provinceactivityList',[ProvinceController::class , 'indexprovince'])->name('provinceactivityList');
-Route::get('/provinceactivitylnsert',[ProvinceController::class , 'createprovince'])->name('provinceactivitylnsert');
-Route::post('/provincactivityadd',[ProvinceController::class , 'storeprovince'])->name('provinceactivityadd');
-Route::delete('/provincactivitydelete/{id}',[ProvinceController::class , 'destroyprovince'])->name('provinceactivitydelete');
-Route::get('/provincactivityedit/{id}',[ProvinceController::class , 'editprovince'])->name('provinceactivityedit');
-Route::put('/provincactivityputedit/{id}',[ProvinceController::class , 'updateprovince'])->name('provinceactivityupdate');
+Route::get('/provinceactivityList', [ProvinceController::class, 'indexprovince'])->name('provinceactivityList');
+Route::get('/provinceactivitylnsert', [ProvinceController::class, 'createprovince'])->name('provinceactivitylnsert');
+Route::post('/provincactivityadd', [ProvinceController::class, 'storeprovince'])->name('provinceactivityadd');
+Route::delete('/provincactivitydelete/{id}', [ProvinceController::class, 'destroyprovince'])->name('provinceactivitydelete');
+Route::get('/provincactivityedit/{id}', [ProvinceController::class, 'editprovince'])->name('provinceactivityedit');
+Route::put('/provincactivityputedit/{id}', [ProvinceController::class, 'updateprovince'])->name('provinceactivityupdate');
 
 
 //ศูนย์บริการ
-Route::get('/servicecenteractivityList',[ProvinceController::class , 'indexservicecenter'])->name('servicecenteractivityList');
-Route::get('/servicecenteractivitylnsert',[ProvinceController::class , 'createservicecenter'])->name('servicecenteractivitylnsert');
-Route::post('/servicecenteractivityadd',[ProvinceController::class , 'storeservicecenter'])->name('servicecenteractivityadd');
-Route::delete('/servicecenteractivitydelete/{id}',[ProvinceController::class , 'destroyservicecenter'])->name('servicecenteractivitydelete');
-Route::get('/servicecenteractivityedit/{id}',[ProvinceController::class , 'editservicecenter'])->name('servicecenteractivityedit');
-Route::put('/servicecenteractivityputedit/{id}',[ProvinceController::class , 'updateservicecenter'])->name('servicecenteractivityupdate');
+Route::get('/servicecenteractivityList', [ProvinceController::class, 'indexservicecenter'])->name('servicecenteractivityList');
+Route::get('/servicecenteractivitylnsert', [ProvinceController::class, 'createservicecenter'])->name('servicecenteractivitylnsert');
+Route::post('/servicecenteractivityadd', [ProvinceController::class, 'storeservicecenter'])->name('servicecenteractivityadd');
+Route::delete('/servicecenteractivitydelete/{id}', [ProvinceController::class, 'destroyservicecenter'])->name('servicecenteractivitydelete');
+Route::get('/servicecenteractivityedit/{id}', [ProvinceController::class, 'editservicecenter'])->name('servicecenteractivityedit');
+Route::put('/servicecenteractivityputedit/{id}', [ProvinceController::class, 'updateservicecenter'])->name('servicecenteractivityupdate');
 
 Route::get('/province/{id}/service-centers', [ProvinceController::class, 'viewServiceCenters'])->name('province.viewServiceCenters');
 Route::get('/province/{id}/service-center/create', [ProvinceController::class, 'createServiceCenterForProvince'])
@@ -384,9 +385,14 @@ Route::post('/province/{id}/service-center', [ProvinceController::class, 'storeS
 
 
 //ลูกค้า
-Route::get('/customer_list',[CustomerController::class , 'CustomerList'])->name('customer_list');
-Route::get('/customer_create_view',[CustomerController::class , 'CustomerCreate'])->name('customer_create');
-Route::post('/customer_insert',[CustomerController::class , 'CustomerInsert'])->name('customer_insert');
-Route::delete('/customer_delete/{cus_id}',[CustomerController::class , 'CustomerDelete'])->name('customer_delete');
-Route::get('/customer_edit/{cus_id}',[CustomerController::class , 'CustomerEdit'])->name('customer_edit');
-Route::put('/customer_update/{cus_id}',[CustomerController::class , 'CustomerUpdate'])->name('customer_update');
+Route::get('/customer_list', [CustomerController::class, 'CustomerList'])->name('customer_list');
+Route::get('/customer_create_view', [CustomerController::class, 'CustomerCreate'])->name('customer_create');
+Route::post('/customer_insert', [CustomerController::class, 'CustomerInsert'])->name('customer_insert');
+Route::delete('/customer_delete/{cus_id}', [CustomerController::class, 'CustomerDelete'])->name('customer_delete');
+Route::get('/customer_edit/{cus_id}', [CustomerController::class, 'CustomerEdit'])->name('customer_edit');
+Route::put('/customer_update/{cus_id}', [CustomerController::class, 'CustomerUpdate'])->name('customer_update');
+
+Route::get('/getPromotions', [CustomerController::class, 'getPromotions']);
+Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);
+Route::get('/getPrices', [CustomerController::class, 'getPrices']);
+Route::get('/getCenters', [CustomerController::class, 'getCenters']);

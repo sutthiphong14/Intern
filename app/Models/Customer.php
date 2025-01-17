@@ -42,6 +42,11 @@ class Customer extends Model
         return $this->belongsTo(ServeActivity::class, 'service_id', 'service_id');
     }
 
+    public function promotion()
+    {
+        return $this->belongsTo(PromotionActivity::class, 'promotion_id', 'promotion_id');  // เพิ่มความสัมพันธ์กับ promotion
+    }
+
     public function province()
     {
         return $this->belongsTo(ProvinceActivity::class, 'province_id', 'province_id');
