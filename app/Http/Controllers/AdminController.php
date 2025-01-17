@@ -24,12 +24,19 @@ class AdminController extends Controller
 
     function listnewsfeed()
     {
-        $data = DB::table('newsfeeds')->paginate(10);
+        $data = DB::table('newsfeeds')
+        ->orderBy('id', 'desc')
+        ->paginate(10);
         return view('newsfeed.listnewsfeed', compact('data'));
     }
 
     public function newsfeed(Request $request)
     {
+        $data_all = Newsfeed::where('status', true)
+            ->orderBy('id', 'desc')
+            ->paginate(10); // Use paginate to manage pagination
+
+
         $data_announce = Newsfeed::where('status', true)
             ->where('categories', 'ข่าว')  // Filter by category 'ข่าว'
             ->orderBy('id', 'desc')
@@ -45,60 +52,64 @@ class AdminController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(10); // Use paginate to manage pagination
 
-        return view('newsfeed.newsfeed', compact('data_announce','data_document', 'data_form'));
+        return view('newsfeed.newsfeed', compact('data_announce','data_document', 'data_form' ,'data_all'));
     }
 
 
 
     function createnews(Request $request)
-{
-    $request->validate([
-    'name' => 'required|max:50',
-    'description' => 'required',
-    'categories' => 'required|in:ข่าว,เอกสาร,แบบฟอร์ม',
-    'content_type' => 'required|in:file,link,youtube',
-    'file' => 'nullable|file|mimes:pdf,jpg,png,xlsx|max:10240',
-    'link' => 'nullable|url',
-    'youtube' => 'nullable|url|',
-
-], [
-    'name.required' => 'กรุณาระบุชื่อ',
-    'description.required' => 'กรุณาระบุคำอธิบาย',
-    'categories.required' => 'กรุณาเลือกหมวดหมู่',
-    'content_type.required' => 'กรุณาเลือกประเภทข้อมูล',
-    'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
-    'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 10MB',
-    'link.url' => 'กรุณาระบุลิงก์ให้ถูกต้อง',
-    'youtube.regex' => 'ลิงก์ YouTube ไม่ถูกต้อง',
-]);
-
-    $data = [
-        'name' => $request->name,
-        'description' => $request->description,
-        'categories' => $request->categories,
-        'content_type' => $request->content_type,
-        'status' => 1,
-        'created_at' => now(),
-        'updated_at' => now(),
-    ];
-
-    if ($request->content_type === 'file' && $request->hasFile('file')) {
-        $file = $request->file('file');
-        $filePath = $file->storeAs('newsfeeds', time() . '_' . $file->getClientOriginalName(), 'public');
-        $data['file'] = $filePath;
-    } elseif ($request->content_type === 'link') {
-        $data['link'] = $request->link;
-    } elseif ($request->content_type === 'youtube') {
-        $data['youtube'] = $request->youtube;
+    {
+        $request->validate([
+            'name' => 'required|max:50',
+            'description' => 'required',
+            'categories' => 'required|in:ข่าว,เอกสาร,แบบฟอร์ม',
+            'content_type' => 'required|in:file,link,youtube',
+            'file' => 'nullable|required_if:content_type,file|file|mimes:pdf,jpg,png,xlsx|max:10240',
+            'link' => 'nullable|required_if:content_type,link|url',
+            'youtube' => 'nullable|required_if:content_type,youtube|url',
+    
+        ], [
+            'name.required' => 'กรุณาระบุชื่อ',
+            'description.required' => 'กรุณาระบุคำอธิบาย',
+            'categories.required' => 'กรุณาเลือกหมวดหมู่',
+            'content_type.required' => 'กรุณาเลือกประเภทข้อมูล',
+            'file.required_if' => 'กรุณาอัปโหลดไฟล์เมื่อเลือกประเภทเป็นไฟล์',
+            'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
+            'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 10MB',
+            'link.required_if' => 'กรุณาระบุลิงก์เมื่อเลือกประเภทเป็นลิงก์',
+            'link.url' => 'กรุณาระบุลิงก์ให้ถูกต้อง',
+            'youtube.required_if' => 'กรุณาระบุลิงก์ YouTube เมื่อเลือกประเภทเป็นวิดีโอ',
+            'youtube.url' => 'ลิงก์ YouTube ไม่ถูกต้อง',
+        ]);
+    
+        $data = [
+            'name' => $request->name,
+            'description' => $request->description,
+            'categories' => $request->categories,
+            'content_type' => $request->content_type,
+            'status' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+    
+        if ($request->content_type === 'file' && $request->hasFile('file')) {
+            $file = $request->file('file');
+            $filePath = $file->storeAs('newsfeeds', time() . '_' . $file->getClientOriginalName(), 'public');
+            $data['file'] = $filePath;
+        } elseif ($request->content_type === 'link') {
+            $data['link'] = $request->link;
+        } elseif ($request->content_type === 'youtube') {
+            $data['youtube'] = $request->youtube;
+        }
+    
+        DB::table('newsfeeds')->insert($data);
+    
+        // Log the creation
+        $this->logAction('เพิ่มเอกสาร', 'จัดการประชาสัมพันธ์', $data);
+    
+        return redirect('/listnewsfeed');
     }
-
-    DB::table('newsfeeds')->insert($data);
-
-    // Log the creation
-    $this->logAction('เพิ่มเอกสาร', 'จัดการประชาสัมพันธ์', $data);
-
-    return redirect('/listnewsfeed');
-}
+    
 
 public function changenews(Request $request, $id)
 {
@@ -161,19 +172,23 @@ public function changenews(Request $request, $id)
         'description' => 'required',
         'categories' => 'required|max:255',
         'content_type' => 'required|in:file,link,youtube',
-        'file' => 'nullable|file|mimes:pdf,jpg,png,xlsx|max:2048',
-        'link' => 'nullable|url',
-        'youtube' => 'nullable|url|regex:/^https:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+$/', // Valid YouTube link
+        'file' => 'required_if:content_type,file|file|mimes:pdf,jpg,png,xlsx|max:2048',
+        'link' => 'nullable|required_if:content_type,link|url',
+        'youtube' => 'nullable|required_if:content_type,youtube|regex:/^https:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+$/',
     ], [
         'name.required' => 'กรุณาระบุชื่อ',
         'description.required' => 'กรุณาระบุคำอธิบาย',
         'categories.required' => 'กรุณาระบุหมวดหมู่',
         'content_type.required' => 'กรุณาระบุประเภทข้อมูล',
+        'file.required_if' => 'กรุณาอัปโหลดไฟล์เมื่อเปลี่ยนประเภทเป็นไฟล์',
         'file.mimes' => 'ไฟล์ต้องเป็น .pdf, .jpg, .png หรือ .xlsx',
         'file.max' => 'ขนาดไฟล์ไม่ควรเกิน 2MB',
+        'link.required_if' => 'กรุณาระบุลิงก์เมื่อเลือกประเภทข้อมูลเป็นลิงก์',
         'link.url' => 'กรุณาระบุลิงก์ให้ถูกต้อง',
+        'youtube.required_if' => 'กรุณาระบุลิงก์วิดีโอ YouTube เมื่อเลือกประเภทข้อมูลเป็นวิดีโอ',
         'youtube.regex' => 'ลิงก์ YouTube ไม่ถูกต้อง',
     ]);
+    
 
     // Fetch old data for checking and logging purposes
     $oldData = DB::table('newsfeeds')->where('id', $id)->first();

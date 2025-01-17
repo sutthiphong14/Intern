@@ -8,51 +8,51 @@
 @section('content')
 <div class="content-wrapper">
   <div class="card ">
-  <div class="slide">
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-interval="500">
+    <div class="slide">
+      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-interval="500">
         <div class="carousel-indicators">
-            @if($banners->isNotEmpty())
-                @foreach($banners as $key => $banner)
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $key }}"
-                            class="{{ $key === 0 ? 'active' : '' }}" aria-current="{{ $key === 0 ? 'true' : 'false' }}"
-                            aria-label="Slide {{ $key + 1 }}"></button>
-                @endforeach
-            @endif
+          @if($banners->isNotEmpty())
+        @foreach($banners as $key => $banner)
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $key }}"
+      class="{{ $key === 0 ? 'active' : '' }}" aria-current="{{ $key === 0 ? 'true' : 'false' }}"
+      aria-label="Slide {{ $key + 1 }}"></button>
+    @endforeach
+      @endif
         </div>
         <div class="carousel-inner">
-            @if($banners->isNotEmpty())
-                @foreach($banners as $key => $banner)
-                    <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-                        @if($banner->slideshow_link)
-                            <a href="{{ $banner->slideshow_link }}" target="_blank">
-                                <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded"
-                                     alt="Banner {{ $key + 1 }}">
-                            </a>
-                        @else
-                            <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded"
-                                 alt="Banner {{ $key + 1 }}">
-                        @endif
-                    </div>
-                @endforeach
-            @else
-                <div class="carousel-item active">
-                    <img src="{{ asset('storage/slideshow_images/none.png') }}" class="d-block w-100 rounded"
-                         alt="Default Banner">
-                </div>
-            @endif
+          @if($banners->isNotEmpty())
+        @foreach($banners as $key => $banner)
+      <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+      @if($banner->slideshow_link)
+      <a href="{{ $banner->slideshow_link }}" target="_blank">
+      <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded"
+      alt="Banner {{ $key + 1 }}">
+      </a>
+    @else
+      <img src="{{ asset('storage/' . $banner->slideshow_image) }}" class="d-block w-100 rounded"
+      alt="Banner {{ $key + 1 }}">
+    @endif
+      </div>
+    @endforeach
+      @else
+      <div class="carousel-item active">
+      <img src="{{ asset('storage/slideshow_images/none.png') }}" class="d-block w-100 rounded"
+        alt="Default Banner">
+      </div>
+    @endif
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+          data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+          data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
         </button>
+      </div>
     </div>
-</div>
 
 
 
@@ -65,7 +65,7 @@
       <li class="nav-item ">
         <button type="button" class="nav-link active text-dark" role="tab" data-bs-toggle="tab"
           data-bs-target="#navs-justified-announce" aria-controls="navs-justified-announce" aria-selected="true">
-          <i class="tf-icons bx bx-home">ประกาศ</i>
+          <i class="fas fa-bullhorn"> ประกาศ</i>
           <!-- <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-danger">3</span> -->
         </button>
       </li>
@@ -96,57 +96,57 @@
           </thead>
 
           <tbody class="align-items-center">
-            @foreach ($data_announce as $item)
+    @foreach ($data_announce as $item)
         <tr>
-          <td class="ms-5 text-start">
-          <div>
-            {{ $item->name }}
-            @if ($loop->index < 2)
-        <span class="badge bg-label-danger"> New</span>
-      @endif
-          </div>
-          </td>
-          <td class="ms-5 text-center">
-          <div>{{ $item->description }}</div>
-          </td>
-          <td class="ms-5 text-center">
-          <div>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</div>
-          </td>
-          <td class="ms-5 text-center">
-          <div>
-            @if ($item->content_type === 'file')
-        @if(Storage::disk('public')->exists($item->file))
-      <a href="{{ route('admin.download', $item->id) }}" class="btn btn-warning col-1"
-      style="width: 130px;">
-      Download <i class="fas fa-arrow-down"></i>
-      </a>
-    @else
-    <span class="text-danger">ไฟล์ไม่พบ</span>
-  @endif
-      @elseif ($item->content_type === 'link')
-    @if (!empty($item->link))
-    <a href="{{ $item->link }}" target="_blank" class="btn btn-info col-1" style="width: 130px;">
-    Link <i class="fas fa-external-link-alt"></i>
-    </a>
-  @else
-  <span class="text-danger">ลิงก์ไม่พบ</span>
-@endif
-  @elseif ($item->content_type === 'youtube')
-  @if (!empty($item->youtube))
-    <a href="{{ $item->youtube }}" target="_blank" class="btn btn-danger col-1" style="width: 130px;">
-    Video <i class="fas fa-play-circle"></i>
-    </a>
-  @else
-    <span class="text-danger">วิดีโอไม่พบ</span>
-  @endif
-@else
-  <span class="text-muted">ประเภทไม่ถูกต้อง</span>
-@endif
-          </div>
-          </td>
+            <td class="ms-5 text-start">
+                <div>
+                    {{ $item->name }}
+                    @if ($item->id == $latestNewsId) <!-- ตรวจสอบว่าเป็นข่าวล่าสุด -->
+                        <span class="badge bg-label-danger"> New</span>
+                    @endif
+                </div>
+            </td>
+            <td class="ms-5 text-center">
+                <div>{{ $item->description }}</div>
+            </td>
+            <td class="ms-5 text-center">
+                <div>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</div>
+            </td>
+            <td class="ms-5 text-center">
+                <div>
+                    @if ($item->content_type === 'file')
+                        @if(Storage::disk('public')->exists($item->file))
+                            <a href="{{ route('admin.download', $item->id) }}" class="btn btn-warning col-1" style="width: 130px;">
+                                Download <i class="fas fa-arrow-down"></i>
+                            </a>
+                        @else
+                            <span class="text-danger">ไฟล์ไม่พบ</span>
+                        @endif
+                    @elseif ($item->content_type === 'link')
+                        @if (!empty($item->link))
+                            <a href="{{ $item->link }}" target="_blank" class="btn btn-info col-1" style="width: 130px;">
+                                Link <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        @else
+                            <span class="text-danger">ลิงก์ไม่พบ</span>
+                        @endif
+                    @elseif ($item->content_type === 'youtube')
+                        @if (!empty($item->youtube))
+                            <a href="{{ $item->youtube }}" target="_blank" class="btn btn-danger col-1" style="width: 130px;">
+                                Video <i class="fas fa-play-circle"></i>
+                            </a>
+                        @else
+                            <span class="text-danger">วิดีโอไม่พบ</span>
+                        @endif
+                    @else
+                        <span class="text-muted">ประเภทไม่ถูกต้อง</span>
+                    @endif
+                </div>
+            </td>
         </tr>
-      @endforeach
-          </tbody>
+    @endforeach
+</tbody>
+
         </table>
 
         <!-- Pagination -->
@@ -467,58 +467,41 @@
     </div>
 
 
-
-
-
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-  <div class="row">
-    <div class="col-3">
-      <div class="card mt-4 text-center">
-        <br>
-        <br>
-        <br>
-        <h1>Content</h1>
-        <br>
-        <br>
-        <br>
-
-      </div>
-    </div>
-    <div class="col-9">
-      <div class="card mt-4 text-center">
-        <br>
-        <br>
-        <br>
-        <h1>Content</h1>
-        <br>
-        <br>
-        <br>
-      </div>
-    </div>
-
     <div class="card mt-4 text-center">
       <br>
       <br>
       <br>
-      <h1>Content</h1>
+      <h1>Event</h1>
+      <h1>Coming Soon</h1>
       <br>
       <br>
       <br>
 
     </div>
 
+
+
+
+
   </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
 
 
 </div>

@@ -32,11 +32,11 @@ Route::get('/admins', function () {
 
 Route::get('/', function (){
     return view('home');
-});
+})->name('home');
 
 Route::get('/home', function (){
     return view('home');
-});
+})->name('home');
 
 Route::get('/structure', function (){
     return view('structure') ;
@@ -68,7 +68,7 @@ Route::get('/listnewsfeed',[AdminController::class , 'listnewsfeed'])->name('lis
 
 Route::get('/insertnewsfeed', function (){
     return view('newsfeed.insertnewsfeed');
-});
+})->name('insertnewsfeed');
 
 Route::get('/newsfeed', function (){
     return view('newsfeed.newsfeed');

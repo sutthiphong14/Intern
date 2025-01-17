@@ -1,4 +1,52 @@
 <style>
+  /* จัดการขนาดและจัดเรียง */
+  .custom-navbar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* ระยะห่างระหว่างแต่ละเมนู */
+  }
+
+  .nav-item {
+    list-style: none;
+  }
+
+  .nav-link-main {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* สีพื้นฐาน */
+  .nav-link-main.text-dark {
+    color: #333;
+  }
+
+  /* การเปลี่ยนสีเมื่อ hover */
+  .nav-link-main:hover {
+    background-color: #f8f9fa;
+    color: #ffc107;
+    transform: scale(1.1);
+    /* animation ขยายขนาด */
+  }
+
+  /* ไอคอนและข้อความจัดให้อยู่ตรงกลาง */
+  .nav-link-main i {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+  
+  .d-flex {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
   .app-icon {
     width: 60px;
     height: 60px;
@@ -26,14 +74,14 @@
   a:hover .app-icon {
     transform: scale(1.2);
     /* ขยายไอคอนเมื่อวางเมาส์ */
-    background-color:rgb(255, 187, 0);
+    background-color: rgb(255, 187, 0);
     /* เปลี่ยนสีพื้นหลัง */
   }
 
   /* ขยายข้อความแต่ไม่ให้ขยับแถว */
   a:hover h5,
   a:hover h6 {
-    color:rgb(255, 183, 0);
+    color: rgb(255, 183, 0);
     /* เปลี่ยนสีข้อความ */
     transform: scale(1.1);
     /* ขยายข้อความเล็กน้อย */
@@ -59,123 +107,84 @@
     /* สี warning */
   }
 
-  
+
 
   .modal-content {
-  height: 90vh; /* กำหนดความสูงคงที่ 80% ของหน้าจอ */
-  max-height: 110vh; /* จำกัดไม่ให้เกิน 90% ของหน้าจอ */
+    height: 90vh;
+    /* กำหนดความสูงคงที่ 80% ของหน้าจอ */
+    max-height: 110vh;
+    /* จำกัดไม่ให้เกิน 90% ของหน้าจอ */
 
-}
+  }
 
-.modal-body {
-  overflow-y: auto; /* เปิดให้เลื่อนเฉพาะส่วนเนื้อหา */
-}
-
-
-
-
-
+  .modal-body {
+    overflow-y: auto;
+    /* เปิดให้เลื่อนเฉพาะส่วนเนื้อหา */
+  }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm rounded border p-2">
+<nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm rounded border p-1">
   <div class="container-fluid">
-    <div class="layout-menu-toggle navbar-nav me-xl-0 d-xl-none ">
-      <a class="navbar-brand nav-link px-0 me-xl-4" href="javascript:void(0)">
+    <div class="layout-menu-toggle navbar-nav me-xl-0 d-xl-none">
+      <a class="navbar-brand nav-link-main px-0 me-xl-4" href="javascript:void(0)">
         <i class="bx bx-menu bx-sm"></i>
       </a>
     </div>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link text-dark" aria-current="page" href="{{ route('home') }}"
-            onmouseover="this.classList.replace('text-dark', 'text-warning')"
-            onmouseout="this.classList.replace('text-warning', 'text-dark')">
-            <i class="menu-icon tf-icons bx bx-home-circle"></i> หน้าแรก
-          </a>
-        </li>
-        @if (Auth::check())
-        <li class="nav-item">
-          <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#exLargeModal">
-          <i class="fas fa-th"> แอป</i> 
-          </button>
-        </li>
-        @endif
-
-
-        @if (Auth::check() && Auth::user()->permission['manage_users'] ?? false)
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0 custom-navbar">
       <li class="nav-item">
-        <a class="nav-link text-dark" aria-current="page" href="{{ route('users.list') }}"
-        onmouseover="this.classList.replace('text-dark', 'text-warning')"
-        onmouseout="this.classList.replace('text-warning', 'text-dark')">
-        <i class="fas fa-users-cog"></i> จัดการผู้ใช้
+        <a class="nav-link-main text-dark" aria-current="page" href="{{ route('home') }}">
+          <i class="menu-icon tf-icons bx bx-home-circle"></i>
+          หน้าแรก
         </a>
       </li>
-    @endif
-        @if (Auth::check() && Auth::user()->permission['manage_dashboard'] ?? false)
+      @if (Auth::check())
       <li class="nav-item">
-        <a class="nav-link text-dark" aria-current="page" href="{{ route('importdata') }}"
-        onmouseover="this.classList.replace('text-dark', 'text-warning')"
-        onmouseout="this.classList.replace('text-warning', 'text-dark')">
-        <i class="fas fa-users-cog"></i> จัดการ Dashboard
+        <a class="nav-link-main text-dark" href="#" data-bs-toggle="modal" data-bs-target="#exLargeModal">
+          <i class="fas fa-th"></i>
+          แอป
         </a>
       </li>
-    @endif
-        @if (Auth::check() && Auth::user()->permission['manage_newsfeed'] ?? false)
-      <li class="nav-item">
-        <a class="nav-link text-dark" aria-current="page" href="{{ route('listnewsfeed') }}"
-        onmouseover="this.classList.replace('text-dark', 'text-warning')"
-        onmouseout="this.classList.replace('text-warning', 'text-dark')">
-        <i class="fas fa-newspaper"></i> จัดการเอกสารข่าว
-        </a>
-      </li>
-    @endif
-      </ul>
+      @endif
+    </ul>
 
+    <div class="d-flex align-items-center">
       @auth
       <div class="dropdown">
-      <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" id="userDropdown"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        @if (Auth::user()->profile_image)
-      <img src="{{ Auth::user()->profile_image }}" alt="User Avatar" class="w-px-40 h-auto rounded-circle">
-    @else
-    <img src="{{ asset('dist/img/defult_profile.jpg') }}" alt="Default Profile Image"
-    class="w-px-40 h-auto rounded-circle">
-  @endif
-        <span class="text-dark">{{ Auth::user()->name }}</span>
-      </a>
-      <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="userDropdown">
-        <li>
-        <a class="dropdown-item" href="{{ route('profile') }}">
-          <i class="bx bx-user me-2"></i>
-          <span class="align-middle">My Profile</span>
+        <a class="nav-link-main dropdown-toggle hide-arrow" href="javascript:void(0);" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          @if (Auth::user()->profile_image)
+          <img src="{{ Auth::user()->profile_image }}" alt="User Avatar" class="w-px-40 h-auto rounded-circle">
+          @else
+          <img src="{{ asset('dist/img/defult_profile.jpg') }}" alt="Default Profile Image" class="w-px-40 h-auto rounded-circle">
+          @endif
+          <span class="text-dark">{{ Auth::user()->name }}</span>
         </a>
-        </li>
-        <li>
-        <a class="dropdown-item" href="{{ route('logout') }}"
-          onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-          <i class="bx bx-power-off me-2"></i>
-          {{ __('Logout') }}
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-          @csrf
-        </form>
-        </li>
-      </ul>
+        <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="userDropdown">
+          <li>
+            <a class="dropdown-item" href="{{ route('profile') }}">
+              <i class="bx bx-user me-2"></i>
+              <span class="align-middle">My Profile</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{{ route('logout') }}"
+              onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+              <i class="bx bx-power-off me-2"></i>
+              {{ __('Logout') }}
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+              @csrf
+            </form>
+          </li>
+        </ul>
       </div>
-    @endauth
+      @endauth
+      @guest
+      <a href="{{ route('login') }}" class="btn btn-dark">
+        <i class="fas fa-sign-in-alt mr-2"></i>{{ __('เข้าสู่ระบบ') }}
+      </a>
+      @endguest
     </div>
-    @guest
-    <a href="{{ route('login') }}" class="btn btn-dark">
-      <i class="fas fa-sign-in-alt mr-2"></i>{{ __('เข้าสู่ระบบ') }}
-    </a>
-  @else
-  <button class="navbar-toggler text-dark" type="button" data-bs-toggle="collapse"
-    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-    aria-label="Toggle navigation">
-    แถบเครื่องมือ <span class="fas fa-chevron-down"></span>
-  </button>
-@endguest
   </div>
 </nav>
 
@@ -429,7 +438,7 @@
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
-                  <i class="fas fa-calendar-plus"></i>
+                    <i class="fas fa-calendar-plus"></i>
                   </div>
                 </div>
                 <div class="col">
@@ -445,7 +454,7 @@
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
-                  <i class="fas fa-tags"></i>
+                    <i class="fas fa-tags"></i>
                   </div>
                 </div>
                 <div class="col">
@@ -461,7 +470,7 @@
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
-                  <i class="fas fa-map-marker-alt"></i>
+                    <i class="fas fa-map-marker-alt"></i>
                   </div>
                 </div>
                 <div class="col">
@@ -477,7 +486,7 @@
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
-                  <i class="fas fa-file-alt"></i>
+                    <i class="fas fa-file-alt"></i>
                   </div>
                 </div>
                 <div class="col">

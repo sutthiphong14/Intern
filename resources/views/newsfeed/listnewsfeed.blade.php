@@ -10,10 +10,18 @@
 @endsection
 
 @section('content')
+
+<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
+            <a href="{{ route('home') }}" class="">
+                หน้าแรก
+            </a>
+            /
+        </span> รายการจัดการข่าว</h4>
+
 <div class="card card-warning mt-3 mb-3">
     <div class="d-flex justify-content-between align-items-center gap-2">
         <!-- หัวข้อ -->
-        <h3 class="card-header">รายชื่อผู้ใช้</h3>
+        <h3 class="card-header">รายการจัดการข่าว</h3>
 
         <div class="d-flex align-items-center gap-2">
             <!-- เพิ่มฟอร์มค้นหา -->
@@ -23,7 +31,7 @@
                 <button type="submit" class="btn btn-info btn-dark">ค้นหา</button>
             </form>
 
-            <a href="insertnewsfeed" class="btn bg-success col-4 me-4">
+            <a href="{{ route('insertnewsfeed') }}" class="btn bg-success col-4 me-4">
                 <i class="d-flex justify-content-end"></i> เพิ่มเอกสาร
             </a>
         </div>
@@ -38,7 +46,7 @@
                         <th class="col-4">คำอธิบาย</th>
                         <th class="col-1">หมวดหมู่</th>
                         <th class="col-2">เวลาลงข้อมูล</th>
-                        <th class="col-1">สถานะข้อมูล</th>
+                        <th class="col-1">สถานะ</th>
                         <th class="col-1">Action</th>
                     </tr>
                 </thead>

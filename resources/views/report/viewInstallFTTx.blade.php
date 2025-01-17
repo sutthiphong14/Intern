@@ -17,7 +17,7 @@
 
     <!-- navigate -->
     <h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
-            <a href="home" class="">
+            <a href="{{ route('home') }}" class="">
                 หน้าแรก
             </a>
             /
