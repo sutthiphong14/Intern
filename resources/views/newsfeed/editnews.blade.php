@@ -96,7 +96,7 @@
 
             <div class="form-group mt-3" id="link_input"
                 style="display: {{ $oldnews->content_type == 'link' ? 'block' : 'none' }};">
-                <label for="link">ลิงก์</label>
+                <label for="link">ลิงค์</label>
                 <input class="form-control" type="url" name="link" placeholder="https://example.com"
                     value="{{ old('link', $oldnews->link) }}">
                 @error('link')
@@ -106,7 +106,7 @@
 
             <div class="form-group mt-3" id="youtube_input"
                 style="display: {{ $oldnews->content_type == 'youtube' ? 'block' : 'none' }};">
-                <label for="youtube">ลิงก์วิดีโอ YouTube</label>
+                <label for="youtube">ลิงค์วิดีโอ</label>
                 <input class="form-control" type="url" name="youtube" placeholder="https://youtube.com/watch?v=..."
                     value="{{ old('youtube', $oldnews->youtube) }}">
                 @error('youtube')

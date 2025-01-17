@@ -3,7 +3,7 @@
   .custom-navbar {
     display: flex;
     align-items: center;
-    gap: 15px;
+
     /* ระยะห่างระหว่างแต่ละเมนู */
   }
 
@@ -134,15 +134,16 @@
     <ul class="navbar-nav me-auto mb-2 mb-lg-0 custom-navbar">
       <li class="nav-item">
         <a class="nav-link-main " aria-current="page" href="{{ route('home') }}">
-          <i class="menu-icon tf-icons bx bx-home-circle"></i>
-          หน้าแรก
+        <i class="fas fa-home"> หน้าแรก</i>
+          
         </a>
       </li>
       @if (Auth::check())
       <li class="nav-item">
         <a class="nav-link-main " href="#" data-bs-toggle="modal" data-bs-target="#exLargeModal">
-          <i class="fas fa-th"></i>
+          <i class="fas fa-th"> 
           แอป
+          </i>
         </a>
       </li>
       @endif

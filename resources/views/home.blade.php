@@ -72,13 +72,13 @@
       <li class="nav-item">
         <button type="button" class="nav-link text-dark" role="tab" data-bs-toggle="tab"
           data-bs-target="#navs-justified-document" aria-controls="navs-justified-document" aria-selected="false">
-          <i class="tf-icons bx bx-user">เอกสาร</i>
+          <i class="fas fa-file"> เอกสาร</i>
         </button>
       </li>
       <li class="nav-item">
         <button type="button" class="nav-link text-dark" role="tab" data-bs-toggle="tab"
           data-bs-target="#navs-justified-form" aria-controls="navs-justified-form" aria-selected="false">
-          <i class="tf-icons bx bx-message-square">แบบฟอร์ม</i>
+          <i class="fas fa-sticky-note"> แบบฟอร์ม</i>
         </button>
       </li>
 

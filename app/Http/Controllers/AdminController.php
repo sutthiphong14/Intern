@@ -31,29 +31,39 @@ class AdminController extends Controller
     }
 
     public function newsfeed(Request $request)
-    {
-        $data_all = Newsfeed::where('status', true)
-            ->orderBy('id', 'desc')
-            ->paginate(10); // Use paginate to manage pagination
+{
+    // เริ่มต้น query
+    $query = Newsfeed::where('status', true)
+                     ->orderBy('id', 'desc');
 
-
-        $data_announce = Newsfeed::where('status', true)
-            ->where('categories', 'ข่าว')  // Filter by category 'ข่าว'
-            ->orderBy('id', 'desc')
-            ->paginate(10); // Use paginate to manage pagination
-
-        $data_document = Newsfeed::where('status', true)
-            ->where('categories', 'เอกสาร')  // Filter by category 'ข่าว'
-            ->orderBy('id', 'desc')
-            ->paginate(10); // Use paginate to manage pagination
-
-        $data_form = Newsfeed::where('status', true)
-            ->where('categories', 'แบบฟอร์ม')  // Filter by category 'ข่าว'
-            ->orderBy('id', 'desc')
-            ->paginate(10); // Use paginate to manage pagination
-
-        return view('newsfeed.newsfeed', compact('data_announce','data_document', 'data_form' ,'data_all'));
+    // เช็คว่ามีการค้นหาหรือไม่
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->search;
+        
+        // เพิ่มเงื่อนไขการค้นหาลงใน query
+        $query->where('name', 'like', '%' . $search . '%')
+              ->orWhere('description', 'like', '%' . $search . '%');
     }
+
+    // เช็คว่ามีการเลือกหมวดหมู่หรือไม่
+    if ($request->has('category') && $request->category != '') {
+        $category = $request->category;
+        
+        // กรองข้อมูลตามหมวดหมู่ที่เลือก
+        $query->where('categories', $category);
+    }
+
+    // ดึงข้อมูลทั้งหมด
+    $data_all = $query->paginate(10); // ใช้ paginate เพื่อแบ่งหน้า
+
+    $latestNewsId = Newsfeed::where('status', true)
+        ->orderBy('id', 'desc')
+        ->value('id');
+
+    // ส่งข้อมูลทั้งหมดไปยัง view
+    return view('newsfeed.newsfeed', compact('data_all', 'latestNewsId'));
+}
+
 
 
 

@@ -64,6 +64,8 @@ Route::get('/updatenewsfeed', function (){
     return view('newsfeed.updatenewsfeed');
 });
 
+
+
 Route::get('/listnewsfeed',[AdminController::class , 'listnewsfeed'])->name('listnewsfeed');
 
 Route::get('/insertnewsfeed', function (){
@@ -75,6 +77,7 @@ Route::get('/newsfeed', function (){
 });
 
 Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
+
 
 Route::get('/profile', function (){
     return view('profile');
