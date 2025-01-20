@@ -315,7 +315,6 @@ Route::get('/edit_banner', function () {
 });
 
 
-
 //ส่วนกิจกรรม
 Route::get('/typeactivity_list', [ActivityController::class, 'ListType'])->name('type_list');
 Route::post('/typeactivity_insert', [ActivityController::class, 'TypeInsert'])->name('type_insert');
@@ -347,32 +346,17 @@ Route::post('/price_insert/{service_id}/{promotion_id}/{speed_id}', [ActivityCon
 Route::delete('/price_delete/{service_id}/{promotion_id}/{speed_id}/{price_id}', [ActivityController::class, 'PriceDelete'])->name('price_delete');
 Route::put('/price_update/{service_id}/{promotion_id}/{speed_id}/{price_id}', [ActivityController::class, 'PriceUpdate'])->name('price_update');
 
-
-
-
 //จังหวัด
 Route::get('/provinceactivityList', [ProvinceController::class, 'indexprovince'])->name('provinceactivityList');
-Route::get('/provinceactivitylnsert', [ProvinceController::class, 'createprovince'])->name('provinceactivitylnsert');
 Route::post('/provincactivityadd', [ProvinceController::class, 'storeprovince'])->name('provinceactivityadd');
 Route::delete('/provincactivitydelete/{id}', [ProvinceController::class, 'destroyprovince'])->name('provinceactivitydelete');
-Route::get('/provincactivityedit/{id}', [ProvinceController::class, 'editprovince'])->name('provinceactivityedit');
 Route::put('/provincactivityputedit/{id}', [ProvinceController::class, 'updateprovince'])->name('provinceactivityupdate');
 
-
 //ศูนย์บริการ
-Route::get('/servicecenteractivityList', [ProvinceController::class, 'indexservicecenter'])->name('servicecenteractivityList');
-Route::get('/servicecenteractivitylnsert', [ProvinceController::class, 'createservicecenter'])->name('servicecenteractivitylnsert');
-Route::post('/servicecenteractivityadd', [ProvinceController::class, 'storeservicecenter'])->name('servicecenteractivityadd');
-Route::delete('/servicecenteractivitydelete/{id}', [ProvinceController::class, 'destroyservicecenter'])->name('servicecenteractivitydelete');
-Route::get('/servicecenteractivityedit/{id}', [ProvinceController::class, 'editservicecenter'])->name('servicecenteractivityedit');
-Route::put('/servicecenteractivityputedit/{id}', [ProvinceController::class, 'updateservicecenter'])->name('servicecenteractivityupdate');
-
 Route::get('/province/{id}/service-centers', [ProvinceController::class, 'viewServiceCenters'])->name('province.viewServiceCenters');
-Route::get('/province/{id}/service-center/create', [ProvinceController::class, 'createServiceCenterForProvince'])
-    ->name('province.createServiceCenter');
-Route::post('/province/{id}/service-center', [ProvinceController::class, 'storeServiceCenterForProvince'])
-    ->name('province.storeServiceCenter');
-
+Route::post('/province/{id}/service-center', [ProvinceController::class, 'storeServiceCenterForProvince'])->name('province.storeServiceCenter');
+Route::delete('/servicecenteractivitydelete/{id}', [ProvinceController::class, 'destroyservicecenter'])->name('servicecenteractivitydelete');
+Route::put('/servicecenteractivityputedit/{id}', [ProvinceController::class, 'updateservicecenter'])->name('servicecenteractivityupdate');
 
 //ลูกค้า
 Route::get('/customer_list', [CustomerController::class, 'CustomerList'])->name('customer_list');
