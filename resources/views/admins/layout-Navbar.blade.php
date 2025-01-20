@@ -371,7 +371,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="{{ route('viewInstallFTTx') }}" class="text-decoration-none">
+            <a href="{{ route('main_revenue') }}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-teal d-flex justify-content-center align-items-center">

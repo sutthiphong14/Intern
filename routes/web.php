@@ -409,3 +409,7 @@ Route::get('/getPromotions', [CustomerController::class, 'getPromotions']);
 Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);
 Route::get('/getPrices', [CustomerController::class, 'getPrices']);
 Route::get('/getCenters', [CustomerController::class, 'getCenters']);
+
+Route::get('/main_revenue', function () {
+    return view('revenue_report.main_revenue');
+})->name('main_revenue');
