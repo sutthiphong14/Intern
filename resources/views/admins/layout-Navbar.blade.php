@@ -1,45 +1,58 @@
 <style>
-  /* จัดการขนาดและจัดเรียง */
   .custom-navbar {
-    display: flex;
-    align-items: center;
+  display: flex;
+  flex-wrap: nowrap; /* ป้องกันการซ้อนกันของเมนู */
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px; /* ระยะห่างระหว่างเมนู */
+  width: 100%;
+}
 
-    /* ระยะห่างระหว่างแต่ละเมนู */
-  }
+.nav-item {
+  list-style: none;
+  flex-shrink: 0; /* ป้องกันการบีบเมนู */
+}
 
-  .nav-item {
-    list-style: none;
-  }
+.nav-link-main {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  white-space: nowrap; /* ป้องกันการตัดบรรทัด */
+}
 
-  .nav-link-main {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: all 0.3s ease-in-out;
-  }
+.nav-link-main.text-dark {
+  color: #333;
+}
 
-  /* สีพื้นฐาน */
-  .nav-link-main.text-dark {
-    color: #333;
-  }
+.nav-link-main:hover {
+  background-color: #f8f9fa;
+  color: #ffc107;
+  transform: scale(1.1);
+}
 
-  /* การเปลี่ยนสีเมื่อ hover */
-  .nav-link-main:hover {
-    background-color: #f8f9fa;
-    color: #ffc107;
-    transform: scale(1.1);
-    /* animation ขยายขนาด */
-  }
+.nav-link-main i {
+  margin-right: 8px;
+  font-size: 18px;
+}
 
-  /* ไอคอนและข้อความจัดให้อยู่ตรงกลาง */
-  .nav-link-main i {
-    margin-right: 8px;
-    font-size: 18px;
-  }
+.d-flex {
+  display: flex;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+
   
   .d-flex {
   display: flex;
@@ -131,25 +144,22 @@
       </a>
     </div>
 
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0 custom-navbar">
+    <ul class="navbar-nav custom-navbar flex-nowrap w-100">
       <li class="nav-item">
-        <a class="nav-link-main " aria-current="page" href="{{ route('home') }}">
-        <i class="fas fa-home"> หน้าแรก</i>
-          
+        <a class="nav-link-main" aria-current="page" href="{{ route('home') }}">
+          <i class="fas fa-home"></i> หน้าแรก
         </a>
       </li>
       @if (Auth::check())
       <li class="nav-item">
-        <a class="nav-link-main " href="#" data-bs-toggle="modal" data-bs-target="#exLargeModal">
-          <i class="fas fa-th"> 
-          แอป
-          </i>
+        <a class="nav-link-main" href="#" data-bs-toggle="modal" data-bs-target="#exLargeModal">
+          <i class="fas fa-th"></i> แอป
         </a>
       </li>
       @endif
     </ul>
 
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center flex-shrink-0">
       @auth
       <div class="dropdown">
         <a class="nav-link-main dropdown-toggle hide-arrow" href="javascript:void(0);" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -189,6 +199,8 @@
   </div>
 </nav>
 
+
+
 <div class="modal fade" id="exLargeModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
@@ -220,7 +232,7 @@
             </div>
 
             <div class="col-3 mb-4">
-              <a href="{{ route('insertusers') }}" class="text-decoration-none">
+              <a href="{{ route('users.list') }}" class="text-decoration-none">
                 <div class="row align-items-center">
                   <div class="col-auto">
                     <div class="app-icon bg-orange d-flex justify-content-center align-items-center">
