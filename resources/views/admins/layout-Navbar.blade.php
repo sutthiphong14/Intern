@@ -136,7 +136,7 @@
   }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm rounded border p-3">
+<nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm rounded border p-2">
   <div class="container-fluid">
     <div class="layout-menu-toggle navbar-nav me-xl-0 d-xl-none">
       <a class="navbar-brand nav-link-main px-0 me-xl-4" href="javascript:void(0)">
@@ -297,7 +297,7 @@
 
           </div>
         </div>
-        <h4><i class="fas fa-tachometer-alt"></i> Dashboard</h4>
+        <h4><i class="fas fa-tachometer-alt"></i> Dashboard การติดตั้ง fttx ภายใน 3 วัน</h4>
         <hr>
         <div class="row">
 
@@ -311,7 +311,7 @@
                 </div>
                 <div class="col">
                   <h5 class="mb-1">จัดการ Dashboard</h5>
-                  <h6 class="text-muted mb-0">เพิ่ม ลบ แก้ไข Dashboard</h6>
+                  <h6 class="text-muted mb-0">เพิ่ม ลบ แก้ไข การติดตั้ง fttx ภายใน 3 วัน</h6>
                 </div>
               </div>
             </a>
@@ -338,6 +338,59 @@
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-cyan d-flex justify-content-center align-items-center">
+                    <i class="fas fa-history"></i>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5 class="mb-1">ประวัติการทำงาน</h5>
+                  <h6 class="text-muted mb-0">แสดงข้อมูลประวัติทำงาน (Log) ของข้อมูล Dashboard</h6>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <h4><i class="fas fa-money-bill-wave"></i> Dashboard รายได้แยกตามบริการ</h4>
+        <hr>
+        <div class="row">
+
+          <div class="col-3 mb-4">
+            <a href="{{ route('importdata') }}" class="text-decoration-none">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <div class="app-icon bg-teal d-flex justify-content-center align-items-center">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5 class="mb-1">จัดการ Dashboard</h5>
+                  <h6 class="text-muted mb-0">เพิ่ม ลบ แก้ไข รายได้แยกตามบริการ</h6>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-3 mb-4">
+            <a href="{{ route('viewInstallFTTx') }}" class="text-decoration-none">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <div class="app-icon bg-teal d-flex justify-content-center align-items-center">
+                    <i class="fas fa-wrench"></i>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5 class="mb-1">รายได้แยกตามบริการ</h5>
+                  <h6 class="text-muted mb-0">ข้อมูลรายได้แยกตามบริการ</h6>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-3 mb-4">
+            <a href="{{ route('user-logs') }}" class="text-decoration-none">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <div class="app-icon bg-teal d-flex justify-content-center align-items-center">
                     <i class="fas fa-history"></i>
                   </div>
                 </div>
