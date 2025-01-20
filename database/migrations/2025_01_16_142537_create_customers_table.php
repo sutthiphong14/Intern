@@ -18,19 +18,19 @@ return new class extends Migration
             $table->string('cus_photo')->nullable(); // เก็บ Path ของรูปถ่าย (optional)
             $table->text('cus_address'); // ที่อยู่
             $table->unsignedBigInteger('type_id');
-            $table->foreign('type_id')->references('type_id')->on('type_activity');
+            $table->foreign('type_id')->references('type_id')->on('type_activity')->onDelete('cascade');
             $table->unsignedBigInteger('service_id');
-            $table->foreign('service_id')->references('service_id')->on('serve_activity');
+            $table->foreign('service_id')->references('service_id')->on('serve_activity')->onDelete('cascade');
             $table->unsignedBigInteger('promotion_id');
-            $table->foreign('promotion_id')->references('promotion_id')->on('promotion_activity');
+            $table->foreign('promotion_id')->references('promotion_id')->on('promotion_activity')->onDelete('cascade');
             $table->unsignedBigInteger('speed_id');
-            $table->foreign('speed_id')->references('speed_id')->on('speed_activity');
+            $table->foreign('speed_id')->references('speed_id')->on('speed_activity')->onDelete('cascade');
             $table->unsignedBigInteger('price_id');
-            $table->foreign('price_id')->references('price_id')->on('price_activity');
+            $table->foreign('price_id')->references('price_id')->on('price_activity')->onDelete('cascade');
             $table->unsignedBigInteger('province_id')->nullable();
-            $table->foreign('province_id')->references('province_id')->on('province_activity');
+            $table->foreign('province_id')->references('province_id')->on('province_activity')->onDelete('cascade');
             $table->unsignedBigInteger('center_id')->nullable();
-            $table->foreign('center_id')->references('center_id')->on('servicecenter_activity');
+            $table->foreign('center_id')->references('center_id')->on('servicecenter_activity')->onDelete('cascade');
             $table->text('other')->nullable();
             $table->timestamps(); // สร้าง created_at และ updated_at
         });

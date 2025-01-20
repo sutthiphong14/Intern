@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\ProvinceActivity;
 use App\Models\ServiceCenterActivity;
 
@@ -14,24 +15,18 @@ class ProvinceController extends Controller
     public function indexprovince()
     {
         $data = ProvinceActivity::all();
-        return view('provinceActivity.provinceActivityList', compact('data'));
-    }
-
-    public function createprovince()
-    {
-        $foreignData = ProvinceActivity::all();
-        return view('provinceActivity.provinceactivitylnsert', compact('foreignData'));
+        return view('events.provinceActivityList', compact('data'));
     }
 
     public function storeprovince(Request $request)
     {
         $request->validate([
             'province_name' => 'required|string|max:255',
-            
+
         ]);
         ProvinceActivity::create($request->all());
         return redirect()->route('provinceactivityList')
-            ->with('success', 'Serve activity created successfully!');
+            ->with('success', 'เพิ่มจังหวัดสำเร็จ');
     }
 
     public function destroyprovince($id)
@@ -39,108 +34,64 @@ class ProvinceController extends Controller
         $data = ProvinceActivity::findOrFail($id);
         $data->delete();
         return redirect()->route('provinceactivityList')
-            ->with('success', 'Serve activity deleted successfully!');
+            ->with('success', 'ลบจังหวัดสำเร็จ');
     }
 
-
-    public function editprovince($id)
-    {
-        $data = ProvinceActivity::findOrFail($id);
-        return view('provinceActivity.provinceactivityEdit', compact('data'));
-    }
     public function updateprovince(Request $request, $id)
     {
         $request->validate([
             'province_name' => 'required|string|max:255',
-            
+
         ]);
         $data = ProvinceActivity::findOrFail($id);
         $data->update($request->all());
         return redirect()->route('provinceactivityList')
-            ->with('success', 'Serve activity updated successfully!');
+            ->with('success', 'แก้ไขจังหวัดสำเร็จ');
     }
 
-//จัดการข้อมูลศูนย์บริการ
-
-public function indexservicecenter()
+    //จัดการข้อมูลศูนย์บริการ
+    public function viewServiceCenters($province_id)
     {
-        $data = ServiceCenterActivity::all();
-        return view('servicecenterActivity.servicecenterActivityList', compact('data'));
-    }
-    public function createservicecenter()
-    {
-        $foreignData = ServiceCenterActivity::all();
-        return view('servicecenterActivity.servicecenteractivitylnsert', compact('foreignData'));
+        $province = ProvinceActivity::with('centers')->findOrFail($province_id);
+        return view('events.viewServiceCenters', compact('province'));
     }
 
-    public function storeservicecenter(Request $request)
+    public function storeServiceCenterForProvince(Request $request, $province_id)
     {
         $request->validate([
             'center_name' => 'required|string|max:255',
-            
         ]);
-        ServiceCenterActivity::create($request->all());
-        return redirect()->route('servicecenteractivityList')
-            ->with('success', 'Serve activity created successfully!');
+
+        ServiceCenterActivity::create([
+            'center_name' => $request->center_name,
+            'province_id' => $province_id
+        ]);
+
+        return redirect()->route('province.viewServiceCenters', $province_id)
+            ->with('success', 'เพิ่มศูนย์บริการสำเร็จ');
     }
+
 
     public function destroyservicecenter($id)
     {
-    
+
         $data = ServiceCenterActivity::findOrFail($id);
         $data->delete();
         $id = $data->province_id;
-        return redirect()->route('province.viewServiceCenters',compact('id'))
-            ->with('success', 'Serve activity deleted successfully!');
+        return redirect()->route('province.viewServiceCenters', compact('id'))
+            ->with('success', 'ลบศูนย์บริการสำเร็จ');
     }
 
-    public function editservicecenter($id)
-    {
-        $data = ServiceCenterActivity::findOrFail($id);
-        return view('servicecenterActivity.servicecenteractivityEdit', compact('data'));
-    }
     public function updateservicecenter(Request $request, $id)
     {
         $request->validate([
             'center_name' => 'required|string|max:255',
-            
+
         ]);
         $data = ServiceCenterActivity::findOrFail($id);
         $data->update($request->all());
         $id = $data->province_id;
-        return redirect()->route('province.viewServiceCenters',compact('id'))
-            ->with('success', 'Serve activity updated successfully!');
+        return redirect()->route('province.viewServiceCenters', compact('id'))
+            ->with('success', 'อัปเดตศูนย์บริการสำเร็จ');
     }
-
-   
-
-public function createServiceCenterForProvince($province_id)
-{
-    $province = ProvinceActivity::findOrFail($province_id);
-    return view('servicecenterActivity.createForProvince', compact('province'));
-}
-
-
-
-public function viewServiceCenters($province_id)
-{
-    $province = ProvinceActivity::with('centers')->findOrFail($province_id);
-    return view('provinceActivity.viewServiceCenters', compact('province'));
-}
-
-public function storeServiceCenterForProvince(Request $request, $province_id)
-{
-    $request->validate([
-        'center_name' => 'required|string|max:255',
-    ]);
-
-    ServiceCenterActivity::create([
-        'center_name' => $request->center_name,
-        'province_id' => $province_id
-    ]);
-
-    return redirect()->route('province.viewServiceCenters', $province_id)
-        ->with('success', 'เพิ่มศูนย์บริการสำเร็จ');
-}
-
 }

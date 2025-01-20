@@ -76,7 +76,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="12" class="text-center">No Customer Data</td>
+                        <td colspan="12" class="text-center">ไม่มีข้อมูลลูกค้า</td>
                     </tr>
                 @endif
             </tbody>
@@ -153,7 +153,10 @@
                     icon: 'success',
                     title: 'สำเร็จ!',
                     text: '{{ session('success') }}',
+                    timer: 1500, // เพิ่มเวลาให้แสดงนานขึ้น
+                    timerProgressBar: true,
                     confirmButtonText: 'ตกลง'
+
                 });
             });
         </script>
