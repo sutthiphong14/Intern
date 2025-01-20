@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
-            $table->id('cus_id'); // Primary Key ชื่อ customer_id
-            $table->string('cus_fullname'); // ชื่อ นามสกุล
-            $table->string('id_card', 13); // รหัสบัตรประชาชน (13 หลัก) และต้องไม่ซ้ำ
-            $table->string('cus_photo')->nullable(); // เก็บ Path ของรูปถ่าย (optional)
-            $table->text('cus_address'); // ที่อยู่
+            $table->id('cus_id');
+            $table->string('cus_fullname');
+            $table->string('id_card', 13);
+            $table->string('cus_photo')->nullable();
+            $table->text('cus_address');
             $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('type_id')->on('type_activity')->onDelete('cascade');
             $table->unsignedBigInteger('service_id');
@@ -32,7 +32,7 @@ return new class extends Migration
             $table->unsignedBigInteger('center_id')->nullable();
             $table->foreign('center_id')->references('center_id')->on('servicecenter_activity')->onDelete('cascade');
             $table->text('other')->nullable();
-            $table->timestamps(); // สร้าง created_at และ updated_at
+            $table->timestamps();
         });
     }
 
@@ -44,3 +44,4 @@ return new class extends Migration
         Schema::dropIfExists('customers');
     }
 };
+

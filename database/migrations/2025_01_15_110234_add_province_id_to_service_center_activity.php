@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('serviceCenter_activity', function (Blueprint $table) {
+        Schema::create('servicecenter_activity', function (Blueprint $table) {
             $table->id('center_id');
             $table->string('center_name');
             $table->unsignedBigInteger('province_id');

@@ -9,7 +9,7 @@ use App\Models\ProvinceActivity;
 use App\Models\ServeActivity;
 use App\Models\ServiceCenterActivity;
 use App\Models\SpeedActivity;
-use App\Models\Typeactivity;
+use App\Models\TypeActivity;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
