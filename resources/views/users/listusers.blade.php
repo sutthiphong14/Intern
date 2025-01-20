@@ -34,7 +34,16 @@
             <a href="{{ route('insertusers') }}" class="btn bg-success col-4 me-4">
                 <i class="d-flex justify-content-end"></i> เพิ่มผู้ใช้งาน
             </a>
+            <button
+            type="button"
+            class="btn btn-dark me-4 ms-3"
+            data-bs-toggle="modal"
+            data-bs-target="#modalScrollable"
+          >
+          <i class="fas fa-question-circle"></i>
+          </button>
         </div>
+     
     </div>
     
     <div class="card-body">
@@ -148,6 +157,101 @@
         </nav>
     </div>
 </div>
+
+<div class="modal fade" id="modalScrollable" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalScrollableTitle">คู่มือการใช้งานหน้าจัดการรายชื่อผู้ใช้งาน</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body text-dark">
+            <h6 style="color: black; font-weight: bold;">
+            1.การดูข้อมูลผู้ใช้งาน(Read)
+          </h6>
+          <p>
+            • แสดงรายการผู้ใช้งานทั้งหมดในรูปแบบตาราง
+          </p>
+          <p>
+            • สามารถค้นหาผู้ใช้งานได้โดย ชื่อผู้ใช้งาน อีเมล
+          </p>
+          <p>
+            • แสดงจำนวนรายการต่อหน้าได้ตามที่กำหนด
+          </p>
+          <h6 style="color: black; font-weight: bold;">
+            2.การเพิ่มผู้ใช้งานใหม่ (Create)
+          </h6>
+          <p>
+            • คลิกปุ่ม "เพิ่มผู้ใช้งาน" ที่ด้านบนของตาราง
+          </p>
+          <p>
+            • กรอกข้อมูลในแบบฟอร์ม
+          </p>
+          <p>
+            • คลิกปุ่ม "บันทึก" เพื่อสร้างผู้ใช้งานใหม่
+          </p>
+          <h6 style="color: black; font-weight: bold;">
+            3.การแก้ไขข้อมูลผู้ใช้งาน (Update)
+          </h6>
+          <p>
+            • • คลิกไอคอนลบ (รูปถังดินสอ) ตรงเครื่องมือดำเนินการ
+          </p>
+          <p>
+            • แก้ไขข้อมูลในแบบฟอร์ม
+          </p>
+          <p>
+            • คลิกปุ่ม "บันทึก" เพื่อบันทึกการเปลี่ยนแปลง
+          </p>
+          <h6 style="color: black; font-weight: bold;">
+            3.การลบผู้ใช้งาน (Delete)
+          </h6>
+          <p>
+            • คลิกไอคอนลบ (รูปถังขยะ) ตรงเครื่องมือดำเนินการ
+          </p>
+          <p>
+            • ระบบจะแสดงหน้าต่างยืนยันการลบ
+          </p>
+          <p>
+            • คลิก "ยืนยัน" เพื่อลบผู้ใช้งาน หรือ "ยกเลิก" เพื่อยกเลิกการลบ
+          </p>
+          <h6 style="color: black; font-weight: bold;">
+            คุณสมบัติเพิ่มเติม
+          </h6>
+          <p>
+            • ระบบจะบันทึกประวัติการดำเนินการ (Audit Log)
+          </p>
+          <p>
+            •มีระบบการแจ้งเตือนเมื่อดำเนินการสำเร็จหรือเกิดข้อผิดพลาด
+          </p>
+          <p>
+            • รองรับการทำงานแบบ Responsive บนอุปกรณ์ทุกขนาดหน้าจอ
+          </p>
+          <h6 style="color: red;font-weight: bold;">
+            ข้อควรระวัง
+          </h6>
+          
+          <p>
+            • การลบผู้ใช้งานไม่สามารถเรียกคืนได้
+          </p>
+          <p>
+            • อีเมลที่ใช้ต้องไม่ซ้ำกับผู้ใช้งานอื่นในระบบ
+          </p>
+          <p>
+            • ควรตรวจสอบความถูกต้องของข้อมูลก่อนการบันทึกทุกครั้ง
+          </p>
+          
+          
+          
+        </div>
+
+      </div>
+    </div>
+  </div>
 
 @endsection
 

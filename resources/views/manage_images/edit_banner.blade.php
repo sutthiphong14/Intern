@@ -107,6 +107,7 @@
             <h3 class="card-header text-dark">
                 จัดการ Slideshow
             </h3>
+            
             <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     ลบ
@@ -319,6 +320,115 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalScrollable" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalScrollableTitle">คู่มือการใช้งานหน้าจัดการรายชื่อผู้ใช้งาน</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body text-dark">
+            <h6 style="color: black; font-weight: bold;">
+            1.การดูรายการ Slideshow (Read)
+          </h6>
+          <p>
+            • ระบบจะแสดงรายการภาพ Slideshow ทั้งหมดที่มีในระบบ
+          </p>
+         
+          <h6 style="color: black; font-weight: bold;">
+            2. การเพิ่มภาพ Slideshow ใหม่ (Create)
+          </h6>
+          <p>
+            • คลิกปุ่ม "เพิ่มหน้า"
+
+          </p>
+          <p>
+            • เลือกไฟล์ภาพที่ต้องการอัพโหลด 
+          </p>
+          <p>
+            • รองรับไฟล์นามสกุล: .jpg, .jpeg, .png
+          </p>
+          <p>
+            • ขนาดภาพที่แนะนำ: 1600x400 pixels
+          </p>
+          <p>
+            • คลิก "ยืนยัน" เพื่อเพิ่มSlideshow หรือ "ยกเลิก" เมื่อต้องการยกเลิก
+          </p>
+
+          
+          <h6 style="color: black; font-weight: bold;">
+            4.การแก้ไขภาพ Slideshow (Update)
+          </h6>
+          <p>
+            • คลิกปุ่ม "แก้ไข" ที่ภาพต้องการ
+          </p>
+          <p>
+            • อัพโหลดภาพใหม่แทนภาพเดิม
+          </p>
+          <p>
+            • คลิกปุ่ม "บันทึก" เพื่อยืนยันการแก้ไข
+          </p>
+          <h6 style="color: black; font-weight: bold;">
+            3.การลบผู้ใช้งาน (Delete)
+          </h6>
+          <p>
+            • คลิกไอคอนลบ (รูปถังขยะ) ตรงเครื่องมือดำเนินการ
+          </p>
+          <p>
+            • ระบบจะแสดงหน้าต่างยืนยันการลบ
+          </p>
+          <p>
+            • คลิก "ยืนยัน" เพื่อลบผู้ใช้งาน หรือ "ยกเลิก" เพื่อยกเลิกการลบ
+          </p>
+          <h6 style="color: black; font-weight: bold;">
+            คุณสมบัติเพิ่มเติม
+          </h6>
+          <p>
+            • ระบบจะบันทึกประวัติการดำเนินการ (Audit Log)
+          </p>
+          <p>
+            •มีระบบการแจ้งเตือนเมื่อดำเนินการสำเร็จหรือเกิดข้อผิดพลาด
+          </p>
+          <p>
+            • รองรับการทำงานแบบ Responsive บนอุปกรณ์ทุกขนาดหน้าจอ
+          </p>
+          <h6 style="color: red;font-weight: bold;">
+            ข้อควรระวัง
+          </h6>
+          
+          <p>
+            • การลบภาพไม่สามารถเรียกคืนได้
+          </p>
+          <p>
+            • ควรตรวจสอบขนาดและคุณภาพของภาพก่อนอัพโหลด
+          </p>
+          <p>
+            • ภาพที่อัพโหลดควรมีสัดส่วนที่เหมาะสมกับพื้นที่แสดงผล
+          </p>
+          <p>
+            • ภาพที่อัพโหลดควรมีสัดส่วนที่เหมาะสมกับพื้นที่แสดงผล
+          </p>
+          <p>
+            • ตรวจสอบนามสกุลไฟล์ทุกครั้งก่อนอัปโหลดภาพ
+          </p>
+          <p>
+            • ควรใช้ภาพที่มีความคมชัดสูง
+          </p>
+          
+          
+          
+          
+          
+        </div>
+
+      </div>
+    </div>
+  </div>
 
 
 
