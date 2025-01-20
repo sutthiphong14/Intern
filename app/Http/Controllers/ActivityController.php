@@ -6,7 +6,7 @@ use App\Models\PriceActivity;
 use App\Models\PromotionActivity;
 use App\Models\ServeActivity;
 use App\Models\SpeedActivity;
-use App\Models\Typeactivity;
+use App\Models\TypeActivity;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 
