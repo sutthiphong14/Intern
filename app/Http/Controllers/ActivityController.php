@@ -16,11 +16,7 @@ class ActivityController extends Controller
      public function ListType(){
         $data = Typeactivity::all();
         
-        return view('typeActivity.TypeActivityList', compact('data'));
-    }
-
-    public function TypeCreate(){
-        return view('typeActivity.TypeActivityCreate');
+        return view('events.TypeActivityList', compact('data'));
     }
 
     public function TypeInsert(Request $request)
@@ -30,30 +26,25 @@ class ActivityController extends Controller
         ]);
     
         try {
-            // บันทึกข้อมูล
-            Typeactivity::create($request->all());
+            // บันทึกข้อมูลและเก็บผลลัพธ์
+            $newRecord = Typeactivity::create($request->all());
     
-            // ส่งข้อมูลสำเร็จกลับไปในรูปแบบ JSON
-            return response()->json(['success' => true, 'message' => 'เพิ่มกิจกรรมสำเร็จ']);
+            // ส่งข้อมูลสำเร็จกลับไปในรูปแบบ JSON พร้อม ID
+            return response()->json(['success' => true, 'message' => 'เพิ่มกิจกรรมสำเร็จ', 'id' => $newRecord->id]);
         } catch (\Exception $e) {
             // กรณีเกิดข้อผิดพลาด
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
     
+    
 
     public function TypeDelete($type_id){
         $data = Typeactivity::where('type_id',$type_id);
         
         $data->delete();
-        return redirect()->route('type_list')->with('success', 'ลบบริการสำเร็จ');
+        return redirect()->route('type_list')->with('success', 'ลบกิจกรรมสำเร็จ');
     
-    }
-
-    public function TypeEdit($type_id){
-        $data = Typeactivity::where('type_id',$type_id)->first();
-
-        return view('typeActivity.TypeActivityEdit', compact('data'));
     }
 
     public function Typeupdate(Request $request, $type_id)
@@ -76,7 +67,7 @@ class ActivityController extends Controller
         }
     
         return redirect()->route('type_list')
-            ->with('success', 'อัพเดทบริการสำเร็จ!');
+            ->with('success', 'อัพเดทกิจกรรมสำเร็จ!');
     }
 
 
@@ -85,11 +76,7 @@ class ActivityController extends Controller
     public function ListService(){
         $data = ServeActivity::all();
         
-        return view("ServeActivity.ServeActivityList", compact('data'));
-    }
-
-    public function ServiceCreate(){
-        return view('ServeActivity.ServeActivityCreate');
+        return view("events.ServeActivityList", compact('data'));
     }
 
     public function ServiceInsert(Request $request){
@@ -110,12 +97,6 @@ class ActivityController extends Controller
         $data->delete();
         return redirect()->route('service_list')->with('success', 'ลบบริการสำเร็จ');
     
-    }
-
-    public function ServiceEdit($service_id){
-        $data = ServeActivity::where('service_id',$service_id)->first();
-
-        return view('ServeActivity.ServeActivityEdit', compact('data'));
     }
 
     public function Serviceupdate(Request $request, $service_id)
@@ -146,12 +127,9 @@ class ActivityController extends Controller
 
     public function ListPromotion($service_id){
         $data = PromotionActivity::where('service_id', $service_id)->get();
-        return view('promotionActivity.promotionActivityList',compact('data','service_id'));
+        return view('events.promotionActivityList',compact('data','service_id'));
     }
     
-    public function PromotionCreate($service_id){
-        return view('promotionActivity.promotionActivityCreate',compact('service_id'));
-    }
 
     public function PromotionInsert(Request $request,$service_id){
         $request->validate([
@@ -177,14 +155,6 @@ class ActivityController extends Controller
             ->with('success', 'ลบโปรโมชั่นสำเร็จ');
     }
 
-    public function PromotionEdit($service_id,$promotion_id){
-        $data =PromotionActivity::where('promotion_id', $promotion_id)
-        ->where('service_id', $service_id)->first();
-
-        return view('promotionActivity.promotionActivityEdit', compact('data','service_id'));
-    
-    }
-
     public function PromotionUpdate(Request $request ,$service_id,$promotion_id){
         $request->validate([
             'promotion_name' => 'required|string|max:255',
@@ -206,11 +176,7 @@ class ActivityController extends Controller
         $data = SpeedActivity::where('promotion_id', $promotion_id)
         ->where('service_id', $service_id)
         ->get();
-        return view('speedActivity.speedActivityList',compact('data','service_id','promotion_id'));
-    }
-
-    public function SpeedCreate($service_id,$promotion_id){
-        return view('speedActivity.speedActivityCreate',compact('service_id','promotion_id'));
+        return view('events.speedActivityList',compact('data','service_id','promotion_id'));
     }
 
     public function SpeedInsert(Request $request,$service_id,$promotion_id){
@@ -239,12 +205,6 @@ class ActivityController extends Controller
             ->with('success', 'ลบความเร็วสำเร็จ');
     }
 
-    public function SpeedEdit($speed_id,$promotion_id,$service_id){
-        $data =SpeedActivity::where('speed_id',$speed_id)->first();
-        return view('speedActivity.speedActivityEdit', compact('data','service_id','promotion_id','speed_id'));
-        
-    }
-
     public function SpeedUpdate(Request $request ,$service_id,$promotion_id,$speed_id){
 
         $request->validate([
@@ -261,44 +221,37 @@ class ActivityController extends Controller
     }
 
      //ราคา
-     public function ListPrice($speed_id){
+     public function ListPrice($service_id,$promotion_id,$speed_id){
         $data = PriceActivity::where('speed_id',$speed_id)->get();
-        return view('priceActivity.priceActivityList',compact('data','speed_id'));
+        return view('events.priceActivityList',compact('data','service_id','promotion_id','speed_id'));
     }
 
-    public function PriceCreate($speed_id){
-        return view('priceActivity.priceActivityCreate',compact('speed_id'));
-    }
-
-    public function PriceInsert(Request $request,$speed_id){
+    public function PriceInsert(Request $request,$service_id,$promotion_id,$speed_id){
         $request->validate([
             'price_name' => 'required|string|max:255',
             
         ]);
         PriceActivity::create([
             'price_name' => $request->price_name,
+            'service_id'=> $service_id,
+            'promotion_id' => $promotion_id,
             'speed_id' => $speed_id 
         ]);
         $data = PriceActivity::all();
-        return redirect()->route('price_list',compact('data','speed_id'))
+        return redirect()->route('price_list',compact('data','service_id','promotion_id','speed_id'))
             ->with('success', 'เพิ่มราคาสำเร็จ');
     }
 
-    public function PriceDelete($speed_id,$price_id){
+    public function PriceDelete( $service_id,$promotion_id,$speed_id,$price_id){
         PriceActivity::where('speed_id', $speed_id)
         ->where('price_id', $price_id)
         ->delete();
         $data = SpeedActivity::all();
-        return redirect()->route('price_list',compact('data','speed_id'))
+        return redirect()->route('price_list',compact('data','service_id','promotion_id','speed_id'))
             ->with('success', 'ลบราคาสำเร็จ');
     }
 
-    public function PriceEdit($speed_id,$price_id){
-        $data =PriceActivity::where('price_id',$price_id)->first();
-        return view('priceActivity.priceActivityEdit', compact('data','speed_id','price_id'));
-    }
-
-    public function PriceUpdate(Request $request, $speed_id,$price_id){
+    public function PriceUpdate(Request $request, $service_id,$promotion_id,$speed_id,$price_id){
         $request->validate([
             'price_name' => 'required|string|max:255',
             
@@ -308,7 +261,7 @@ class ActivityController extends Controller
             'price_name' => $request->price_name,
         ]);
         $data = PriceActivity::all();
-        return redirect()->route('price_list',compact('data','speed_id'))
+        return redirect()->route('price_list',compact('data','service_id','promotion_id','speed_id'))
             ->with('success', 'อัปเดตราคาสำเร็จ');
     }
 }

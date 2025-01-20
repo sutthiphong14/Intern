@@ -18,7 +18,7 @@ class CustomerController extends Controller
     public function CustomerList()
     {
         $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])->get();
-        return view('customers.cus_list', compact('data'));
+        return view('events.cus_list', compact('data'));
     }
 
 
@@ -33,7 +33,7 @@ class CustomerController extends Controller
         $prices = PriceActivity::all(); // ดึงข้อมูลราคา
         $centers = ServiceCenterActivity::all(); // ดึงข้อมูลศูนย์บริการ
 
-        return view('customers.cus_create', compact('types', 'services', 'promotion', 'provinces', 'speeds', 'prices', 'centers'));
+        return view('events.cus_create', compact('types', 'services', 'promotion', 'provinces', 'speeds', 'prices', 'centers'));
     }
 
 
@@ -104,7 +104,7 @@ class CustomerController extends Controller
         $prices = PriceActivity::all(); // ดึงข้อมูลราคา
         $centers = ServiceCenterActivity::all(); // ดึงข้อมูลศูนย์บริการ
 
-        return view('customers.cus_edit', compact('customer', 'types', 'services', 'promotion', 'provinces', 'speed', 'prices', 'centers'));
+        return view('events.cus_edit', compact('customer', 'types', 'services', 'promotion', 'provinces', 'speed', 'prices', 'centers'));
     }
 
     public function CustomerUpdate(Request $request, $cus_id)
