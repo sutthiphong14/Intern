@@ -413,3 +413,7 @@ Route::get('/getCenters', [CustomerController::class, 'getCenters']);
 Route::get('/main_revenue', function () {
     return view('revenue_report.main_revenue');
 })->name('main_revenue');
+
+Route::get('/provin_revenue', function () {
+    return view('revenue_report.provin_revenue');
+})->name('provin_revenue');
