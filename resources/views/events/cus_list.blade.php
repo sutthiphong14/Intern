@@ -94,12 +94,13 @@
                             <p><span class="fw-bold text-dark">ชื่อ-นามสกุล:</span> {{ $customer->cus_fullname }}</p>
                             <p><span class="fw-bold text-dark">รหัสบัตรประชาชน:</span> {{ $customer->id_card }}</p>
                             <p><span class="fw-bold text-dark">ที่อยู่:</span> {{ $customer->cus_address }}</p>
-                            <p><span class="fw-bold text-dark">ประเภท:</span> {{ $customer->type->type_name ?? 'ไม่ระบุ' }}
+                            <p><span class="fw-bold text-dark">กิจกรรม:</span>
+                                {{ $customer->type->type_name ?? 'ไม่ระบุ' }}
                             </p>
                             <p><span class="fw-bold text-dark">บริการ:</span>
                                 {{ $customer->service->service_name ?? 'ไม่ระบุ' }} <a
                                     class="btn btn-warning btn-sm text-dark" data-bs-toggle="modal"
-                                    data-bs-target="#fttxBroadbandModal{{ $customer->cus_id }}">ดูบริการ</a></p>
+                                    data-bs-target="#fttxBroadbandModal{{ $customer->cus_id }}">รายละเอียด</a></p>
                             <p><span class="fw-bold text-dark">โปรโมชั่น:</span>
                                 {{ $customer->promotion->promotion_name ?? 'ไม่ระบุ' }}</p>
                             <p><span class="fw-bold text-dark">ความเร็ว:</span>
@@ -142,7 +143,8 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="fttxBroadbandLabel{{ $customer->cus_id }}">ข้อมูลบริการของลูกค้า </h5>
+                            <h5 class="modal-title" id="fttxBroadbandLabel{{ $customer->cus_id }}">ข้อมูลบริการของลูกค้า
+                            </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -171,7 +173,7 @@
             </div>
         @endforeach
 
-           
+
         <div class="mt-5">
             <h3>สรุปรายงานผลการดำเนินงานกิจกรรมการตลาด</h3>
         </div>
@@ -182,22 +184,28 @@
                     <th rowspan="2">ลำดับ</th>
                     <th rowspan="2">จังหวัด</th>
                     <th colspan="3">FTTX</th>
-                  
+
                 </tr>
                 <tr class="bg-dark text-center">
-                   
-                    <th rowspan="2" >new</th>
+
+                    <th rowspan="2">new</th>
                     <th rowspan="2">ติดตั้งเอง</th>
                     <th rowspan="2">จ้างผู้รับเหมา</th>
-                    
+
                 </tr>
             </thead>
             <tbody class="text-center">
-                <td>1</td>
-                <td>ขอนแก่่น</td>
-                <td>5</td>
-                <td>10</td>
-                <td>50</td>
+                <tr>
+                    @foreach ($provinces as $index => $province)
+                    <tr>
+                    <td>{{$index+1}}</td>
+                        <td>{{ $province->province_name }}</td>
+                        <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
+                        <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
+                        <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
+                    </tr>
+                @endforeach
+               
             </tbody>
         </table>
     </div>

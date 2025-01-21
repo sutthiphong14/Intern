@@ -119,7 +119,7 @@
                     </select>
 
                     <!-- Second select -->
-                    <label for="installation_type" class="form-label">วิธีการติดตั้ง</label>
+                    <label for="installation_type" class="form-label">งานติดตั้ง</label>
                     <select class="form-select" id="installation_type" name="installation_type" required>
                         <option value="" disabled selected>-- เลือกวิธีการติดตั้ง --</option>
                         <option value="1"> ติดตั้งเอง </option>

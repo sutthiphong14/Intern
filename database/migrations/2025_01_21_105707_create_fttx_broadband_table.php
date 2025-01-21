@@ -16,6 +16,8 @@ class CreateFttxBroadbandTable extends Migration
             // Foreign Key to customers table
             $table->unsignedBigInteger('cus_id');
             $table->foreign('cus_id')->references('cus_id')->on('customers')->onDelete('cascade');
+            $table->unsignedBigInteger('province_id');
+            $table->foreign('province_id')->references('province_id')->on('province_activity')->onDelete('cascade');
             $table->timestamps();
         });
     }

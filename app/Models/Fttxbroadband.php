@@ -9,11 +9,15 @@ class Fttxbroadband extends Model
 {
     use HasFactory;
     protected $table = 'fttx_broadband';
-    protected $fillable = ['new','installation_type','cus_id'];
+    protected $fillable = ['new','installation_type','cus_id','province_id'];
     public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล
 
     public function promotionActivities()
     {
         return $this->hasMany(Customer::class, 'cus_id', 'cus_id');
+    }
+    public function province()
+    {
+        return $this->belongsTo(ProvinceActivity::class, 'province_id', 'province_id');
     }
 }
