@@ -12,11 +12,10 @@ class Customer extends Model
     // ชื่อตารางในฐานข้อมูล
     protected $table = 'customers';
 
-    // Primary Key
-    protected $primaryKey = 'cus_id';
 
     // คอลัมน์ที่อนุญาตให้เพิ่มหรือแก้ไขข้อมูล
     protected $fillable = [
+        'cus_id',
         'cus_fullname',
         'id_card',
         'cus_photo',

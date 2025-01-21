@@ -19,10 +19,15 @@
                     oninput="validateIdCard()" required>
                 <p id="error-id_card" style="color:red"></p>
 
+                <div>
+                    <img src="{{ $customer->cus_photo ? asset('storage/' . $customer->cus_photo) : 'path_to_default_image.jpg' }}"
+                        alt="Current Image" width="150">
+                </div>
                 <label for="cus_photo" class="form-label">รูปภาพ</label>
                 <input type="file" class="form-control" id="cus_photo" name="cus_photo"
-                    value="{{ $customer->cus_photo }}" required>
+                    value="{{ $customer->cus_photo }}">
                 <p id="error-cus_photo" style="color:red"></p>
+
 
                 <label for="cus_address" class="form-label">ที่อยู่</label>
                 <textarea class="form-control" id="cus_address" name="cus_address" rows="4" required>{{ $customer->cus_address }}</textarea>
@@ -99,6 +104,33 @@
                         </option>
                     @endforeach
                 </select>
+
+                <!-- First select -->
+                <div id="fttx_broadband">
+                    <label for="new" class="form-label">ประเภทลูกค้า</label>
+                    <select class="form-select" id="new" name="new" required>
+                        <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
+                        @foreach ($customerTypeOptions as $option)
+                            <option value="{{ $option->new }}" {{ isset($fttxBroadband) && $fttxBroadband->new == $option->new ? 'selected' : '' }}>
+                                {{ $option->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}
+                            </option>
+                        @endforeach
+                    </select>
+                    
+
+                    <!-- Second select -->
+                    <label for="installation_type" class="form-label">วิธีการติดตั้ง</label>
+                    <select class="form-select" id="installation_type" name="installation_type" required>
+                        <option value="" disabled selected>-- เลือกวิธีการติดตั้ง --</option>
+                        @foreach ($installationOptions as $option)
+                            <option value="{{ $option->installation_type }}" {{ isset($fttxBroadband) && $fttxBroadband->installation_type == $option->installation_type ? 'selected' : '' }}>
+                                {{ $option->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
+                            </option>
+                        @endforeach
+                    </select>
+                    
+                </div>
+
 
 
                 <label for="other" class="form-label">หมายเหตุ</label>
@@ -237,18 +269,40 @@
         });
     </script>
 
-<script>
-    function validateIdCard() {
-        const idCard = document.getElementById('id_card').value;
-        const errorMessage = document.getElementById('error-id_card');
+    <script>
+        function validateIdCard() {
+            const idCard = document.getElementById('id_card').value;
+            const errorMessage = document.getElementById('error-id_card');
 
-        // Regex to check if it's 13 digits long
-        const regex = /^\d{13}$/;
-        if (!regex.test(idCard)) {
-            errorMessage.textContent = 'หมายเลขบัตรประชาชนต้องเป็น 13 หลัก!';
-        } else {
-            errorMessage.textContent = '';
+            // Regex to check if it's 13 digits long
+            const regex = /^\d{13}$/;
+            if (!regex.test(idCard)) {
+                errorMessage.textContent = 'หมายเลขบัตรประชาชนต้องเป็น 13 หลัก!';
+            } else {
+                errorMessage.textContent = '';
+            }
         }
-    }
-</script>
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            function toggleFttxBroadband() {
+                var serviceName = $('#service_id option:selected').text().trim();
+                console.log(serviceName); // ตรวจสอบค่าของ serviceName
+                if (serviceName === 'fttx_broadband') {
+                    $('#fttx_broadband').show();
+                } else {
+                    $('#fttx_broadband').hide();
+                }
+            }
+
+            // ตรวจสอบค่าเริ่มต้น
+            toggleFttxBroadband();
+
+            // ตรวจสอบเมื่อมีการเปลี่ยนแปลง
+            $('#service_id').change(function() {
+                toggleFttxBroadband();
+            });
+        });
+    </script>
 @endsection

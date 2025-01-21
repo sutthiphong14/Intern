@@ -108,6 +108,26 @@
                     <small style="color:red">{{ $message }}</small>
                 @enderror
 
+                <!-- First select -->
+                <div id="fttx_broadband">
+
+                    <label for="new" class="form-label">ประเภทลูกค้า</label>
+                    <select class="form-select" id="new" name="new" required>
+                        <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
+                        <option value="1"> ลูกค้าใหม่ </option>
+                        <option value="0"> ปรับโปรโมชั่น </option>
+                    </select>
+
+                    <!-- Second select -->
+                    <label for="installation_type" class="form-label">วิธีการติดตั้ง</label>
+                    <select class="form-select" id="installation_type" name="installation_type" required>
+                        <option value="" disabled selected>-- เลือกวิธีการติดตั้ง --</option>
+                        <option value="1"> ติดตั้งเอง </option>
+                        <option value="0"> จ้างผู้รับเหมา </option>
+                    </select>
+                </div>
+
+
                 <!-- Other -->
                 <label for="other" class="form-label">หมายเหตุ</label>
                 <textarea class="form-control" id="other" name="other" rows="4">{{ old('other') }}</textarea>
@@ -259,5 +279,32 @@
                 errorMessage.textContent = '';
             }
         }
+    </script>
+
+
+    <script>
+        //เงื่อนไข fttx_broadband
+        $(document).ready(function() {
+            var serviceName = $('#service_id option:selected').text(); // ดึงชื่อบริการที่เลือก
+
+            if (serviceName === 'fttx_broadband') {
+                $('#fttx_broadband').show();
+
+            } else {
+                $('#fttx_broadband').hide();
+
+            }
+
+            $('#service_id').change(function() {
+                var serviceName = $(this).find('option:selected').text();
+                if (serviceName === 'fttx_broadband') {
+                    $('#fttx_broadband').show();
+
+                } else {
+                    $('#fttx_broadband').hide();
+
+                }
+            });
+        });
     </script>
 @endsection

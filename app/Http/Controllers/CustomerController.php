@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Fttxbroadband;
 use App\Models\PriceActivity;
 use App\Models\PromotionActivity;
 use App\Models\ProvinceActivity;
@@ -68,7 +69,6 @@ class CustomerController extends Controller
             'province_id.required' => 'กรุณาเลือกจังหวัด',
             'center_id.required' => 'กรุณาเลือกศูนย์บริการ',
         ]);
-        
 
         // Prepare data for insertion
         $data = $request->only(['cus_fullname', 'id_card', 'cus_address', 'center_id', 'type_id', 'service_id', 'province_id', 'promotion_id', 'speed_id', 'price_id', 'other']);
@@ -80,9 +80,23 @@ class CustomerController extends Controller
             $data['cus_photo'] = $path; // เก็บชื่อไฟล์ในฐานข้อมูลตามที่ต้องการ เช่น customer_images/filename
         }
 
+        // Insert into database and retrieve the cus_id from the inserted customer
+        $customer = Customer::create($data);
 
-        // Insert into database
-        Customer::create($data);
+        // ดึงชื่อบริการจาก service_id
+        $service_name = ServeActivity::where('service_id', $data['service_id'])->value('service_name');
+
+        if ($service_name == 'fttx_broadband') {
+            $new = $request->input('new');
+            $installation_type = $request->input('installation_type');
+            $cus_id = $customer->id;  // ดึง cus_id ที่เพิ่งสร้างใหม่มาใช้งาน
+            // ใช้ $cus_id ในการเพิ่มข้อมูลใน FttxBroadband
+            Fttxbroadband::create([
+                'new' => $new,
+                'installation_type' => $installation_type,
+                'cus_id' => $cus_id  // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
+            ]);
+        }
 
         return redirect()->route('customer_list')->with('success', 'เพิ่มข้อมูลลูกค้าสำเร็จ');
     }
@@ -90,11 +104,16 @@ class CustomerController extends Controller
     public function CustomerDelete($cus_id)
     {
         // Find customer by id
-        $customer = Customer::find($cus_id);
+        $customer = Customer::where('cus_id', $cus_id);
+
 
         if ($customer) {
+            // Delete data from related table (if any)
+            Customer::where('cus_id', $cus_id)->delete();
+
             // Delete the customer
             $customer->delete();
+
             return redirect()->route('customer_list')->with('success', 'ลบข้อมูลสำเร็จ');
         } else {
             return redirect()->route('customer_list')->with('error', 'Customer not found');
@@ -107,6 +126,9 @@ class CustomerController extends Controller
         if (!$customer) {
             return redirect()->route('customer_list')->with('error', 'ไม่พบข้อมูลลูกค้า');
         }
+        $fttxBroadband = Fttxbroadband::where('cus_id', $cus_id)->first();
+        $customerTypeOptions = Fttxbroadband::select('fttx_id', 'new')->get(); // ตัวเลือกประเภทลูกค้า
+        $installationOptions = Fttxbroadband::select('fttx_id', 'installation_type')->get(); // ตัวเลือกวิธีติดตั้ง
 
         // ดึงข้อมูลประเภทกิจกรรม, บริการ, และจังหวัดเพื่อใช้ในฟอร์ม
         $types = TypeActivity::all();
@@ -117,47 +139,80 @@ class CustomerController extends Controller
         $prices = PriceActivity::all(); // ดึงข้อมูลราคา
         $centers = ServiceCenterActivity::all(); // ดึงข้อมูลศูนย์บริการ
 
-        return view('events.cus_edit', compact('customer', 'types', 'services', 'promotion', 'provinces', 'speed', 'prices', 'centers'));
+        return view('events.cus_edit', compact('customer', 'types', 'services', 'promotion', 'provinces', 'speed', 'prices', 'centers','fttxBroadband', 'customerTypeOptions', 'installationOptions'));
     }
 
     public function CustomerUpdate(Request $request, $cus_id)
     {
-        // Find customer by ID
-        $customer = Customer::find($cus_id);
-
+        // Find customer by id
+        $customer = Customer::where('cus_id', $cus_id)->firstOrFail();  // หรือ .first()
+        
+    
         if (!$customer) {
             return redirect()->route('customer_list')->with('error', 'ไม่พบข้อมูลลูกค้า');
         }
-
+    
         // รับค่าจากฟอร์ม
-        $customer->cus_fullname = $request->input('cus_fullname');
-        $customer->id_card = $request->input('id_card');
-        $customer->cus_address = $request->input('cus_address');
-        $customer->type_id = $request->input('type_id');
-        $customer->service_id = $request->input('service_id');
-
-        // รองรับ null สำหรับ province_id และ center_id
-        $customer->province_id = $request->input('province_id') == "null" ? null : $request->input('province_id');
-        $customer->center_id = $request->input('center_id') == "null" ? null : $request->input('center_id');
-        $customer->other = $request->input('other');
-
+        $cus_fullname = $request->input('cus_fullname');
+        $id_card = $request->input('id_card');
+        $cus_address = $request->input('cus_address');
+        $type_id = $request->input('type_id');
+        $service_id = $request->input('service_id');
+    
+        $province_id = $request->input('province_id') == "null" ? null : $request->input('province_id');
+        $center_id = $request->input('center_id') == "null" ? null : $request->input('center_id');
+        $other = $request->input('other');
+    
         // ตรวจสอบว่ามีไฟล์รูปภาพอัปโหลดไหม
         if ($request->hasFile('cus_photo')) {
             $file = $request->file('cus_photo');
             $filename = time() . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('customer_images', $filename, 'public');
-            $customer->cus_photo = $path; // อัปเดตชื่อไฟล์ในฐานข้อมูล
+            $cus_photo = $path; // อัปเดตชื่อไฟล์ในฐานข้อมูล
+        } else {
+            $cus_photo = $customer->cus_photo;  // กรณีไม่มีการอัพโหลดรูปใหม่ใช้ค่าที่มีอยู่เดิม
         }
-
+    
         // อัปเดตข้อมูล
-        $customer->updated_at = \Carbon\Carbon::now();
+        $updated_at = \Carbon\Carbon::now()->format('Y-m-d H:i:s');  // เปลี่ยนให้ถูกต้อง
+    
+        // Save to database using update() on a Builder object
+        $updateData = [
+            'cus_fullname' => $cus_fullname,
+            'id_card' => $id_card,
+            'cus_address' => $cus_address,
+            'type_id' => $type_id,
+            'service_id' => $service_id,
+            'province_id' => $province_id,
+            'center_id' => $center_id,
+            'other' => $other,
+            'cus_photo' => $cus_photo,
+            'updated_at' => $updated_at,
+        ];
+    
+        $updateResult = Customer::where('cus_id', $cus_id)->update($updateData);
 
-        // Save to database
-        $customer->save();
+        // ดึงชื่อบริการจาก service_id
+        $service_name = ServeActivity::where('service_id', $service_id)->value('service_name');
 
-        return redirect()->route('customer_list')->with('success', 'อัปเดตข้อมูลลูกค้าเรียบร้อยแล้ว');
+        if ($service_name == 'fttx_broadband') {
+            $new = $request->input('new');
+            $installation_type = $request->input('installation_type');
+         
+            // ใช้ $cus_id ในการเพิ่มข้อมูลใน FttxBroadband
+            Fttxbroadband::where('cus_id', $cus_id)->update([
+                'new' => $new,
+                'installation_type' => $installation_type,
+            ]);
+        }
+    
+        if ($updateResult) {
+            return redirect()->route('customer_list')->with('success', 'อัปเดตข้อมูลลูกค้าเรียบร้อยแล้ว');
+        } else {
+            return redirect()->route('customer_list')->with('error', 'การอัปเดตล้มเหลว');
+        }
     }
-
+    
 
 
 
