@@ -97,7 +97,9 @@
                             <p><span class="fw-bold text-dark">ประเภท:</span> {{ $customer->type->type_name ?? 'ไม่ระบุ' }}
                             </p>
                             <p><span class="fw-bold text-dark">บริการ:</span>
-                                {{ $customer->service->service_name ?? 'ไม่ระบุ' }}</p>
+                                {{ $customer->service->service_name ?? 'ไม่ระบุ' }} <a
+                                    class="btn btn-warning btn-sm text-dark" data-bs-toggle="modal"
+                                    data-bs-target="#fttxBroadbandModal{{ $customer->cus_id }}">ดูบริการ</a></p>
                             <p><span class="fw-bold text-dark">โปรโมชั่น:</span>
                                 {{ $customer->promotion->promotion_name ?? 'ไม่ระบุ' }}</p>
                             <p><span class="fw-bold text-dark">ความเร็ว:</span>
@@ -112,6 +114,9 @@
                             </p>
                             <p><span class="fw-bold text-dark">หมายเหตุ</span> {{ $customer->other ?? 'ไม่ระบุ' }}</p>
 
+
+
+
                             @if ($customer->cus_photo)
                                 <div class="text-center">
                                     <img src="{{ asset('storage/' . $customer->cus_photo) }}" alt="Customer Photo"
@@ -119,6 +124,43 @@
                                 </div>
                             @else
                                 <p><strong>รูปถ่าย:</strong> ไม่มีรูปถ่าย</p>
+                            @endif
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+
+        <!-- Modal สำหรับดูข้อมูลใน fttx_broadband -->
+        @foreach ($data as $customer)
+            <div class="modal fade" id="fttxBroadbandModal{{ $customer->cus_id }}" tabindex="-1"
+                aria-labelledby="fttxBroadbandLabel{{ $customer->cus_id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="fttxBroadbandLabel{{ $customer->cus_id }}">ข้อมูลบริการของลูกค้า </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- ดึงข้อมูลจาก fttx_broadband -->
+                            <p><span class="fw-bold text-dark">บริการ:</span> {{ $customer->service->service_name }} </p>
+                            @php
+                                $fttxData = \App\Models\Fttxbroadband::where('cus_id', $customer->cus_id)->first();
+                            @endphp
+
+                            @if ($fttxData)
+                                <p><span class="fw-bold text-dark">งานติดตั้ง:</span>
+                                    {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
+                                </p>
+                                <p><span class="fw-bold text-dark">ประเภทลูกค้า:</span>
+                                    {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}</p>
+                            @else
+                                <p><span class="fw-bold text-dark">วิธีการติดตั้ง:</span> ไม่ระบุ</p>
+                                <p><span class="fw-bold text-dark">ประเภทลูกค้า:</span> ไม่ระบุ</p>
                             @endif
                         </div>
                         <div class="modal-footer">
@@ -129,7 +171,37 @@
             </div>
         @endforeach
 
+           
+        <div class="mt-5">
+            <h3>สรุปรายงานผลการดำเนินงานกิจกรรมการตลาด</h3>
+        </div>
+        <h5>Fttx broadband</h5>
+        <table class="table table-bordered ">
+            <thead>
+                <tr class="bg-dark text-center align-center">
+                    <th rowspan="2">ลำดับ</th>
+                    <th rowspan="2">จังหวัด</th>
+                    <th colspan="3">FTTX</th>
+                  
+                </tr>
+                <tr class="bg-dark text-center">
+                   
+                    <th rowspan="2" >new</th>
+                    <th rowspan="2">ติดตั้งเอง</th>
+                    <th rowspan="2">จ้างผู้รับเหมา</th>
+                    
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <td>1</td>
+                <td>ขอนแก่่น</td>
+                <td>5</td>
+                <td>10</td>
+                <td>50</td>
+            </tbody>
+        </table>
     </div>
+
 @endsection
 
 @section('script')

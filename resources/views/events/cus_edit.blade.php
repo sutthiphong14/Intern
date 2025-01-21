@@ -110,26 +110,27 @@
                     <label for="new" class="form-label">ประเภทลูกค้า</label>
                     <select class="form-select" id="new" name="new" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
-                        @foreach ($customerTypeOptions as $option)
-                            <option value="{{ $option->new }}" {{ isset($fttxBroadband) && $fttxBroadband->new == $option->new ? 'selected' : '' }}>
-                                {{ $option->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}
-                            </option>
-                        @endforeach
+                        <option value="1" {{ isset($fttxBroadband) && $fttxBroadband->new == 1 ? 'selected' : '' }}>
+                            ลูกค้าใหม่</option>
+                        <option value="0" {{ isset($fttxBroadband) && $fttxBroadband->new == 0 ? 'selected' : '' }}>
+                            ปรับโปรโมชั่น</option>
                     </select>
-                    
+                </div>
 
-                    <!-- Second select -->
+                <!-- Second select -->
+                <div id="fttx_broadband">
                     <label for="installation_type" class="form-label">วิธีการติดตั้ง</label>
                     <select class="form-select" id="installation_type" name="installation_type" required>
                         <option value="" disabled selected>-- เลือกวิธีการติดตั้ง --</option>
-                        @foreach ($installationOptions as $option)
-                            <option value="{{ $option->installation_type }}" {{ isset($fttxBroadband) && $fttxBroadband->installation_type == $option->installation_type ? 'selected' : '' }}>
-                                {{ $option->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
-                            </option>
-                        @endforeach
+                        <option value="1"
+                            {{ isset($fttxBroadband) && $fttxBroadband->installation_type == 1 ? 'selected' : '' }}>
+                            ติดตั้งเอง</option>
+                        <option value="0"
+                            {{ isset($fttxBroadband) && $fttxBroadband->installation_type == 0 ? 'selected' : '' }}>
+                            จ้างผู้รับเหมา</option>
                     </select>
-                    
                 </div>
+
 
 
 

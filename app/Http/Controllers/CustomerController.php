@@ -19,7 +19,8 @@ class CustomerController extends Controller
     public function CustomerList()
     {
         $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])->get();
-        return view('events.cus_list', compact('data'));
+        $datafttx = Fttxbroadband::with('customer');
+        return view('events.cus_list', compact('data','datafttx'));
     }
 
 

@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RequestsController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SlideshowController;
+use App\Models\Fttxbroadband;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -383,3 +385,9 @@ Route::get('/getPromotions', [CustomerController::class, 'getPromotions']);
 Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);
 Route::get('/getPrices', [CustomerController::class, 'getPrices']);
 Route::get('/getCenters', [CustomerController::class, 'getCenters']);
+Route::get('/check-service/{cus_id}', function ($cus_id) {
+    // ตรวจสอบข้อมูลใน fttx_broadband โดยใช้ $cus_id
+    $serviceDetails = Fttxbroadband::where('cus_id', $cus_id)->first();
+    return response()->json($serviceDetails); // ส่งกลับข้อมูลไปยัง modal
+});
+
