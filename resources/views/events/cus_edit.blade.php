@@ -13,12 +13,16 @@
                 <input type="text" class="form-control" id="cus_fullname" name="cus_fullname"
                     value="{{ $customer->cus_fullname }}" required>
 
+                <!-- ID Card -->
                 <label for="id_card" class="form-label">หมายเลขบัตรประจำตัวประชาชน</label>
                 <input type="text" class="form-control" id="id_card" name="id_card" value="{{ $customer->id_card }}"
-                    required>
+                    oninput="validateIdCard()" required>
+                <p id="error-id_card" style="color:red"></p>
 
                 <label for="cus_photo" class="form-label">รูปภาพ</label>
-                <input type="file" class="form-control" id="cus_photo" name="cus_photo">
+                <input type="file" class="form-control" id="cus_photo" name="cus_photo"
+                    value="{{ $customer->cus_photo }}" required>
+                <p id="error-cus_photo" style="color:red"></p>
 
                 <label for="cus_address" class="form-label">ที่อยู่</label>
                 <textarea class="form-control" id="cus_address" name="cus_address" rows="4" required>{{ $customer->cus_address }}</textarea>
@@ -73,10 +77,9 @@
 
                 <!-- Dropdown for Province -->
                 <label for="province_id" class="form-label">จังหวัด</label>
-                <select class="form-select" id="province_id" name="province_id">
-                    <option value="" disabled {{ is_null($customer->province_id) ? 'selected' : '' }}>-- เลือกจังหวัด
-                        --</option>
-                    <option value="null" {{ is_null($customer->province_id) ? 'selected' : '' }}>อื่นๆ</option>
+                <select class="form-select" id="province_id" name="province_id" required>
+                    <option value="" disabled>-- เลือกจังหวัด--</option>
+
                     @foreach ($provinces as $province)
                         <option value="{{ $province->province_id }}"
                             {{ $customer->province_id == $province->province_id ? 'selected' : '' }}>
@@ -88,9 +91,7 @@
                 <!-- Dropdown for Center -->
                 <label for="center_id" class="form-label">ศูนย์บริการ</label>
                 <select class="form-select" id="center_id" name="center_id">
-                    <option value="" disabled {{ is_null($customer->center_id) ? 'selected' : '' }}>--
-                        เลือกศูนย์บริการ --</option>
-                        <option value="null" {{ is_null($customer->province_id) ? 'selected' : '' }}>อื่นๆ</option>
+                    <option value="" disabled>--เลือกศูนย์บริการ --</option>
                     @foreach ($centers as $center)
                         <option value="{{ $center->center_id }}"
                             {{ $customer->center_id == $center->center_id ? 'selected' : '' }}>
@@ -100,12 +101,12 @@
                 </select>
 
 
-                <label for="other" class="form-label">อื่นๆ</label>
+                <label for="other" class="form-label">หมายเหตุ</label>
                 <textarea class="form-control" id="other" name="other" rows="4">{{ $customer->other }}</textarea>
 
                 <input type="hidden" name="updated_at" value="{{ \Carbon\Carbon::now() }}">
             </div>
-            <button type="submit" class="btn btn-success">บันทึก</button>
+            <button type="submit" class="btn btn-success" id="save-button">บันทึก</button>
             <a href="{{ url()->previous() }}" class="btn btn-secondary">ย้อนกลับ</a>
         </form>
     </div>
@@ -218,4 +219,36 @@
             });
         });
     </script>
+
+
+    <script>
+        document.getElementById('cus_photo').addEventListener('change', function() {
+            const file = this.files[0];
+            const errorElement = document.getElementById('error-cus_photo');
+            const saveButton = document.getElementById('save-button');
+
+            if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
+                errorElement.textContent = '';
+                saveButton.disabled = false;
+            } else {
+                errorElement.textContent = 'กรุณาอัปโหลดไฟล์รูปภาพที่ถูกต้อง (JPEG หรือ PNG)';
+                saveButton.disabled = true;
+            }
+        });
+    </script>
+
+<script>
+    function validateIdCard() {
+        const idCard = document.getElementById('id_card').value;
+        const errorMessage = document.getElementById('error-id_card');
+
+        // Regex to check if it's 13 digits long
+        const regex = /^\d{13}$/;
+        if (!regex.test(idCard)) {
+            errorMessage.textContent = 'หมายเลขบัตรประชาชนต้องเป็น 13 หลัก!';
+        } else {
+            errorMessage.textContent = '';
+        }
+    }
+</script>
 @endsection

@@ -8,18 +8,35 @@
         <form action="{{ route('customer_insert') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
+                <!-- Fullname -->
                 <label for="cus_fullname" class="form-label">ชื่อ นามสกุล</label>
-                <input type="text" class="form-control" id="cus_fullname" name="cus_fullname" required>
+                @error('cus_fullname')
+                    <p style="color:red">{{ $message }}</p>
+                @enderror
+                <input type="text" class="form-control" id="cus_fullname" name="cus_fullname"
+                    value="{{ old('cus_fullname') }}" required>
 
+                <!-- ID Card -->
                 <label for="id_card" class="form-label">หมายเลขบัตรประจำตัวประชาชน</label>
-                <input type="text" class="form-control" id="id_card" name="id_card" required>
+                <input type="text" class="form-control" id="id_card" name="id_card" value="{{ old('id_card') }}"
+                    required oninput="validateIdCard()">
+                <p id="error-id_card" style="color:red"></p>
 
+
+                <!-- Photo -->
                 <label for="cus_photo" class="form-label">รูปภาพ</label>
-                <input type="file" class="form-control" id="cus_photo" name="cus_photo">
+                <input type="file" class="form-control" id="cus_photo" name="cus_photo" required>
+                <p id="error-cus_photo" style="color:red"></p>
 
+
+                <!-- Address -->
                 <label for="cus_address" class="form-label">ที่อยู่</label>
-                <textarea class="form-control" id="cus_address" name="cus_address" rows="4" required></textarea>
-                <!-- Dropdown for Type -->
+                <textarea class="form-control" id="cus_address" name="cus_address" rows="4" required>{{ old('cus_address') }}</textarea>
+                @error('cus_address')
+                    <p style="color:red">{{ $message }}</p>
+                @enderror
+
+                <!-- Type -->
                 <label for="type_id" class="form-label">กิจกรรม</label>
                 <select class="form-select" id="type_id" name="type_id" required>
                     <option value="" disabled selected>-- เลือกกิจกรรม --</option>
@@ -27,8 +44,11 @@
                         <option value="{{ $type->type_id }}">{{ $type->type_name }}</option>
                     @endforeach
                 </select>
+                @error('type_id')
+                    <small style="color:red">{{ $message }}</small>
+                @enderror
 
-                <!-- Dropdown for Service -->
+                <!-- Service -->
                 <label for="service_id" class="form-label">บริการ</label>
                 <select class="form-select" id="service_id" name="service_id" required>
                     <option value="" disabled selected>-- เลือกบริการ --</option>
@@ -36,41 +56,64 @@
                         <option value="{{ $service->service_id }}">{{ $service->service_name }}</option>
                     @endforeach
                 </select>
+                @error('service_id')
+                    <small style="color:red">{{ $message }}</small>
+                @enderror
 
+                <!-- Promotion -->
                 <label for="promotion_id" class="form-label">โปรโมชั่น</label>
                 <select class="form-select" id="promotion_id" name="promotion_id" required>
                     <option value="" disabled selected>-- เลือกโปรโมชั่น --</option>
                 </select>
+                @error('promotion_id')
+                    <small style="color:red">{{ $message }}</small>
+                @enderror
 
+                <!-- Speed -->
                 <label for="speed_id" class="form-label">ความเร็ว</label>
                 <select class="form-select" id="speed_id" name="speed_id" required>
                     <option value="" disabled selected>-- เลือกความเร็ว --</option>
                 </select>
+                @error('speed_id')
+                    <small style="color:red">{{ $message }}</small>
+                @enderror
 
+                <!-- Price -->
                 <label for="price_id" class="form-label">ราคา</label>
                 <select class="form-select" id="price_id" name="price_id" required>
                     <option value="" disabled selected>-- เลือกราคา --</option>
                 </select>
+                @error('price_id')
+                    <small style="color:red">{{ $message }}</small>
+                @enderror
 
-                <!-- Dropdown for Province -->
+                <!-- Province -->
                 <label for="province_id" class="form-label">จังหวัด</label>
-                <select class="form-select" id="province_id" name="province_id">
+                <select class="form-select" id="province_id" name="province_id" required>
                     <option value="" disabled selected>-- เลือกจังหวัด --</option>
                     @foreach ($provinces as $province)
                         <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
-                    @endforeach    
+                    @endforeach
                 </select>
+                @error('province_id')
+                    <small style="color:red">{{ $message }}</small>
+                @enderror
 
+                <!-- Center -->
                 <label for="center_id" class="form-label">ศูนย์บริการ</label>
-                <select class="form-select" id="center_id" name="center_id">
+                <select class="form-select" id="center_id" name="center_id" required>
                     <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
                 </select>
+                @error('center_id')
+                    <small style="color:red">{{ $message }}</small>
+                @enderror
 
+                <!-- Other -->
                 <label for="other" class="form-label">หมายเหตุ</label>
-                <textarea class="form-control" id="other" name="other" rows="4"></textarea>
+                <textarea class="form-control" id="other" name="other" rows="4">{{ old('other') }}</textarea>
             </div>
-            <button type="submit" class="btn btn-success">Save</button>
-            <a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
+            <button type="submit" class="btn btn-success" id="save-button">Save</button>
+            <a href="{{ route('customer_list') }}" class="btn btn-secondary">Back</a>
         </form>
     </div>
 @endsection
@@ -94,7 +137,7 @@
                         $('#promotion_id').empty(); // ล้างตัวเลือกเก่าออก
                         $('#promotion_id').append(
                             '<option value="" disabled selected>-- เลือกโปรโมชั่น --</option>'
-                            );
+                        );
                         $.each(data, function(index, promotion) {
                             $('#promotion_id').append('<option value="' + promotion
                                 .promotion_id + '">' + promotion.promotion_name +
@@ -147,7 +190,7 @@
                 success: function(data) {
                     $('#price_id').empty();
                     $('#price_id').append(
-                    '<option value="" disabled selected>-- เลือกราคา --</option>');
+                        '<option value="" disabled selected>-- เลือกราคา --</option>');
                     $.each(data, function(index, price) {
                         $('#price_id').append('<option value="' + price.price_id + '">' + price
                             .price_name + '</option>');
@@ -183,5 +226,38 @@
                 }
             });
         });
+    </script>
+
+
+
+    <script>
+        document.getElementById('cus_photo').addEventListener('change', function() {
+            const file = this.files[0];
+            const errorElement = document.getElementById('error-cus_photo');
+            const saveButton = document.getElementById('save-button');
+
+            if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
+                errorElement.textContent = '';
+                saveButton.disabled = false;
+            } else {
+                errorElement.textContent = 'กรุณาอัปโหลดไฟล์รูปภาพที่ถูกต้อง (JPEG หรือ PNG)';
+                saveButton.disabled = true;
+            }
+        });
+    </script>
+
+    <script>
+        function validateIdCard() {
+            const idCard = document.getElementById('id_card').value;
+            const errorMessage = document.getElementById('error-id_card');
+
+            // Regex to check if it's 13 digits long
+            const regex = /^\d{13}$/;
+            if (!regex.test(idCard)) {
+                errorMessage.textContent = 'หมายเลขบัตรประชาชนต้องเป็น 13 หลัก!';
+            } else {
+                errorMessage.textContent = '';
+            }
+        }
     </script>
 @endsection

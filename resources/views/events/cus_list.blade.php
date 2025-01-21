@@ -19,7 +19,8 @@
                     <th>โปรโมชั่น</th>
                     <th>ความเร็ว</th>
                     <th>ราคา</th>
-                    <th>(จังหวัด/ศูนย์บริการ/อื่นๆ)</th>
+                    <th>(จังหวัด/ศูนย์บริการ)</th>
+
                     <th>เครื่องมือ</th>
                 </tr>
             </thead>
@@ -44,28 +45,22 @@
                             <td>{{ $customer->speed->speed_name ?? 'N/A' }}</td> <!-- ดึงชื่อจากสัมพันธ์ speed -->
                             <td>{{ $customer->price->price_name ?? 'N/A' }}</td> <!-- ดึงชื่อจากสัมพันธ์ price -->
                             <td>
-                                @if (is_null($customer->province) && is_null($customer->center) && is_null($customer->other))
-                                    <span class="text-danger">ไม่ได้ระบุ</span>
-                                @elseif (is_null($customer->province) && is_null($customer->center))
-                                    <span class="text-warning">{{ $customer->other ?? 'N/A' }}</span>
-                                @elseif (is_null($customer->other))
-                                    {{ $customer->province->province_name ?? 'N/A' }} /
-                                    {{ $customer->center->center_name ?? 'N/A' }}
-                                @else
-                                    {{ $customer->province->province_name ?? 'N/A' }} /
-                                    {{ $customer->center->center_name ?? 'N/A' }}
-                                @endif
+                                {{ $customer->province->province_name ?? 'N/A' }} /
+                                {{ $customer->center->center_name ?? 'N/A' }}
                             </td>
 
 
                             <td>
                                 <a href="{{ route('customer_edit', $customer->cus_id) }}"
                                     class="btn btn-warning btn-sm">Edit</a>
-                                    <form id="deleteForm{{ $customer->cus_id }}" action="{{ route('customer_delete', $customer->cus_id) }}" method="POST" style="display: inline-block;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $customer->cus_id }})">Delete</button>
-                                    </form>
+                                <form id="deleteForm{{ $customer->cus_id }}"
+                                    action="{{ route('customer_delete', $customer->cus_id) }}" method="POST"
+                                    style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="confirmDelete({{ $customer->cus_id }})">Delete</button>
+                                </form>
                                 <!-- ปุ่ม View -->
                                 <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#customerModal{{ $customer->cus_id }}">
@@ -110,20 +105,12 @@
                             <p><span class="fw-bold text-dark">ราคา:</span> {{ $customer->price->price_name ?? 'ไม่ระบุ' }}
                             </p>
                             <p><span class="fw-bold text-dark">จังหวัด:</span>
-                                @if (is_null($customer->province) && is_null($customer->center))
-                                    ไม่ระบุ
-                                @else
-                                    {{ $customer->province->province_name ?? 'ไม่ระบุ' }}
-                                @endif
+                                {{ $customer->province->province_name }}
                             </p>
                             <p><span class="fw-bold text-dark">ศูนย์บริการ:</span>
-                                @if (is_null($customer->province) && is_null($customer->center))
-                                    ไม่ระบุ
-                                @else
-                                    {{ $customer->center->center_name ?? 'ไม่ระบุ' }}
-                                @endif
+                                {{ $customer->center->center_name }}
                             </p>
-                            <p><span class="fw-bold text-dark">อื่นๆ:</span> {{ $customer->other ?? 'ไม่ระบุ' }}</p>
+                            <p><span class="fw-bold text-dark">หมายเหตุ</span> {{ $customer->other ?? 'ไม่ระบุ' }}</p>
 
                             @if ($customer->cus_photo)
                                 <div class="text-center">

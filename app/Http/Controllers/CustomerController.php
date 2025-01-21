@@ -43,14 +43,32 @@ class CustomerController extends Controller
     {
         // Validate the incoming request
         $request->validate([
-            'cus_fullname' => 'required|string|max:255',
+            'cus_fullname' => 'required|string',
             'id_card' => 'required|max:13',
             'cus_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'cus_address' => 'required|string|max:500',
-            'type_id' => 'required|exists:type_activity,type_id',
-            'province_id' =>'required',
-            'center_id'=> 'required'
+            'cus_address' => 'required|string',
+            'type_id' => 'required',
+            'service_id' => 'required',
+            'speed_id' => 'required',
+            'price_id' => 'required',
+            'province_id' => 'required',
+            'center_id' => 'required',
+        ], [
+            'cus_fullname.required' => 'กรุณากรอกชื่อนามสกุล',
+            'id_card.required' => 'กรุณากรอกหมายเลขบัตรประชาชน',
+            'id_card.max' => 'หมายเลขบัตรประชาชนต้องไม่เกิน 13 ตัวอักษร',
+            'cus_photo.image' => 'ไฟล์ที่อัปโหลดต้องเป็นรูปภาพ',
+            'cus_photo.mimes' => 'รูปภาพต้องอยู่ในรูปแบบ jpeg, png, jpg, gif, หรือ svg',
+            'cus_photo.max' => 'ไฟล์รูปภาพต้องมีขนาดไม่เกิน 2 MB',
+            'cus_address.required' => 'กรุณากรอกที่อยู่',
+            'type_id.required' => 'กรุณาเลือกกิจกรรม',
+            'service_id.required' => 'กรุณาเลือกบริการ',
+            'speed_id.required' => 'กรุณาเลือกความเร็ว',
+            'price_id.required' => 'กรุณาเลือกราคา',
+            'province_id.required' => 'กรุณาเลือกจังหวัด',
+            'center_id.required' => 'กรุณาเลือกศูนย์บริการ',
         ]);
+        
 
         // Prepare data for insertion
         $data = $request->only(['cus_fullname', 'id_card', 'cus_address', 'center_id', 'type_id', 'service_id', 'province_id', 'promotion_id', 'speed_id', 'price_id', 'other']);
