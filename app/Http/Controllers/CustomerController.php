@@ -48,17 +48,12 @@ class CustomerController extends Controller
             'cus_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'cus_address' => 'required|string|max:500',
             'type_id' => 'required|exists:type_activity,type_id',
+            'province_id' =>'required',
+            'center_id'=> 'required'
         ]);
 
         // Prepare data for insertion
         $data = $request->only(['cus_fullname', 'id_card', 'cus_address', 'center_id', 'type_id', 'service_id', 'province_id', 'promotion_id', 'speed_id', 'price_id', 'other']);
-
-        // Check if province_id and center_id are provided
-        if ($request->filled('province_id') && $request->filled('center_id')) {
-            $data['other'] = null; // ถ้ามีการระบุจังหวัดและศูนย์บริการ ให้ other เป็น null
-        } else {
-            $data['other'] = $request->input('other'); // ถ้าไม่มี ให้ other เก็บค่าที่ส่งมา
-        }
 
         if ($request->hasFile('cus_photo')) {
             $file = $request->file('cus_photo');

@@ -56,7 +56,6 @@
                 <label for="province_id" class="form-label">จังหวัด</label>
                 <select class="form-select" id="province_id" name="province_id">
                     <option value="" disabled selected>-- เลือกจังหวัด --</option>
-                    <option value="null">อื่นๆ</option>
                     @foreach ($provinces as $province)
                         <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
                     @endforeach    
@@ -67,7 +66,7 @@
                     <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
                 </select>
 
-                <label for="other" class="form-label">อื่นๆ</label>
+                <label for="other" class="form-label">หมายเหตุ</label>
                 <textarea class="form-control" id="other" name="other" rows="4"></textarea>
             </div>
             <button type="submit" class="btn btn-success">Save</button>

@@ -27,9 +27,9 @@ return new class extends Migration
             $table->foreign('speed_id')->references('speed_id')->on('speed_activity')->onDelete('cascade');
             $table->unsignedBigInteger('price_id');
             $table->foreign('price_id')->references('price_id')->on('price_activity')->onDelete('cascade');
-            $table->unsignedBigInteger('province_id')->nullable();
+            $table->unsignedBigInteger('province_id');
             $table->foreign('province_id')->references('province_id')->on('province_activity')->onDelete('cascade');
-            $table->unsignedBigInteger('center_id')->nullable();
+            $table->unsignedBigInteger('center_id');
             $table->foreign('center_id')->references('center_id')->on('servicecenter_activity')->onDelete('cascade');
             $table->text('other')->nullable();
             $table->timestamps();
