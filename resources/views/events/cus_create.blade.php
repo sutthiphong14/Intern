@@ -26,7 +26,7 @@
                 <!-- Photo -->
                 <label for="cus_photo" class="form-label">รูปภาพ</label>
                 <input type="file" class="form-control" id="cus_photo" name="cus_photo" required>
-                <p id="error-cus_photo" style="color:red"></p>
+                
 
 
                 <!-- Address -->
@@ -250,21 +250,7 @@
 
 
 
-    <script>
-        document.getElementById('cus_photo').addEventListener('change', function() {
-            const file = this.files[0];
-            const errorElement = document.getElementById('error-cus_photo');
-            const saveButton = document.getElementById('save-button');
-
-            if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
-                errorElement.textContent = '';
-                saveButton.disabled = false;
-            } else {
-                errorElement.textContent = 'กรุณาอัปโหลดไฟล์รูปภาพที่ถูกต้อง (JPEG หรือ PNG)';
-                saveButton.disabled = true;
-            }
-        });
-    </script>
+    
 
     <script>
         function validateIdCard() {

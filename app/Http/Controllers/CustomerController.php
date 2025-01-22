@@ -46,7 +46,7 @@ class CustomerController extends Controller
             ->map(function ($items) {
                 return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
             });
-   
+
 
         return view('events.cus_list', compact('data', 'provinces', 'fttxNew', 'selfInstall', 'HireInstall'));
     }
@@ -76,7 +76,6 @@ class CustomerController extends Controller
         $request->validate([
             'cus_fullname' => 'required|string',
             'id_card' => 'required|max:13',
-            'cus_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'cus_address' => 'required|string',
             'type_id' => 'required',
             'service_id' => 'required',
@@ -88,9 +87,6 @@ class CustomerController extends Controller
             'cus_fullname.required' => 'กรุณากรอกชื่อนามสกุล',
             'id_card.required' => 'กรุณากรอกหมายเลขบัตรประชาชน',
             'id_card.max' => 'หมายเลขบัตรประชาชนต้องไม่เกิน 13 ตัวอักษร',
-            'cus_photo.image' => 'ไฟล์ที่อัปโหลดต้องเป็นรูปภาพ',
-            'cus_photo.mimes' => 'รูปภาพต้องอยู่ในรูปแบบ jpeg, png, jpg, gif, หรือ svg',
-            'cus_photo.max' => 'ไฟล์รูปภาพต้องมีขนาดไม่เกิน 2 MB',
             'cus_address.required' => 'กรุณากรอกที่อยู่',
             'type_id.required' => 'กรุณาเลือกกิจกรรม',
             'service_id.required' => 'กรุณาเลือกบริการ',
@@ -126,7 +122,7 @@ class CustomerController extends Controller
                 'new' => $new,
                 'installation_type' => $installation_type,
                 'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
-                'province_id' => $province_id
+                'province_id' => $province_id,
             ]);
         }
 
@@ -191,8 +187,8 @@ class CustomerController extends Controller
         $type_id = $request->input('type_id');
         $service_id = $request->input('service_id');
 
-        $province_id = $request->input('province_id') == "null" ? null : $request->input('province_id');
-        $center_id = $request->input('center_id') == "null" ? null : $request->input('center_id');
+        $province_id = $request->input('province_id');
+        $center_id = $request->input('center_id') ;
         $other = $request->input('other');
 
         // ตรวจสอบว่ามีไฟล์รูปภาพอัปโหลดไหม
@@ -204,6 +200,30 @@ class CustomerController extends Controller
         } else {
             $cus_photo = $customer->cus_photo;  // กรณีไม่มีการอัพโหลดรูปใหม่ใช้ค่าที่มีอยู่เดิม
         }
+        // ดึงชื่อบริการจาก service_id
+        $service_name = ServeActivity::where('service_id', $service_id)->value('service_name');
+        $fttx_cus_id = Fttxbroadband::where('cus_id', $cus_id)->value('cus_id');
+        if ($service_name == 'fttx_broadband') {
+            $new = $request->input('new');
+            $installation_type = $request->input('installation_type');
+            if ($fttx_cus_id == null) {
+                Fttxbroadband::create([
+                    'new' => $new,
+                    'installation_type' => $installation_type,
+                    'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
+                    'province_id' => $province_id,
+                ]);
+            }else{
+            // ใช้ $cus_id ในการอัปเดตใน FttxBroadband
+            Fttxbroadband::where('cus_id', $cus_id)->update([
+                'new' => $new,
+                'installation_type' => $installation_type,
+            ]);}
+        } else {
+            Fttxbroadband::where('cus_id', $cus_id)->delete();
+        }
+
+
 
         // อัปเดตข้อมูล
         $updated_at = \Carbon\Carbon::now()->format('Y-m-d H:i:s');  // เปลี่ยนให้ถูกต้อง
@@ -224,19 +244,6 @@ class CustomerController extends Controller
 
         $updateResult = Customer::where('cus_id', $cus_id)->update($updateData);
 
-        // ดึงชื่อบริการจาก service_id
-        $service_name = ServeActivity::where('service_id', $service_id)->value('service_name');
-
-        if ($service_name == 'fttx_broadband') {
-            $new = $request->input('new');
-            $installation_type = $request->input('installation_type');
-
-            // ใช้ $cus_id ในการเพิ่มข้อมูลใน FttxBroadband
-            Fttxbroadband::where('cus_id', $cus_id)->update([
-                'new' => $new,
-                'installation_type' => $installation_type,
-            ]);
-        }
 
         if ($updateResult) {
             return redirect()->route('customer_list')->with('success', 'อัปเดตข้อมูลลูกค้าเรียบร้อยแล้ว');

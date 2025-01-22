@@ -107,6 +107,7 @@
 
                 <!-- First select -->
                 <div id="fttx_broadband">
+                    <div>
                     <label for="new" class="form-label">ประเภทลูกค้า</label>
                     <select class="form-select" id="new" name="new" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
@@ -118,7 +119,7 @@
                 </div>
 
                 <!-- Second select -->
-                <div id="fttx_broadband">
+                <div>
                     <label for="installation_type" class="form-label">งานติดตั้ง</label>
                     <select class="form-select" id="installation_type" name="installation_type" required>
                         <option value="" disabled selected>-- เลือกงานติดตั้ง --</option>
@@ -130,6 +131,7 @@
                             จ้างผู้รับเหมา</option>
                     </select>
                 </div>
+            </div>
 
 
 
