@@ -90,7 +90,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p><span class="fw-bold text-dark">รหัสลูกค้า:</span> {{ $customer->cus_id }}</p>
+                            
                             <p><span class="fw-bold text-dark">ชื่อ-นามสกุล:</span> {{ $customer->cus_fullname }}</p>
                             <p><span class="fw-bold text-dark">รหัสบัตรประชาชน:</span> {{ $customer->id_card }}</p>
                             <p><span class="fw-bold text-dark">ที่อยู่:</span> {{ $customer->cus_address }}</p>
@@ -98,9 +98,35 @@
                                 {{ $customer->type->type_name ?? 'ไม่ระบุ' }}
                             </p>
                             <p><span class="fw-bold text-dark">บริการ:</span>
-                                {{ $customer->service->service_name ?? 'ไม่ระบุ' }} <a
-                                    class="btn btn-warning btn-sm text-dark" data-bs-toggle="modal"
-                                    data-bs-target="#fttxBroadbandModal{{ $customer->cus_id }}">รายละเอียด</a></p>
+                                {{ $customer->service->service_name ?? 'ไม่ระบุ' }}<a
+                                class="btn btn-warning btn-sm text-dark" 
+                                data-bs-toggle="tooltip" 
+                                data-bs-placement="right"
+                                data-bs-html="true"
+                                data-bs-original-title="
+                                    <div class='text-start py-3' style='padding: 10px; background-color: #f9f9f9; border-radius: 5px;'>
+                                        <strong>ข้อมูลบริการของลูกค้า</strong><br>
+                                        <span>----------------------------</span>
+                                        <strong class='text-warning'>บริการ:   </strong> {{ $customer->service->service_name }}<br>
+                                        @php
+                                            $fttxData = \App\Models\Fttxbroadband::where('cus_id', $customer->cus_id)->first();
+                                        @endphp
+                                        @if ($fttxData)
+                                            <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
+                                            <strong class='text-warning'>งานติดตั้ง:   </strong> {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
+                                        @elseif ($fttxData)
+                                            <strong class='text-warning'>งานติดตั้ง:   </strong> {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
+                                        @else
+                                            <strong class='text-warning'>ประเภทลูกค้า:   </strong> ไม่ระบุ<br>
+                                            <strong class='text-warning'>วิธีการติดตั้ง:   </strong> ไม่ระบุ
+                                        @endif
+                                    </div>
+                                ">
+                                รายละเอียด
+                            </a>
+                            
+
+                            </p>
                             <p><span class="fw-bold text-dark">โปรโมชั่น:</span>
                                 {{ $customer->promotion->promotion_name ?? 'ไม่ระบุ' }}</p>
                             <p><span class="fw-bold text-dark">ความเร็ว:</span>
@@ -136,42 +162,7 @@
             </div>
         @endforeach
 
-        <!-- Modal สำหรับดูข้อมูลใน fttx_broadband -->
-        @foreach ($data as $customer)
-            <div class="modal fade" id="fttxBroadbandModal{{ $customer->cus_id }}" tabindex="-1"
-                aria-labelledby="fttxBroadbandLabel{{ $customer->cus_id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="fttxBroadbandLabel{{ $customer->cus_id }}">ข้อมูลบริการของลูกค้า
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <!-- ดึงข้อมูลจาก fttx_broadband -->
-                            <p><span class="fw-bold text-dark">บริการ:</span> {{ $customer->service->service_name }} </p>
-                            @php
-                                $fttxData = \App\Models\Fttxbroadband::where('cus_id', $customer->cus_id)->first();
-                            @endphp
 
-                            @if ($fttxData)
-                                <p><span class="fw-bold text-dark">ประเภทลูกค้า:</span>
-                                    {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}</p>
-                                <p><span class="fw-bold text-dark">งานติดตั้ง:</span>
-                                    {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
-                                </p>
-                            @else
-                                <p><span class="fw-bold text-dark">ประเภทลูกค้า:</span> ไม่ระบุ</p>
-                                <p><span class="fw-bold text-dark">วิธีการติดตั้ง:</span> ไม่ระบุ</p>
-                            @endif
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
 
 
         <div class="mt-5">
@@ -195,76 +186,77 @@
                 </tr>
             </thead>
             @php
-            $sumFttxNew = $sumSelfInstall = $sumHireInstall = 0; // สำหรับ province_id <= 33
-            $sumFttxNewOver33 = $sumSelfInstallOver33 = $sumHireInstallOver33 = 0; // สำหรับ province_id > 33
-        @endphp
-        <tbody class="text-center">
-            @foreach ($provinces as $index => $province)
-                {{-- Province ID <= 33 --}}
-                @if ($province->province_id <= 12)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $province->province_name }}</td>
-                        <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
-                        <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
-                        <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
-                    </tr>
-                    @php
-                        $sumFttxNew += $fttxNew[$province->province_id] ?? 0;
-                        $sumSelfInstall += $selfInstall[$province->province_id] ?? 0;
-                        $sumHireInstall += $HireInstall[$province->province_id] ?? 0;
-                    @endphp
-                @endif
-        
-                {{-- แสดงผลรวมตรงกลางเมื่อเปลี่ยนกลุ่ม --}}
-                @if ($province->province_id == 12)
-                    <tr class="bg-warning">
-                        <td colspan="2" >รวม ตป.1</td>
-                        <td>{{ $sumFttxNew }}</td>
-                        <td>{{ $sumSelfInstall }}</td>
-                        <td>{{ $sumHireInstall }}</td>
-                    </tr>
-                @endif
-        
-                {{-- Province ID > 33 --}}
-                @if ($province->province_id > 12)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $province->province_name }}</td>
-                        <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
-                        <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
-                        <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
-                    </tr>
-                    @php
-                        $sumFttxNewOver33 += $fttxNew[$province->province_id] ?? 0;
-                        $sumSelfInstallOver33 += $selfInstall[$province->province_id] ?? 0;
-                        $sumHireInstallOver33 += $HireInstall[$province->province_id] ?? 0;
-                    @endphp
-                @endif
-            @endforeach
-        
-            {{-- แสดงผลรวมสำหรับ province_id > 33 --}}
-            <tr class="bg-warning">
-                <td colspan="2" >รวม ตป.2</td>
-                <td>{{ $sumFttxNewOver33 }}</td>
-                <td>{{ $sumSelfInstallOver33 }}</td>
-                <td>{{ $sumHireInstallOver33 }}</td>
-            </tr>
+                $sumFttxNew = $sumSelfInstall = $sumHireInstall = 0; // สำหรับ province_id <= 33
+                $sumFttxNewOver33 = $sumSelfInstallOver33 = $sumHireInstallOver33 = 0; // สำหรับ province_id > 33
+            @endphp
+            <tbody class="text-center">
+                @foreach ($provinces as $index => $province)
+                    {{-- Province ID <= 33 --}}
+                    @if ($province->province_id <= 12)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $province->province_name }}</td>
+                            <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
+                        </tr>
+                        @php
+                            $sumFttxNew += $fttxNew[$province->province_id] ?? 0;
+                            $sumSelfInstall += $selfInstall[$province->province_id] ?? 0;
+                            $sumHireInstall += $HireInstall[$province->province_id] ?? 0;
+                        @endphp
+                    @endif
 
-            <tr class="bg-success">
-                <td colspan="2" >รวม ทั้งหมด</td>
-                <td>{{ $sumFttxNew + $sumFttxNewOver33 }}</td>
-                <td>{{ $sumSelfInstall + $sumSelfInstallOver33 }}</td>
-                <td>{{ $sumHireInstall + $sumHireInstallOver33 }}</td>
-            </tr>
-        </tbody>
-        
+                    {{-- แสดงผลรวมตรงกลางเมื่อเปลี่ยนกลุ่ม --}}
+                    @if ($province->province_id == 12)
+                        <tr class="bg-warning">
+                            <td colspan="2">รวม ตป.1</td>
+                            <td>{{ $sumFttxNew }}</td>
+                            <td>{{ $sumSelfInstall }}</td>
+                            <td>{{ $sumHireInstall }}</td>
+                        </tr>
+                    @endif
+
+                    {{-- Province ID > 33 --}}
+                    @if ($province->province_id > 12)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $province->province_name }}</td>
+                            <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
+                        </tr>
+                        @php
+                            $sumFttxNewOver33 += $fttxNew[$province->province_id] ?? 0;
+                            $sumSelfInstallOver33 += $selfInstall[$province->province_id] ?? 0;
+                            $sumHireInstallOver33 += $HireInstall[$province->province_id] ?? 0;
+                        @endphp
+                    @endif
+                @endforeach
+
+                {{-- แสดงผลรวมสำหรับ province_id > 33 --}}
+                <tr class="bg-warning">
+                    <td colspan="2">รวม ตป.2</td>
+                    <td>{{ $sumFttxNewOver33 }}</td>
+                    <td>{{ $sumSelfInstallOver33 }}</td>
+                    <td>{{ $sumHireInstallOver33 }}</td>
+                </tr>
+
+                <tr class="bg-success">
+                    <td colspan="2">รวม ทั้งหมด</td>
+                    <td>{{ $sumFttxNew + $sumFttxNewOver33 }}</td>
+                    <td>{{ $sumSelfInstall + $sumSelfInstallOver33 }}</td>
+                    <td>{{ $sumHireInstall + $sumHireInstallOver33 }}</td>
+                </tr>
+            </tbody>
+
 
 
         </table>
         <div class='card mt-5'>
             <h3 class="card-header bg-primary ">กราฟ Fttx broadband</h3>
-            <canvas id="myChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+            <canvas id="myChart" class="mt-5 "
+                style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
         </div>
 
     </div>
@@ -272,6 +264,13 @@
 @endsection
 
 @section('script')
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+
     @if (session('success'))
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -313,8 +312,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 
-
-
     <script>
         // ดึงข้อมูลจาก Blade ไปใส่ใน JavaScript
         const provincesRaw = @json($provinces);
@@ -338,7 +335,6 @@
         const selfInstallData = filteredData.map((province) => selfInstall[province.province_id] || 0);
         const hireInstallData = filteredData.map((province) => hireInstall[province.province_id] || 0);
 
-
         const ctx = document.getElementById('myChart').getContext('2d');
 
         const myChart = new Chart(ctx, {
@@ -352,7 +348,7 @@
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 1,
                         barThickness: 33,
-
+                        borderRadius: 5, // ทำมุมโค้งมน
                     },
                     {
                         label: "NEW",
@@ -361,6 +357,7 @@
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1,
                         barThickness: 50,
+                        borderRadius: 5, // ทำมุมโค้งมน
                     },
                     {
                         label: "ติดตั้งเอง",
@@ -369,6 +366,7 @@
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1,
                         barThickness: 33,
+                        borderRadius: 5, // ทำมุมโค้งมน
                     },
                 ],
             },
@@ -376,32 +374,60 @@
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'top',
+                        position: 'bottom', // ย้าย Legend มาด้านล่าง
+                        labels: {
+                            font: {
+                                size: 14,
+                            },
+                        },
                     },
                     // ตั้งค่า Data Labels
                     datalabels: {
                         display: true,
-                        color: '#000', // สีตัวอักษร
-                        backgroundColor: '#28b463', // สีพื้นหลังของตัวหนังสือ (พร้อมความโปร่งใส)
-                        borderColor: '#000',
+                        color: '#fff', // สีตัวอักษร
+                        backgroundColor: 'rgba(0,0,0,0.5)', // สีพื้นหลังของตัวหนังสือ
+                        borderRadius: 3,
                         anchor: 'end', // ตำแหน่งอ้างอิงให้อยู่ด้านบนของกราฟ
-                        offset: 5, // ระยะห่างจากแท่งกราฟ
+                        offset: -15, // ระยะห่างจากแท่งกราฟ
+                        align: 'top', // จัดให้อยู่บนสุดของแท่งกราฟ
                         formatter: (value) => {
-                            // ถ้าค่าเป็น 0 จะไม่แสดงข้อความ
-                            return value > 0 ? value : null;
+                            return value > 0 ? value : null; // ซ่อนค่าที่เป็น 0
                         },
                     },
+
                 },
                 scales: {
                     x: {
                         grid: {
-                            display: false,
+                            display: false, // ซ่อนเส้น Grid
+                        },
+                        ticks: {
+                            font: {
+                                size: 12,
+                            },
+                            maxRotation: 45, // ตั้งค่ามุมการหมุนของป้ายแกน X
+                            minRotation: 0,
+                        },
+                        title: {
+                            display: true,
+                            text: 'จังหวัด', // เพิ่มชื่อแกน X
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                            },
                         },
                     },
                     y: {
                         beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'จำนวนการติดตั้ง', // เพิ่มชื่อแกน Y
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                            },
+                        },
                     },
-
                 },
             },
             plugins: [ChartDataLabels], // ใช้ plugin datalabels

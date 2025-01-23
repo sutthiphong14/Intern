@@ -391,3 +391,22 @@ Route::get('/check-service/{cus_id}', function ($cus_id) {
     return response()->json($serviceDetails); // ส่งกลับข้อมูลไปยัง modal
 });
 
+
+Route::get('/api/getCustomerDetails/{cus_id}', function ($cus_id) {
+    $fttxData = Fttxbroadband::where('cus_id', $cus_id)->first();
+
+    if ($fttxData) {
+        return response()->json([
+            'service_name' => $fttxData->service->service_name ?? 'ไม่ระบุ',
+            'customer_type' => $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น',
+            'installation_type' => $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา',
+        ]);
+    }
+
+    return response()->json([
+        'service_name' => 'ไม่ระบุ',
+        'customer_type' => 'ไม่ระบุ',
+        'installation_type' => 'ไม่ระบุ',
+    ]);
+});
+
