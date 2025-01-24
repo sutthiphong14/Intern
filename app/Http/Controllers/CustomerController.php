@@ -9,7 +9,9 @@ use App\Models\PromotionActivity;
 use App\Models\ProvinceActivity;
 use App\Models\ServeActivity;
 use App\Models\ServiceCenterActivity;
+use App\Models\Simmy;
 use App\Models\SpeedActivity;
+use App\Models\TopUp;
 use App\Models\TypeActivity;
 use Illuminate\Http\Request;
 
@@ -47,8 +49,43 @@ class CustomerController extends Controller
                 return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
             });
 
+        $Simmy_new = Simmy::where('cus_new', 1)
+            ->get()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->count('cus_new'); // รวมค่าที่ซ้ำกันได้
+            });
 
-        return view('events.cus_list', compact('data', 'provinces', 'fttxNew', 'selfInstall', 'HireInstall'));
+        $Simmy_move = Simmy::where('cus_new', 0)
+            ->get()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->count('cus_new'); // รวมค่าที่ซ้ำกันได้
+            });
+
+        $Simmy_count = TopUp::all()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->count(); // นับจำนวนรายการในแต่ละกลุ่ม
+            });
+
+            $Simmy_price = TopUp::all()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->sum('amount'); // รวมค่าของ amount ในแต่ละกลุ่ม
+            });
+        
+
+
+
+
+
+
+
+
+
+
+        return view('events.cus_list', compact('data', 'provinces', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price'));
     }
 
 
@@ -124,6 +161,20 @@ class CustomerController extends Controller
                 'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
                 'province_id' => $province_id,
             ]);
+        } else if (strpos(strtolower($service_name), 'sim my') !== false) {
+            $cus_new = $request->input('cus_new');
+            $service_id = $request->input('service_id');
+            $price_id = $request->input('price_id');
+            $cus_id = $customer->id;  // ดึง cus_id ที่เพิ่งสร้างใหม่มาใช้งาน
+            $province_id = $request->input('province_id');
+            // ใช้ $cus_id ในการเพิ่มข้อมูลใน FttxBroadband
+            Simmy::create([
+                'cus_new' => $cus_new,
+                'service_id' => $service_id,
+                'price_id' => $price_id,
+                'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
+                'province_id' => $province_id,
+            ]);
         }
 
         return redirect()->route('customer_list')->with('success', 'เพิ่มข้อมูลลูกค้าสำเร็จ');
@@ -188,7 +239,7 @@ class CustomerController extends Controller
         $service_id = $request->input('service_id');
 
         $province_id = $request->input('province_id');
-        $center_id = $request->input('center_id') ;
+        $center_id = $request->input('center_id');
         $other = $request->input('other');
 
         // ตรวจสอบว่ามีไฟล์รูปภาพอัปโหลดไหม
@@ -213,12 +264,13 @@ class CustomerController extends Controller
                     'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
                     'province_id' => $province_id,
                 ]);
-            }else{
-            // ใช้ $cus_id ในการอัปเดตใน FttxBroadband
-            Fttxbroadband::where('cus_id', $cus_id)->update([
-                'new' => $new,
-                'installation_type' => $installation_type,
-            ]);}
+            } else {
+                // ใช้ $cus_id ในการอัปเดตใน FttxBroadband
+                Fttxbroadband::where('cus_id', $cus_id)->update([
+                    'new' => $new,
+                    'installation_type' => $installation_type,
+                ]);
+            }
         } else {
             Fttxbroadband::where('cus_id', $cus_id)->delete();
         }
@@ -250,6 +302,23 @@ class CustomerController extends Controller
         } else {
             return redirect()->route('customer_list')->with('error', 'การอัปเดตล้มเหลว');
         }
+    }
+
+    public function insertTopup(Request $request)
+    {
+        $phone = $request->input('phone');
+        $amount = $request->input('amount');
+        $province_id = $request->input('province_id');
+        $center_id = $request->input('center_id');
+
+        TopUp::create([
+            'phone' => $phone,
+            'amount' => $amount,
+            'province_id' => $province_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
+            'center_id' => $center_id,
+        ]);
+
+        return redirect()->route('customer_list')->with('success', 'เพิ่มข้อมูลการเติมเงินสำเร็จ');
     }
 
 

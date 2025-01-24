@@ -26,7 +26,7 @@
                 <!-- Photo -->
                 <label for="cus_photo" class="form-label">รูปภาพ</label>
                 <input type="file" class="form-control" id="cus_photo" name="cus_photo" required>
-                
+
 
 
                 <!-- Address -->
@@ -108,25 +108,31 @@
                     <small style="color:red">{{ $message }}</small>
                 @enderror
 
-                <!-- First select -->
+                <!-- fttx_broadband form-->
                 <div id="fttx_broadband">
-
                     <label for="new" class="form-label">ประเภทลูกค้า</label>
-                    <select class="form-select" id="new" name="new" required>
+                    <select class="form-select bg-warning" id="new" name="new" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
-                        <option value="1"> ลูกค้าใหม่ </option>
-                        <option value="0"> ปรับโปรโมชั่น </option>
+                        <option value="1" class="bg-secondary"> ลูกค้าใหม่ </option>
+                        <option value="0" class="bg-secondary"> ปรับโปรโมชั่น </option>
                     </select>
-
-                    <!-- Second select -->
                     <label for="installation_type" class="form-label">งานติดตั้ง</label>
-                    <select class="form-select" id="installation_type" name="installation_type" required>
+                    <select class="form-select bg-warning" id="installation_type" name="installation_type" required>
                         <option value="" disabled selected>-- เลือกวิธีการติดตั้ง --</option>
-                        <option value="1"> ติดตั้งเอง </option>
-                        <option value="0"> จ้างผู้รับเหมา </option>
+                        <option value="1" class="bg-secondary"> ติดตั้งเอง </option>
+                        <option value="0" class="bg-secondary"> จ้างผู้รับเหมา </option>
                     </select>
                 </div>
 
+                <!-- sim_my form-->
+                <div id="sim_my">
+                    <label for="cus_new" class="form-label">ประเภทลูกค้า</label>
+                    <select class="form-select bg-warning" id="cus_new" name="cus_new" required>
+                        <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
+                        <option value="1" class="bg-secondary"> ลูกค้าใหม่ </option>
+                        <option value="0" class="bg-secondary"> ลูกค้า(ย้ายค่าย) </option>
+                    </select>
+                </div>
 
                 <!-- Other -->
                 <label for="other" class="form-label">หมายเหตุ</label>
@@ -250,7 +256,7 @@
 
 
 
-    
+
 
     <script>
         function validateIdCard() {
@@ -268,29 +274,44 @@
     </script>
 
 
-    <script>
-        //เงื่อนไข fttx_broadband
-        $(document).ready(function() {
-            var serviceName = $('#service_id option:selected').text(); // ดึงชื่อบริการที่เลือก
-
+<script>
+    $(document).ready(function() {
+        function toggleForms(serviceName) {
             if (serviceName === 'fttx_broadband') {
                 $('#fttx_broadband').show();
+                $('#sim_my').hide();
 
-            } else {
+                // เปิด required สำหรับฟอร์ม fttx_broadband
+                $('#new, #installation_type').prop('required', true);
+
+                // ปิด required สำหรับฟอร์ม sim_my
+            } else if (serviceName.includes('SIM my')) {
+                $('#sim_my').show();
                 $('#fttx_broadband').hide();
 
+                // เปิด required สำหรับฟอร์ม sim_my
+                $('#cus_new').prop('required', true);
+
+                // ปิด required สำหรับฟอร์ม fttx_broadband
+                $('#new, #installation_type').prop('required', false);
+            } else {
+                // ซ่อนฟอร์มทั้งหมด
+                $('#fttx_broadband, #sim_my').hide();
+
+                // ปิด required สำหรับทุกฟอร์ม
+                $('#new, #installation_type, #cus_new').prop('required', false);
             }
+        }
 
-            $('#service_id').change(function() {
-                var serviceName = $(this).find('option:selected').text();
-                if (serviceName === 'fttx_broadband') {
-                    $('#fttx_broadband').show();
+        // เรียกใช้ฟังก์ชันตอนโหลดหน้า
+        var serviceName = $('#service_id option:selected').text();
+        toggleForms(serviceName);
 
-                } else {
-                    $('#fttx_broadband').hide();
-
-                }
-            });
+        // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
+        $('#service_id').change(function() {
+            var serviceName = $(this).find('option:selected').text();
+            toggleForms(serviceName);
         });
-    </script>
+    });
+</script>
 @endsection

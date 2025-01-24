@@ -12,7 +12,7 @@ class Fttxbroadband extends Model
     protected $fillable = ['new','installation_type','cus_id','province_id','center_id'];
     public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล
 
-    public function promotionActivities()
+    public function customer()
     {
         return $this->hasMany(Customer::class, 'cus_id', 'cus_id');
     }

@@ -6,6 +6,56 @@
     <div class="container">
         <h2>จัดการลูกค้า</h2>
         <a href="{{ route('customer_create') }}" class="btn btn-primary mb-3">เพิ่มข้อมูลลูกค้า</a>
+        <button class="btn btn-warning mb-3" data-bs-toggle="modal" data-bs-target="#Top_up">เติมเงิน</button>
+
+        <a href="#sim_my" class="btn btn-secondary mb-3">SIM my </a>
+
+        <!-- Modal สำหรับเติมเงิน -->
+        <div class="modal fade" id="Top_up" tabindex="-1" aria-labelledby="Top_uplLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form id="priceForm" action="{{route('topUp_insert')}}" method="POST">
+                    @csrf
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="PriceModalLabel">เติมเงิน</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">หมายเลขโทรศัพท์มือถือ</label>
+                                <input type="text" class="form-control" id="phone" name="phone">
+                            </div>
+                            <div class="mb-3">
+                                <label for="amount" class="form-label">จำนวนเงินที่เติม</label>
+                                <input type="number" class="form-control" id="amount" name="amount" required>
+                            </div>
+
+                            <label for="province_id" class="form-label">จังหวัด</label>
+                            <select class="form-select bg-warning text-dark" id="province_id" name="province_id" required>
+                                <option value=""  disabled selected>-- เลือกจังหวัด --</option>
+                                @foreach ($provinces as $province)
+                                    <option class="bg-secondary" value="{{ $province->province_id }}">{{ $province->province_name }}</option>
+                                @endforeach
+                            </select>
+                         
+            
+                            <!-- Center -->
+                            <label for="center_id" class="form-label">ศูนย์บริการ</label>
+                            <select class="form-select bg-warning text-dark" id="center_id" name="center_id" required>
+                                <option  value="" disabled selected>-- เลือกศูนย์บริการ --</option>
+                            </select>
+                            
+                        </div>
+                        <div class="modal-footer ">
+                            <button type="submit" class="btn btn-success">บันทึก</button>
+                       
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        
         <table class="table table-bordered">
             <thead>
                 <tr class="bg-dark text-light">
@@ -48,9 +98,7 @@
                                 {{ $customer->province->province_name ?? 'N/A' }} /
                                 {{ $customer->center->center_name ?? 'N/A' }}
                             </td>
-
-
-                            <td>
+                            <td colspan="2">
                                 <a href="{{ route('customer_edit', $customer->cus_id) }}"
                                     class="btn btn-warning btn-sm">Edit</a>
                                 <form id="deleteForm{{ $customer->cus_id }}"
@@ -110,20 +158,22 @@
                                         <strong class='text-warning'>บริการ:   </strong> {{ $customer->service->service_name }}<br>
                                         @php
                                             $fttxData = \App\Models\Fttxbroadband::where('cus_id', $customer->cus_id)->first();
+                                            $simmyData = \App\Models\Simmy::where('cus_id', $customer->cus_id)->first();
                                         @endphp
-                                        @if ($fttxData)
+                                        @if ($fttxData && $customer->service->service_name == 'fttx_broadband')
                                             <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
                                             <strong class='text-warning'>งานติดตั้ง:   </strong> {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
-                                        @elseif ($fttxData)
-                                            <strong class='text-warning'>งานติดตั้ง:   </strong> {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
+                                        @elseif ($simmyData && str_contains(strtolower($customer->service->service_name), 'sim my'))
+                                            <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $simmyData->cus_new == 1 ? 'ลูกค้าใหม่' : 'ลูกค้า(ย้ายค่าย)' }}<br>
                                         @else
                                             <strong class='text-warning'>ประเภทลูกค้า:   </strong> ไม่ระบุ<br>
-                                            <strong class='text-warning'>วิธีการติดตั้ง:   </strong> ไม่ระบุ
+                                            <strong class='text-warning'>ข้อมูลเพิ่มเติม:   </strong> ไม่ระบุ
                                         @endif
                                     </div>
                                 ">
                                 รายละเอียด
                             </a>
+                            
                             
 
                             </p>
@@ -140,10 +190,6 @@
                                 {{ $customer->center->center_name }}
                             </p>
                             <p><span class="fw-bold text-dark">หมายเหตุ</span> {{ $customer->other ?? 'ไม่ระบุ' }}</p>
-
-
-
-
                             @if ($customer->cus_photo)
                                 <div class="text-center">
                                     <img src="{{ asset('storage/' . $customer->cus_photo) }}" alt="Customer Photo"
@@ -253,17 +299,148 @@
 
 
         </table>
+
+
+        <h5 id="sim_my">SIM my</h5>
+        <table class="table table-bordered text-center" >
+            <thead>
+                <tr class="bg-dark">
+                    <th rowspan="3">ลำดับ</th>
+                    <th rowspan="3">จังหวัด</th>
+                    <th colspan="5" rowspan="1">SIM my</th>
+                   
+                </tr>
+                <tr class="bg-dark">
+                    <th rowspan="2">ลูกค้าใหม่</th>
+                    <th rowspan="2">ลูกค้า (ย้ายค่าย)</th>
+                    <th colspan="3">เติมเงินรายปี</th>
+                
+                
+                </tr>
+                <tr class="bg-dark">
+                    <th>จำนวน
+                         (ราย)</th>
+                    <th>ยอดเงิน</th>
+                 
+                </tr>
+            </thead>
+
+            @php
+                $sumNew = $sumMove = $sumCount = $sumPrice  = 0; // สำหรับ province_id <= 33
+                $sumNewOver33 = $sumMoveOver33 = $sumCountOver33 = $sumPriceOver33 = 0; // สำหรับ province_id > 33
+            @endphp
+            <tbody class="text-center">
+                @foreach ($provinces as $index => $province)
+                    {{-- Province ID <= 33 --}}
+                    @if ($province->province_id <= 12)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $province->province_name }}</td>
+                            <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
+                        </tr>
+                        @php
+                            $sumNew += $Simmy_new[$province->province_id] ?? 0;
+                            $sumMove += $Simmy_move[$province->province_id] ?? 0;
+                             $sumCount += $Simmy_count[$province->province_id] ?? 0;
+                             $sumPrice += $Simmy_price[$province->province_id] ?? 0;
+                         @endphp
+                    @endif
+
+                    {{-- แสดงผลรวมตรงกลางเมื่อเปลี่ยนกลุ่ม --}}
+                    @if ($province->province_id == 12)
+                        <tr class="bg-warning">
+                            <td colspan="2">รวม ตป.1</td>
+                            <td>{{ $sumNew }}</td>
+                            <td>{{ $sumMove }}</td>
+                            <td>{{ $sumCount }}</td>
+                            <td>{{ $sumPrice }}</td>
+                        </tr>
+                    @endif
+
+                    {{-- Province ID > 33 --}}
+                    @if ($province->province_id > 12)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $province->province_name }}</td>
+                            <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
+                        </tr>
+                        @php
+                        $sumNewOver33 += $Simmy_new[$province->province_id] ?? 0;
+                        $sumMoveOver33 += $Simmy_move[$province->province_id] ?? 0;
+                         $sumCountOver33 += $Simmy_count[$province->province_id] ?? 0;
+                         $sumPriceOver33 += $Simmy_price[$province->province_id] ?? 0;
+                     @endphp
+                       
+                    @endif
+                @endforeach
+
+                {{-- แสดงผลรวมสำหรับ province_id > 33 --}}
+                @if ($province->province_id > 12)
+                        <tr class="bg-warning">
+                            <td colspan="2">รวม ตป.2</td>
+                            <td>{{ $sumNewOver33 }}</td>
+                            <td>{{ $sumMoveOver33 }}</td>
+                            <td>{{ $sumCountOver33 }}</td>
+                            <td>{{ $sumPriceOver33 }}</td>
+                        </tr>
+                    @endif
+
+                <tr class="bg-success">
+                    <td colspan="2">รวม ทั้งหมด</td>
+                    <td>{{ $sumNew + $sumNewOver33 }}</td>
+                    <td>{{ $sumMove  + $sumMoveOver33 }}</td>
+                    <td>{{ $sumCount  + $sumCountOver33}}</td>
+                    <td>{{ $sumPrice  + $sumPriceOver33}}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        
+
         <div class='card mt-5'>
             <h3 class="card-header bg-primary ">กราฟ Fttx broadband</h3>
             <canvas id="myChart" class="mt-5 "
                 style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
         </div>
 
+       
     </div>
 
 @endsection
 
 @section('script')
+<script>
+    
+    $('#province_id').change(function() {
+            var provinceId = $(this).val();
+
+            $.ajax({
+                url: '/getCenters',
+                type: 'GET',
+                data: {
+                    province_id: provinceId
+                },
+                success: function(data) {
+                    $('#center_id').empty();
+                    $('#center_id').append(
+                        '<option value="" disabled selected>-- เลือกศูนย์บริการ --</option>');
+                    $.each(data, function(index, center) {
+                        $('#center_id').append('<option class="bg-secondary" value="' + center.center_id + '">' +
+                            center.center_name + '</option>');
+                    });
+                },
+                error: function() {
+                    console.log('Error fetching centers');
+                }
+            });
+        });
+</script>
     <script>
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
@@ -347,7 +524,7 @@
                         backgroundColor: 'rgba(255, 99, 132, 0.7)',
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 1,
-                        barThickness: 33,
+                        barThickness: 25,
                         borderRadius: 5, // ทำมุมโค้งมน
                     },
                     {
@@ -365,7 +542,7 @@
                         backgroundColor: 'rgba(75, 192, 192, 0.7)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1,
-                        barThickness: 33,
+                        barThickness: 25,
                         borderRadius: 5, // ทำมุมโค้งมน
                     },
                 ],
