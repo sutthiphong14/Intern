@@ -4,16 +4,44 @@
 
 @section('content')
     <div class="container">
-        <h2>จัดการลูกค้า</h2>
-        <a href="{{ route('customer_create') }}" class="btn btn-primary mb-3">เพิ่มข้อมูลลูกค้า</a>
-        <button class="btn btn-warning mb-3" data-bs-toggle="modal" data-bs-target="#Top_up">เติมเงิน</button>
+        <div class="d-flex justify-content-between">
+            <div class="row mb-3">
+                <div class="col-auto">
+                    <a href="{{ route('customer_create') }}" class="btn btn-primary">เพิ่มข้อมูลลูกค้า</a>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#Top_up">เติมเงิน</button>
+                </div>
+                <div class="col-auto">
+                    <a href="#sim_my" class="btn btn-secondary">SIM my </a>
+                </div>
+            </div>
 
-        <a href="#sim_my" class="btn btn-secondary mb-3">SIM my </a>
+            <!-- Form สำหรับเลือกประเภทบริการ -->
+            <form action="#" method="GET" id="yearForm" class="row mb-3">
+                <div class="col-auto">
+                    <select class="form-select bg-warning" id="type_service" name="type_service" required
+                        onchange="this.form.submit()">
+                        <option value="" disabled selected>-- เลือกประเภทบริการ --</option>
+                        <option value="fttx_broadband" class="bg-secondary"
+                            {{ request()->get('type_service') == 'fttx_broadband' ? 'selected' : '' }}>Fttxbroadband
+                        </option>
+                        <option value="SIM my(เติมเงิน)" class="bg-secondary"
+                            {{ request()->get('type_service') == 'SIM my(เติมเงิน)' ? 'selected' : '' }}>SIM my(เติมเงิน)
+                        </option>
+                        <option value="SIM my(รายเดือน)" class="bg-secondary"
+                            {{ request()->get('type_service') == 'SIM my(รายเดือน)' ? 'selected' : '' }}>SIM my(รายเดิือน)
+                        </option>
+                    </select>
+                </div>
+            </form>
+        </div>
+
 
         <!-- Modal สำหรับเติมเงิน -->
         <div class="modal fade" id="Top_up" tabindex="-1" aria-labelledby="Top_uplLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <form id="priceForm" action="{{route('topUp_insert')}}" method="POST">
+                <form id="priceForm" action="{{ route('topUp_insert') }}" method="POST">
                     @csrf
                     <div class="modal-content">
                         <div class="modal-header">
@@ -32,30 +60,31 @@
 
                             <label for="province_id" class="form-label">จังหวัด</label>
                             <select class="form-select bg-warning text-dark" id="province_id" name="province_id" required>
-                                <option value=""  disabled selected>-- เลือกจังหวัด --</option>
+                                <option value="" disabled selected>-- เลือกจังหวัด --</option>
                                 @foreach ($provinces as $province)
-                                    <option class="bg-secondary" value="{{ $province->province_id }}">{{ $province->province_name }}</option>
+                                    <option class="bg-secondary" value="{{ $province->province_id }}">
+                                        {{ $province->province_name }}</option>
                                 @endforeach
                             </select>
-                         
-            
+
+
                             <!-- Center -->
                             <label for="center_id" class="form-label">ศูนย์บริการ</label>
                             <select class="form-select bg-warning text-dark" id="center_id" name="center_id" required>
-                                <option  value="" disabled selected>-- เลือกศูนย์บริการ --</option>
+                                <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
                             </select>
-                            
+
                         </div>
                         <div class="modal-footer ">
                             <button type="submit" class="btn btn-success">บันทึก</button>
-                       
+
                         </div>
                     </div>
                 </form>
             </div>
         </div>
 
-        
+
         <table class="table table-bordered">
             <thead>
                 <tr class="bg-dark text-light">
@@ -135,10 +164,11 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="customerModalLabel{{ $customer->cus_id }}">รายละเอียดลูกค้า</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            
+
                             <p><span class="fw-bold text-dark">ชื่อ-นามสกุล:</span> {{ $customer->cus_fullname }}</p>
                             <p><span class="fw-bold text-dark">รหัสบัตรประชาชน:</span> {{ $customer->id_card }}</p>
                             <p><span class="fw-bold text-dark">ที่อยู่:</span> {{ $customer->cus_address }}</p>
@@ -147,41 +177,43 @@
                             </p>
                             <p><span class="fw-bold text-dark">บริการ:</span>
                                 {{ $customer->service->service_name ?? 'ไม่ระบุ' }}<a
-                                class="btn btn-warning btn-sm text-dark" 
-                                data-bs-toggle="tooltip" 
-                                data-bs-placement="right"
-                                data-bs-html="true"
-                                data-bs-original-title="
+                                    class="btn btn-warning btn-sm text-dark" data-bs-toggle="tooltip"
+                                    data-bs-placement="right" data-bs-html="true"
+                                    data-bs-original-title="
                                     <div class='text-start py-3' style='padding: 10px; background-color: #f9f9f9; border-radius: 5px;'>
                                         <strong>ข้อมูลบริการของลูกค้า</strong><br>
                                         <span>----------------------------</span>
                                         <strong class='text-warning'>บริการ:   </strong> {{ $customer->service->service_name }}<br>
                                         @php
-                                            $fttxData = \App\Models\Fttxbroadband::where('cus_id', $customer->cus_id)->first();
+                                            $fttxData = \App\Models\Fttxbroadband::where(
+                                                'cus_id',
+                                                $customer->cus_id,
+                                            )->first();
                                             $simmyData = \App\Models\Simmy::where('cus_id', $customer->cus_id)->first();
                                         @endphp
                                         @if ($fttxData && $customer->service->service_name == 'fttx_broadband')
-                                            <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
+<strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
                                             <strong class='text-warning'>งานติดตั้ง:   </strong> {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
-                                        @elseif ($simmyData && str_contains(strtolower($customer->service->service_name), 'sim my'))
-                                            <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $simmyData->cus_new == 1 ? 'ลูกค้าใหม่' : 'ลูกค้า(ย้ายค่าย)' }}<br>
-                                        @else
-                                            <strong class='text-warning'>ประเภทลูกค้า:   </strong> ไม่ระบุ<br>
+@elseif ($simmyData && str_contains(strtolower($customer->service->service_name), 'sim my'))
+<strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $simmyData->cus_new == 1 ? 'ลูกค้าใหม่' : 'ลูกค้า(ย้ายค่าย)' }}<br>
+@else
+<strong class='text-warning'>ประเภทลูกค้า:   </strong> ไม่ระบุ<br>
                                             <strong class='text-warning'>ข้อมูลเพิ่มเติม:   </strong> ไม่ระบุ
-                                        @endif
+@endif
                                     </div>
                                 ">
-                                รายละเอียด
-                            </a>
-                            
-                            
+                                    รายละเอียด
+                                </a>
+
+
 
                             </p>
                             <p><span class="fw-bold text-dark">โปรโมชั่น:</span>
                                 {{ $customer->promotion->promotion_name ?? 'ไม่ระบุ' }}</p>
                             <p><span class="fw-bold text-dark">ความเร็ว:</span>
                                 {{ $customer->speed->speed_name ?? 'ไม่ระบุ' }}</p>
-                            <p><span class="fw-bold text-dark">ราคา:</span> {{ $customer->price->price_name ?? 'ไม่ระบุ' }}
+                            <p><span class="fw-bold text-dark">ราคา:</span>
+                                {{ $customer->price->price_name ?? 'ไม่ระบุ' }}
                             </p>
                             <p><span class="fw-bold text-dark">จังหวัด:</span>
                                 {{ $customer->province->province_name }}
@@ -302,31 +334,31 @@
 
 
         <h5 id="sim_my">SIM my</h5>
-        <table class="table table-bordered text-center" >
+        <table class="table table-bordered text-center">
             <thead>
                 <tr class="bg-dark">
                     <th rowspan="3">ลำดับ</th>
                     <th rowspan="3">จังหวัด</th>
                     <th colspan="5" rowspan="1">SIM my</th>
-                   
+
                 </tr>
                 <tr class="bg-dark">
                     <th rowspan="2">ลูกค้าใหม่</th>
                     <th rowspan="2">ลูกค้า (ย้ายค่าย)</th>
                     <th colspan="3">เติมเงินรายปี</th>
-                
-                
+
+
                 </tr>
                 <tr class="bg-dark">
                     <th>จำนวน
-                         (ราย)</th>
+                        (ราย)</th>
                     <th>ยอดเงิน</th>
-                 
+
                 </tr>
             </thead>
 
             @php
-                $sumNew = $sumMove = $sumCount = $sumPrice  = 0; // สำหรับ province_id <= 33
+                $sumNew = $sumMove = $sumCount = $sumPrice = 0; // สำหรับ province_id <= 33
                 $sumNewOver33 = $sumMoveOver33 = $sumCountOver33 = $sumPriceOver33 = 0; // สำหรับ province_id > 33
             @endphp
             <tbody class="text-center">
@@ -344,9 +376,9 @@
                         @php
                             $sumNew += $Simmy_new[$province->province_id] ?? 0;
                             $sumMove += $Simmy_move[$province->province_id] ?? 0;
-                             $sumCount += $Simmy_count[$province->province_id] ?? 0;
-                             $sumPrice += $Simmy_price[$province->province_id] ?? 0;
-                         @endphp
+                            $sumCount += $Simmy_count[$province->province_id] ?? 0;
+                            $sumPrice += $Simmy_price[$province->province_id] ?? 0;
+                        @endphp
                     @endif
 
                     {{-- แสดงผลรวมตรงกลางเมื่อเปลี่ยนกลุ่ม --}}
@@ -371,37 +403,36 @@
                             <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
                         </tr>
                         @php
-                        $sumNewOver33 += $Simmy_new[$province->province_id] ?? 0;
-                        $sumMoveOver33 += $Simmy_move[$province->province_id] ?? 0;
-                         $sumCountOver33 += $Simmy_count[$province->province_id] ?? 0;
-                         $sumPriceOver33 += $Simmy_price[$province->province_id] ?? 0;
-                     @endphp
-                       
+                            $sumNewOver33 += $Simmy_new[$province->province_id] ?? 0;
+                            $sumMoveOver33 += $Simmy_move[$province->province_id] ?? 0;
+                            $sumCountOver33 += $Simmy_count[$province->province_id] ?? 0;
+                            $sumPriceOver33 += $Simmy_price[$province->province_id] ?? 0;
+                        @endphp
                     @endif
                 @endforeach
 
                 {{-- แสดงผลรวมสำหรับ province_id > 33 --}}
                 @if ($province->province_id > 12)
-                        <tr class="bg-warning">
-                            <td colspan="2">รวม ตป.2</td>
-                            <td>{{ $sumNewOver33 }}</td>
-                            <td>{{ $sumMoveOver33 }}</td>
-                            <td>{{ $sumCountOver33 }}</td>
-                            <td>{{ $sumPriceOver33 }}</td>
-                        </tr>
-                    @endif
+                    <tr class="bg-warning">
+                        <td colspan="2">รวม ตป.2</td>
+                        <td>{{ $sumNewOver33 }}</td>
+                        <td>{{ $sumMoveOver33 }}</td>
+                        <td>{{ $sumCountOver33 }}</td>
+                        <td>{{ $sumPriceOver33 }}</td>
+                    </tr>
+                @endif
 
                 <tr class="bg-success">
                     <td colspan="2">รวม ทั้งหมด</td>
                     <td>{{ $sumNew + $sumNewOver33 }}</td>
-                    <td>{{ $sumMove  + $sumMoveOver33 }}</td>
-                    <td>{{ $sumCount  + $sumCountOver33}}</td>
-                    <td>{{ $sumPrice  + $sumPriceOver33}}</td>
+                    <td>{{ $sumMove + $sumMoveOver33 }}</td>
+                    <td>{{ $sumCount + $sumCountOver33 }}</td>
+                    <td>{{ $sumPrice + $sumPriceOver33 }}</td>
                 </tr>
             </tbody>
         </table>
-        
-        
+
+
 
         <div class='card mt-5'>
             <h3 class="card-header bg-primary ">กราฟ Fttx broadband</h3>
@@ -409,15 +440,14 @@
                 style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
         </div>
 
-       
+
     </div>
 
 @endsection
 
 @section('script')
-<script>
-    
-    $('#province_id').change(function() {
+    <script>
+        $('#province_id').change(function() {
             var provinceId = $(this).val();
 
             $.ajax({
@@ -431,7 +461,8 @@
                     $('#center_id').append(
                         '<option value="" disabled selected>-- เลือกศูนย์บริการ --</option>');
                     $.each(data, function(index, center) {
-                        $('#center_id').append('<option class="bg-secondary" value="' + center.center_id + '">' +
+                        $('#center_id').append('<option class="bg-secondary" value="' + center
+                            .center_id + '">' +
                             center.center_name + '</option>');
                     });
                 },
@@ -440,7 +471,7 @@
                 }
             });
         });
-</script>
+    </script>
     <script>
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {

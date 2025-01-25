@@ -381,11 +381,13 @@ Route::delete('/customer_delete/{cus_id}', [CustomerController::class, 'Customer
 Route::get('/customer_edit/{cus_id}', [CustomerController::class, 'CustomerEdit'])->name('customer_edit');
 Route::put('/customer_update/{cus_id}', [CustomerController::class, 'CustomerUpdate'])->name('customer_update');
 
+Route::get('/fttx_broadband', [ActivityController::class, 'Fttxlist'])->name('fttx_broadband');
+Route::get('/sim_my', [ActivityController::class, 'Sim_my'])->name('sim_my');
+
 Route::get('/getPromotions', [CustomerController::class, 'getPromotions']);
 Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);
 Route::get('/getPrices', [CustomerController::class, 'getPrices']);
 Route::get('/getCenters', [CustomerController::class, 'getCenters']);
-
 Route::post('/topUp_insert', [CustomerController::class,'insertTopup'])->name('topUp_insert');
 
 

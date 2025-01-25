@@ -285,6 +285,7 @@
                 $('#new, #installation_type').prop('required', true);
 
                 // ปิด required สำหรับฟอร์ม sim_my
+                $('#cus_new').prop('required', false);
             } else if (serviceName.includes('SIM my')) {
                 $('#sim_my').show();
                 $('#fttx_broadband').hide();

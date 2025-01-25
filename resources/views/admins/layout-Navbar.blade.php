@@ -156,6 +156,18 @@
           <i class="fas fa-th"></i> แอป
         </a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link-main" aria-current="page" href="{{ route('fttx_broadband') }}">
+         fttx_broadband
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link-main" aria-current="page" href="{{ route('sim_my') }}">
+         sim_my
+        </a>
+      </li>
       @endif
     </ul>
 

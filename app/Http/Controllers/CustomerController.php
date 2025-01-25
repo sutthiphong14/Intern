@@ -18,10 +18,25 @@ use Illuminate\Http\Request;
 class CustomerController extends Controller
 {
     //
-    public function CustomerList()
+    public function CustomerList(Request $request)
     {
-        // ดึงข้อมูล Customer และจัดกลุ่มตาม province_id
-        $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])->get();
+        // รับค่า type_service จาก request (GET หรือ POST)
+        $type_service = $request->input('type_service');
+
+        // กรองข้อมูลตาม type_service
+        if ($type_service !== null) {
+            // กรองข้อมูลตามชื่อบริการในตาราง service
+            $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])
+                ->whereHas('service', function ($query) use ($type_service) {
+                    $query->where('service_name', $type_service);
+                })
+                ->get();
+                
+        } else {
+            // หากไม่เลือก type_service ให้ดึงข้อมูลทั้งหมด
+            $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])->get();
+        }
+
         $provinces = ProvinceActivity::all();
 
         // ดึงข้อมูล Fttxbroadband ที่ new = 1
@@ -69,20 +84,11 @@ class CustomerController extends Controller
                 return $items->count(); // นับจำนวนรายการในแต่ละกลุ่ม
             });
 
-            $Simmy_price = TopUp::all()
+        $Simmy_price = TopUp::all()
             ->groupBy('province_id')
             ->map(function ($items) {
                 return $items->sum('amount'); // รวมค่าของ amount ในแต่ละกลุ่ม
             });
-        
-
-
-
-
-
-
-
-
 
 
         return view('events.cus_list', compact('data', 'provinces', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price'));
@@ -206,6 +212,7 @@ class CustomerController extends Controller
             return redirect()->route('customer_list')->with('error', 'ไม่พบข้อมูลลูกค้า');
         }
         $fttxBroadband = Fttxbroadband::where('cus_id', $cus_id)->first();
+        $sim_my = Simmy::where('cus_id', $cus_id)->first();
         $customerTypeOptions = Fttxbroadband::select('fttx_id', 'new')->get(); // ตัวเลือกประเภทลูกค้า
         $installationOptions = Fttxbroadband::select('fttx_id', 'installation_type')->get(); // ตัวเลือกวิธีติดตั้ง
 
@@ -218,14 +225,13 @@ class CustomerController extends Controller
         $prices = PriceActivity::all(); // ดึงข้อมูลราคา
         $centers = ServiceCenterActivity::all(); // ดึงข้อมูลศูนย์บริการ
 
-        return view('events.cus_edit', compact('customer', 'types', 'services', 'promotion', 'provinces', 'speed', 'prices', 'centers', 'fttxBroadband', 'customerTypeOptions', 'installationOptions'));
+        return view('events.cus_edit', compact('customer', 'types', 'services', 'promotion', 'provinces', 'speed', 'prices', 'centers', 'fttxBroadband', 'sim_my', 'customerTypeOptions', 'installationOptions'));
     }
 
     public function CustomerUpdate(Request $request, $cus_id)
     {
         // Find customer by id
-        $customer = Customer::where('cus_id', $cus_id)->firstOrFail();  // หรือ .first()
-
+        $customer = Customer::where('cus_id', $cus_id)->firstOrFail();
 
         if (!$customer) {
             return redirect()->route('customer_list')->with('error', 'ไม่พบข้อมูลลูกค้า');
@@ -249,38 +255,67 @@ class CustomerController extends Controller
             $path = $file->storeAs('customer_images', $filename, 'public');
             $cus_photo = $path; // อัปเดตชื่อไฟล์ในฐานข้อมูล
         } else {
-            $cus_photo = $customer->cus_photo;  // กรณีไม่มีการอัพโหลดรูปใหม่ใช้ค่าที่มีอยู่เดิม
+            $cus_photo = $customer->cus_photo; // ใช้ค่าที่มีอยู่เดิมหากไม่มีการอัปโหลดรูปใหม่
         }
+
         // ดึงชื่อบริการจาก service_id
         $service_name = ServeActivity::where('service_id', $service_id)->value('service_name');
         $fttx_cus_id = Fttxbroadband::where('cus_id', $cus_id)->value('cus_id');
+        $simmy_cus_id = Simmy::where('cus_id', $cus_id)->value('cus_id');
+
         if ($service_name == 'fttx_broadband') {
+            // กรณีเป็น fttx_broadband
             $new = $request->input('new');
             $installation_type = $request->input('installation_type');
             if ($fttx_cus_id == null) {
                 Fttxbroadband::create([
                     'new' => $new,
                     'installation_type' => $installation_type,
-                    'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
+                    'cus_id' => $cus_id,
                     'province_id' => $province_id,
                 ]);
             } else {
-                // ใช้ $cus_id ในการอัปเดตใน FttxBroadband
                 Fttxbroadband::where('cus_id', $cus_id)->update([
                     'new' => $new,
                     'installation_type' => $installation_type,
+                    'province_id' => $province_id
                 ]);
             }
-        } else {
+
+            // ลบข้อมูลใน Simmy หากเปลี่ยนจาก sim my
+            Simmy::where('cus_id', $cus_id)->delete();
+        } elseif (strpos(strtolower($service_name), 'sim my') !== false) {
+            // กรณีเป็น sim my
+            $cus_new = $request->input('cus_new');
+            $price_id = $request->input('price_id');
+
+            if ($simmy_cus_id == null) {
+                Simmy::create([
+                    'cus_id' => $cus_id,
+                    'cus_new' => $cus_new,
+                    'service_id' => $service_id,
+                    'price_id' => $price_id,
+                    'province_id' => $province_id,
+                ]);
+            } else {
+                Simmy::where('cus_id', $cus_id)->update([
+                    'cus_new' => $cus_new,
+                    'service_id' => $service_id,
+                    'price_id' => $price_id,
+                    'province_id' => $province_id,
+                ]);
+            }
+
+            // ลบข้อมูลใน Fttxbroadband หากเปลี่ยนจาก fttx_broadband
             Fttxbroadband::where('cus_id', $cus_id)->delete();
+        } else {
+            // ลบข้อมูลทั้ง Fttxbroadband และ Simmy หากเปลี่ยนบริการ
+            Fttxbroadband::where('cus_id', $cus_id)->delete();
+            Simmy::where('cus_id', $cus_id)->delete();
         }
 
-
-
         // อัปเดตข้อมูล
-        $updated_at = \Carbon\Carbon::now()->format('Y-m-d H:i:s');  // เปลี่ยนให้ถูกต้อง
-
-        // Save to database using update() on a Builder object
+        $updated_at = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
         $updateData = [
             'cus_fullname' => $cus_fullname,
             'id_card' => $id_card,
@@ -295,7 +330,6 @@ class CustomerController extends Controller
         ];
 
         $updateResult = Customer::where('cus_id', $cus_id)->update($updateData);
-
 
         if ($updateResult) {
             return redirect()->route('customer_list')->with('success', 'อัปเดตข้อมูลลูกค้าเรียบร้อยแล้ว');
