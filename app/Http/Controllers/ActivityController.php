@@ -350,6 +350,81 @@ class ActivityController extends Controller
             ->map(function ($items) {
                 return $items->sum('amount'); // รวมค่าของ amount ในแต่ละกลุ่ม
             });
-        return view('events.sim_my', compact('data', 'provinces','Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price'));
+        return view('events.sim_my', compact('data', 'provinces', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price'));
+    }
+
+    public function activity_list(Request $request)
+    {
+        // รับค่า type_service จาก request (GET หรือ POST)
+        $type_service = $request->input('type_service');
+
+        // กรองข้อมูลตาม type_service
+        if ($type_service !== null) {
+            // กรองข้อมูลตามชื่อบริการในตาราง service
+            $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])
+                ->whereHas('service', function ($query) use ($type_service) {
+                    $query->where('service_name', $type_service);
+                })
+                ->get();
+        } else {
+            // หากไม่เลือก type_service ให้ดึงข้อมูลทั้งหมด
+            $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])->get();
+        }
+
+        $provinces = ProvinceActivity::all();
+
+        // ดึงข้อมูล Fttxbroadband ที่ new = 1
+        $fttxNew = Fttxbroadband::where('new', 1)
+            ->get()
+            ->groupBy('province_id') // แยกกลุ่มตาม `province_id`
+            ->map(function ($items) {
+                return $items->count('new'); // รวมค่าที่ซ้ำกันได้
+            });
+
+
+        // ดึงข้อมูล Fttxbroadband ที่ติดตั้งเอง
+        $selfInstall = Fttxbroadband::where('installation_type', 1)
+            ->get()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
+            });
+
+        // ดึงข้อมูล Fttxbroadband ที่จ้างผู้รับเหมา
+        $HireInstall = Fttxbroadband::where('installation_type', 0)
+            ->get()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
+            });
+
+        $Simmy_new = Simmy::where('cus_new', 1)
+            ->get()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->count('cus_new'); // รวมค่าที่ซ้ำกันได้
+            });
+
+        $Simmy_move = Simmy::where('cus_new', 0)
+            ->get()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->count('cus_new'); // รวมค่าที่ซ้ำกันได้
+            });
+
+        $Simmy_count = TopUp::all()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->count(); // นับจำนวนรายการในแต่ละกลุ่ม
+            });
+
+        $Simmy_price = TopUp::all()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->sum('amount'); // รวมค่าของ amount ในแต่ละกลุ่ม
+            });
+
+
+        return view('events.activity_list', compact('data', 'provinces', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price'));
     }
 }

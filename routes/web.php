@@ -383,12 +383,26 @@ Route::put('/customer_update/{cus_id}', [CustomerController::class, 'CustomerUpd
 
 Route::get('/fttx_broadband', [ActivityController::class, 'Fttxlist'])->name('fttx_broadband');
 Route::get('/sim_my', [ActivityController::class, 'Sim_my'])->name('sim_my');
+Route::get('/activity_list', [ActivityController::class, 'activity_list'])->name('activity_list');
 
 Route::get('/getPromotions', [CustomerController::class, 'getPromotions']);
 Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);
 Route::get('/getPrices', [CustomerController::class, 'getPrices']);
 Route::get('/getCenters', [CustomerController::class, 'getCenters']);
+Route::get('/customers/search', [CustomerController::class, 'searchCustomers'])->name('customer_search');
+
+
+
 Route::post('/topUp_insert', [CustomerController::class,'insertTopup'])->name('topUp_insert');
+Route::delete('/topUp_delete/{topUp_id}', [CustomerController::class, 'TopUpDelete'])->name('topUp_delete');
+Route::put('/top-up/update/{id}', [CustomerController::class, 'TopUpUpdate'])->name('topUp_update');
+Route::get('/getTopUpDetails/{topUpId}', [CustomerController::class, 'getTopUpDetails'])->name('getTopUpDetails');
+
+
+
+
+
+
 
 
 

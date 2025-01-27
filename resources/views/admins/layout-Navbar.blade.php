@@ -164,6 +164,12 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link-main" aria-current="page" href="{{ route('activity_list') }}">
+          activity_list
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link-main" aria-current="page" href="{{ route('sim_my') }}">
          sim_my
         </a>

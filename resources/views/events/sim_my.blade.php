@@ -103,4 +103,123 @@
     </tbody>
 </table>
 
+<div class='card mt-5'>
+    <h3 class="card-header bg-primary ">กราฟ Fttx broadband</h3>
+    <canvas id="simMyChart" width="400" height="200"></canvas>
+</div>
+<!-- HTML สำหรับ Canvas -->
+
+
+@endsection
+
+@section('script')
+   
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+<script>
+    // เตรียมข้อมูลจาก PHP
+    const provinces = @json($provinces);
+    const simNewData = @json($Simmy_new);
+    const simMoveData = @json($Simmy_move);
+    const simCountData = @json($Simmy_count);
+    
+     // สร้างอาร์เรย์สำหรับ Bar และ Line chart
+     const labels = provinces.map(province => province.province_name);
+    const newCustomers = provinces.map(province => simNewData[province.province_id] || 0);
+    const moveCustomers = provinces.map(province => simMoveData[province.province_id] || 0);
+    const counts = provinces.map(province => simCountData[province.province_id] || 0);
+
+    // เปลี่ยนชื่อ config เป็น simMyChartConfig
+    const simMyChartConfig = {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                type: 'bar', // Bar สำหรับลูกค้าใหม่
+                label: 'ลูกค้าใหม่',
+                data: newCustomers,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                order: 1 // ลำดับของ Bar จะต่ำกว่า Line
+            },
+            {
+                type: 'line', // Line สำหรับลูกค้าย้ายค่าย
+                label: 'ลูกค้า (ย้ายค่าย)',
+                data: moveCustomers,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                tension: 0.4, // เพิ่มความยืดหยุ่นให้เส้นเพื่อให้มันดูมีระยะห่าง
+                fill: false,  // ไม่เติมสีใต้เส้น
+                pointRadius: 5, // เพิ่มขนาดจุดเพื่อให้เห็นชัดขึ้น
+                pointHoverRadius: 7, // ขนาดของจุดเมื่อ hover
+                order: 2 // ให้ Line อยู่เหนือ Bar
+            },
+            {
+                type: 'line', // Line สำหรับจำนวนราย
+                label: 'จำนวน (ราย)',
+                data: counts,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2,
+                tension: 0.4, // เพิ่มความยืดหยุ่นให้เส้น
+                fill: false,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                order: 3 // ให้ Line อยู่เหนือ Bar
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'กราฟแสดงข้อมูล SIM my'
+            },
+            tooltip: {
+                mode: 'index',
+                intersect: false
+            }
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'จังหวัด'
+                },
+                ticks: {
+                    autoSkip: true,  // กำหนดให้ไม่แสดงทุก label ถ้ามีข้อมูลมาก
+                    maxTicksLimit: 20, // จำกัดจำนวน label ที่จะแสดง
+                    maxRotation: 0,  // ปรับให้ label บนแกน X ไม่หมุน
+                    minRotation: 0,  // กำหนดไม่ให้ label หมุน
+                },
+                grid: {
+                    display: true,
+                    drawBorder: true
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'จำนวนลูกค้า'
+                },
+                beginAtZero: true,
+               
+            }
+        }
+    }
+};
+
+// เรนเดอร์กราฟ
+const ctx = document.getElementById('simMyChart').getContext('2d');
+new Chart(ctx, simMyChartConfig);
+
+
+</script>
+
+
+
 @endsection

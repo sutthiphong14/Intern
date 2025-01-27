@@ -31,13 +31,13 @@ class CustomerController extends Controller
                     $query->where('service_name', $type_service);
                 })
                 ->get();
-                
         } else {
             // หากไม่เลือก type_service ให้ดึงข้อมูลทั้งหมด
             $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])->get();
         }
 
         $provinces = ProvinceActivity::all();
+        $centers = ServiceCenterActivity::all();
 
         // ดึงข้อมูล Fttxbroadband ที่ new = 1
         $fttxNew = Fttxbroadband::where('new', 1)
@@ -90,8 +90,11 @@ class CustomerController extends Controller
                 return $items->sum('amount'); // รวมค่าของ amount ในแต่ละกลุ่ม
             });
 
+        $TopUp = TopUp::with(['province', 'center'])->get();
 
-        return view('events.cus_list', compact('data', 'provinces', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price'));
+
+
+        return view('events.cus_list', compact('data', 'provinces', 'centers', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price', 'TopUp'));
     }
 
 
@@ -355,6 +358,64 @@ class CustomerController extends Controller
         return redirect()->route('customer_list')->with('success', 'เพิ่มข้อมูลการเติมเงินสำเร็จ');
     }
 
+    public function TopUpDelete($topUp_id)
+    {
+        // Find customer by id
+        $customer = TopUp::where('topUp_id', $topUp_id);
+
+
+        if ($customer) {
+            // Delete data from related table (if any)
+            TopUp::where('topUp_id', $topUp_id)->delete();
+
+            // Delete the customer
+            $customer->delete();
+
+            return redirect()->route('customer_list')->with('success', 'ลบข้อมูลสำเร็จ');
+        } else {
+            return redirect()->route('customer_list')->with('error', 'Customer not found');
+        }
+    }
+    public function getTopUpDetails($topUpId)
+    {
+        $topUp = TopUp::findOrFail($topUpId);
+        $provinces = ProvinceActivity::all();
+        $centers = ServiceCenterActivity::all();
+
+        return response()->json([
+            'phone' => $topUp->phone,
+            'amount' => $topUp->amount,
+            'province_id' => $topUp->province_id,
+            'center_id' => $topUp->center_id,
+            'provinces' => $provinces, // หากคุณต้องการส่ง provinces และ centers กลับไป
+            'centers' => $centers
+        ]);
+    }
+
+
+
+    public function TopUpUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'phone' => 'string|max:255',
+            'amount' => 'required|numeric',
+            'province_id' => 'required',
+            'center_id' => 'required'
+        ]);
+
+        $topUp = TopUp::where('topUp_id', $id);
+
+        $topUp->update([
+            'phone' => $request->phone,
+            'amount' => $request->amount,
+            'province_id' => $request->province_id,
+            'center_id' => $request->center_id,
+        ]);
+
+        return redirect()->back()->with('success', 'TopUp updated successfully!');
+    }
+
+
 
 
 
@@ -386,4 +447,37 @@ class CustomerController extends Controller
         $centers = ServiceCenterActivity::where('province_id', $provinceId)->get();
         return response()->json($centers);
     }
+
+    public function searchCustomers(Request $request)
+{
+    $date = $request->get('date');
+    $name = $request->get('name');
+    $service = $request->get('service');
+
+    // เริ่มต้น Query
+    $query = Customer::query();
+
+    // ค้นหาตามวันที่
+    if ($date) {
+        $query->whereDate('created_at', $date);
+    }
+
+    // ค้นหาตามชื่อ
+    if ($name) {
+        $query->where('cus_fullname', 'like', '%' . $name . '%');
+    }
+
+    // ค้นหาตามประเภทบริการ
+    if ($service) {
+        $query->whereHas('service', function ($q) use ($service) {
+            $q->where('service_name', 'like', '%' . $service . '%');
+        });
+    }
+
+    // ดึงข้อมูลลูกค้า
+    $customers = $query->with(['type', 'service', 'promotion', 'speed', 'price', 'province', 'center'])->get();
+
+    return response()->json($customers);
+}
+
 }

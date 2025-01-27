@@ -13,28 +13,33 @@
                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#Top_up">เติมเงิน</button>
                 </div>
                 <div class="col-auto">
-                    <a href="#sim_my" class="btn btn-secondary">SIM my </a>
+                    <a href="#top_up" class="btn btn-secondary">ข้อมูลการเติมเงิน </a>
                 </div>
             </div>
 
-            <!-- Form สำหรับเลือกประเภทบริการ -->
-            <form action="#" method="GET" id="yearForm" class="row mb-3">
-                <div class="col-auto">
-                    <select class="form-select bg-warning" id="type_service" name="type_service" required
-                        onchange="this.form.submit()">
+
+
+            <div class="d-flex">
+                <div class="mb-3">
+                    <!-- ช่องกรอกวันที่ -->
+                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                    <input type="date" id="createdDate" class="form-control" placeholder="ค้นหาตามวันที่">
+                </div>
+                <div class="mb-3">
+                    <input type="text" id="searchInput" class="form-control" placeholder="ค้นหาชื่อลูกค้า">
+                </div>
+                <div class="mb-3">
+                    <!-- ช่องเลือกประเภทบริการ -->
+                    <select class="form-select bg-warning" id="type_service" name="type_service">
                         <option value="" disabled selected>-- เลือกประเภทบริการ --</option>
-                        <option value="fttx_broadband" class="bg-secondary"
-                            {{ request()->get('type_service') == 'fttx_broadband' ? 'selected' : '' }}>Fttxbroadband
-                        </option>
-                        <option value="SIM my(เติมเงิน)" class="bg-secondary"
-                            {{ request()->get('type_service') == 'SIM my(เติมเงิน)' ? 'selected' : '' }}>SIM my(เติมเงิน)
-                        </option>
-                        <option value="SIM my(รายเดือน)" class="bg-secondary"
-                            {{ request()->get('type_service') == 'SIM my(รายเดือน)' ? 'selected' : '' }}>SIM my(รายเดิือน)
-                        </option>
+                        <option value="">ทั้งหมด</option>
+                        <option value="fttx_broadband">Fttxbroadband</option>
+                        <option value="SIM my(เติมเงิน)">SIM my(เติมเงิน)</option>
+                        <option value="SIM my(รายเดือน)">SIM my(รายเดือน)</option>
                     </select>
                 </div>
-            </form>
+            </div>
+
         </div>
 
 
@@ -87,7 +92,7 @@
 
         <table class="table table-bordered">
             <thead>
-                <tr class="bg-dark text-light">
+                <tr class="bg-dark text-light text-center">
                     <th>#</th>
                     <th>ชื่อ-นามสกุล</th>
                     {{-- <th>เลขบัตรประชาชน</th>
@@ -100,10 +105,10 @@
                     <th>ราคา</th>
                     <th>(จังหวัด/ศูนย์บริการ)</th>
 
-                    <th>เครื่องมือ</th>
+                    <th>การดำเนินการ</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="customerTable">
                 @if ($data->count() > 0)
                     @foreach ($data as $customer)
                         <tr>
@@ -128,21 +133,29 @@
                                 {{ $customer->center->center_name ?? 'N/A' }}
                             </td>
                             <td colspan="2">
-                                <a href="{{ route('customer_edit', $customer->cus_id) }}"
-                                    class="btn btn-warning btn-sm">Edit</a>
-                                <form id="deleteForm{{ $customer->cus_id }}"
-                                    action="{{ route('customer_delete', $customer->cus_id) }}" method="POST"
-                                    style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="confirmDelete({{ $customer->cus_id }})">Delete</button>
-                                </form>
-                                <!-- ปุ่ม View -->
-                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#customerModal{{ $customer->cus_id }}">
-                                    View
-                                </button>
+                                <div class="dropdown-menu-start">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                        data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="{{ route('customer_edit', $customer->cus_id) }}"
+                                            class="btn btn-warning btn-sm">Edit</a>
+                                        <form id="deleteForm{{ $customer->cus_id }}"
+                                            action="{{ route('customer_delete', $customer->cus_id) }}" method="POST"
+                                            style="display: inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                onclick="confirmDelete({{ $customer->cus_id }})">Delete</button>
+                                        </form>
+                                        <!-- ปุ่ม View -->
+                                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#customerModal{{ $customer->cus_id }}">
+                                            View
+                                        </button>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -240,208 +253,118 @@
             </div>
         @endforeach
 
-
-
-
-        <div class="mt-5">
-            <h3>สรุปรายงานผลการดำเนินงานกิจกรรมการตลาด</h3>
-        </div>
-        <h5>Fttx broadband</h5>
-        <table class="table table-bordered ">
+        <h3 class="mt-5" id="top_up">ข้อมูลการเติมเงิน</h3>
+        <table class="table table-bordered text-center ">
             <thead>
-                <tr class="bg-dark text-center align-center">
-                    <th rowspan="2">ลำดับ</th>
-                    <th rowspan="2">จังหวัด</th>
-                    <th colspan="3">FTTX</th>
-
-                </tr>
-                <tr class="bg-dark text-center">
-
-                    <th rowspan="2">new</th>
-                    <th rowspan="2">ติดตั้งเอง</th>
-                    <th rowspan="2">จ้างผู้รับเหมา</th>
-
-                </tr>
-            </thead>
-            @php
-                $sumFttxNew = $sumSelfInstall = $sumHireInstall = 0; // สำหรับ province_id <= 33
-                $sumFttxNewOver33 = $sumSelfInstallOver33 = $sumHireInstallOver33 = 0; // สำหรับ province_id > 33
-            @endphp
-            <tbody class="text-center">
-                @foreach ($provinces as $index => $province)
-                    {{-- Province ID <= 33 --}}
-                    @if ($province->province_id <= 12)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $province->province_name }}</td>
-                            <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
-                        </tr>
-                        @php
-                            $sumFttxNew += $fttxNew[$province->province_id] ?? 0;
-                            $sumSelfInstall += $selfInstall[$province->province_id] ?? 0;
-                            $sumHireInstall += $HireInstall[$province->province_id] ?? 0;
-                        @endphp
-                    @endif
-
-                    {{-- แสดงผลรวมตรงกลางเมื่อเปลี่ยนกลุ่ม --}}
-                    @if ($province->province_id == 12)
-                        <tr class="bg-warning">
-                            <td colspan="2">รวม ตป.1</td>
-                            <td>{{ $sumFttxNew }}</td>
-                            <td>{{ $sumSelfInstall }}</td>
-                            <td>{{ $sumHireInstall }}</td>
-                        </tr>
-                    @endif
-
-                    {{-- Province ID > 33 --}}
-                    @if ($province->province_id > 12)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $province->province_name }}</td>
-                            <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
-                        </tr>
-                        @php
-                            $sumFttxNewOver33 += $fttxNew[$province->province_id] ?? 0;
-                            $sumSelfInstallOver33 += $selfInstall[$province->province_id] ?? 0;
-                            $sumHireInstallOver33 += $HireInstall[$province->province_id] ?? 0;
-                        @endphp
-                    @endif
-                @endforeach
-
-                {{-- แสดงผลรวมสำหรับ province_id > 33 --}}
-                <tr class="bg-warning">
-                    <td colspan="2">รวม ตป.2</td>
-                    <td>{{ $sumFttxNewOver33 }}</td>
-                    <td>{{ $sumSelfInstallOver33 }}</td>
-                    <td>{{ $sumHireInstallOver33 }}</td>
-                </tr>
-
-                <tr class="bg-success">
-                    <td colspan="2">รวม ทั้งหมด</td>
-                    <td>{{ $sumFttxNew + $sumFttxNewOver33 }}</td>
-                    <td>{{ $sumSelfInstall + $sumSelfInstallOver33 }}</td>
-                    <td>{{ $sumHireInstall + $sumHireInstallOver33 }}</td>
-                </tr>
-            </tbody>
-
-
-
-        </table>
-
-
-        <h5 id="sim_my">SIM my</h5>
-        <table class="table table-bordered text-center">
-            <thead>
-                <tr class="bg-dark">
-                    <th rowspan="3">ลำดับ</th>
-                    <th rowspan="3">จังหวัด</th>
-                    <th colspan="5" rowspan="1">SIM my</th>
-
-                </tr>
-                <tr class="bg-dark">
-                    <th rowspan="2">ลูกค้าใหม่</th>
-                    <th rowspan="2">ลูกค้า (ย้ายค่าย)</th>
-                    <th colspan="3">เติมเงินรายปี</th>
-
-
-                </tr>
-                <tr class="bg-dark">
-                    <th>จำนวน
-                        (ราย)</th>
+                <tr class="bg-dark text-light">
+                    <th>ลำดับ</th>
+                    <th>หมายเลขโทรศัพท์</th>
                     <th>ยอดเงิน</th>
+                    <th>จังหวัด</th>
+                    <th>ศูนย์บริการ</th>
 
+                    <th>เครื่องมือ</th>
                 </tr>
             </thead>
+            <tbody>
+                @foreach ($TopUp as $TopUp)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $TopUp->phone ?? 'ไม่ระบุ' }}</td>
+                        <td>{{ $TopUp->amount }}</td>
+                        <td>{{ $TopUp->province->province_name ?? 'ไม่ระบุ' }}</td>
+                        <td>{{ $TopUp->center->center_name ?? 'ไม่ระบุ' }}</td>
+                        <td>
 
-            @php
-                $sumNew = $sumMove = $sumCount = $sumPrice = 0; // สำหรับ province_id <= 33
-                $sumNewOver33 = $sumMoveOver33 = $sumCountOver33 = $sumPriceOver33 = 0; // สำหรับ province_id > 33
-            @endphp
-            <tbody class="text-center">
-                @foreach ($provinces as $index => $province)
-                    {{-- Province ID <= 33 --}}
-                    @if ($province->province_id <= 12)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $province->province_name }}</td>
-                            <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
-                        </tr>
-                        @php
-                            $sumNew += $Simmy_new[$province->province_id] ?? 0;
-                            $sumMove += $Simmy_move[$province->province_id] ?? 0;
-                            $sumCount += $Simmy_count[$province->province_id] ?? 0;
-                            $sumPrice += $Simmy_price[$province->province_id] ?? 0;
-                        @endphp
-                    @endif
+                            <!-- ปุ่ม Edit -->
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#editTopUpModal" data-url="{{ route('topUp_update', $TopUp->topUp_id) }}"
+                                data-id="{{ $TopUp->topUp_id }}" data-name="{{ $TopUp->phone }}"
+                                data-amount="{{ $TopUp->amount }}" data-province="{{ $TopUp->province_id }}"
+                                data-center="{{ $TopUp->center_id }}">
+                                แก้ไข
+                            </button>
 
-                    {{-- แสดงผลรวมตรงกลางเมื่อเปลี่ยนกลุ่ม --}}
-                    @if ($province->province_id == 12)
-                        <tr class="bg-warning">
-                            <td colspan="2">รวม ตป.1</td>
-                            <td>{{ $sumNew }}</td>
-                            <td>{{ $sumMove }}</td>
-                            <td>{{ $sumCount }}</td>
-                            <td>{{ $sumPrice }}</td>
-                        </tr>
-                    @endif
+                            <form id="deleteForm{{ $TopUp->topUp_id }}"
+                                action="{{ route('topUp_delete', $TopUp->topUp_id) }}" method="POST"
+                                style="display: inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-danger btn-sm"
+                                    onclick="confirmDeleteTop({{ $TopUp->topUp_id }})">Delete</button>
+                            </form>
 
-                    {{-- Province ID > 33 --}}
-                    @if ($province->province_id > 12)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $province->province_name }}</td>
-                            <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
-                        </tr>
-                        @php
-                            $sumNewOver33 += $Simmy_new[$province->province_id] ?? 0;
-                            $sumMoveOver33 += $Simmy_move[$province->province_id] ?? 0;
-                            $sumCountOver33 += $Simmy_count[$province->province_id] ?? 0;
-                            $sumPriceOver33 += $Simmy_price[$province->province_id] ?? 0;
-                        @endphp
-                    @endif
+                        </td>
+                    </tr>
                 @endforeach
 
-                {{-- แสดงผลรวมสำหรับ province_id > 33 --}}
-                @if ($province->province_id > 12)
-                    <tr class="bg-warning">
-                        <td colspan="2">รวม ตป.2</td>
-                        <td>{{ $sumNewOver33 }}</td>
-                        <td>{{ $sumMoveOver33 }}</td>
-                        <td>{{ $sumCountOver33 }}</td>
-                        <td>{{ $sumPriceOver33 }}</td>
-                    </tr>
-                @endif
-
-                <tr class="bg-success">
-                    <td colspan="2">รวม ทั้งหมด</td>
-                    <td>{{ $sumNew + $sumNewOver33 }}</td>
-                    <td>{{ $sumMove + $sumMoveOver33 }}</td>
-                    <td>{{ $sumCount + $sumCountOver33 }}</td>
-                    <td>{{ $sumPrice + $sumPriceOver33 }}</td>
-                </tr>
             </tbody>
         </table>
 
+        <!-- Modal สำหรับแก้ไข -->
+        <div class="modal fade" id="editTopUpModal" tabindex="-1" aria-labelledby="editTopUpModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTopUpModalLabel">แก้ไขโปรโมชั่น</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="editTopUpForm" method="POST" action="">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="text" name="phone" id="phone" class="form-control"
+                                    value="{{ $TopUp->phone }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="amount" class="form-label">Amount</label>
+                                <input type="number" name="amount" id="amount" class="form-control"
+                                    value="{{ $TopUp->amount }}" required>
+                            </div>
 
+                            <label for="province_id" class="form-label">จังหวัด</label>
+                            <select class="form-select bg-warning text-dark" id="province_id2" name="province_id"
+                                required>
+                                <option value="" disabled selected>-- เลือกจังหวัด --</option>
+                                @foreach ($provinces as $province)
+                                    <option value="{{ $province->province_id }}"
+                                        {{ $TopUp->province_id == $province->province_id ? 'selected' : '' }}>
+                                        {{ $province->province_name }}
+                                    </option>
+                                @endforeach
+                            </select>
 
-        <div class='card mt-5'>
-            <h3 class="card-header bg-primary ">กราฟ Fttx broadband</h3>
-            <canvas id="myChart" class="mt-5 "
-                style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                            <!-- Center -->
+                            <label for="center_id" class="form-label">ศูนย์บริการ</label>
+                            <select class="form-select bg-warning text-dark" id="center_id2" name="center_id" required>
+                                <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
+                                @foreach ($centers as $center)
+                                    <option value="{{ $center->center_id }}"
+                                        {{ $TopUp->center_id == $center->center_id ? 'selected' : '' }}>
+                                        {{ $center->center_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                            <button type="submit" class="btn btn-primary">บันทึก</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
 
     </div>
+
+
+
+
+
 
 @endsection
 
@@ -462,6 +385,33 @@
                         '<option value="" disabled selected>-- เลือกศูนย์บริการ --</option>');
                     $.each(data, function(index, center) {
                         $('#center_id').append('<option class="bg-secondary" value="' + center
+                            .center_id + '">' +
+                            center.center_name + '</option>');
+                    });
+                },
+                error: function() {
+                    console.log('Error fetching centers');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $('#province_id2').change(function() {
+            var provinceId = $(this).val();
+
+            $.ajax({
+                url: '/getCenters',
+                type: 'GET',
+                data: {
+                    province_id: provinceId
+                },
+                success: function(data) {
+                    $('#center_id2').empty();
+                    $('#center_id2').append(
+                        '<option value="" disabled selected>-- เลือกศูนย์บริการ --</option>');
+                    $.each(data, function(index, center) {
+                        $('#center_id2').append('<option class="bg-secondary" value="' + center
                             .center_id + '">' +
                             center.center_name + '</option>');
                     });
@@ -494,6 +444,25 @@
             });
         </script>
     @endif
+    <script>
+        function confirmDeleteTop(topUpId) {
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: "การลบนี้ไม่สามารถกู้คืนได้!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ใช่, ลบเลย!',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm' + topUpId).submit();
+                }
+            });
+        }
+    </script>
+
 
     <script>
         function confirmDelete(customerId) {
@@ -515,130 +484,144 @@
     </script>
 
 
-
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
-
     <script>
-        // ดึงข้อมูลจาก Blade ไปใส่ใน JavaScript
-        const provincesRaw = @json($provinces);
-        const fttxNew = @json($fttxNew);
-        const selfInstall = @json($selfInstall);
-        const hireInstall = @json($HireInstall);
+        document.addEventListener('DOMContentLoaded', function() {
+            const editTopUpModal = document.getElementById('editTopUpModal');
+            editTopUpModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget; // ปุ่มที่เรียก Modal
+                const url = button.getAttribute('data-url');
+                const id = button.getAttribute('data-id');
+                const name = button.getAttribute('data-name');
+                const amount = button.getAttribute('data-amount');
+                const province = button.getAttribute('data-province');
+                const center = button.getAttribute('data-center');
 
-        // กรองข้อมูล: ไม่เอา provinces ที่ทุกค่า (fttxNew, selfInstall, hireInstall) เท่ากับ 0
-        const filteredData = provincesRaw.filter((province) => {
-            const provinceId = province.province_id;
-            return (
-                (fttxNew[provinceId] || 0) > 0 ||
-                (selfInstall[provinceId] || 0) > 0 ||
-                (hireInstall[provinceId] || 0) > 0
-            );
-        });
-
-        // สร้างข้อมูลที่ผ่านการกรอง
-        const provinces = filteredData.map((province) => province.province_name);
-        const fttxData = filteredData.map((province) => fttxNew[province.province_id] || 0);
-        const selfInstallData = filteredData.map((province) => selfInstall[province.province_id] || 0);
-        const hireInstallData = filteredData.map((province) => hireInstall[province.province_id] || 0);
-
-        const ctx = document.getElementById('myChart').getContext('2d');
-
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: provinces,
-                datasets: [{
-                        label: "จ้างผู้รับเหมา",
-                        data: hireInstallData,
-                        backgroundColor: 'rgba(255, 99, 132, 0.7)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1,
-                        barThickness: 25,
-                        borderRadius: 5, // ทำมุมโค้งมน
-                    },
-                    {
-                        label: "NEW",
-                        data: fttxData,
-                        backgroundColor: 'rgba(54, 162, 235, 0.45)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1,
-                        barThickness: 50,
-                        borderRadius: 5, // ทำมุมโค้งมน
-                    },
-                    {
-                        label: "ติดตั้งเอง",
-                        data: selfInstallData,
-                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                        barThickness: 25,
-                        borderRadius: 5, // ทำมุมโค้งมน
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom', // ย้าย Legend มาด้านล่าง
-                        labels: {
-                            font: {
-                                size: 14,
-                            },
-                        },
-                    },
-                    // ตั้งค่า Data Labels
-                    datalabels: {
-                        display: true,
-                        color: '#fff', // สีตัวอักษร
-                        backgroundColor: 'rgba(0,0,0,0.5)', // สีพื้นหลังของตัวหนังสือ
-                        borderRadius: 3,
-                        anchor: 'end', // ตำแหน่งอ้างอิงให้อยู่ด้านบนของกราฟ
-                        offset: -15, // ระยะห่างจากแท่งกราฟ
-                        align: 'top', // จัดให้อยู่บนสุดของแท่งกราฟ
-                        formatter: (value) => {
-                            return value > 0 ? value : null; // ซ่อนค่าที่เป็น 0
-                        },
-                    },
-
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false, // ซ่อนเส้น Grid
-                        },
-                        ticks: {
-                            font: {
-                                size: 12,
-                            },
-                            maxRotation: 45, // ตั้งค่ามุมการหมุนของป้ายแกน X
-                            minRotation: 0,
-                        },
-                        title: {
-                            display: true,
-                            text: 'จังหวัด', // เพิ่มชื่อแกน X
-                            font: {
-                                size: 16,
-                                weight: 'bold',
-                            },
-                        },
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'จำนวนการติดตั้ง', // เพิ่มชื่อแกน Y
-                            font: {
-                                size: 16,
-                                weight: 'bold',
-                            },
-                        },
-                    },
-                },
-            },
-            plugins: [ChartDataLabels], // ใช้ plugin datalabels
+                // ใส่ค่าลงในฟอร์ม
+                const form = document.getElementById('editTopUpForm');
+                form.action = url;
+                form.querySelector('#phone').value = name;
+                form.querySelector('#amount').value = amount;
+                form.querySelector('#province_id2').value = province;
+                form.querySelector('#center_id2').value = center;
+            });
         });
     </script>
+
+
+    <script>
+        //ค้นหา
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let query = this.value;
+
+            fetch("{{ route('customer_search') }}?search=" + query)
+                .then(response => response.json())
+                .then(data => {
+                    let customerTable = document.getElementById('customerTable');
+                    customerTable.innerHTML = '';
+
+                    if (data.length > 0) {
+                        data.forEach((customer, index) => {
+                            customerTable.innerHTML += `
+                        
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${customer.cus_fullname}</td>
+                                <td>${customer.type?.type_name || 'N/A'}</td>
+                                <td>${customer.service?.service_name || 'N/A'}</td>
+                                <td>${customer.promotion?.promotion_name || 'N/A'}</td>
+                                <td>${customer.speed?.speed_name || 'N/A'}</td>
+                                <td>${customer.price?.price_name || 'N/A'}</td>
+                                <td>${customer.province?.province_name || 'N/A'} / ${customer.center?.center_name || 'N/A'}</td>
+                                <td>
+                                    <a href="/customer/edit/${customer.cus_id}" class="btn btn-warning btn-sm">Edit</a>
+                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                     <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#customerModal{{ $customer->cus_id }}">
+                                    View
+                                </button>
+                                
+                                </td>
+                            </tr>
+                        `;
+                        });
+                    } else {
+                        customerTable.innerHTML = `
+                        <tr>
+                            <td colspan="9" class="text-center">ไม่มีข้อมูลลูกค้า</td>
+                        </tr>
+                    `;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+<script>
+    //ค้นหา
+    document.getElementById('createdDate').addEventListener('input', searchCustomers);
+    document.getElementById('searchInput').addEventListener('input', searchCustomers);
+    document.getElementById('type_service').addEventListener('change', searchCustomers);
+
+    function searchCustomers() {
+        let date = document.getElementById('createdDate').value;
+        let searchName = document.getElementById('searchInput').value;
+        let typeService = document.getElementById('type_service').value;
+
+        // ส่งค่าผ่าน URL Params ไปยัง Backend
+        let url = `/customers/search?date=${date}&name=${searchName}&service=${typeService}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                let customerTable = document.getElementById('customerTable');
+                customerTable.innerHTML = ''; // ลบข้อมูลเดิมในตาราง
+
+                if (data.length > 0) {
+                    data.forEach((customer, index) => {
+                        customerTable.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${customer.cus_fullname}</td>
+                        <td>${customer.type?.type_name || 'N/A'}</td>
+                        <td>${customer.service?.service_name || 'N/A'}</td>
+                        <td>${customer.promotion?.promotion_name || 'N/A'}</td>
+                        <td>${customer.speed?.speed_name || 'N/A'}</td>
+                        <td>${customer.price?.price_name || 'N/A'}</td>
+                        <td>${customer.province?.province_name || 'N/A'} / ${customer.center?.center_name || 'N/A'}</td>
+                        <td>
+                             <div class="dropdown-menu-start">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                    data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <!-- ใช้ JavaScript ในการใส่ค่า ID ที่ถูกต้อง -->
+                                    <a href="/customer_edit/${customer.cus_id}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form id="deleteForm${customer.cus_id}" action="/customer_delete/${customer.cus_id}" method="POST" style="display: inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(${customer.cus_id})">Delete</button>
+                                    </form>
+                                    <!-- ปุ่ม View -->
+                                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#customerModal${customer.cus_id}">
+                                        View
+                                    </button>
+                                </div>
+                            </div>
+                        
+                        </td>
+                    </tr>
+                `;
+                    });
+                } else {
+                    customerTable.innerHTML = `
+                <tr>
+                    <td colspan="11" class="text-center">ไม่มีข้อมูลลูกค้า</td>
+                </tr>
+            `;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
 @endsection
