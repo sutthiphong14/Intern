@@ -293,24 +293,24 @@ class ActivityController extends Controller
         $provinces = ProvinceActivity::all();
 
         // ดึงข้อมูล Fttxbroadband ที่ new = 1
-        $fttxNew = Fttxbroadband::where('new', 1)
+        $fttxNew = Customer::where('cus_type_fttx', 1)
             ->get()
             ->groupBy('province_id') // แยกกลุ่มตาม `province_id`
             ->map(function ($items) {
-                return $items->count('new'); // รวมค่าที่ซ้ำกันได้
+                return $items->count('cus_type_fttx'); // รวมค่าที่ซ้ำกันได้
             });
 
 
-        // ดึงข้อมูล Fttxbroadband ที่ติดตั้งเอง
-        $selfInstall = Fttxbroadband::where('installation_type', 1)
+        // ดึงข้อมูล Customer ที่ติดตั้งเอง
+        $selfInstall = Customer::where('installation_type', 1)
             ->get()
             ->groupBy('province_id')
             ->map(function ($items) {
                 return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
             });
 
-        // ดึงข้อมูล Fttxbroadband ที่จ้างผู้รับเหมา
-        $HireInstall = Fttxbroadband::where('installation_type', 0)
+        // ดึงข้อมูล Customer ที่จ้างผู้รับเหมา
+        $HireInstall = Customer::where('installation_type', 0)
             ->get()
             ->groupBy('province_id')
             ->map(function ($items) {
@@ -325,18 +325,18 @@ class ActivityController extends Controller
         // ดึงข้อมูล Customer และจัดกลุ่มตาม province_id
         $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])->get();
         $provinces = ProvinceActivity::all();
-        $Simmy_new = Simmy::where('cus_new', 1)
+        $Simmy_new = Customer::where('cus_type_sim', 1)
             ->get()
             ->groupBy('province_id')
             ->map(function ($items) {
-                return $items->count('cus_new'); // รวมค่าที่ซ้ำกันได้
+                return $items->count('cus_type_sim'); // รวมค่าที่ซ้ำกันได้
             });
 
-        $Simmy_move = Simmy::where('cus_new', 0)
+        $Simmy_move = Customer::where('cus_type_sim', 0)
             ->get()
             ->groupBy('province_id')
             ->map(function ($items) {
-                return $items->count('cus_new'); // รวมค่าที่ซ้ำกันได้
+                return $items->count('cus_type_sim'); // รวมค่าที่ซ้ำกันได้
             });
 
         $Simmy_count = TopUp::all()
@@ -374,7 +374,7 @@ class ActivityController extends Controller
         $provinces = ProvinceActivity::all();
 
         // ดึงข้อมูล Fttxbroadband ที่ new = 1
-        $fttxNew = Fttxbroadband::where('new', 1)
+        $fttxNew = Customer::where('cus_type_fttx', 1)
             ->get()
             ->groupBy('province_id') // แยกกลุ่มตาม `province_id`
             ->map(function ($items) {
@@ -383,7 +383,7 @@ class ActivityController extends Controller
 
 
         // ดึงข้อมูล Fttxbroadband ที่ติดตั้งเอง
-        $selfInstall = Fttxbroadband::where('installation_type', 1)
+        $selfInstall = Customer::where('installation_type', 1)
             ->get()
             ->groupBy('province_id')
             ->map(function ($items) {
@@ -391,25 +391,25 @@ class ActivityController extends Controller
             });
 
         // ดึงข้อมูล Fttxbroadband ที่จ้างผู้รับเหมา
-        $HireInstall = Fttxbroadband::where('installation_type', 0)
+        $HireInstall = Customer::where('installation_type', 0)
             ->get()
             ->groupBy('province_id')
             ->map(function ($items) {
                 return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
             });
 
-        $Simmy_new = Simmy::where('cus_new', 1)
+        $Simmy_new = Customer::where('cus_type_sim', 1)
             ->get()
             ->groupBy('province_id')
             ->map(function ($items) {
-                return $items->count('cus_new'); // รวมค่าที่ซ้ำกันได้
+                return $items->count('cus_type_sim'); // รวมค่าที่ซ้ำกันได้
             });
 
-        $Simmy_move = Simmy::where('cus_new', 0)
+        $Simmy_move = Customer::where('cus_type_sim', 0)
             ->get()
             ->groupBy('province_id')
             ->map(function ($items) {
-                return $items->count('cus_new'); // รวมค่าที่ซ้ำกันได้
+                return $items->count('cus_type_sim'); // รวมค่าที่ซ้ำกันได้
             });
 
         $Simmy_count = TopUp::all()

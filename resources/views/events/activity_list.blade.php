@@ -197,17 +197,17 @@
                                         <span>----------------------------</span>
                                         <strong class='text-warning'>บริการ:   </strong> {{ $customer->service->service_name }}<br>
                                         @php
-                                            $fttxData = \App\Models\Fttxbroadband::where(
+                                            $fttxData = \App\Models\Customer::where(
                                                 'cus_id',
                                                 $customer->cus_id,
                                             )->first();
-                                            $simmyData = \App\Models\Simmy::where('cus_id', $customer->cus_id)->first();
+                                            $simmyData = \App\Models\Customer::where('cus_id', $customer->cus_id)->first();
                                         @endphp
                                         @if ($fttxData && $customer->service->service_name == 'fttx_broadband')
-<strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
+<strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->cus_type_fttx == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
                                             <strong class='text-warning'>งานติดตั้ง:   </strong> {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
 @elseif ($simmyData && str_contains(strtolower($customer->service->service_name), 'sim my'))
-<strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $simmyData->cus_new == 1 ? 'ลูกค้าใหม่' : 'ลูกค้า(ย้ายค่าย)' }}<br>
+<strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $simmyData->cus_type_sim == 1 ? 'ลูกค้าใหม่' : 'ลูกค้า(ย้ายค่าย)' }}<br>
 @else
 <strong class='text-warning'>ประเภทลูกค้า:   </strong> ไม่ระบุ<br>
                                             <strong class='text-warning'>ข้อมูลเพิ่มเติม:   </strong> ไม่ระบุ
@@ -548,8 +548,7 @@
                         backgroundColor: 'rgba(255, 99, 132, 0.7)',
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 1,
-                        barThickness: 25,
-                        borderRadius: 5, // ทำมุมโค้งมน
+                        barThickness: 25
                     },
                     {
                         label: "NEW",
@@ -557,8 +556,7 @@
                         backgroundColor: 'rgba(54, 162, 235, 0.45)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1,
-                        barThickness: 50,
-                        borderRadius: 5, // ทำมุมโค้งมน
+                        barThickness: 50
                     },
                     {
                         label: "ติดตั้งเอง",
@@ -566,8 +564,7 @@
                         backgroundColor: 'rgba(75, 192, 192, 0.7)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1,
-                        barThickness: 25,
-                        borderRadius: 5, // ทำมุมโค้งมน
+                        barThickness: 25
                     },
                 ],
             },

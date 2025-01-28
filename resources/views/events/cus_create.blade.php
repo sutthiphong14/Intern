@@ -49,13 +49,22 @@
                 @enderror
 
                 <!-- Service -->
-                <label for="service_id" class="form-label">บริการ</label>
-                <select class="form-select" id="service_id" name="service_id" required>
-                    <option value="" disabled selected>-- เลือกบริการ --</option>
-                    @foreach ($services as $service)
-                        <option value="{{ $service->service_id }}">{{ $service->service_name }}</option>
-                    @endforeach
-                </select>
+                <div class="d-flex justify-content-between">
+                    <div class="w-100">
+                        <label for="service_id" class="form-label">บริการ</label>
+                        <select class="form-select w-100" id="service_id" name="service_id" required>
+                            <option value="" disabled selected>-- เลือกบริการ --</option>
+                            @foreach ($services as $service)
+                                <option value="{{ $service->service_id }}">{{ $service->service_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="w-100 mt-4">
+                        <a href="{{ route('service_list') }}" class="btn btn-primary ">เพิ่มบริการใหม่</a>
+                    </div>
+                </div>
+
+
                 @error('service_id')
                     <small style="color:red">{{ $message }}</small>
                 @enderror
@@ -110,8 +119,8 @@
 
                 <!-- fttx_broadband form-->
                 <div id="fttx_broadband">
-                    <label for="new" class="form-label">ประเภทลูกค้า</label>
-                    <select class="form-select bg-warning" id="new" name="new" required>
+                    <label for="cus_type_fttx" class="form-label">ประเภทลูกค้า</label>
+                    <select class="form-select bg-warning" id="cus_type_fttx" name="cus_type_fttx" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
                         <option value="1" class="bg-secondary"> ลูกค้าใหม่ </option>
                         <option value="0" class="bg-secondary"> ปรับโปรโมชั่น </option>
@@ -126,8 +135,8 @@
 
                 <!-- sim_my form-->
                 <div id="sim_my">
-                    <label for="cus_new" class="form-label">ประเภทลูกค้า</label>
-                    <select class="form-select bg-warning" id="cus_new" name="cus_new" required>
+                    <label for="cus_type_sim" class="form-label">ประเภทลูกค้า</label>
+                    <select class="form-select bg-warning" id="cus_type_sim" name="cus_type_sim" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
                         <option value="1" class="bg-secondary"> ลูกค้าใหม่ </option>
                         <option value="0" class="bg-secondary"> ลูกค้า(ย้ายค่าย) </option>
@@ -274,45 +283,45 @@
     </script>
 
 
-<script>
-    $(document).ready(function() {
-        function toggleForms(serviceName) {
-            if (serviceName === 'fttx_broadband') {
-                $('#fttx_broadband').show();
-                $('#sim_my').hide();
+    <script>
+        $(document).ready(function() {
+            function toggleForms(serviceName) {
+                if (serviceName === 'fttx_broadband') {
+                    $('#fttx_broadband').show();
+                    $('#sim_my').hide();
 
-                // เปิด required สำหรับฟอร์ม fttx_broadband
-                $('#new, #installation_type').prop('required', true);
+                    // เปิด required สำหรับฟอร์ม fttx_broadband
+                    $('#cus_type_fttx, #installation_type').prop('required', true);
 
-                // ปิด required สำหรับฟอร์ม sim_my
-                $('#cus_new').prop('required', false);
-            } else if (serviceName.includes('SIM my')) {
-                $('#sim_my').show();
-                $('#fttx_broadband').hide();
+                    // ปิด required สำหรับฟอร์ม sim_my
+                    $('#cus_type_sim').prop('required', false);
+                } else if (serviceName.includes('SIM my')) {
+                    $('#sim_my').show();
+                    $('#fttx_broadband').hide();
 
-                // เปิด required สำหรับฟอร์ม sim_my
-                $('#cus_new').prop('required', true);
+                    // เปิด required สำหรับฟอร์ม sim_my
+                    $('#cus_type_sim').prop('required', true);
 
-                // ปิด required สำหรับฟอร์ม fttx_broadband
-                $('#new, #installation_type').prop('required', false);
-            } else {
-                // ซ่อนฟอร์มทั้งหมด
-                $('#fttx_broadband, #sim_my').hide();
+                    // ปิด required สำหรับฟอร์ม fttx_broadband
+                    $('#cus_type_fttx, #installation_type').prop('required', false);
+                } else {
+                    // ซ่อนฟอร์มทั้งหมด
+                    $('#fttx_broadband, #sim_my').hide();
 
-                // ปิด required สำหรับทุกฟอร์ม
-                $('#new, #installation_type, #cus_new').prop('required', false);
+                    // ปิด required สำหรับทุกฟอร์ม
+                    $('#cus_type_fttx, #installation_type, #cus_type_sim').prop('required', false);
+                }
             }
-        }
 
-        // เรียกใช้ฟังก์ชันตอนโหลดหน้า
-        var serviceName = $('#service_id option:selected').text();
-        toggleForms(serviceName);
-
-        // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
-        $('#service_id').change(function() {
-            var serviceName = $(this).find('option:selected').text();
+            // เรียกใช้ฟังก์ชันตอนโหลดหน้า
+            var serviceName = $('#service_id option:selected').text();
             toggleForms(serviceName);
+
+            // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
+            $('#service_id').change(function() {
+                var serviceName = $(this).find('option:selected').text();
+                toggleForms(serviceName);
+            });
         });
-    });
-</script>
+    </script>
 @endsection

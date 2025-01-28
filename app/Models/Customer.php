@@ -22,6 +22,9 @@ class Customer extends Model
         'cus_address',
         'type_id',
         'service_id',
+        'installation_type',
+        'cus_type_fttx',
+        'cus_type_sim',
         'promotion_id',
         'speed_id',
         'price_id',
@@ -30,6 +33,8 @@ class Customer extends Model
         'other'
 
     ];
+    public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล
+
 
     // ความสัมพันธ์กับ Model อื่น ๆ
     public function type()

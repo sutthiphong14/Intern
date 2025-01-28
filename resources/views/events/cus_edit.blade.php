@@ -106,14 +106,14 @@
                 </select>
                 <!-- fttx_broadband form -->
                 <div id="fttx_broadband">
-                    <label for="new" class="form-label">ประเภทลูกค้า</label>
-                    <select class="form-select bg-warning" id="new" name="new" required>
+                    <label for="cus_type_fttx" class="form-label">ประเภทลูกค้า</label>
+                    <select class="form-select bg-warning" id="cus_type_fttx" name="cus_type_fttx" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
                         <option value="1" class="bg-secondary"
-                            {{ isset($fttxBroadband) && $fttxBroadband->new == 1 ? 'selected' : '' }}>
+                            {{ isset($fttxBroadband) && $fttxBroadband->cus_type_fttx == 1 ? 'selected' : '' }}>
                             ลูกค้าใหม่</option>
                         <option value="0" class="bg-secondary"
-                            {{ isset($fttxBroadband) && $fttxBroadband->new == 0 ? 'selected' : '' }}>
+                            {{ isset($fttxBroadband) && $fttxBroadband->cus_type_fttx == 0 ? 'selected' : '' }}>
                             ปรับโปรโมชั่น</option>
                     </select>
 
@@ -132,14 +132,14 @@
 
                 <!-- sim_my form -->
                 <div id="sim_my">
-                    <label for="cus_new" class="form-label">ประเภทลูกค้า</label>
-                    <select class="form-select bg-warning" id="cus_new" name="cus_new" required>
+                    <label for="cus_type_sim" class="form-label">ประเภทลูกค้า</label>
+                    <select class="form-select bg-warning" id="cus_type_sim" name="cus_type_sim" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
                         <option value="1" class="bg-secondary"
-                            {{ isset($sim_my) && $sim_my->cus_new == 1 ? 'selected' : '' }}>
+                            {{ isset($sim_my) && $sim_my->cus_type_sim == 1 ? 'selected' : '' }}>
                             ลูกค้าใหม่ </option>
                         <option value="0" class="bg-secondary"
-                            {{ isset($sim_my) && $sim_my->cus_new == 0 ? 'selected' : '' }}>
+                            {{ isset($sim_my) && $sim_my->cus_type_sim == 0 ? 'selected' : '' }}>
                             ลูกค้า(ย้ายค่าย) </option>
                     </select>
                 </div>
@@ -307,25 +307,25 @@
                     $('#sim_my').hide();
 
                     // เปิด required สำหรับฟอร์ม fttx_broadband
-                    $('#new, #installation_type').prop('required', true);
+                    $('#cus_type_fttx, #installation_type').prop('required', true);
 
                     // ปิด required สำหรับฟอร์ม sim_my
-                    $('#cus_new').prop('required', false);
+                    $('#cus_type_sim').prop('required', false).val(null);
                 } else if (serviceName.includes('SIM my')) {
                     $('#sim_my').show();
                     $('#fttx_broadband').hide();
 
                     // เปิด required สำหรับฟอร์ม sim_my
-                    $('#cus_new').prop('required', true);
+                    $('#cus_type_sim').prop('required', true);
 
                     // ปิด required สำหรับฟอร์ม fttx_broadband
-                    $('#new, #installation_type').prop('required', false);
+                    $('#cus_type_fttx, #installation_type').prop('required', false).val(null);
                 } else {
                     // ซ่อนฟอร์มทั้งหมด
                     $('#fttx_broadband, #sim_my').hide();
 
                     // ปิด required สำหรับทุกฟอร์ม
-                    $('#new, #installation_type, #cus_new').prop('required', false);
+                    $('#cus_type_fttx, #installation_type, #cus_type_sim').prop('required', false).val(null);
                 }
             }
 

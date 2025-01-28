@@ -198,17 +198,17 @@
                                         <span>----------------------------</span>
                                         <strong class='text-warning'>บริการ:   </strong> {{ $customer->service->service_name }}<br>
                                         @php
-                                            $fttxData = \App\Models\Fttxbroadband::where(
+                                            $fttxData = \App\Models\Customer::where(
                                                 'cus_id',
                                                 $customer->cus_id,
                                             )->first();
-                                            $simmyData = \App\Models\Simmy::where('cus_id', $customer->cus_id)->first();
+                                            $simmyData = \App\Models\Customer::where('cus_id', $customer->cus_id)->first();
                                         @endphp
                                         @if ($fttxData && $customer->service->service_name == 'fttx_broadband')
-<strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
+<strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->cus_type_fttx == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
                                             <strong class='text-warning'>งานติดตั้ง:   </strong> {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
 @elseif ($simmyData && str_contains(strtolower($customer->service->service_name), 'sim my'))
-<strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $simmyData->cus_new == 1 ? 'ลูกค้าใหม่' : 'ลูกค้า(ย้ายค่าย)' }}<br>
+<strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $simmyData->cus_type_sim == 1 ? 'ลูกค้าใหม่' : 'ลูกค้า(ย้ายค่าย)' }}<br>
 @else
 <strong class='text-warning'>ประเภทลูกค้า:   </strong> ไม่ระบุ<br>
                                             <strong class='text-warning'>ข้อมูลเพิ่มเติม:   </strong> ไม่ระบุ
@@ -317,12 +317,12 @@
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone</label>
                                 <input type="text" name="phone" id="phone" class="form-control"
-                                    value="{{ $TopUp->phone }}">
+                                value="{{ $TopUp->first()->phone ?? '' }}">
                             </div>
                             <div class="mb-3">
                                 <label for="amount" class="form-label">Amount</label>
                                 <input type="number" name="amount" id="amount" class="form-control"
-                                    value="{{ $TopUp->amount }}" required>
+                                value="{{ $TopUp->first()->amount ?? '' }}" required>
                             </div>
 
                             <label for="province_id" class="form-label">จังหวัด</label>
@@ -331,7 +331,7 @@
                                 <option value="" disabled selected>-- เลือกจังหวัด --</option>
                                 @foreach ($provinces as $province)
                                     <option value="{{ $province->province_id }}"
-                                        {{ $TopUp->province_id == $province->province_id ? 'selected' : '' }}>
+                                        {{ $TopUp->first()->province_id ?? '' == $province->province_id ? 'selected' : '' }}>
                                         {{ $province->province_name }}
                                     </option>
                                 @endforeach
@@ -343,7 +343,7 @@
                                 <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
                                 @foreach ($centers as $center)
                                     <option value="{{ $center->center_id }}"
-                                        {{ $TopUp->center_id == $center->center_id ? 'selected' : '' }}>
+                                        {{ $TopUp->first()->center_id ?? '' == $center->center_id ? 'selected' : '' }}>
                                         {{ $center->center_name }}
                                     </option>
                                 @endforeach
@@ -536,7 +536,7 @@
                                     <a href="/customer/edit/${customer.cus_id}" class="btn btn-warning btn-sm">Edit</a>
                                     <button class="btn btn-danger btn-sm">Delete</button>
                                      <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#customerModal{{ $customer->cus_id }}">
+                                    data-bs-target="#customerModal{{ $customer->cus_id ?? '' }}">
                                     View
                                 </button>
                                 
