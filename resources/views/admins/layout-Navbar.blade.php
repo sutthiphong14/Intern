@@ -3,9 +3,9 @@
   display: flex;
   flex-wrap: nowrap; /* ป้องกันการซ้อนกันของเมนู */
   justify-content: flex-start;
-  align-items: center;
+  align-items: start;
   gap: 15px; /* ระยะห่างระหว่างเมนู */
-  width: 100%;
+  width: 20%;
 }
 
 .nav-item {
