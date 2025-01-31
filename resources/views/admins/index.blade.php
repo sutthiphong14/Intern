@@ -85,6 +85,11 @@
         <div class="container-xxl flex-grow-1 container-p-y">
         @include('admins.layout-Navbar')
                 @yield('content')
+                @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
                 </div>
             @include('admins.footer')
         </div>

@@ -94,11 +94,12 @@
 @endsection
 @section('content')
 <h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light"></span>
-<a href="{{ route('home') }}" class="">
-                หน้าแรก
-            </a>
-            /
-        </span> จัดการ Slideshow</h4>
+    <a href="{{ route('home') }}" class="">
+        หน้าแรก
+    </a>
+    /
+    </span> จัดการ Slideshow
+</h4>
 
 <div class="content-wrapper">
     <div class="card">
@@ -124,25 +125,28 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                
-                            <form id="deleteSlideForm" method="POST" action="{{ route('slideshow.destroy', ['id' => 'PLACEHOLDER_ID']) }}">
-    @csrf
-    @method('DELETE')
-    <select id="slideId" name="slideId" class="form-select" onchange="updateSlideDetails()" required>
-        <option value="" disabled selected>เลือกสไลด์...</option>
-        @foreach ($slideshows as $slideshow)
-            <option value="{{ $slideshow->slideshow_id }}"
-                data-image="{{ asset('storage/' . $slideshow->slideshow_image) }}"
-                data-number="{{ $loop->index + 1 }}">
-                ลำดับ {{ $loop->index + 1 }} - {{ $slideshow->slideshow_link }}
-            </option>
-        @endforeach
-    </select>
-    <div class="mt-3">
-        <img id="selectedSlideImage" src="" alt="Preview" style="display: none; max-width: 100%; max-height: 200px; border: 1px solid #ddd; padding: 5px;">
-        <p id="selectedSlideText" style="display: none; margin-top: 10px;"></p>
-    </div>
-</form>
+
+                                <form id="deleteSlideForm" method="POST"
+                                    action="{{ route('slideshow.destroy', ['id' => 'PLACEHOLDER_ID']) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <select id="slideId" name="slideId" class="form-select"
+                                        onchange="updateSlideDetails()" required>
+                                        <option value="" disabled selected>เลือกสไลด์...</option>
+                                        @foreach ($slideshows as $slideshow)
+                                            <option value="{{ $slideshow->slideshow_id }}"
+                                                data-image="{{ asset('storage/' . $slideshow->slideshow_image) }}"
+                                                data-number="{{ $loop->index + 1 }}">
+                                                ลำดับ {{ $loop->index + 1 }} - {{ $slideshow->slideshow_link }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="mt-3">
+                                        <img id="selectedSlideImage" src="" alt="Preview"
+                                            style="display: none; max-width: 100%; max-height: 200px; border: 1px solid #ddd; padding: 5px;">
+                                        <p id="selectedSlideText" style="display: none; margin-top: 10px;"></p>
+                                    </div>
+                                </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
@@ -395,28 +399,28 @@
     }
 
     function updateSlideDetails() {
-    const slideSelect = document.getElementById('slideId');
-    const selectedOption = slideSelect.options[slideSelect.selectedIndex];
+        const slideSelect = document.getElementById('slideId');
+        const selectedOption = slideSelect.options[slideSelect.selectedIndex];
 
-    if (selectedOption.value) {
-        // ดึงข้อมูลรูปภาพและลำดับจาก data-attribute
-        const imageSrc = selectedOption.getAttribute('data-image');
-        const slideNumber = selectedOption.getAttribute('data-number');
+        if (selectedOption.value) {
+            // ดึงข้อมูลรูปภาพและลำดับจาก data-attribute
+            const imageSrc = selectedOption.getAttribute('data-image');
+            const slideNumber = selectedOption.getAttribute('data-number');
 
-        // แสดงข้อมูลในฟอร์ม
-        const slideImage = document.getElementById('selectedSlideImage');
-        const slideText = document.getElementById('selectedSlideText');
+            // แสดงข้อมูลในฟอร์ม
+            const slideImage = document.getElementById('selectedSlideImage');
+            const slideText = document.getElementById('selectedSlideText');
 
-        slideImage.src = imageSrc;
-        slideImage.style.display = 'block';
-        slideText.textContent = `ลำดับ: ${slideNumber}`;
-        slideText.style.display = 'block';
-    } else {
-        // ซ่อนข้อมูลถ้ายังไม่ได้เลือก
-        document.getElementById('selectedSlideImage').style.display = 'none';
-        document.getElementById('selectedSlideText').style.display = 'none';
+            slideImage.src = imageSrc;
+            slideImage.style.display = 'block';
+            slideText.textContent = `ลำดับ: ${slideNumber}`;
+            slideText.style.display = 'block';
+        } else {
+            // ซ่อนข้อมูลถ้ายังไม่ได้เลือก
+            document.getElementById('selectedSlideImage').style.display = 'none';
+            document.getElementById('selectedSlideText').style.display = 'none';
+        }
     }
-}
 
     function confirmDelete() {
         const slideSelect = document.getElementById('slideId');
