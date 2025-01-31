@@ -117,31 +117,35 @@
                     <small style="color:red">{{ $message }}</small>
                 @enderror
 
-                <!-- fttx_broadband form-->
-                <div id="fttx_broadband">
+                <div id="dynamicForm">
+                    
+                </div>
+
+                {{-- <!-- fttx_broadband form -->
+                <div id="fttx_broadband" style="display: none;">
                     <label for="cus_type_fttx" class="form-label">ประเภทลูกค้า</label>
                     <select class="form-select bg-warning" id="cus_type_fttx" name="cus_type_fttx" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
-                        <option value="1" class="bg-secondary"> ลูกค้าใหม่ </option>
-                        <option value="0" class="bg-secondary"> ปรับโปรโมชั่น </option>
+                        <option value="1" class="bg-secondary">ลูกค้าใหม่</option>
+                        <option value="0" class="bg-secondary">ปรับโปรโมชั่น</option>
                     </select>
                     <label for="installation_type" class="form-label">งานติดตั้ง</label>
                     <select class="form-select bg-warning" id="installation_type" name="installation_type" required>
                         <option value="" disabled selected>-- เลือกวิธีการติดตั้ง --</option>
-                        <option value="1" class="bg-secondary"> ติดตั้งเอง </option>
-                        <option value="0" class="bg-secondary"> จ้างผู้รับเหมา </option>
+                        <option value="1" class="bg-secondary">ติดตั้งเอง</option>
+                        <option value="0" class="bg-secondary">จ้างผู้รับเหมา</option>
                     </select>
                 </div>
 
-                <!-- sim_my form-->
-                <div id="sim_my">
+                <!-- sim_my form -->
+                <div id="sim_my" style="display: none;">
                     <label for="cus_type_sim" class="form-label">ประเภทลูกค้า</label>
                     <select class="form-select bg-warning" id="cus_type_sim" name="cus_type_sim" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
-                        <option value="1" class="bg-secondary"> ลูกค้าใหม่ </option>
-                        <option value="0" class="bg-secondary"> ลูกค้า(ย้ายค่าย) </option>
+                        <option value="1" class="bg-secondary">ลูกค้าใหม่</option>
+                        <option value="0" class="bg-secondary">ลูกค้า(ย้ายค่าย)</option>
                     </select>
-                </div>
+                </div> --}}
 
                 <!-- Other -->
                 <label for="other" class="form-label">หมายเหตุ</label>
@@ -282,42 +286,79 @@
         }
     </script>
 
+    <script>
+        $(document).ready(function() {
+            $("#service_id").change(function() {
+                let serviceId = $(this).val();
+                if (!serviceId) {
+                    $("#dynamicForm").html("");
+                    return;
+                }
+
+                $.ajax({
+                    url: "/service-fields/" + serviceId,
+                    type: "GET",
+                    success: function(response) {
+                        let formHtml = "";
+                        console.log(response);
+                        response.forEach(field => {
+                            let required = field.is_required ? "required" : "";
+                            formHtml += `<label class='form-label'>${field.attribute_name}</label>`;
+                            if (field.data_type === "string") {
+                                formHtml +=
+                                    `<input type="text" name="attributes[${field.attribute_id}]" ${required} class="form-control">`;
+                            } else if (field.data_type === "textarea") {
+                                formHtml +=
+                                    `<textarea  name="attributes[${field.attribute_id}]" ${required} class="form-control"></textarea>`;
+                            } else if (field.data_type === "number") {
+                                formHtml +=
+                                    `<input type="number"  name="attributes[${field.attribute_id}]" ${required} class="form-control">`;
+                            } else if (field.data_type === "boolean") {
+                                var trueValue = field.custom_true_value || "ใช่";  // ค่า default เป็น "ใช่"
+    var falseValue = field.custom_false_value || "ไม่ใช่";  // ค่า default เป็น "ไม่ใช่"
+    
+    formHtml += `
+     
+        <select name="attributes[${field.attribute_id}]"  ${required} class="form-control bg-warning">
+              <option value="" disabled selected  class='bg-secondary'>-- เลือกประเภทข้อมูล --</option>
+            <option value="1" class='bg-secondary'>${trueValue}</option>
+            <option value="0"  class='bg-secondary'>${falseValue}</option>
+        </select>
+    `;
+                            }
+                            formHtml += "<br>";
+                        });
+                        $("#dynamicForm").html(formHtml);
+                    }
+                });
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function() {
+            // ฟังก์ชันสำหรับการแสดง/ซ่อนฟอร์มตาม serviceName
             function toggleForms(serviceName) {
                 if (serviceName === 'fttx_broadband') {
                     $('#fttx_broadband').show();
                     $('#sim_my').hide();
-
-                    // เปิด required สำหรับฟอร์ม fttx_broadband
                     $('#cus_type_fttx, #installation_type').prop('required', true);
-
-                    // ปิด required สำหรับฟอร์ม sim_my
                     $('#cus_type_sim').prop('required', false);
                 } else if (serviceName.includes('SIM my')) {
                     $('#sim_my').show();
                     $('#fttx_broadband').hide();
-
-                    // เปิด required สำหรับฟอร์ม sim_my
                     $('#cus_type_sim').prop('required', true);
-
-                    // ปิด required สำหรับฟอร์ม fttx_broadband
                     $('#cus_type_fttx, #installation_type').prop('required', false);
                 } else {
-                    // ซ่อนฟอร์มทั้งหมด
                     $('#fttx_broadband, #sim_my').hide();
-
-                    // ปิด required สำหรับทุกฟอร์ม
                     $('#cus_type_fttx, #installation_type, #cus_type_sim').prop('required', false);
                 }
             }
 
-            // เรียกใช้ฟังก์ชันตอนโหลดหน้า
+            // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
             var serviceName = $('#service_id option:selected').text();
             toggleForms(serviceName);
 
-            // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
             $('#service_id').change(function() {
                 var serviceName = $(this).find('option:selected').text();
                 toggleForms(serviceName);

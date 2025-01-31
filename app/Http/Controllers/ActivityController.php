@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Customer_att;
 use App\Models\Fttxbroadband;
 use App\Models\Simmy;
 use App\Models\TopUp;
@@ -10,6 +11,7 @@ use App\Models\PriceActivity;
 use App\Models\ProvinceActivity;
 use App\Models\PromotionActivity;
 use App\Models\ServeActivity;
+use App\Models\Service_att;
 use App\Models\SpeedActivity;
 use App\Models\TypeActivity;
 use Illuminate\Http\Request;
@@ -92,8 +94,26 @@ class ActivityController extends Controller
             'service_name' => 'required|string|max:255',
 
         ]);
+        $service_name = $request->input('service_name');
+        $sub_services = $request->input('sub_service');
+        $type_subs = $request->input('type_sub');
+        $service = ServeActivity::create(['service_name' => $service_name]);
 
-        ServeActivity::create($request->all());
+        // เพิ่มข้อมูลลงในตาราง service_att (ถ้ามีข้อมูล)
+        if ($sub_services || $type_subs) {
+            foreach ($sub_services as $index => $sub_service) {
+                $true_value = $request->input("true_value.{$index}");
+                $false_value = $request->input("false_value.{$index}");
+
+                Service_att::create([
+                    'service_id' => $service->id,
+                    'attribute_name' => $sub_service,
+                    'data_type' => $type_subs[$index],
+                    'custom_true_value' => $true_value ? $true_value : null, // ถ้ามีค่าให้เก็บ
+                    'custom_false_value' => $false_value ? $false_value : null, // ถ้ามีค่าให้เก็บ
+                ]);
+            }
+        }
         $data = ServeActivity::all();
         return redirect()->route('service_list', compact('data'))
             ->with('success', 'เพิ่มบริการสำเร็จ');
@@ -290,32 +310,41 @@ class ActivityController extends Controller
     {
         // ดึงข้อมูล Customer และจัดกลุ่มตาม province_id
         $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])->get();
+        // ดึงข้อมูลทั้งหมดใน province
         $provinces = ProvinceActivity::all();
 
-        // ดึงข้อมูล Fttxbroadband ที่ new = 1
-        $fttxNew = Customer::where('cus_type_fttx', 1)
+        // ดึงข้อมูล Customer ทั้งหมดที่ใช้บริการ fttx_broadband
+        $customers = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center', 'customerAttributes.attribute'])
+            ->whereHas('service', function ($query) {
+                $query->where('service_name', 'fttx_broadband');
+            })
             ->get()
-            ->groupBy('province_id') // แยกกลุ่มตาม `province_id`
-            ->map(function ($items) {
-                return $items->count('cus_type_fttx'); // รวมค่าที่ซ้ำกันได้
-            });
+            ->groupBy('province_id'); // แยกกลุ่มตามจังหวัด
 
+        // คำนวณข้อมูลแต่ละประเภท
+        $fttxNew = $customers->map(function ($items) {
+            return $items->filter(function ($customer) {
+                return $customer->customerAttributes->contains(function ($attribute) {
+                    return $attribute->attribute->attribute_name === 'ประเภทลูกค้า' && $attribute->value == 1;
+                });
+            })->count();
+        });
 
-        // ดึงข้อมูล Customer ที่ติดตั้งเอง
-        $selfInstall = Customer::where('installation_type', 1)
-            ->get()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
-            });
+        $selfInstall = $customers->map(function ($items) {
+            return $items->filter(function ($customer) {
+                return $customer->customerAttributes->contains(function ($attribute) {
+                    return $attribute->attribute->attribute_name === 'งานติดตั้ง' && $attribute->value == 1;
+                });
+            })->count();
+        });
 
-        // ดึงข้อมูล Customer ที่จ้างผู้รับเหมา
-        $HireInstall = Customer::where('installation_type', 0)
-            ->get()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
-            });
+        $HireInstall = $customers->map(function ($items) {
+            return $items->filter(function ($customer) {
+                return $customer->customerAttributes->contains(function ($attribute) {
+                    return $attribute->attribute->attribute_name === 'งานติดตั้ง' && $attribute->value == 0;
+                });
+            })->count();
+        });
         return view('events.fttx_broadband', compact('data', 'provinces', 'fttxNew', 'selfInstall', 'HireInstall'));
     }
 
@@ -378,7 +407,7 @@ class ActivityController extends Controller
             ->get()
             ->groupBy('province_id') // แยกกลุ่มตาม `province_id`
             ->map(function ($items) {
-                return $items->count('new'); // รวมค่าที่ซ้ำกันได้
+                return $items->count('cus_type_fttx'); // รวมค่าที่ซ้ำกันได้
             });
 
 
@@ -427,4 +456,54 @@ class ActivityController extends Controller
 
         return view('events.activity_list', compact('data', 'provinces', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price'));
     }
+
+    public function serviceList()
+{
+    // ดึงข้อมูล Province ทั้งหมด
+    $provinces = ProvinceActivity::all();
+
+    // ดึงข้อมูลบริการทั้งหมด
+    $services = ServeActivity::pluck('service_name')->unique();
+
+    // ดึงข้อมูลลูกค้าทั้งหมดที่ใช้บริการ
+    $customers = Customer::with([
+        'type', 'service', 'promotion', 'province', 'speed', 'price', 'center',
+        'customerAttributes.attribute'
+    ])
+    ->whereHas('service') // ดึงเฉพาะลูกค้าที่มีบริการ
+    ->get()
+    ->groupBy('province_id'); // แยกตามจังหวัด
+
+    // ดึง attribute_name ทั้งหมดที่เกี่ยวข้อง
+    $attributes = Service_att::whereHas('customerAttributes')
+        ->pluck('attribute_name')
+        ->unique();
+
+
+        $customers = Customer::with(['service', 'customerAttributes.attribute'])->get();
+        $attributes = Service_att::pluck('attribute_name');
+
+
+        
+        $serviceData = $customers->groupBy('service_name')->mapWithKeys(function ($serviceGroup, $serviceId) use ($attributes) {
+            $service = $serviceGroup->first()?->service; // ใช้ `?->` ป้องกัน Error ถ้าไม่มี service
+            $serviceName = $service ? $service->service_name : "Unknown Service"; // กำหนดชื่อเริ่มต้นถ้าไม่มีข้อมูล
+        
+            return [
+                $serviceName => $attributes->mapWithKeys(function ($attributeName) use ($serviceGroup) {
+                    return [
+                        $attributeName => $serviceGroup->filter(function ($customer) use ($attributeName) {
+                            return $customer->customerAttributes->contains(fn($attribute) =>
+                                $attribute->attribute->attribute_name === $attributeName && $attribute->value == 1
+                            );
+                        })->count()
+                    ];
+                })
+            ];
+        });
+        
+
+    return view('events.service_list', compact('provinces', 'services', 'serviceData'));
+}
+
 }

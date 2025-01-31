@@ -398,6 +398,9 @@ Route::delete('/topUp_delete/{topUp_id}', [CustomerController::class, 'TopUpDele
 Route::put('/top-up/update/{id}', [CustomerController::class, 'TopUpUpdate'])->name('topUp_update');
 Route::get('/getTopUpDetails/{topUpId}', [CustomerController::class, 'getTopUpDetails'])->name('getTopUpDetails');
 
+Route::get('/service-fields/{id}', [CustomerController::class, 'getServiceFields']);
+Route::get('/test', [ActivityController::class, 'serviceList']);
+
 
 
 

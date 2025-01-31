@@ -22,9 +22,9 @@ return new class extends Migration
             $table->unsignedBigInteger('service_id');
             
             $table->foreign('service_id')->references('service_id')->on('serve_activity')->onDelete('cascade');
-            $table->boolean('installation_type')->nullable();  // ฟิลด์เดียวแทน ติดตั้งเอง หรือ จ้างผู้รับเหมา
-            $table->boolean('cus_type_fttx')->nullable();  // ฟิลด์ลูกค้าใหม่ fttx
-            $table->boolean('cus_type_sim')->nullable();  // ฟิลด์ลูกค้าใหม่ SIM my
+            // $table->boolean('installation_type')->nullable();  // ฟิลด์เดียวแทน ติดตั้งเอง หรือ จ้างผู้รับเหมา
+            // $table->boolean('cus_type_fttx')->nullable();  // ฟิลด์ลูกค้าใหม่ fttx
+            // $table->boolean('cus_type_sim')->nullable();  // ฟิลด์ลูกค้าใหม่ SIM my
             $table->unsignedBigInteger('promotion_id');
             $table->foreign('promotion_id')->references('promotion_id')->on('promotion_activity')->onDelete('cascade');
             $table->unsignedBigInteger('speed_id');

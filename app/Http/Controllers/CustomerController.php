@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Customer_att;
 use App\Models\Fttxbroadband;
 use App\Models\PriceActivity;
 use App\Models\PromotionActivity;
 use App\Models\ProvinceActivity;
 use App\Models\ServeActivity;
+use App\Models\Service_att;
 use App\Models\ServiceCenterActivity;
 use App\Models\Simmy;
 use App\Models\SpeedActivity;
@@ -40,61 +42,61 @@ class CustomerController extends Controller
         $centers = ServiceCenterActivity::all();
 
         // ดึงข้อมูล Fttxbroadband ที่ new = 1
-        $fttxNew = Customer::where('cus_type_fttx', 1)
+        $fttxNew = Customer_att::where('value', 1)
             ->get()
             ->groupBy('province_id') // แยกกลุ่มตาม `province_id`
             ->map(function ($items) {
-                return $items->count('new'); // รวมค่าที่ซ้ำกันได้
+                return $items->count('value'); // รวมค่าที่ซ้ำกันได้
             });
 
 
         // ดึงข้อมูล Fttxbroadband ที่ติดตั้งเอง
-        $selfInstall = Customer::where('installation_type', 1)
+        $selfInstall = Customer_att::where('value', 1)
             ->get()
             ->groupBy('province_id')
             ->map(function ($items) {
-                return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
+                return $items->count('value'); // รวมค่าที่ซ้ำกันได้
             });
 
         // ดึงข้อมูล Fttxbroadband ที่จ้างผู้รับเหมา
-        $HireInstall = Customer::where('installation_type', 0)
+        $HireInstall = Customer_att::where('value', 0)
             ->get()
             ->groupBy('province_id')
             ->map(function ($items) {
-                return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
+                return $items->count('value'); // รวมค่าที่ซ้ำกันได้
             });
 
-        $Simmy_new = Customer::where('cus_type_sim', 1)
-            ->get()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->count('cus_type_sim'); // รวมค่าที่ซ้ำกันได้
-            });
+        // $Simmy_new = Customer::where('cus_type_sim', 1)
+        //     ->get()
+        //     ->groupBy('province_id')
+        //     ->map(function ($items) {
+        //         return $items->count('cus_type_sim'); // รวมค่าที่ซ้ำกันได้
+        //     });
 
-        $Simmy_move = Customer::where('cus_type_sim', 0)
-            ->get()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->count('cus_type_sim'); // รวมค่าที่ซ้ำกันได้
-            });
+        // $Simmy_move = Customer::where('cus_type_sim', 0)
+        //     ->get()
+        //     ->groupBy('province_id')
+        //     ->map(function ($items) {
+        //         return $items->count('cus_type_sim'); // รวมค่าที่ซ้ำกันได้
+        //     });
 
-        $Simmy_count = TopUp::all()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->count(); // นับจำนวนรายการในแต่ละกลุ่ม
-            });
+        // $Simmy_count = TopUp::all()
+        //     ->groupBy('province_id')
+        //     ->map(function ($items) {
+        //         return $items->count(); // นับจำนวนรายการในแต่ละกลุ่ม
+        //     });
 
-        $Simmy_price = TopUp::all()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->sum('amount'); // รวมค่าของ amount ในแต่ละกลุ่ม
-            });
+        // $Simmy_price = TopUp::all()
+        //     ->groupBy('province_id')
+        //     ->map(function ($items) {
+        //         return $items->sum('amount'); // รวมค่าของ amount ในแต่ละกลุ่ม
+        //     });
 
         $TopUp = TopUp::with(['province', 'center'])->get();
 
 
 
-        return view('events.cus_list', compact('data', 'provinces', 'centers', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price', 'TopUp'));
+        return view('events.cus_list', compact('data', 'provinces', 'centers', 'fttxNew', 'selfInstall', 'HireInstall','TopUp'));
     }
 
 
@@ -118,7 +120,8 @@ class CustomerController extends Controller
 
     public function CustomerInsert(Request $request)
     {
-        // Validate the incoming request
+        // [1] ผู้ใช้กรอกแบบฟอร์มสมัครบริการ
+        // เริ่มต้นการตรวจสอบข้อมูลที่ป้อนมาจากฟอร์ม
         $request->validate([
             'cus_fullname' => 'required|string',
             'id_card' => 'required|max:13',
@@ -141,48 +144,63 @@ class CustomerController extends Controller
             'province_id.required' => 'กรุณาเลือกจังหวัด',
             'center_id.required' => 'กรุณาเลือกศูนย์บริการ',
         ]);
-        
+
+        // [2] ระบบตรวจสอบความถูกต้องของข้อมูล
+        // ตรวจสอบบริการที่ลูกค้าเลือก
         $service = $request->input('service_id');
-
-
-
-        // ดึงชื่อบริการจาก service_id
         $service_name = ServeActivity::where('service_id', $service)->value('service_name');
 
-        if (strpos(strtolower($service_name), 'fttx_broadband') !== false) {
-            // Prepare data for insertion
-            $data = $request->only([
-                'cus_fullname', 'id_card', 'cus_address', 'center_id', 'type_id', 
-                'service_id', 'installation_type', 'cus_type_fttx', 'province_id', 
-                'promotion_id', 'speed_id', 'price_id', 'other'
-            ]);
-            if ($request->hasFile('cus_photo')) {
-                $file = $request->file('cus_photo');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('customer_images', $filename, 'public');
-                $data['cus_photo'] = $path; // เพิ่มข้อมูลลงใน $data
-            }
-            // Insert into database and retrieve the cus_id from the inserted customer
-            $customer = Customer::create($data);
-        } else if (strpos(strtolower($service_name), 'sim my') !== false) {
-                // Prepare data for insertion
-                $data = $request->only([
-                    'cus_fullname', 'id_card', 'cus_address', 'center_id', 'type_id', 
-                    'service_id', 'cus_type_sim', 'province_id', 
-                    'promotion_id', 'speed_id', 'price_id', 'other'
-                ]);
-                if ($request->hasFile('cus_photo')) {
-                    $file = $request->file('cus_photo');
-                    $filename = time() . '_' . $file->getClientOriginalName();
-                    $path = $file->storeAs('customer_images', $filename, 'public');
-                    $data['cus_photo'] = $path; // เพิ่มข้อมูลลงใน $data
-                }
-                // Insert into database and retrieve the cus_id from the inserted customer
-                $customer = Customer::create($data);
+        // [3] ระบบบันทึกข้อมูลลูกค้าในตาราง Customer
+        // สร้างข้อมูลลูกค้าพื้นฐาน
+        $data = $request->only([
+            'cus_fullname',
+            'id_card',
+            'cus_address',
+            'center_id',
+            'type_id',
+            'service_id',
+            'installation_type',
+            'cus_type_fttx',
+            'province_id',
+            'promotion_id',
+            'speed_id',
+            'price_id',
+            'other'
+        ]);
+
+        // [5] ระบบบันทึกฟิลด์เฉพาะของลูกค้าใน Customer_Attributes
+        // บันทึกข้อมูลฟิลด์เฉพาะของลูกค้า
+        $customer = Customer::create($data);
+
+        // [6] ระบบบันทึกไฟล์รูปภาพ (ถ้ามี)
+        if ($request->hasFile('cus_photo')) {
+            $file = $request->file('cus_photo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('customer_images', $filename, 'public');
+            $customer->cus_photo = $path;  // บันทึกที่อยู่ของไฟล์ 
+            $customer->save();  // อัปเดตข้อมูลลูกค้าด้วยที่อยู่ไฟล์
         }
 
+        // [4] ระบบตรวจสอบประเภทบริการ และดึงฟิลด์ที่ต้องกรอกจาก Service_Attributes
+        // ตรวจสอบบริการที่เลือกและดึงฟิลด์เฉพาะจาก service_attributes
+        $serviceAttributes = Service_att::where('service_id', $service)->get();
+
+     // เพิ่มฟิลด์เฉพาะตามบริการที่เลือก
+     foreach ($serviceAttributes as $attribute) {
+        $values = $request->input('attributes.' . $attribute->attribute_id);
+            // ถ้าเป็นค่าเดียวก็เพิ่มเข้าไปปกติ
+            Customer_att::create([
+                'customer_id' => $customer->cus_id, 
+                'attribute_id' => $attribute->attribute_id,
+                'value' => $values, 
+            ]);
+        }
+        // [7] ระบบแจ้งผลลัพธ์ และแสดงรายการลูกค้า
+        // แจ้งผลลัพธ์การเพิ่มข้อมูลและแสดงหน้าลูกค้า
         return redirect()->route('customer_list')->with('success', 'เพิ่มข้อมูลลูกค้าสำเร็จ');
     }
+
+
 
     public function CustomerDelete($cus_id)
     {
@@ -211,7 +229,7 @@ class CustomerController extends Controller
         }
         $fttxBroadband = Customer::where('cus_id', $cus_id)->first();
         $sim_my = Customer::where('cus_id', $cus_id)->first();
-        $customerTypeOptions = Customer::select('cus_id', 'cus_type_fttx')->get() ; // ตัวเลือกประเภทลูกค้า
+        $customerTypeOptions = Customer::select('cus_id', 'cus_type_fttx')->get(); // ตัวเลือกประเภทลูกค้า
         $installationOptions = Customer::select('cus_id', 'installation_type')->get(); // ตัวเลือกวิธีติดตั้ง
 
         // ดึงข้อมูลประเภทกิจกรรม, บริการ, และจังหวัดเพื่อใช้ในฟอร์ม
@@ -247,7 +265,7 @@ class CustomerController extends Controller
         $province_id = $request->input('province_id');
         $center_id = $request->input('center_id');
         $other = $request->input('other');
-        
+
 
         // ตรวจสอบว่ามีไฟล์รูปภาพอัปโหลดไหม
         if ($request->hasFile('cus_photo')) {
@@ -423,5 +441,13 @@ class CustomerController extends Controller
         $customers = $query->with(['type', 'service', 'promotion', 'speed', 'price', 'province', 'center'])->get();
 
         return response()->json($customers);
+    }
+
+    // ดึงฟิลด์ของบริการที่เลือก
+    public function getServiceFields($id)
+    {
+        $fields = Service_att::where('service_id', $id)->get();
+
+        return response()->json($fields);
     }
 }

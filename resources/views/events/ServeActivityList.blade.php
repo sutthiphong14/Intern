@@ -67,11 +67,47 @@
                                 <label for="service_name" class="form-label">ชื่อบริการ</label>
                                 <input type="text" class="form-control" id="service_name" name="service_name" required>
                             </div>
+                            <div id="fields-container">
+                                <div class=" d-flex align-items-center">
+                                    <div class="me-3">
+                                        <label for="sub_service" class="form-label">ข้อมูลของบริการ</label>
+                                        <input type="text" class="form-control" id="sub_service" name="sub_service[]"
+                                            >
+                                    </div>
+                                    <div>
+                                        <label for="type_sub" class="form-label">ประเภทข้อมูล</label>
+                                        <select name="type_sub[]" id="type_sub" class="form-control">
+                                            <option value="" disabled selected>-- เลือกประเภทข้อมูล --</option>
+                                            <option value="boolean">ตัวเลือก</option>
+                                            <option value="number">ตัวเลข</option>
+                                            <option value="string">ตัวหนังสือ</option>
+                                        </select>
+                                      
+                                    </div>
+                                    <button type="button" id="addField" class="btn btn-success mt-4">+เพิ่มฟิลด์</button>
+                                </div>
+                                  <!-- แสดงฟิลด์สำหรับกรอกค่า True/False -->
+                                  <div id="booleanFields" style="display: none;">
+                                    <div  class="d-flex align-items-center">
+                                    <div class="mb-3">
+                                        <label for="true_value" class="form-label">ตัวเลือกที่ 1</label>
+                                        <input type="text" class="form-control" id="true_value"
+                                            name="true_value[]">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="false_value" class="form-label">ตัวเลือกที่ 2</label>
+                                        <input type="text" class="form-control" id="false_value"
+                                            name="false_value[]">
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
                             <button type="submit" class="btn btn-primary">บันทึก</button>
                         </div>
+
                     </div>
                 </form>
             </div>
@@ -92,7 +128,8 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="serviceName" class="form-label">ชื่อบริการ</label>
-                                <input type="text" class="form-control" id="serviceName" name="service_name" required>
+                                <input type="text" class="form-control" id="serviceName" name="service_name"
+                                    required>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -161,5 +198,86 @@
                 }
             });
         }
+    </script>
+
+<script>
+    // Function to add a new field
+    function addField() {
+        var container = document.getElementById('fields-container');
+        var newField = document.createElement('div');
+        newField.classList.add('mb-3', 'd-flex', 'align-items-center');
+        newField.innerHTML = `
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <label for="sub_service" class="form-label">ข้อมูลของบริการ</label>
+                    <input type="text" class="form-control" name="sub_service[]">
+                </div>
+                <div>
+                    <label for="type_sub" class="form-label">ประเภทข้อมูล</label>
+                    <select name="type_sub[]" class="form-control">
+                        <option value="" disabled selected>-- เลือกประเภทข้อมูล --</option>
+                        <option value="boolean">ตัวเลือก</option>
+                        <option value="number">ตัวเลข</option>
+                        <option value="string">ตัวหนังสือ</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-success mt-4 addFieldBtn">+เพิ่มฟิลด์</button>
+                <button type="button" class="btn btn-danger mt-4 removeFieldBtn">-ลบฟิลด์</button>
+            </div>
+            <div class="booleanFields" style="display: none;">
+                
+                    <div class="mb-3">
+                        <label for="true_value" class="form-label">ตัวเลือกที่ 1</label>
+                        <input type="text" class="form-control" name="true_value[]">
+                    </div>
+                    <div class="mb-3">
+                        <label for="false_value" class="form-label">ตัวเลือกที่ 2</label>
+                        <input type="text" class="form-control" name="false_value[]">
+                    </div>
+           
+            </div>
+        `;
+        container.appendChild(newField);
+
+        // Add event listener to the remove button
+        newField.querySelector('.addFieldBtn').addEventListener('click', addField);
+
+
+        newField.querySelector('.removeFieldBtn').addEventListener('click', function() {
+            newField.remove(); // Remove the field when delete button is clicked
+        });
+
+        // Handle changes in type_sub select
+        newField.querySelector('select[name="type_sub[]"]').addEventListener('change', function() {
+            var booleanFields = newField.querySelector('.booleanFields');
+            if (this.value === 'boolean') {
+                booleanFields.style.display = 'block';
+            } else {
+                booleanFields.style.display = 'none';
+            }
+        });
+    }
+
+    // Initial event listener for the first add button
+    document.getElementById('addField').addEventListener('click', addField);
+</script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeSubSelect = document.getElementById('type_sub');
+            const booleanFields = document.getElementById('booleanFields');
+
+            // ตรวจจับการเปลี่ยนแปลงของประเภทข้อมูล
+            typeSubSelect.addEventListener('change', function() {
+                if (this.value === 'boolean') {
+                    // ถ้าเลือก "boolean" ให้แสดงฟิลด์สำหรับกรอกค่า True/False
+                    booleanFields.style.display = 'block';
+                } else {
+                    // ถ้าไม่ใช่ "boolean" ให้ซ่อนฟิลด์ True/False
+                    booleanFields.style.display = 'none';
+                }
+            });
+        });
     </script>
 @endsection

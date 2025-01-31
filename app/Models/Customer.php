@@ -12,6 +12,8 @@ class Customer extends Model
     // ชื่อตารางในฐานข้อมูล
     protected $table = 'customers';
 
+    protected $primaryKey = 'cus_id';  // เปลี่ยน 'customer_id' ให้เป็นชื่อคอลัมน์ที่เป็น Primary Key ในตารางของคุณ
+
 
     // คอลัมน์ที่อนุญาตให้เพิ่มหรือแก้ไขข้อมูล
     protected $fillable = [
@@ -34,7 +36,11 @@ class Customer extends Model
 
     ];
     public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล
-
+  // ความสัมพันธ์กับ customer_attributes
+  public function customerAttributes()
+  {
+      return $this->hasMany(Customer_att::class, 'customer_id', 'cus_id');
+  }
 
     // ความสัมพันธ์กับ Model อื่น ๆ
     public function type()
