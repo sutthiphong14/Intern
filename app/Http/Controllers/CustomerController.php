@@ -13,6 +13,7 @@ use App\Models\Simmy;
 use App\Models\SpeedActivity;
 use App\Models\TopUp;
 use App\Models\TypeActivity;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -91,6 +92,7 @@ class CustomerController extends Controller
             });
 
         $TopUp = TopUp::with(['province', 'center'])->get();
+        
 
 
 
@@ -144,6 +146,7 @@ class CustomerController extends Controller
 
         // Prepare data for insertion
         $data = $request->only(['cus_fullname', 'id_card', 'cus_address', 'center_id', 'type_id', 'service_id', 'province_id', 'promotion_id', 'speed_id', 'price_id', 'other']);
+        $data['created_at'] = $request->input('date') ? Carbon::parse($request->input('date')) : Carbon::now(); // ถ้า date ในฟอร์มมีค่าให้ใช้ ถ้าไม่มีใช้เวลาปัจจุบัน
 
         if ($request->hasFile('cus_photo')) {
             $file = $request->file('cus_photo');
@@ -158,17 +161,21 @@ class CustomerController extends Controller
         // ดึงชื่อบริการจาก service_id
         $service_name = ServeActivity::where('service_id', $data['service_id'])->value('service_name');
 
-        if ($service_name == 'fttx_broadband') {
+      
+        if (strpos(strtolower($service_name), 'fttx_broadband') !== false)  {
             $new = $request->input('new');
             $installation_type = $request->input('installation_type');
             $cus_id = $customer->id;  // ดึง cus_id ที่เพิ่งสร้างใหม่มาใช้งาน
             $province_id = $request->input('province_id');
+            $date = $request->input('date');
             // ใช้ $cus_id ในการเพิ่มข้อมูลใน FttxBroadband
+            
             Fttxbroadband::create([
                 'new' => $new,
                 'installation_type' => $installation_type,
                 'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
                 'province_id' => $province_id,
+                'created_at'=>$date
             ]);
         } else if (strpos(strtolower($service_name), 'sim my') !== false) {
             $cus_new = $request->input('cus_new');
@@ -176,6 +183,7 @@ class CustomerController extends Controller
             $price_id = $request->input('price_id');
             $cus_id = $customer->id;  // ดึง cus_id ที่เพิ่งสร้างใหม่มาใช้งาน
             $province_id = $request->input('province_id');
+            $date = $request->input('date');
             // ใช้ $cus_id ในการเพิ่มข้อมูลใน FttxBroadband
             Simmy::create([
                 'cus_new' => $cus_new,
@@ -183,6 +191,7 @@ class CustomerController extends Controller
                 'price_id' => $price_id,
                 'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
                 'province_id' => $province_id,
+                'created_at'=>$date
             ]);
         }
 
@@ -249,6 +258,7 @@ class CustomerController extends Controller
 
         $province_id = $request->input('province_id');
         $center_id = $request->input('center_id');
+        $date = $request->input('date');
         $other = $request->input('other');
 
         // ตรวจสอบว่ามีไฟล์รูปภาพอัปโหลดไหม
@@ -266,7 +276,7 @@ class CustomerController extends Controller
         $fttx_cus_id = Fttxbroadband::where('cus_id', $cus_id)->value('cus_id');
         $simmy_cus_id = Simmy::where('cus_id', $cus_id)->value('cus_id');
 
-        if ($service_name == 'fttx_broadband') {
+        if (strpos(strtolower($service_name), 'fttx_broadband') !== false) {
             // กรณีเป็น fttx_broadband
             $new = $request->input('new');
             $installation_type = $request->input('installation_type');
@@ -276,12 +286,15 @@ class CustomerController extends Controller
                     'installation_type' => $installation_type,
                     'cus_id' => $cus_id,
                     'province_id' => $province_id,
+                    'created_at' => $date
                 ]);
             } else {
                 Fttxbroadband::where('cus_id', $cus_id)->update([
                     'new' => $new,
                     'installation_type' => $installation_type,
-                    'province_id' => $province_id
+                    'province_id' => $province_id,
+                    'created_at' => $date
+
                 ]);
             }
 
@@ -299,6 +312,7 @@ class CustomerController extends Controller
                     'service_id' => $service_id,
                     'price_id' => $price_id,
                     'province_id' => $province_id,
+                    'created_at' => $date
                 ]);
             } else {
                 Simmy::where('cus_id', $cus_id)->update([
@@ -306,6 +320,7 @@ class CustomerController extends Controller
                     'service_id' => $service_id,
                     'price_id' => $price_id,
                     'province_id' => $province_id,
+                    'created_at' => $date
                 ]);
             }
 
@@ -329,6 +344,7 @@ class CustomerController extends Controller
             'center_id' => $center_id,
             'other' => $other,
             'cus_photo' => $cus_photo,
+            'created_at' => $date,
             'updated_at' => $updated_at,
         ];
 

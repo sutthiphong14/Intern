@@ -424,7 +424,10 @@ class ActivityController extends Controller
                 return $items->sum('amount'); // รวมค่าของ amount ในแต่ละกลุ่ม
             });
 
+            $serviceTypes = ServeActivity::all(); // หรือสามารถใช้ where หรือ query อื่นๆ ได้ตามต้องการ
 
-        return view('events.activity_list', compact('data', 'provinces', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price'));
+
+        return view('events.activity_list', compact('serviceTypes','data', 'provinces', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price'));
     }
+
 }

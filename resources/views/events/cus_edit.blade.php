@@ -42,15 +42,29 @@
                     @endforeach
                 </select>
 
-                <!-- Dropdown for Service -->
-                <label for="service_id" class="form-label">บริการ</label>
-                <select class="form-select" id="service_id" name="service_id" required>
-                    <option value="" disabled>-- เลือกบริการ --</option>
-                    @foreach ($services as $service)
-                        <option value="{{ $service->service_id }}"
-                            {{ $customer->service_id == $service->service_id ? 'selected' : '' }}>
-                            {{ $service->service_name }}</option>
-                    @endforeach
+              
+                    <!-- Dropdown for Service -->
+                    <label for="service_id" class="form-label">บริการ</label>
+                    <select class="form-select" id="service_id" name="service_id" required>
+                        <option value="" disabled>-- เลือกบริการ --</option>
+                        @foreach ($services as $service)
+                            @if (strpos($service->service_name, 'ร่วม') !== false)
+                                <option value="{{ $service->service_id }}"
+                                    {{ $customer->service_id == $service->service_id ? 'selected' : '' }}>
+                                    {{ $service->service_name }}
+                                </option>
+                            @endif
+                        @endforeach
+                        
+                        @foreach ($services as $service)
+                            @if (strpos($service->service_name, 'ร่วม') === false)
+                                <option value="{{ $service->service_id }}"
+                                    {{ $customer->service_id == $service->service_id ? 'selected' : '' }}>
+                                    {{ $service->service_name }}
+                                </option>
+                            @endif
+                        @endforeach
+                        
                 </select>
 
                 <label for="promotion_id" class="form-label">โปรโมชั่น</label>
@@ -143,6 +157,13 @@
                             ลูกค้า(ย้ายค่าย) </option>
                     </select>
                 </div>
+                 <!-- Date Form -->
+                 <div id="date" class="mt-3">
+                    <label for="date" class="form-label">วัน/เดือน/ปี</label>
+                    <input type="date" id="date" name="date" class="form-label" required
+                    value="{{ $customer->created_at->format('Y-m-d') }}">
+                </div>
+
 
 
 

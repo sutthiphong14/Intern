@@ -10,7 +10,7 @@ class Simmy extends Model
     use HasFactory;
 
     protected $table = 'sim_my';
-    protected $fillable = ['cus_new', 'service_id','price_id','cus_id','province_id'];
+    protected $fillable = ['cus_new', 'service_id','price_id','cus_id','province_id','created_at'];
 
     public function service()
     {

@@ -12,9 +12,7 @@
                 <div class="col-auto">
                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#Top_up">เติมเงิน</button>
                 </div>
-                <div class="col-auto">
-                    <a href="#sim_my" class="btn btn-secondary">SIM my </a>
-                </div>
+               
             </div>
 
 
@@ -28,13 +26,14 @@
                     <input type="text" id="searchInput" class="form-control" placeholder="ค้นหาชื่อลูกค้า">
                 </div>
                 <div class="mb-3">
+
                     <!-- ช่องเลือกประเภทบริการ -->
                     <select class="form-select bg-warning" id="type_service" name="type_service">
                         <option value="" disabled selected>-- เลือกประเภทบริการ --</option>
                         <option value="">ทั้งหมด</option>
-                        <option value="fttx_broadband">Fttxbroadband</option>
-                        <option value="SIM my(เติมเงิน)">SIM my(เติมเงิน)</option>
-                        <option value="SIM my(รายเดือน)">SIM my(รายเดือน)</option>
+                        @foreach ($serviceTypes as $serviceType)
+                            <option value="{{ $serviceType->service_name }}">{{ $serviceType->service_name }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -203,7 +202,7 @@
                                             )->first();
                                             $simmyData = \App\Models\Simmy::where('cus_id', $customer->cus_id)->first();
                                         @endphp
-                                        @if ($fttxData && $customer->service->service_name == 'fttx_broadband')
+                                @if ($fttxData && str_contains(strtolower($customer->service->service_name), 'fttx_broadband'))
 <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
                                             <strong class='text-warning'>งานติดตั้ง:   </strong> {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
 @elseif ($simmyData && str_contains(strtolower($customer->service->service_name), 'sim my'))
@@ -258,7 +257,6 @@
         <div class="mt-5">
             <h3>สรุปรายงานผลการดำเนินงานกิจกรรมการตลาด</h3>
         </div>
-        <h5>Fttx broadband</h5>
         <table class="table table-bordered ">
             <thead>
                 <tr class="bg-dark text-center align-center">
@@ -400,39 +398,42 @@
 
 
 
-<!-- Fttx Graph -->
-<div class="card mt-5">
-    <div class="card-header bg-danger" id="fttxGraphHeading">
-        <h3 class="mb-0 d-flex justify-content-between align-items-center text-light">
-            กราฟ Fttx broadband
-            <button class="btn btn-link text-white" type="button" data-toggle="collapse" data-target="#fttxGraph" aria-expanded="true" aria-controls="fttxGraph">
-                <i class="fas fa-chevron-down" id="fttxGraphIcon"></i>
-            </button>
-        </h3>
-    </div>
-    <div id="fttxGraph" class="collapse show" aria-labelledby="fttxGraphHeading" data-parent="#fttxGraph">
-        <div class="fttx_graph mb-5">
-            <canvas id="myChart" class="mt-5" width="400" height="200"></canvas>
+        <!-- Fttx Graph -->
+        <div class="card mt-5">
+            <div class="card-header bg-danger" id="fttxGraphHeading">
+                <h3 class="mb-0 d-flex justify-content-between align-items-center text-light">
+                    กราฟ Fttx broadband
+                    <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                        data-target="#fttxGraph" aria-expanded="true" aria-controls="fttxGraph">
+                        <i class="fas fa-chevron-down" id="fttxGraphIcon"></i>
+                        
+                    </button>
+                </h3>
+            </div>
+            <div id="fttxGraph" class="collapse show" aria-labelledby="fttxGraphHeading" data-parent="#fttxGraph">
+                <div class="fttx_graph mb-5">
+                    <canvas id="myChart" class="mt-5" width="400" height="200"></canvas>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<!-- SIM my Graph -->
-<div class="card mt-5">
-    <div class="card-header bg-danger" id="simMyGraphHeading">
-        <h3 class="mb-0 d-flex justify-content-between align-items-center text-light">
-            กราฟ SIM my
-            <button class="btn btn-link text-white" type="button" data-toggle="collapse" data-target="#simMyGraph" aria-expanded="true" aria-controls="simMyGraph">
-                <i class="fas fa-chevron-down" id="simMyGraphIcon"></i>
-            </button>
-        </h3>
-    </div>
-    <div id="simMyGraph" class="collapse show" aria-labelledby="simMyGraphHeading" data-parent="#simMyGraph">
-        <div class="SIMmy_graph">
-            <canvas id="simMyChart" width="400" height="200"></canvas>
+        <!-- SIM my Graph -->
+        <div class="card mt-5">
+            <div class="card-header bg-danger" id="simMyGraphHeading">
+                <h3 class="mb-0 d-flex justify-content-between align-items-center text-light">
+                    กราฟ SIM my
+                    <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                        data-target="#simMyGraph" aria-expanded="true" aria-controls="simMyGraph">
+                        <i class="fas fa-chevron-down" id="simMyGraphIcon"></i>
+                    </button>
+                </h3>
+            </div>
+            <div id="simMyGraph" class="collapse show" aria-labelledby="simMyGraphHeading" data-parent="#simMyGraph">
+                <div class="SIMmy_graph">
+                    <canvas id="simMyChart" width="400" height="200"></canvas>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
     </div>
 
@@ -617,6 +618,8 @@
                                 weight: 'bold',
                             },
                         },
+                        
+                        
                     },
                     y: {
                         beginAtZero: true,

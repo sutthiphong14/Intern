@@ -52,13 +52,26 @@
                 <label for="service_id" class="form-label">บริการ</label>
                 <select class="form-select" id="service_id" name="service_id" required>
                     <option value="" disabled selected>-- เลือกบริการ --</option>
+
+                    <!-- แสดงบริการที่มีคำว่า 'ร่วม' ขึ้นก่อน -->
                     @foreach ($services as $service)
-                        <option value="{{ $service->service_id }}">{{ $service->service_name }}</option>
+                        @if (strpos($service->service_name, 'ร่วม') !== false)
+                            <option value="{{ $service->service_id }}">{{ $service->service_name }}</option>
+                        @endif
+                    @endforeach
+
+                    <!-- แสดงบริการที่ไม่มีคำว่า 'ร่วม' -->
+                    @foreach ($services as $service)
+                        @if (strpos($service->service_name, 'ร่วม') === false)
+                            <option value="{{ $service->service_id }}">{{ $service->service_name }}</option>
+                        @endif
                     @endforeach
                 </select>
+
                 @error('service_id')
                     <small style="color:red">{{ $message }}</small>
                 @enderror
+
 
                 <!-- Promotion -->
                 <label for="promotion_id" class="form-label">โปรโมชั่น</label>
@@ -134,6 +147,13 @@
                     </select>
                 </div>
 
+                <!-- Date Form -->
+                <div id="date" class="mt-3">
+                    <label for="date" class="form-label">วัน/เดือน/ปี</label>
+                    <input type="date" id="date" name="date" class="form-label" required
+                        value="<?= date('Y-m-d') ?>">
+                </div>
+
                 <!-- Other -->
                 <label for="other" class="form-label">หมายเหตุ</label>
                 <textarea class="form-control" id="other" name="other" rows="4">{{ old('other') }}</textarea>
@@ -147,6 +167,9 @@
 
 
 @section('script')
+    <script>
+        document.getElementById("date").valueAsDate = new Date();
+    </script>
     <script>
         $(document).ready(function() {
             $('#service_id').change(function() {
@@ -274,45 +297,45 @@
     </script>
 
 
-<script>
-    $(document).ready(function() {
-        function toggleForms(serviceName) {
-            if (serviceName === 'fttx_broadband') {
-                $('#fttx_broadband').show();
-                $('#sim_my').hide();
+    <script>
+        $(document).ready(function() {
+            function toggleForms(serviceName) {
+                if (serviceName.includes('fttx_broadband')) {
+                    $('#fttx_broadband').show();
+                    $('#sim_my').hide();
 
-                // เปิด required สำหรับฟอร์ม fttx_broadband
-                $('#new, #installation_type').prop('required', true);
+                    // เปิด required สำหรับฟอร์ม fttx_broadband
+                    $('#new, #installation_type').prop('required', true);
 
-                // ปิด required สำหรับฟอร์ม sim_my
-                $('#cus_new').prop('required', false);
-            } else if (serviceName.includes('SIM my')) {
-                $('#sim_my').show();
-                $('#fttx_broadband').hide();
+                    // ปิด required สำหรับฟอร์ม sim_my
+                    $('#cus_new').prop('required', false);
+                } else if (serviceName.includes('SIM my')) {
+                    $('#sim_my').show();
+                    $('#fttx_broadband').hide();
 
-                // เปิด required สำหรับฟอร์ม sim_my
-                $('#cus_new').prop('required', true);
+                    // เปิด required สำหรับฟอร์ม sim_my
+                    $('#cus_new').prop('required', true);
 
-                // ปิด required สำหรับฟอร์ม fttx_broadband
-                $('#new, #installation_type').prop('required', false);
-            } else {
-                // ซ่อนฟอร์มทั้งหมด
-                $('#fttx_broadband, #sim_my').hide();
+                    // ปิด required สำหรับฟอร์ม fttx_broadband
+                    $('#new, #installation_type').prop('required', false);
+                } else {
+                    // ซ่อนฟอร์มทั้งหมด
+                    $('#fttx_broadband, #sim_my').hide();
 
-                // ปิด required สำหรับทุกฟอร์ม
-                $('#new, #installation_type, #cus_new').prop('required', false);
+                    // ปิด required สำหรับทุกฟอร์ม
+                    $('#new, #installation_type, #cus_new').prop('required', false);
+                }
             }
-        }
 
-        // เรียกใช้ฟังก์ชันตอนโหลดหน้า
-        var serviceName = $('#service_id option:selected').text();
-        toggleForms(serviceName);
-
-        // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
-        $('#service_id').change(function() {
-            var serviceName = $(this).find('option:selected').text();
+            // เรียกใช้ฟังก์ชันตอนโหลดหน้า
+            var serviceName = $('#service_id option:selected').text();
             toggleForms(serviceName);
+
+            // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
+            $('#service_id').change(function() {
+                var serviceName = $(this).find('option:selected').text();
+                toggleForms(serviceName);
+            });
         });
-    });
-</script>
+    </script>
 @endsection
