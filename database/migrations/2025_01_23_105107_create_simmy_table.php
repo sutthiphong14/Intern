@@ -22,6 +22,8 @@ class CreateSimmyTable extends Migration
             $table->foreign('price_id')->references('price_id')->on('price_activity')->onDelete('cascade');
             $table->unsignedBigInteger('cus_id');
             $table->foreign('cus_id')->references('cus_id')->on('customers')->onDelete('cascade');
+            $table->unsignedBigInteger('center_id');
+            $table->foreign('center_id')->references('center_id')->on('servicecenter_activity')->onDelete('cascade');
             $table->unsignedBigInteger('province_id');
             $table->foreign('province_id')->references('province_id')->on('province_activity')->onDelete('cascade');
             $table->timestamps();
@@ -35,6 +37,6 @@ class CreateSimmyTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sim');
+        Schema::dropIfExists('sim_my');
     }
 };

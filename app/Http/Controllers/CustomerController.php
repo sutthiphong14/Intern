@@ -166,6 +166,7 @@ class CustomerController extends Controller
             $new = $request->input('new');
             $installation_type = $request->input('installation_type');
             $cus_id = $customer->id;  // ดึง cus_id ที่เพิ่งสร้างใหม่มาใช้งาน
+            $center = $request->input('center_id');
             $province_id = $request->input('province_id');
             $date = $request->input('date');
             // ใช้ $cus_id ในการเพิ่มข้อมูลใน FttxBroadband
@@ -174,6 +175,7 @@ class CustomerController extends Controller
                 'new' => $new,
                 'installation_type' => $installation_type,
                 'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
+                'center_id' => $center,
                 'province_id' => $province_id,
                 'created_at'=>$date
             ]);
@@ -182,6 +184,7 @@ class CustomerController extends Controller
             $service_id = $request->input('service_id');
             $price_id = $request->input('price_id');
             $cus_id = $customer->id;  // ดึง cus_id ที่เพิ่งสร้างใหม่มาใช้งาน
+            $center = $request->input('center_id');
             $province_id = $request->input('province_id');
             $date = $request->input('date');
             // ใช้ $cus_id ในการเพิ่มข้อมูลใน FttxBroadband
@@ -190,6 +193,7 @@ class CustomerController extends Controller
                 'service_id' => $service_id,
                 'price_id' => $price_id,
                 'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
+                'center_id' => $center,
                 'province_id' => $province_id,
                 'created_at'=>$date
             ]);
@@ -285,6 +289,7 @@ class CustomerController extends Controller
                     'new' => $new,
                     'installation_type' => $installation_type,
                     'cus_id' => $cus_id,
+                    'center_id' => $center_id,
                     'province_id' => $province_id,
                     'created_at' => $date
                 ]);
@@ -292,6 +297,7 @@ class CustomerController extends Controller
                 Fttxbroadband::where('cus_id', $cus_id)->update([
                     'new' => $new,
                     'installation_type' => $installation_type,
+                    'center_id' => $center_id,
                     'province_id' => $province_id,
                     'created_at' => $date
 
@@ -311,6 +317,7 @@ class CustomerController extends Controller
                     'cus_new' => $cus_new,
                     'service_id' => $service_id,
                     'price_id' => $price_id,
+                    'center_id' => $center_id,
                     'province_id' => $province_id,
                     'created_at' => $date
                 ]);
@@ -319,6 +326,7 @@ class CustomerController extends Controller
                     'cus_new' => $cus_new,
                     'service_id' => $service_id,
                     'price_id' => $price_id,
+                    'center_id' => $center_id,
                     'province_id' => $province_id,
                     'created_at' => $date
                 ]);
