@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\ImageEvent;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 class EventController extends Controller
 {
     /**
@@ -152,6 +153,31 @@ public function uploadImage(Request $request, $event_id)
     }
 
     return back()->with('success', 'Images uploaded successfully.');
+}
+
+public function deleteImage($event_id, $image_id)
+{
+    // ค้นหา event
+    $event = Event::find($event_id);
+    if (!$event) {
+        return response()->json(['success' => false, 'message' => 'Event not found.']);
+    }
+
+    // ค้นหารูปภาพ
+    $image = ImageEvent::where('event_id', $event_id)->find($image_id);
+    if (!$image) {
+        return response()->json(['success' => false, 'message' => 'Image not found.']);
+    }
+
+    // ลบไฟล์จาก storage
+    if (Storage::disk('public')->exists($image->image_event)) {
+        Storage::disk('public')->delete($image->image_event);
+    }
+
+    // ลบจากฐานข้อมูล
+    $image->delete();
+
+    return response()->json(['success' => true, 'message' => 'Image deleted successfully.']);
 }
 
 }

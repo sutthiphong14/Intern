@@ -454,7 +454,6 @@
               </div>
             </a>
           </div>
-
         </div>
 
         <h4><i class="fas fa-images"></i> จัดการรูปภาพ</h4>
@@ -472,6 +471,22 @@
                 <div class="col">
                   <h5 class="mb-1">จัดการปก</h5>
                   <h6 class="text-muted mb-0">จัดการปกหน้าแรกของเพจ</h6>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-3 mb-4">
+            <a href="{{ route('user-logs') }}" class="text-decoration-none">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <div class="app-icon bg-green d-flex justify-content-center align-items-center">
+                    <i class="fas fa-images"></i>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5 class="mb-1">จัดการอัลบั้ม</h5>
+                  <h6 class="text-muted mb-0">จัดการอัลบั้มกิจกรรมต่างๆ</h6>
                 </div>
               </div>
             </a>

@@ -396,5 +396,9 @@ Route::put('/events/{id}', [EventController::class, 'update'])->name('events.upd
 Route::get('/manage_album_event/{event_id}', [EventController::class, 'manageAlbumEvent'])->name('manage_album_event');
 Route::post('/events/{event_id}/upload-image', [EventController::class, 'uploadImage'])->name('upload_image_event');
 
+Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::class, 'deleteImage'])
+    ->name('delete.image');
 
+
+Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::class, 'deleteImage']);
 
