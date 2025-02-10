@@ -13,6 +13,7 @@ use App\Http\Controllers\RequestsController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SlideshowController;
 use App\Http\Controllers\EventController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -388,3 +389,12 @@ Route::get('/getCenters', [CustomerController::class, 'getCenters']);
 
 Route::get('/events', [EventController::class, 'showListView'])->name('events.list');
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
+Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
+Route::post('/events/update-status', [EventController::class, 'updateStatus'])->name('events.updateStatus');
+Route::put('/events/{id}', [EventController::class, 'update'])->name('events.update');
+
+Route::get('/manage_album_event/{event_id}', [EventController::class, 'manageAlbumEvent'])->name('manage_album_event');
+Route::post('/events/{event_id}/upload-image', [EventController::class, 'uploadImage'])->name('upload_image_event');
+
+
+

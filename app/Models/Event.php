@@ -13,5 +13,7 @@ class Event extends Model
     protected $primaryKey = 'event_id'; // ระบุ Primary Key ให้ตรงกับ Database
     public $incrementing = true; // ใช้ Auto Increment
     protected $keyType = 'int'; // กำหนดชนิดข้อมูล Primary Key
-    protected $fillable = ['nameevent']; // อนุญาตให้เพิ่มข้อมูล nameevent
+
+    // อนุญาตให้เพิ่มข้อมูล nameevent และ status
+    protected $fillable = ['nameevent', 'status'];
 }

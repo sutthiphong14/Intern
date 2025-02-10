@@ -25,14 +25,14 @@
     <!-- BS Stepper -->
     <link rel="stylesheet" href="{{ URL::asset('plugins/bs-stepper/css/bs-stepper.min.css') }}">
     <!-- Theme style -->
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
         rel="stylesheet">
 
-        <link rel="icon" type="image/x-icon" href="{{ asset('dist/assets/img/favicon/favicon.png') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('dist/assets/img/favicon/favicon.png') }}" />
 
 
     <!-- Fonts -->
@@ -43,17 +43,18 @@
         rel="stylesheet" />
 
     <!-- Icons. Uncomment required icon fonts -->
-<link rel="stylesheet" href="{{ asset('dist/assets/vendor/fonts/boxicons.css') }}" />
+    <link rel="stylesheet" href="{{ asset('dist/assets/vendor/fonts/boxicons.css') }}" />
 
-<!-- Core CSS -->
-<link rel="stylesheet" href="{{ asset('dist/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
-<link rel="stylesheet" href="{{ asset('dist/assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
-<link rel="stylesheet" href="{{ asset('dist/assets/css/demo.css') }}" />
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{ asset('dist/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('dist/assets/vendor/css/theme-default.css') }}"
+        class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('dist/assets/css/demo.css') }}" />
 
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ asset('dist/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
-<link rel="stylesheet" href="{{ asset('dist/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
+    <link rel="stylesheet" href="{{ asset('dist/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
 
 
     <!-- Page CSS -->
@@ -69,50 +70,46 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"
         integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        @yield('css') <!-- ย้ายมาไว้ตรงนี้หลังจากโหลด CSS หลัก -->
-        
+    @yield('css') <!-- ย้ายมาไว้ตรงนี้หลังจากโหลด CSS หลัก -->
+
 </head>
 
 <body class="hold-transition layout-fixed ">
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
-        @include('admins.layout-menu')
-        <div class="layout-page">
-        
-        
-        
-        
-        <div class="container-xxl flex-grow-1 container-p-y">
-        @include('admins.layout-Navbar')
-                @yield('content')
-                @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+            @include('admins.layout-menu')
+            <div class="layout-page">
+
+
+
+
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    @include('admins.layout-Navbar')
+                    @yield('content')
+                    
                 </div>
-            @include('admins.footer')
-        </div>
+                @include('admins.footer')
+            </div>
         </div>
 
 
     </div>
     <script src="{{ asset('dist/assets/vendor/libs/jquery/jquery.js') }}"></script>
-<script src="{{ asset('dist/assets/vendor/libs/popper/popper.js') }}"></script>
-<script src="{{ asset('dist/assets/vendor/js/bootstrap.js') }}"></script>
-<script src="{{ asset('dist/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+    <script src="{{ asset('dist/assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('dist/assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('dist/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
 
-<script src="{{ asset('dist/assets/vendor/js/menu.js') }}"></script>
-<!-- endbuild -->
+    <script src="{{ asset('dist/assets/vendor/js/menu.js') }}"></script>
+    <!-- endbuild -->
 
-<!-- Vendors JS -->
-<script src="{{ asset('dist/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
+    <!-- Vendors JS -->
+    <script src="{{ asset('dist/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
 
-<!-- Main JS -->
-<script src="{{ asset('dist/assets/js/main.js') }}"></script>
+    <!-- Main JS -->
+    <script src="{{ asset('dist/assets/js/main.js') }}"></script>
 
-<!-- Page JS -->
-<script src="{{ asset('dist/assets/js/dashboards-analytics.js') }}"></script>
+    <!-- Page JS -->
+    <script src="{{ asset('dist/assets/js/dashboards-analytics.js') }}"></script>
 
 
     <!-- Place this tag in your head or just before your close body tag. -->
