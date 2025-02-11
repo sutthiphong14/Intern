@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 class Event extends Model
 {
     use HasFactory;
@@ -16,4 +15,10 @@ class Event extends Model
 
     // อนุญาตให้เพิ่มข้อมูล nameevent และ status
     protected $fillable = ['nameevent', 'status'];
+
+    // ความสัมพันธ์กับ ImageEvent
+    public function images()
+    {
+        return $this->hasMany(ImageEvent::class, 'event_id', 'event_id'); // กำหนดการเชื่อมโยงระหว่าง Event กับ ImageEvent
+    }
 }

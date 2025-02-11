@@ -24,10 +24,19 @@ class EventController extends Controller
      * แสดง View รายการกิจกรรม
      */
     public function showListView()
-    {
-        $events = Event::orderBy('created_at', 'desc')->get(['event_id', 'nameevent', 'status']); 
-        return view('manage_images.list_events', compact('events'));
+{
+    // ดึงกิจกรรมทั้งหมด
+    $events = Event::orderBy('created_at', 'desc')->get(['event_id', 'nameevent', 'status']); 
+
+    // นับจำนวนรูปภาพในอัลบั้มของแต่ละกิจกรรม
+    foreach ($events as $event) {
+        $event->image_count = $event->images()->count();  // นับจำนวนภาพในอัลบั้ม
     }
+
+    return view('manage_images.list_events', compact('events'));
+}
+
+
     
 
     /**
@@ -157,15 +166,17 @@ public function uploadImage(Request $request, $event_id)
 
 public function deleteImage($event_id, $image_id)
 {
-    // ค้นหา event
+    Log::info("🔍 รับคำขอลบรูป ID: {$image_id} จากกิจกรรม ID: {$event_id}");
+
     $event = Event::find($event_id);
     if (!$event) {
+        Log::error("❌ ไม่พบ Event ID: {$event_id}");
         return response()->json(['success' => false, 'message' => 'Event not found.']);
     }
 
-    // ค้นหารูปภาพ
-    $image = ImageEvent::where('event_id', $event_id)->find($image_id);
+    $image = ImageEvent::where('event_id', $event_id)->where('image_id', $image_id)->first();
     if (!$image) {
+        Log::error("❌ ไม่พบ Image ID: {$image_id} ใน Event ID: {$event_id}");
         return response()->json(['success' => false, 'message' => 'Image not found.']);
     }
 
@@ -174,10 +185,13 @@ public function deleteImage($event_id, $image_id)
         Storage::disk('public')->delete($image->image_event);
     }
 
-    // ลบจากฐานข้อมูล
     $image->delete();
 
+    Log::info("✅ ลบรูปภาพสำเร็จ: {$image_id}");
     return response()->json(['success' => true, 'message' => 'Image deleted successfully.']);
 }
+
+
+
 
 }

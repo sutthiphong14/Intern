@@ -402,3 +402,4 @@ Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::cl
 
 Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::class, 'deleteImage']);
 
+

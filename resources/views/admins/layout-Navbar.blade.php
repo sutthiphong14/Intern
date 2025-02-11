@@ -477,7 +477,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="{{ route('user-logs') }}" class="text-decoration-none">
+            <a href="{{ route('events.list') }}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-green d-flex justify-content-center align-items-center">

@@ -10,7 +10,7 @@
 
 @section('content')
 <h4 class="fw-bold py-2 mb-3">
-    <a href="{{ route('events.list') }}">จัดการกิจกรรม</a> / จัดการรูปภาพกิจกรรม
+<a href="{{ route('home') }}">หน้าแรก</a> / <a href="{{ route('events.list') }}">รายการอัลบั้มกิจกรรม</a> / จัดการรูปภาพในอัลบั้ม
 
 </h4>
 
@@ -40,53 +40,59 @@
 
 
             <!-- แสดงรูปภาพที่เกี่ยวข้องกับกิจกรรม -->
-<!-- แสดงรูปภาพที่เกี่ยวข้องกับกิจกรรม -->
-<div class="gallery">
-    @foreach($images as $image)
-        <div class="image-container" id="image-{{ $image->id }}">
-            <img src="{{ asset('storage/' . $image->image_event) }}" alt="Image" class="img-thumbnail">
-            <!-- ปุ่มลบที่จะแสดงเมื่อ hover -->
-            <button class="delete-btn" data-id="{{ $image->id }}" data-event-id="{{ $event->event_id }}">ลบ</button>
-        </div>
-    @endforeach
-</div>
+            <!-- แสดงรูปภาพที่เกี่ยวข้องกับกิจกรรม -->
+            <div class="gallery">
+                @foreach($images as $image)
+                    <div class="image-container" id="image-{{ $image->image_id }}">
+                        <img src="{{ asset('storage/' . $image->image_event) }}" alt="Image" class="img-thumbnail">
+                        <button class="delete-btn" data-id="{{ $image->image_id }}"
+                            data-event-id="{{ $event->event_id }}">ลบ</button>
+                    </div>
 
-<!-- เพิ่ม CSS สำหรับการแสดงปุ่มลบ -->
-<style>
-    .gallery {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr); /* แสดง 4 รูปในแถว */
-        gap: 16px; /* ระยะห่างระหว่างรูป */
-    }
+                @endforeach
 
-    .image-container {
-        position: relative;
-    }
+            </div>
 
-    .gallery img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-    }
+            <!-- เพิ่ม CSS สำหรับการแสดงปุ่มลบ -->
+            <style>
+                .gallery {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    /* แสดง 4 รูปในแถว */
+                    gap: 16px;
+                    /* ระยะห่างระหว่างรูป */
+                }
 
-    /* ปุ่มลบจะถูกซ่อนจนกว่าจะมีการ hover */
-    .delete-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background-color: red;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        cursor: pointer;
-        display: none;
-    }
+                .image-container {
+                    position: relative;
+                }
 
-    /* เมื่อ hover บนรูปภาพ ปุ่มลบจะแสดง */
-    .image-container:hover .delete-btn {
-        display: block;
-    }
-</style>
+                .gallery img {
+                    width: 100%;
+                    height: 120px;
+                    object-fit: cover;
+                    border-radius: 10px;
+                }
+
+                /* ปุ่มลบจะถูกซ่อนจนกว่าจะมีการ hover */
+                .delete-btn {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    background-color: red;
+                    color: white;
+                    border: none;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                    display: none;
+                    border-radius: 10px; /* ปรับค่าความโค้งของขอบ */
+                }
+
+                /* เมื่อ hover บนรูปภาพ ปุ่มลบจะแสดง */
+                .image-container:hover .delete-btn {
+                    display: block;
+                }
+            </style>
 
 
 
@@ -98,44 +104,55 @@
 
 <!-- เพิ่ม JavaScript สำหรับการลบภาพ -->
 <script>
-document.querySelectorAll('.delete-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        let imageId = this.getAttribute('data-id');
-        let eventId = this.getAttribute('data-event-id');
-        let confirmation = confirm('คุณต้องการลบรูปภาพนี้หรือไม่?');
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            let imageId = this.getAttribute('data-id');
+            let eventId = this.getAttribute('data-event-id');
 
-        if (confirmation) {
-            fetch(`/events/${eventId}/delete-image/${imageId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => {
-                // ตรวจสอบสถานะคำตอบของคำขอ
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('เกิดข้อผิดพลาดจากเซิร์ฟเวอร์');
-                }
-            })
-            .then(data => {
-                // ถ้าคำขอลบสำเร็จ
-                if (data.success) {
-                    document.getElementById('image-' + imageId).remove();
-                    alert('ลบรูปภาพสำเร็จ!');
-                } else {
-                    alert(data.message); // แสดงข้อความข้อผิดพลาด
-                }
-            })
-            .catch(error => {
-                console.error("❌ เกิดข้อผิดพลาด:", error);
-                alert("❌ เกิดข้อผิดพลาด กรุณาลองอีกครั้ง");
-            });
-        }
+            console.log("📢 กำลังลบรูป ID:", imageId, "จากกิจกรรม ID:", eventId);
+
+            if (!imageId) {
+                alert("❌ ไม่พบค่า image_id ที่ส่งไป");
+                return;
+            }
+
+            let confirmation = confirm('คุณต้องการลบรูปภาพนี้หรือไม่?');
+
+            if (confirmation) {
+                fetch(`/events/${eventId}/delete-image/${imageId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('❌ เซิร์ฟเวอร์ส่งกลับข้อผิดพลาด');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("📢 Response Data:", data);
+                        if (data.success) {
+                            // 🛠 ลบรูปออกจาก DOM ทันที
+                            let imageElement = document.getElementById('image-' + imageId);
+                            if (imageElement) {
+                                imageElement.remove();
+                            }
+                            alert('✅ ลบรูปภาพสำเร็จ!');
+                        } else {
+                            alert("⚠️ " + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("❌ Fetch Error:", error);
+                        alert("❌ เกิดข้อผิดพลาด กรุณาลองอีกครั้ง");
+                    });
+            }
+        });
     });
-});
+
 </script>
 
 

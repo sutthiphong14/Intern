@@ -34,8 +34,6 @@
         height: auto;
         /* ความสูงของ content ปรับตามเนื้อหาภายใน */
     }
-
-    
 </style>
 
 
@@ -43,7 +41,7 @@
 
 @section('content')
 <h4 class="fw-bold py-2 mb-3">
-    <a href="{{ route('home') }}">หน้าแรก</a> / จัดการกิจกรรม
+    <a href="{{ route('home') }}">หน้าแรก</a> / รายการอัลบั้มกิจกรรม
 </h4>
 @if(session('success'))
     <div class="alert alert-success">
@@ -69,51 +67,52 @@
             <table class="table table-striped col-12">
                 <thead>
                     <tr class='bg-dark text-center'>
-
-                        <th class='7'>ชื่อกิจกรรม</th>
+                        <th class='6'>ชื่อกิจกรรม</th>
                         <th class='1'>สถานะ</th>
-                        <th class='4'>Action</th>
+                        <th class='3'>จำนวนภาพในอัลบั้ม</th>
+                        <th class='2'>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-    @foreach($events as $key => $event)
-        <tr class="text-center" id="event-{{ $event->event_id }}">
+                    @foreach($events as $event)
+                        <tr class="text-center" id="event-{{ $event->event_id }}">
+                            <td>{{ $event->nameevent }}</td>
+                            <td><span class="status-label" data-id="{{ $event->event_id }}">
+                                    {{ $event->status == 'show' ? 'แสดง' : 'ไม่แสดง' }}
+                                </span></td>
+                            <td>
+                                {{ $event->image_count > 0 ? $event->image_count : 'ไม่มีรูปภาพ' }}
+                            </td>
 
-            <td>{{ $event->nameevent }}</td>
-            <td><span class="status-label" data-id="{{ $event->event_id }}">
-                    {{ $event->status == 'show' ? 'แสดง' : 'ไม่แสดง' }}
-                </span></td>
-            <td>
-                <div class="dropdown">
-                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                        data-bs-toggle="dropdown">
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                    </button>
-                    <div class="dropdown-menu">
-                        <button class="dropdown-item edit-event" data-id="{{ $event->event_id }}"
-                            data-name="{{ $event->nameevent }}">
-                            <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                        </button>
-                        <button class="dropdown-item toggle-status" data-id="{{ $event->event_id }}">
-                            เปลี่ยนสถานะ
-                        </button>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                        data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="{{ route('manage_album_event', ['event_id' => $event->event_id]) }}"
+                                            class="dropdown-item">
+                                            <i class="bx bx-image me-1"></i> จัดการรูปภาพในอัลบั้ม
+                                        </a>
+                                        <button class="dropdown-item edit-event" data-id="{{ $event->event_id }}"
+                                            data-name="{{ $event->nameevent }}">
+                                            <i class="bx bx-edit-alt me-1"></i> แก้ไขชื่ออัลบั้ม
+                                        </button>
+                                        <button class="dropdown-item toggle-status" data-id="{{ $event->event_id }}">
+                                            เลือกแสดงอัลบั้ม
+                                        </button>
 
-                        <button type="button" class="dropdown-item text-danger delete-event"
-                            data-id="{{ $event->event_id }}">
-                            <i class="bx bx-trash me-1"></i> ลบ
-                        </button>
-
-                        <!-- ปุ่มจัดการรูปภาพ -->
-                        <a href="{{ route('manage_album_event', ['event_id' => $event->event_id]) }}"
-                            class="dropdown-item">
-                            <i class="bx bx-image me-1"></i> จัดการรูปภาพ
-                        </a>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    @endforeach
-</tbody>
+                                        <button type="button" class="dropdown-item text-danger delete-event"
+                                            data-id="{{ $event->event_id }}">
+                                            <i class="bx bx-trash me-1"></i> ลบ
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
             </table>
         </div>
     </div>
@@ -124,14 +123,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addEventModalLabel">เพิ่มกิจกรรม</h5>
+                <h5 class="modal-title" id="addEventModalLabel">เพิ่มอัลบั้มกิจกรรม</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="addEventForm" method="POST" action="{{ route('events.store') }}">
                     @csrf
                     <input type="text" class="form-control" name="nameevent" required>
-                    <button class ='btn bg-success mt-3' type="submit">เพิ่มกิจกรรม</button>
+                    <button class='btn bg-success mt-3' type="submit">เพิ่มอัลบั้ม</button>
                 </form>
             </div>
         </div>
