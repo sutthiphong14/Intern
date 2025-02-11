@@ -53,6 +53,30 @@ class UserController extends Controller
                 'manage_users' => $request->has('manage_users_permission') ? 1 : 0,
                 'manage_dashboard' => $request->has('manage_dashboard_permission') ? 1 : 0,
                 'manage_newsfeed' => $request->has('manage_newsfeed_permission') ? 1 : 0,
+
+                'adduser' => $request->has('adduser_permission') ? 1 : 0,
+                'adminper_mission' => $request->has('adminper_mission_permission') ? 1 : 0,
+                'permission_users' => $request->has('permission_users_permission') ? 1 : 0,
+                'delete_user' => $request->has('deleteuser_permission') ? 1 : 0,
+                'edit_user' => $request->has('edituser_permission') ? 1 : 0,
+
+                'managenews_feeds' => $request->has('manage_newsfeeds_permission') ? 1 : 0,
+                'viewnews_feeds' => $request->has('view_newsfeeds_permission') ? 1 : 0,
+                
+                'managedash_board' => $request->has('managedash_board_permission') ? 1 : 0,
+                'view_fttx' => $request->has('view_fttx_permission') ? 1 : 0,
+                'view_incomecurrent' => $request->has('view_incomecurrent_permission') ? 1 : 0,
+                'view_service' => $request->has('view_service_permission') ? 1 : 0,
+
+                'manage_banner' => $request->has('manage_banner_permission') ? 1 : 0,
+                'manage_imageevent' => $request->has('manage_imageevent_permission') ? 1 : 0,
+                'manage_album' => $request->has('manage_album_permission') ? 1 : 0,
+
+                'manage_formevent' => $request->has('manage_formevent_permission') ? 1 : 0,
+                'form_event' => $request->has('form_event_permission') ? 1 : 0,
+
+
+
             ]),
         ]);
 

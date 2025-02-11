@@ -17,12 +17,19 @@ return new class extends Migration
             $table->string('name');
             $table->string('emp_id')->nullable();
             $table->string('department');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('password');
+            $table->longText('profile_image')->nullable();
+            $table->unsignedBigInteger('province_id')->nullable();
+            $table->unsignedBigInteger('center_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->longText('profile_image')->nullable();
+        
+            // ตั้งค่า Foreign Key
+            $table->foreign('province_id')->references('province_id')->on('province_activity')->onDelete('set null');
+            $table->foreign('center_id')->references('center_id')->on('servicecenter_activity')->onDelete('set null');
         });
+        
     }
 
     /**
