@@ -361,6 +361,12 @@ Route::post('/price_insert/{service_id}/{promotion_id}/{speed_id}', [ActivityCon
 Route::delete('/price_delete/{service_id}/{promotion_id}/{speed_id}/{price_id}', [ActivityController::class, 'PriceDelete'])->name('price_delete');
 Route::put('/price_update/{service_id}/{promotion_id}/{speed_id}/{price_id}', [ActivityController::class, 'PriceUpdate'])->name('price_update');
 
+//ส่วนproduct
+Route::get('/product_list', [ActivityController::class, 'ListProduct'])->name('product_list');
+Route::post('/product_insert', [ActivityController::class, 'ProductInsert'])->name('product_insert');
+Route::delete('/product_delete/{product_id}', [ActivityController::class, 'ProductDelete'])->name('product_delete');
+Route::put('/product_update/{product_id}', [ActivityController::class, 'Productupdate'])->name('product_update');
+
 //จังหวัด
 Route::get('/provinceactivityList', [ProvinceController::class, 'indexprovince'])->name('provinceactivityList');
 Route::post('/provincactivityadd', [ProvinceController::class, 'storeprovince'])->name('provinceactivityadd');

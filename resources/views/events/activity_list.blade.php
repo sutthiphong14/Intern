@@ -12,7 +12,7 @@
                 <div class="col-auto">
                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#Top_up">เติมเงิน</button>
                 </div>
-               
+
             </div>
 
 
@@ -121,14 +121,15 @@
                             @endif                            
                             </td>
                             <td>{{ $customer->cus_address }}</td> --}}
-                            <td>{{ $customer->type->type_name ?? 'N/A' }}</td>
-                            <td>{{ $customer->service->service_name ?? 'N/A' }}</td>
-                            <td>{{ $customer->promotion->promotion_name ?? 'N/A' }}</td>
-                            <td>{{ $customer->speed->speed_name ?? 'N/A' }}</td> <!-- ดึงชื่อจากสัมพันธ์ speed -->
-                            <td>{{ $customer->price->price_name ?? 'N/A' }}</td> <!-- ดึงชื่อจากสัมพันธ์ price -->
+                            <td>{{ $customer->type->type_name ?? '-' }}</td>
+                            <td>{{ $customer->service->service_name ?? '-' }}</td>
+                            <td>{{ $customer->promotion->promotion_name ?? '-' }}</td>
+                            <td>{{ $customer->speed->speed_name ?? '-' }}</td> <!-- ดึงชื่อจากสัมพันธ์ speed -->
+                            <td>{{ $customer->price->price_name ?? '-' }}</td> <!-- ดึงชื่อจากสัมพันธ์ price -->
+
                             <td>
-                                {{ $customer->province->province_name ?? 'N/A' }} /
-                                {{ $customer->center->center_name ?? 'N/A' }}
+                                {{ $customer->province->province_name ?? '-' }} /
+                                {{ $customer->center->center_name ?? '-' }}
                             </td>
                             <td colspan="2">
                                 <div class="dropdown-menu-start">
@@ -167,7 +168,7 @@
 
 
 
-        <!-- Modal -->
+        <!-- Modal view -->
         @foreach ($data as $customer)
             <div class="modal fade" id="customerModal{{ $customer->cus_id }}" tabindex="-1"
                 aria-labelledby="customerModalLabel{{ $customer->cus_id }}" aria-hidden="true">
@@ -201,12 +202,18 @@
                                                 $customer->cus_id,
                                             )->first();
                                             $simmyData = \App\Models\Simmy::where('cus_id', $customer->cus_id)->first();
+                                            $ictData = \App\Models\IctSolution::where(
+                                                'cus_id',
+                                                $customer->cus_id,
+                                            )->first();
                                         @endphp
                                 @if ($fttxData && str_contains(strtolower($customer->service->service_name), 'fttx_broadband'))
 <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
                                             <strong class='text-warning'>งานติดตั้ง:   </strong> {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
 @elseif ($simmyData && str_contains(strtolower($customer->service->service_name), 'sim my'))
 <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $simmyData->cus_new == 1 ? 'ลูกค้าใหม่' : 'ลูกค้า(ย้ายค่าย)' }}<br>
+@elseif ($ictData && str_contains(strtolower($customer->service->service_name), 'ict solution'))
+<strong class='text-warning'>รายได้:   </strong> {{ $ictData->income }}<br>
 @else
 <strong class='text-warning'>ประเภทลูกค้า:   </strong> ไม่ระบุ<br>
                                             <strong class='text-warning'>ข้อมูลเพิ่มเติม:   </strong> ไม่ระบุ
@@ -263,7 +270,8 @@
                     <th rowspan="4">ลำดับ</th>
                     <th rowspan="4">จังหวัด</th>
                     <th colspan="3">FTTX</th>
-                    <th colspan="11">SIM my</th>
+                    <th colspan="4">SIM my</th>
+                    <th colspan="2">Ict Solution</th>
 
 
 
@@ -279,16 +287,18 @@
                 <tr class="bg-dark text-center">
                     <th rowspan="2">ลูกค้าใหม่</th>
                     <th rowspan="2">ลูกค้า (ย้ายค่าย)</th>
-                    <th colspan="4">เติมเงินรายปี</th>
-
+                    <th colspan="2">เติมเงินรายปี</th>
+                    <th rowspan="2">จำนวน
+                        (ราย)</th>
+                    <th rowspan="2">รายได้</th>
 
                 </tr>
-                <tr class="bg-dark text-center">
+                <tr class="bg-dark text-center ">
                     <th>จำนวน
                         (ราย)</th>
                     <th>ยอดเงิน</th>
-
                 </tr>
+
             </thead>
             @php
                 $sumFttxNew = $sumSelfInstall = $sumHireInstall = 0; // สำหรับ province_id <= 33
@@ -296,6 +306,8 @@
 
                 $sumNew = $sumMove = $sumCount = $sumPrice = 0; // สำหรับ province_id <= 33
                 $sumNewOver33 = $sumMoveOver33 = $sumCountOver33 = $sumPriceOver33 = 0; // สำหรับ province_id > 33
+                $IctCount = $IctIncome = 0; // สำหรับ province_id <= 33
+                $IctCountOver33 = $IctIncomeOver33 = 0; // สำหรับ province_id > 33
             @endphp
             <tbody class="text-center">
                 @foreach ($provinces as $index => $province)
@@ -312,7 +324,10 @@
                             <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
                         </tr>
+
                         @php
                             $sumFttxNew += $fttxNew[$province->province_id] ?? 0;
                             $sumSelfInstall += $selfInstall[$province->province_id] ?? 0;
@@ -321,6 +336,8 @@
                             $sumMove += $Simmy_move[$province->province_id] ?? 0;
                             $sumCount += $Simmy_count[$province->province_id] ?? 0;
                             $sumPrice += $Simmy_price[$province->province_id] ?? 0;
+                            $IctCount += $Ict_count[$province->province_id] ?? 0;
+                            $IctIncome += $Ict_income[$province->province_id] ?? 0;
                         @endphp
                     @endif
                     {{-- แสดงผลรวมตรงกลางเมื่อเปลี่ยนกลุ่ม --}}
@@ -335,6 +352,8 @@
                             <td>{{ $sumMove }}</td>
                             <td>{{ $sumCount }}</td>
                             <td>{{ $sumPrice }}</td>
+                            <td>{{ $IctCount }}</td>
+                            <td>{{ $IctIncome }}</td>
                         </tr>
                     @endif
                     {{-- Province ID > 33 --}}
@@ -350,6 +369,8 @@
                             <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
                         </tr>
                         @php
                             $sumFttxNewOver33 += $fttxNew[$province->province_id] ?? 0;
@@ -360,6 +381,8 @@
                             $sumMoveOver33 += $Simmy_move[$province->province_id] ?? 0;
                             $sumCountOver33 += $Simmy_count[$province->province_id] ?? 0;
                             $sumPriceOver33 += $Simmy_price[$province->province_id] ?? 0;
+                            $IctCountOver33 += $Ict_count[$province->province_id] ?? 0;
+                            $IctIncomeOver33 += $Ict_income[$province->province_id] ?? 0;
                         @endphp
                     @endif
                 @endforeach
@@ -375,6 +398,8 @@
                     <td>{{ $sumMoveOver33 }}</td>
                     <td>{{ $sumCountOver33 }}</td>
                     <td>{{ $sumPriceOver33 }}</td>
+                    <td>{{ $IctCountOver33 }}</td>
+                    <td>{{ $IctIncomeOver33 }}</td>
                 </tr>
 
                 <tr class="bg-success">
@@ -387,6 +412,8 @@
                     <td>{{ $sumMove + $sumMoveOver33 }}</td>
                     <td>{{ $sumCount + $sumCountOver33 }}</td>
                     <td>{{ $sumPrice + $sumPriceOver33 }}</td>
+                    <td>{{ $IctCount + $IctCountOver33 }}</td>
+                    <td>{{ $IctIncome + $IctIncomeOver33 }}</td>
                 </tr>
             </tbody>
 
@@ -397,49 +424,87 @@
 
 
 
-
-        <!-- Fttx Graph -->
-        <div class="card mt-5">
-            <div class="card-header bg-danger" id="fttxGraphHeading">
-                <h3 class="mb-0 d-flex justify-content-between align-items-center text-light">
-                    กราฟ Fttx broadband
-                    <button class="btn btn-link text-white" type="button" data-toggle="collapse"
-                        data-target="#fttxGraph" aria-expanded="true" aria-controls="fttxGraph">
-                        <i class="fas fa-chevron-down" id="fttxGraphIcon"></i>
-                        
-                    </button>
-                </h3>
-            </div>
-            <div id="fttxGraph" class="collapse show" aria-labelledby="fttxGraphHeading" data-parent="#fttxGraph">
-                <div class="fttx_graph mb-5">
-                    <canvas id="myChart" class="mt-5" width="400" height="200"></canvas>
-                </div>
-            </div>
+<!-- Fttx Graph -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center" id="fttxGraphHeading">
+        <h5 class="mb-0 text-dark">
+            กราฟ Fttx broadband
+        </h5>
+        <button class="toggle-btn btn btn-link ms-auto" data-bs-toggle="collapse" data-bs-target="#fttxGraph"
+            aria-expanded="true" aria-controls="fttxGraph">
+            <i class="fas fa-chevron-down text-dark fa-rotate-180"></i>
+        </button>
+    </div>
+    <div id="fttxGraph" class="collapse show" aria-labelledby="fttxGraphHeading">
+        <div class="card-body">
+            <canvas id="myChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width:100%;"></canvas>
         </div>
+    </div>
+</div>
+<hr>
 
-        <!-- SIM my Graph -->
-        <div class="card mt-5">
-            <div class="card-header bg-danger" id="simMyGraphHeading">
-                <h3 class="mb-0 d-flex justify-content-between align-items-center text-light">
-                    กราฟ SIM my
-                    <button class="btn btn-link text-white" type="button" data-toggle="collapse"
-                        data-target="#simMyGraph" aria-expanded="true" aria-controls="simMyGraph">
-                        <i class="fas fa-chevron-down" id="simMyGraphIcon"></i>
-                    </button>
-                </h3>
-            </div>
-            <div id="simMyGraph" class="collapse show" aria-labelledby="simMyGraphHeading" data-parent="#simMyGraph">
-                <div class="SIMmy_graph">
-                    <canvas id="simMyChart" width="400" height="200"></canvas>
-                </div>
-            </div>
+<!-- SIM my Graph -->
+<div class="card mt-3">
+    <div class="card-header d-flex justify-content-between align-items-center" id="simMyGraphHeading">
+        <h5 class="mb-0 text-dark">
+            กราฟ SIM my
+        </h5>
+        <button class="toggle-btn btn btn-link ms-auto" data-bs-toggle="collapse" data-bs-target="#simMyGraph"
+            aria-expanded="true" aria-controls="simMyGraph">
+            <i class="fas fa-chevron-down text-dark fa-rotate-180"></i>
+        </button>
+    </div>
+    <div id="simMyGraph" class="collapse show" aria-labelledby="simMyGraphHeading">
+        <div class="card-body">
+            <canvas id="simMyChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width:100%;"></canvas>
         </div>
+    </div>
+</div>
+<hr>
+
+<!-- ICT Solution Graph -->
+<div class="card mt-3">
+    <div class="card-header d-flex justify-content-between align-items-center" id="ICTGraphHeading">
+        <h5 class="mb-0 text-dark">
+            กราฟ ICT Solution
+        </h5>
+        <button class="toggle-btn btn btn-link ms-auto" data-bs-toggle="collapse" data-bs-target="#ICTGraph"
+            aria-expanded="true" aria-controls="ICTGraph">
+            <i class="fas fa-chevron-down text-dark fa-rotate-180"></i>
+        </button>
+    </div>
+    <div id="ICTGraph" class="collapse show" aria-labelledby="ICTGraphHeading">
+        <div class="card-body">
+            <canvas id="IctChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width:100%;"></canvas>
+        </div>
+    </div>
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
 
     </div>
 
 @endsection
 
 @section('script')
+
+<!-- JavaScript (ทำให้ไอคอนหมุนตามสถานะ) -->
+<script>
+    document.querySelectorAll('.toggle-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const icon = this.querySelector('i'); // เลือกไอคอนภายในปุ่ม
+            icon.classList.toggle('fa-rotate-180'); // สลับคลาสหมุน 180 องศา
+        });
+    });
+</script>
     <script>
         $('#province_id').change(function() {
             var provinceId = $(this).val();
@@ -549,8 +614,10 @@
                         backgroundColor: 'rgba(255, 99, 132, 0.7)',
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 1,
-                        barThickness: 25,
-                        borderRadius: 5, // ทำมุมโค้งมน
+                        barThickness: 20,
+                        borderRadius: 5,
+                        categoryPercentage: 0.8, // กำหนดให้แท่งมีช่องว่าง
+                        barPercentage: 1.0, // ใช้แท่งทั้งหมดที่มี
                     },
                     {
                         label: "NEW",
@@ -558,8 +625,10 @@
                         backgroundColor: 'rgba(54, 162, 235, 0.45)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1,
-                        barThickness: 50,
-                        borderRadius: 5, // ทำมุมโค้งมน
+                        barThickness: 20,
+                        borderRadius: 5,
+                        categoryPercentage: 0.8,
+                        barPercentage: 1.0,
                     },
                     {
                         label: "ติดตั้งเอง",
@@ -567,8 +636,10 @@
                         backgroundColor: 'rgba(75, 192, 192, 0.7)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1,
-                        barThickness: 25,
-                        borderRadius: 5, // ทำมุมโค้งมน
+                        barThickness: 20,
+                        borderRadius: 5,
+                        categoryPercentage: 0.8,
+                        barPercentage: 1.0,
                     },
                 ],
             },
@@ -579,24 +650,26 @@
                         position: 'bottom', // ย้าย Legend มาด้านล่าง
                         labels: {
                             font: {
-                                size: 14,
+                                size: 12,
                             },
                         },
                     },
-                    // ตั้งค่า Data Labels
                     datalabels: {
                         display: true,
-                        color: '#fff', // สีตัวอักษร
-                        backgroundColor: 'rgba(0,0,0,0.5)', // สีพื้นหลังของตัวหนังสือ
+                        color: '#fff',
+                        backgroundColor: 'rgba(0,0,0,0.5)',
                         borderRadius: 3,
-                        anchor: 'end', // ตำแหน่งอ้างอิงให้อยู่ด้านบนของกราฟ
-                        offset: -15, // ระยะห่างจากแท่งกราฟ
-                        align: 'top', // จัดให้อยู่บนสุดของแท่งกราฟ
+                        anchor: 'end',
+                        offset: -15,
+                        align: 'top',
                         formatter: (value) => {
-                            return value > 0 ? value : null; // ซ่อนค่าที่เป็น 0
+                            return value > 0 ? value : null;
                         },
                     },
-
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
                 },
                 scales: {
                     x: {
@@ -607,7 +680,7 @@
                             font: {
                                 size: 12,
                             },
-                            maxRotation: 45, // ตั้งค่ามุมการหมุนของป้ายแกน X
+                            maxRotation: 45,
                             minRotation: 0,
                         },
                         title: {
@@ -618,8 +691,6 @@
                                 weight: 'bold',
                             },
                         },
-                        
-                        
                     },
                     y: {
                         beginAtZero: true,
@@ -634,9 +705,10 @@
                     },
                 },
             },
-            plugins: [ChartDataLabels], // ใช้ plugin datalabels
+            plugins: [ChartDataLabels],
         });
     </script>
+
     <script>
         // เตรียมข้อมูลจาก PHP
         const simProvinces = @json($provinces);
@@ -660,7 +732,7 @@
                         label: 'ลูกค้าใหม่',
                         data: newCustomers,
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderColor: 'rgba(70, 192, 192, 1)',
                         borderWidth: 1,
                         order: 1 // ลำดับของ Bar จะต่ำกว่า Line
                     },
@@ -695,10 +767,6 @@
             options: {
                 responsive: true,
                 plugins: {
-                    title: {
-                        display: true,
-                        text: 'กราฟแสดงข้อมูล SIM my'
-                    },
                     tooltip: {
                         mode: 'index',
                         intersect: false
@@ -737,6 +805,124 @@
         new Chart(simCtx, simMyChartConfig);
     </script>
 
+
+    <script>
+        // ดึงข้อมูลจาก Blade ไปใส่ใน JavaScript
+        const Ictprovinces = @json($provinces);
+        const ictCount = @json($Ict_count); // ข้อมูล ICT Count
+        const ictIncome = @json($Ict_income); // ข้อมูล ICT Income
+
+        // กรองข้อมูล: ไม่เอา provinces ที่ทุกค่า (Ict_count, Ict_income) เท่ากับ 0
+        const ictdata = Ictprovinces.filter((province) => {
+            const provinceId = province.province_id;
+            return (
+                (ictCount[provinceId] || 0) > 0 ||
+                (ictIncome[provinceId] || 0) > 0
+            );
+        });
+
+        // สร้างข้อมูลที่ผ่านการกรอง
+        const provinces1 = ictdata.map((province) => province.province_name);
+        const ictCountData = ictdata.map((province) => ictCount[province.province_id] || 0);
+        const ictIncomeData = ictdata.map((province) => ictIncome[province.province_id] || 0);
+
+        const ctx1 = document.getElementById('IctChart').getContext('2d');
+
+        const myChart3 = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: provinces1, // ใช้ provinces1 แทน provinces
+                datasets: [{
+                    label: "รายได้",
+                    data: ictIncomeData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    barThickness: 20,
+                    borderRadius: 5,
+                    categoryPercentage: 0.8,
+                    barPercentage: 1.0,
+                }, ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom', // ย้าย Legend มาด้านล่าง
+                        labels: {
+                            font: {
+                                size: 12,
+                            },
+                        },
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            // ใช้ custom tooltip
+                            label: function(tooltipItem) {
+                                const provinceIndex = tooltipItem.dataIndex; // เอาตำแหน่งข้อมูลที่คลิก
+                                const provinceName = provinces1[provinceIndex];
+                                const ictCountValue = ictCountData[
+                                provinceIndex]; // ใช้ ictCountData ที่ตรงกับ province
+                                const ictIncomeValue = ictIncomeData[
+                                provinceIndex]; // ใช้ ictIncomeData ที่ตรงกับ province
+
+                                // แสดงข้อมูลใน Tooltip
+                                return ` จำนวน ${ictCountValue} ราย  / รายได้ ${ictIncomeValue}`;
+                            },
+                        },
+                    },
+                    datalabels: {
+                        display: true,
+                        color: '#fff',
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        borderRadius: 3,
+                        anchor: 'end',
+                        offset: -15,
+                        align: 'top',
+                        formatter: (value) => {
+                            return value > 0 ? value : null;
+                        },
+                    },
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false, // ซ่อนเส้น Grid
+                        },
+                        ticks: {
+                            font: {
+                                size: 12,
+                            },
+                            maxRotation: 45, // มุมการหมุนของป้ายแกน X
+                            minRotation: 0,
+                        },
+                        title: {
+                            display: true,
+                            text: 'จังหวัด', // เพิ่มชื่อแกน X
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                            },
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: ' รายได้', // เพิ่มชื่อแกน Y
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                            },
+                        },
+                    },
+                },
+            },
+            plugins: [ChartDataLabels],
+        });
+    </script>
 
 
 

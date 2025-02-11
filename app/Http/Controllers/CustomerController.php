@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Fttxbroadband;
+use App\Models\IctProduct;
+use App\Models\IctSolution;
 use App\Models\PriceActivity;
 use App\Models\PromotionActivity;
 use App\Models\ProvinceActivity;
@@ -92,8 +94,10 @@ class CustomerController extends Controller
             });
 
         $TopUp = TopUp::with(['province', 'center'])->get();
-        
 
+        // $ictSolution = IctSolution::with('products')->find(9)->first(); //
+
+        
 
 
         return view('events.cus_list', compact('data', 'provinces', 'centers', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price', 'TopUp'));
@@ -111,8 +115,9 @@ class CustomerController extends Controller
         $speeds = SpeedActivity::all(); // ดึงข้อมูลความเร็ว
         $prices = PriceActivity::all(); // ดึงข้อมูลราคา
         $centers = ServiceCenterActivity::all(); // ดึงข้อมูลศูนย์บริการ
+        $products = IctProduct::all();
 
-        return view('events.cus_create', compact('types', 'services', 'promotion', 'provinces', 'speeds', 'prices', 'centers'));
+        return view('events.cus_create', compact('types', 'services', 'promotion', 'provinces', 'speeds', 'prices', 'centers', 'products'));
     }
 
 
@@ -123,23 +128,17 @@ class CustomerController extends Controller
         // Validate the incoming request
         $request->validate([
             'cus_fullname' => 'required|string',
-            'id_card' => 'required|max:13',
+
             'cus_address' => 'required|string',
             'type_id' => 'required',
             'service_id' => 'required',
-            'speed_id' => 'required',
-            'price_id' => 'required',
             'province_id' => 'required',
             'center_id' => 'required',
         ], [
             'cus_fullname.required' => 'กรุณากรอกชื่อนามสกุล',
-            'id_card.required' => 'กรุณากรอกหมายเลขบัตรประชาชน',
-            'id_card.max' => 'หมายเลขบัตรประชาชนต้องไม่เกิน 13 ตัวอักษร',
             'cus_address.required' => 'กรุณากรอกที่อยู่',
             'type_id.required' => 'กรุณาเลือกกิจกรรม',
             'service_id.required' => 'กรุณาเลือกบริการ',
-            'speed_id.required' => 'กรุณาเลือกความเร็ว',
-            'price_id.required' => 'กรุณาเลือกราคา',
             'province_id.required' => 'กรุณาเลือกจังหวัด',
             'center_id.required' => 'กรุณาเลือกศูนย์บริการ',
         ]);
@@ -161,8 +160,8 @@ class CustomerController extends Controller
         // ดึงชื่อบริการจาก service_id
         $service_name = ServeActivity::where('service_id', $data['service_id'])->value('service_name');
 
-      
-        if (strpos(strtolower($service_name), 'fttx_broadband') !== false)  {
+
+        if (strpos(strtolower($service_name), 'fttx_broadband') !== false) {
             $new = $request->input('new');
             $installation_type = $request->input('installation_type');
             $cus_id = $customer->id;  // ดึง cus_id ที่เพิ่งสร้างใหม่มาใช้งาน
@@ -170,14 +169,14 @@ class CustomerController extends Controller
             $province_id = $request->input('province_id');
             $date = $request->input('date');
             // ใช้ $cus_id ในการเพิ่มข้อมูลใน FttxBroadband
-            
+
             Fttxbroadband::create([
                 'new' => $new,
                 'installation_type' => $installation_type,
                 'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
                 'center_id' => $center,
                 'province_id' => $province_id,
-                'created_at'=>$date
+                'created_at' => $date
             ]);
         } else if (strpos(strtolower($service_name), 'sim my') !== false) {
             $cus_new = $request->input('cus_new');
@@ -195,9 +194,44 @@ class CustomerController extends Controller
                 'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
                 'center_id' => $center,
                 'province_id' => $province_id,
-                'created_at'=>$date
+                'created_at' => $date
             ]);
+        } elseif (strpos(strtolower($service_name), 'ict solution') !== false) {
+            // ตัวแปรสำหรับไฟล์ quote
+            $filePath = null;
+            if ($request->hasFile('quote')) {
+                $filePath = $request->file('quote')->store('quotes', 'public');
+            }
+
+            // สร้าง IctSolution
+            $ictSolution = IctSolution::create([
+                'income' => $request->input('income'),
+                'cus_id' => $customer->id,
+                'center_id' => $request->input('center_id'),
+                'province_id' => $request->input('province_id'),
+                'quote' => $filePath,
+                'customer_type' => $request->input('customer_type'),
+                'created_at' => $request->input('date')
+            ]);
+
+            // ✅ เพิ่ม Products ที่เกี่ยวข้องกับ ICT Solution
+            $product_ids = $request->input('product_id'); // รับค่า product_id เป็น array
+            $quantities = $request->input('quantity'); // รับค่า quantity เป็น array
+
+            if (!empty($product_ids) && !empty($quantities)) {
+                foreach ($product_ids as $index => $product_id) {
+                    $product = IctProduct::where('product_id', $product_id);
+                    $quantity = $quantities[$index];
+
+                    $ictSolution->products()->attach($product_id, [
+                        'quantity' => $quantity
+
+                    ]);
+                }
+            }
         }
+
+
 
         return redirect()->route('customer_list')->with('success', 'เพิ่มข้อมูลลูกค้าสำเร็จ');
     }
@@ -473,35 +507,34 @@ class CustomerController extends Controller
     }
 
     public function searchCustomers(Request $request)
-{
-    $date = $request->get('date');
-    $name = $request->get('name');
-    $service = $request->get('service');
+    {
+        $date = $request->get('date');
+        $name = $request->get('name');
+        $service = $request->get('service');
 
-    // เริ่มต้น Query
-    $query = Customer::query();
+        // เริ่มต้น Query
+        $query = Customer::query();
 
-    // ค้นหาตามวันที่
-    if ($date) {
-        $query->whereDate('created_at', $date);
+        // ค้นหาตามวันที่
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        }
+
+        // ค้นหาตามชื่อ
+        if ($name) {
+            $query->where('cus_fullname', 'like', '%' . $name . '%');
+        }
+
+        // ค้นหาตามประเภทบริการ
+        if ($service) {
+            $query->whereHas('service', function ($q) use ($service) {
+                $q->where('service_name', 'like', '%' . $service . '%');
+            });
+        }
+
+        // ดึงข้อมูลลูกค้า
+        $customers = $query->with(['type', 'service', 'promotion', 'speed', 'price', 'province', 'center'])->get();
+
+        return response()->json($customers);
     }
-
-    // ค้นหาตามชื่อ
-    if ($name) {
-        $query->where('cus_fullname', 'like', '%' . $name . '%');
-    }
-
-    // ค้นหาตามประเภทบริการ
-    if ($service) {
-        $query->whereHas('service', function ($q) use ($service) {
-            $q->where('service_name', 'like', '%' . $service . '%');
-        });
-    }
-
-    // ดึงข้อมูลลูกค้า
-    $customers = $query->with(['type', 'service', 'promotion', 'speed', 'price', 'province', 'center'])->get();
-
-    return response()->json($customers);
-}
-
 }

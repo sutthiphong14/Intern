@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Fttxbroadband;
+use App\Models\IctProduct;
+use App\Models\IctSolution;
 use App\Models\Simmy;
 use App\Models\TopUp;
 use App\Models\PriceActivity;
@@ -285,6 +287,55 @@ class ActivityController extends Controller
             ->with('success', 'อัปเดตราคาสำเร็จ');
     }
 
+    //โปรดัก
+
+    public function ListProduct()
+    {
+        $data = IctProduct::all();
+        return view('events.product_list', compact('data'));
+    }
+
+
+    public function ProductInsert(Request $request)
+    {
+        $request->validate([
+            'product_name' => 'required|string|max:255',
+
+        ]);
+
+        IctProduct::create([
+            'product_name' => $request->product_name,
+            'description' => $request->description
+        ]);
+        $data = IctProduct::all();
+        return redirect()->route('product_list', compact('data'))
+            ->with('success', 'เพิ่มโปรโมชั่นสำเร็จ');
+    }
+
+    public function ProductDelete($product_id)
+    {
+        IctProduct::where('product_id', $product_id)->delete();
+        $data = IctProduct::all();
+        return redirect()->route('product_list', compact('data'))
+            ->with('success', 'ลบโปรโมชั่นสำเร็จ');
+    }
+
+    public function ProductUpdate(Request $request, $product_id)
+    {
+        $request->validate([
+            'product_name' => 'required|string|max:255',
+
+        ]);
+
+        IctProduct::where('product_id', $product_id)->update([
+                'product_name' => $request->product_name,
+                'description' => $request->description
+            ]);
+        $data = IctProduct::all();
+        return redirect()->route('product_list', compact('data'))
+            ->with('success', 'อัปเดตโปรโมชั่นสำเร็จ');
+    }
+
     //fttx_broadband
     public function FttxList()
     {
@@ -424,10 +475,36 @@ class ActivityController extends Controller
                 return $items->sum('amount'); // รวมค่าของ amount ในแต่ละกลุ่ม
             });
 
-            $serviceTypes = ServeActivity::all(); // หรือสามารถใช้ where หรือ query อื่นๆ ได้ตามต้องการ
+        $serviceTypes = ServeActivity::all(); // หรือสามารถใช้ where หรือ query อื่นๆ ได้ตามต้องการ
+
+        $Ict_count = IctSolution::all()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->count(); // นับจำนวนรายการในแต่ละกลุ่ม
+            });
+
+        $Ict_income = IctSolution::all()
+            ->groupBy('province_id')
+            ->map(function ($items) {
+                return $items->sum('income'); // รวมค่าของ amount ในแต่ละกลุ่ม
+            });
 
 
-        return view('events.activity_list', compact('serviceTypes','data', 'provinces', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price'));
+
+
+        return view('events.activity_list', compact(
+            'serviceTypes',
+            'data',
+            'provinces',
+            'fttxNew',
+            'selfInstall',
+            'HireInstall',
+            'Simmy_new',
+            'Simmy_move',
+            'Simmy_count',
+            'Simmy_price',
+            'Ict_count',
+            'Ict_income'
+        ));
     }
-
 }
