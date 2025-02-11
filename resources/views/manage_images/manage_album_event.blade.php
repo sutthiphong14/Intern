@@ -69,7 +69,7 @@
 
                 .gallery img {
                     width: 100%;
-                    height: 120px;
+
                     object-fit: cover;
                     border-radius: 10px;
                 }
@@ -104,54 +104,85 @@
 
 <!-- เพิ่ม JavaScript สำหรับการลบภาพ -->
 <script>
-    document.querySelectorAll('.delete-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            let imageId = this.getAttribute('data-id');
-            let eventId = this.getAttribute('data-event-id');
+document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        let imageId = this.getAttribute('data-id');
+        let eventId = this.getAttribute('data-event-id');
 
-            console.log("📢 กำลังลบรูป ID:", imageId, "จากกิจกรรม ID:", eventId);
+        console.log("📢 กำลังลบรูป ID:", imageId, "จากกิจกรรม ID:", eventId);
 
-            if (!imageId) {
-                alert("❌ ไม่พบค่า image_id ที่ส่งไป");
-                return;
+        if (!imageId) {
+            Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด!',
+                text: 'ไม่พบค่า image_id ที่ส่งไป',
+            });
+            return;
+        }
+
+        // ใช้ SweetAlert2 แทน confirm
+        Swal.fire({
+    title: 'คุณแน่ใจหรือไม่?',
+    text: "คุณต้องการลบรูปภาพนี้หรือไม่?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'ลบรูปภาพ',
+    cancelButtonText: 'ยกเลิก',
+    reverseButtons: true,
+    customClass: {
+        confirmButton: 'btn btn-success',  // ปรับสีปุ่มยืนยันเป็นสีเขียว
+        cancelButton: 'btn btn-danger'     // ปรับสีปุ่มยกเลิกเป็นสีแดง
+    }
+}).then((result) => {
+    if (result.isConfirmed) {
+        fetch(`/events/${eventId}/delete-image/${imageId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
-
-            let confirmation = confirm('คุณต้องการลบรูปภาพนี้หรือไม่?');
-
-            if (confirmation) {
-                fetch(`/events/${eventId}/delete-image/${imageId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('❌ เซิร์ฟเวอร์ส่งกลับข้อผิดพลาด');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("📢 Response Data:", data);
+                if (data.success) {
+                    // 🛠 ลบรูปออกจาก DOM ทันที
+                    let imageElement = document.getElementById('image-' + imageId);
+                    if (imageElement) {
+                        imageElement.remove();
                     }
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('❌ เซิร์ฟเวอร์ส่งกลับข้อผิดพลาด');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log("📢 Response Data:", data);
-                        if (data.success) {
-                            // 🛠 ลบรูปออกจาก DOM ทันที
-                            let imageElement = document.getElementById('image-' + imageId);
-                            if (imageElement) {
-                                imageElement.remove();
-                            }
-                            alert('✅ ลบรูปภาพสำเร็จ!');
-                        } else {
-                            alert("⚠️ " + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error("❌ Fetch Error:", error);
-                        alert("❌ เกิดข้อผิดพลาด กรุณาลองอีกครั้ง");
+                    // ใช้ SweetAlert2 แจ้งเตือน
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ลบรูปภาพสำเร็จ!',
+                        text: 'รูปภาพได้ถูกลบออกจากอัลบั้ม',
                     });
-            }
-        });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: data.message,
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("❌ Fetch Error:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'เกิดข้อผิดพลาด กรุณาลองอีกครั้ง',
+                });
+            });
+    }
+});
+
     });
+});
 
 </script>
 

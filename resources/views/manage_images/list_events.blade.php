@@ -77,7 +77,7 @@
                     @foreach($events as $event)
                         <tr class="text-center" id="event-{{ $event->event_id }}">
                             <td>{{ $event->nameevent }}</td>
-                            
+
                             <td>
                                 {{ $event->image_count > 0 ? $event->image_count : 'ไม่มีรูปภาพ' }}
                             </td>
@@ -95,6 +95,12 @@
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu">
+                                        <!-- ปุ่มดาวน์โหลดไฟล์ ZIP -->
+                                        <a href="{{ route('events.downloadZip', ['event_id' => $event->event_id]) }}"
+                                            class="dropdown-item">
+                                            <i class="bx bx-download me-1"></i> ดาวน์โหลดรูปภาพ
+                                        </a>
+                                        <!-- ปุ่มอื่น ๆ -->
                                         <a href="{{ route('manage_album_event', ['event_id' => $event->event_id]) }}"
                                             class="dropdown-item">
                                             <i class="bx bx-image me-1"></i> จัดการรูปภาพในอัลบั้ม
@@ -104,9 +110,8 @@
                                             <i class="bx bx-edit-alt me-1"></i> แก้ไขชื่ออัลบั้ม
                                         </button>
                                         <button class="dropdown-item toggle-status" data-id="{{ $event->event_id }}">
-                                        <i class="fas fa-check"></i> เลือกแสดงอัลบั้มนี้
+                                            <i class="fas fa-check"></i> เลือกแสดงอัลบั้มนี้
                                         </button>
-
                                         <button type="button" class="dropdown-item text-danger delete-event"
                                             data-id="{{ $event->event_id }}">
                                             <i class="bx bx-trash me-1"></i> ลบ

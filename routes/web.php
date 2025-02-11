@@ -401,5 +401,5 @@ Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::cl
 
 
 Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::class, 'deleteImage']);
-
+Route::get('/download-zip/{event_id}', [EventController::class, 'downloadZip'])->name('events.downloadZip');
 

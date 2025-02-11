@@ -481,7 +481,7 @@
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-green d-flex justify-content-center align-items-center">
-                    <i class="fas fa-images"></i>
+                  <i class="fas fa-folder-open"></i>
                   </div>
                 </div>
                 <div class="col">

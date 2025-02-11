@@ -7,6 +7,8 @@ use App\Models\ImageEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use ZipArchive; // เพิ่มการ import ที่นี่
+
 class EventController extends Controller
 {
     /**
@@ -190,6 +192,41 @@ public function deleteImage($event_id, $image_id)
     Log::info("✅ ลบรูปภาพสำเร็จ: {$image_id}");
     return response()->json(['success' => true, 'message' => 'Image deleted successfully.']);
 }
+
+public function downloadZip($eventId)
+    {
+        // หาอัลบั้มกิจกรรม
+        $event = Event::findOrFail($eventId);
+
+        // หาไฟล์รูปภาพในอัลบั้ม
+        $images = ImageEvent::where('event_id', $eventId)->get();
+
+        if ($images->isEmpty()) {
+            return redirect()->back()->with('error', 'ไม่มีรูปภาพในอัลบั้มนี้');
+        }
+
+        // สร้างไฟล์ ZIP
+        $zip = new ZipArchive;
+        $zipFileName = storage_path('app/public/' . $event->nameevent . '.zip');
+
+        if ($zip->open($zipFileName, ZipArchive::CREATE) === TRUE) {
+            // เพิ่มไฟล์รูปภาพใน ZIP
+            foreach ($images as $image) {
+                $filePath = storage_path('app/public/' . $image->image_event);
+                if (file_exists($filePath)) {
+                    $zip->addFile($filePath, basename($filePath));
+                }
+            }
+
+            // ปิดไฟล์ ZIP
+            $zip->close();
+
+            // ส่งไฟล์ ZIP ให้ผู้ใช้ดาวน์โหลด
+            return response()->download($zipFileName)->deleteFileAfterSend(true);
+        } else {
+            return redirect()->back()->with('error', 'ไม่สามารถสร้างไฟล์ ZIP ได้');
+        }
+    }
 
 
 
