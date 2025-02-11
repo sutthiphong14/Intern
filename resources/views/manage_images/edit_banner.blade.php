@@ -112,6 +112,20 @@
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     ลบ
                 </button>
+                <style>
+                    /* กำหนดความสูงของ modal ให้เล็กลง */
+                    .modal-dialog {
+
+                        /* ปรับความกว้างของ modal */
+                        height: auto;
+                        /* ความสูงปรับตามเนื้อหา */
+                    }
+
+                    .modal-content {
+                        height: auto;
+                        /* ความสูงของ content ปรับตามเนื้อหาภายใน */
+                    }
+                </style>
 
 
                 <!-- Modal -->
@@ -267,6 +281,8 @@
     </div>
 </div>
 
+
+
 <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -324,61 +340,114 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalScrollable" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalScrollableTitle">คำอธิบายข้อมูล</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-dark">
+                    <p>
+                        รายงานระยะเวลาเฉลี่ยในการติดตั้ง
+                        หน้าหลัก รายงานระยะเวลาเฉลี่ยในการติดตั้ง
+                    </p>
+                    <p>
+                        หมายเหตุ : รายงานระยะเวลาเฉลี่ยในการติดตั้ง ตามศูนย์บริการติดตั้ง
+                    </p>
+                    <p>
+                        • จำนวนวงจร : จะนับเฉพาะใบคำขอที่ทำการปิดงานเรียบร้อยบนระบบ FTTxSM เท่านั้น (ไม่รวมข้อมูลใบคำขอที
+                        import มาจากสผ.และใบคำขอที่ยังไม่เคยปิดงานเรียบร้อย) ตามช่วงเวลาที่เลือก
+                    </p>
+                    <p>
+                        • ระยะเวลาเตรียมข้อมูลรวม : ยอดรวมระยะเวลาที่ใช้ในเตรียมเอกสารของวงจรตามช่วงเวลาที่เลือก
+                        โดยนับระยะเวลาตั้งแต่วันที่สร้างคำขอ - รับชำระเงิน
+                    </p>
+                    <p>
+                        • ระยะเวลาดำเนินการรวม : ยอดรวมระยะเวลาที่ใช้ในการติดตั้งของวงจรตามช่วงเวลาที่เลือก
+                        โดยนับระยะเวลาตั้งแต่รับชำระเงิน - ปิดงานเรียบร้อย ยกเว้น ช่วงรอลูกค้า
+                    </p>
+                    <p>
+                        • ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจร :
+
+                    </p>
+                    <p>
+                        - กำหนดSDP/ODP :
+                    </p>
+                    <p>
+                        >> กรณีส่งงานโยงสายถัดไป ยอดรวมจำนวนวัน นับจากวันที่รับชำระเงินจนถึงส่งงานโยงสาย หารด้วย จำนวนวงจร
+                        (ช่องที่ 1)
+                    </p>
+                    <p>
+                        >> กรณีส่งงานNMSถัดไป ยอดรวมจำนวนวัน นับจากวันที่รับชำระเงินจนถึงส่งงาน NMS หารด้วย จำนวนวงจร
+                        (ช่องที่ 1)
+                    </p>
+                    <p>
+                        - โยงสาย (ถ้าส่งงาน) : ยอดรวมจำนวนวัน นับจากวันที่ส่งงานโยงสายจนถึงส่งงาน NMS หารด้วย จำนวนวงจร
+                        (ช่องที่ 1)
+                    </p>
+                    <p>
+                        - การดำเนินการของ NMS, นัดหมายและกำหนดช่าง, ปิดงาน : ยอดรวมจำนวนวัน
+                        นับจากวันที่รับงานมาดำเนินการจนถึงวันที่จ่ายงานให้งานถัดไป หารด้วย จำนวนวงจร (ช่องที่ 1)
+                    </p>
+                    <p>
+                        - รอลูกค้า :
+                    </p>
+                    <p>
+                        >> กรณีติดตั้งเร็วกว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน
+                        นับจากวันที่ส่งงานลากสายและติดตั้งจนถึงวันที่ติดตั้ง หารด้วย จำนวนวงจร (ช่องที่ 1)
+                    </p>
+                    <p>
+                        >> กรณีติดตั้งช้ากว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน
+                        นับจากวันที่ส่งงานลากสายและติดตั้งจนถึงวันที่นัดหมายลูกค้า หารด้วย จำนวนวงจร (ช่องที่ 1)
+                    </p>
+                    <p>
+                        - ลากสายและติดตั้ง :
+                    </p>
+                    <p>
+                        >> กรณีติดตั้งเร็วกว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน นับจากวันที่ติดตั้งจนถึงวันที่ส่งงานปิดงาน
+                        หารด้วย จำนวนวงจร (ช่องที่ 1)
+                    </p>
+                    <p>
+                        >> กรณีติดตั้งช้ากว่าวันที่นัดหมายลูกค้า ยอดรวมจำนวนวัน
+                        นับจากวันที่วันนัดหมายลูกค้าจนถึงวันที่ส่งงานปิดงาน หารด้วย จำนวนวงจร (ช่องที่ 1)
+                    </p>
+                    <p>
+                        • รวมระยะเวลาเฉลี่ยที่ใช้ต่อวงจร : ระยะเวลารวม (ช่องที่ 3) หารด้วย จำนวนวงจร (ช่องที่ 1)
+                    </p>
+                    <p>
+                        • ร้อยละการติดตั้งภายใน 3 วัน : ร้อยละการปิดงานเรียบร้อยภายใน 3 วัน(รับชำระเงิน - ปิดงานเรียบร้อย
+                        ยกเว้นช่วงรอลูกค้า) เมื่อเทียบกับ จำนวนวงจร (ช่องที่ 1)
+                    </p>
+                    <p>
+                        • กรณีมีการติดตั้งวงจร แต่ระยะเวลาเฉลี่ยที่ใช้ในการดำเนินการต่อวงจรเท่ากับ 0.00 :
+                        ใช้ระยะเวลาในการดำเนินการเป็นระดับวินาที จึงไม่สามารถแสดงตัวเลขได้
+                    </p>
+                    <p>
+                        • รายงานเดือนตุลา ที่มีตัวเลขติดลบในบางพื้นที่ ทางระบบกำลังดำเนินการตรวจสอบและแก้ไขค่ะ
+                        เนื่องจากมีการเลือกวันที่ติดตั้งและส่งงานไม่ถูกต้อง
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
 
 
 <script>
-
-    // ตัวอย่างการเปิด modal ด้วย JavaScript
-    $(document).ready(function () {
-        $('#exportModal').modal('show');
-    });
-
-
-    // เมื่อเลือกแบนเนอร์
-    let selectedSlideId = null; // ตัวแปรสำหรับเก็บ ID ของสไลด์ที่เลือก
-
-    function selectSlide(slideshowId) {
-        selectedSlideId = slideshowId; // ตั้งค่า ID ของสไลด์ที่เลือก
-        let slideshow = @json($slideshows);
-
-        if (!Array.isArray(slideshow) || slideshow.length === 0) {
-            console.log("ไม่มีข้อมูลแบนเนอร์");
-            return;
-        }
-
-        let selectedSlideshow = slideshow.find(slide => slide.slideshow_id === slideshowId);
-
-        if (selectedSlideshow) {
-            let form = document.getElementById('editSlideshowForm');
-            form.action = "/slideshow/" + selectedSlideshow.slideshow_id;
-
-            let imagePreview = document.getElementById('imagePreview');
-            imagePreview.style.display = 'block';
-            imagePreview.src = '/storage/' + selectedSlideshow.slideshow_image;
-
-            document.getElementById('slideshow_link').value = selectedSlideshow.slideshow_link;
-        } else {
-            console.log("ไม่พบแบนเนอร์ที่เลือก");
-        }
-    }
-
-    // ฟังก์ชันนี้จะทำให้ข้อมูลแรกแสดงเมื่อเริ่มต้น
-    window.onload = function () {
-        // ตรวจสอบว่า $slideshows มีข้อมูลหรือไม่ก่อนเรียกฟังก์ชัน selectSlide
-        @if($slideshows->isNotEmpty())
-            selectSlide({{ $slideshows->first()->slideshow_id }});
-        @else
-            console.log("ไม่มีข้อมูลแบนเนอร์");
-        @endif
-    };
-
-
-
-
-    function deleteSlide(slideshowId) {
-        if (confirm('คุณต้องการลบสไลด์นี้หรือไม่?')) {
+function deleteSlide(slideshowId) {
+    Swal.fire({
+        title: 'คุณต้องการลบสไลด์นี้หรือไม่?',
+        text: "การลบไม่สามารถย้อนกลับได้",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'ลบ',
+        cancelButtonText: 'ยกเลิก',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
             fetch(`/slideshow/${slideshowId}`, {
                 method: 'DELETE',
                 headers: {
@@ -386,64 +455,66 @@
                     'Content-Type': 'application/json',
                 },
             })
-                .then(response => {
-                    if (!response.ok) throw new Error('Failed to delete slideshow.');
-                    return response.json();
-                })
-                .then(data => {
-                    alert(data.message || 'ลบสำเร็จ');
-                    location.reload();
-                })
-                .catch(error => console.error('Error deleting slideshow:', error));
-        }
-    }
-
-    function updateSlideDetails() {
-        const slideSelect = document.getElementById('slideId');
-        const selectedOption = slideSelect.options[slideSelect.selectedIndex];
-
-        if (selectedOption.value) {
-            // ดึงข้อมูลรูปภาพและลำดับจาก data-attribute
-            const imageSrc = selectedOption.getAttribute('data-image');
-            const slideNumber = selectedOption.getAttribute('data-number');
-
-            // แสดงข้อมูลในฟอร์ม
-            const slideImage = document.getElementById('selectedSlideImage');
-            const slideText = document.getElementById('selectedSlideText');
-
-            slideImage.src = imageSrc;
-            slideImage.style.display = 'block';
-            slideText.textContent = `ลำดับ: ${slideNumber}`;
-            slideText.style.display = 'block';
-        } else {
-            // ซ่อนข้อมูลถ้ายังไม่ได้เลือก
-            document.getElementById('selectedSlideImage').style.display = 'none';
-            document.getElementById('selectedSlideText').style.display = 'none';
-        }
-    }
-
-    function confirmDelete() {
-        const slideSelect = document.getElementById('slideId');
-        if (!slideSelect.value) {
-            alert('กรุณาเลือกรายการที่ต้องการลบ');
-            return;
-        }
-
-        const slideshowId = slideSelect.value; // Get selected slideshow ID
-        fetch(`/slideshow/${slideshowId}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message || 'ลบสำเร็จ');
-                location.reload(); // Reload page to reflect changes
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to delete slideshow.');
+                return response.json();
             })
-            .catch(error => console.error('Error:', error));
+            .then(data => {
+                Swal.fire(
+                    'ลบสำเร็จ!',
+                    data.message || 'สไลด์ถูกลบเรียบร้อย',
+                    'success'
+                );
+                location.reload();
+            })
+            .catch(error => {
+                Swal.fire(
+                    'เกิดข้อผิดพลาด!',
+                    'ไม่สามารถลบสไลด์ได้',
+                    'error'
+                );
+                console.error('Error deleting slideshow:', error);
+            });
+        }
+    });
+}
+
+function confirmDelete() {
+    const slideSelect = document.getElementById('slideId');
+    if (!slideSelect.value) {
+        Swal.fire({
+            title: 'กรุณาเลือกรายการที่ต้องการลบ',
+            icon: 'warning',
+            confirmButtonText: 'ตกลง'
+        });
+        return;
     }
 
+    const slideshowId = slideSelect.value; // Get selected slideshow ID
+    fetch(`/slideshow/${slideshowId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        Swal.fire(
+            'ลบสำเร็จ!',
+            data.message || 'สไลด์ถูกลบเรียบร้อย',
+            'success'
+        );
+        location.reload(); // Reload page to reflect changes
+    })
+    .catch(error => {
+        Swal.fire(
+            'เกิดข้อผิดพลาด!',
+            'ไม่สามารถลบสไลด์ได้',
+            'error'
+        );
+        console.error('Error:', error);
+    });
+}
 
 </script>
 
