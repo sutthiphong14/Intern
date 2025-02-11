@@ -85,6 +85,7 @@
                             <td>
                                 {{ $event->image_count > 0 ? $event->image_count : 'ไม่มีรูปภาพ' }}
                             </td>
+
                             <td>
                                 <span class="status-label {{ $event->status == 'show' ? 'text-success' : 'text-danger' }}"
                                     data-id="{{ $event->event_id }}">
@@ -100,22 +101,42 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <!-- ปุ่มดาวน์โหลดไฟล์ ZIP -->
-                                        <a href="{{ route('events.downloadZip', ['event_id' => $event->event_id]) }}"
-                                            class="dropdown-item">
-                                            <i class="bx bx-download me-1"></i> ดาวน์โหลดรูปภาพ
-                                        </a>
-                                        <!-- ปุ่มอื่น ๆ -->
+                                        @if($event->image_count > 0)
+                                            <a href="{{ route('events.downloadZip', ['event_id' => $event->event_id]) }}"
+                                                class="dropdown-item">
+                                                <i class="bx bx-download me-1"></i> ดาวน์โหลดรูปภาพ
+                                            </a>
+                                        @else
+                                            <a href="#" class="dropdown-item disabled">
+                                                <i class="bx bx-download me-1"></i> ดาวน์โหลดรูปภาพ
+                                            </a>
+                                        @endif
+
+                                        <!-- ปุ่มจัดการรูปภาพ -->
                                         <a href="{{ route('manage_album_event', ['event_id' => $event->event_id]) }}"
                                             class="dropdown-item">
                                             <i class="bx bx-image me-1"></i> จัดการรูปภาพในอัลบั้ม
                                         </a>
+
+                                        <!-- ปุ่มแก้ไขชื่ออัลบั้ม -->
                                         <button class="dropdown-item edit-event" data-id="{{ $event->event_id }}"
                                             data-name="{{ $event->nameevent }}">
                                             <i class="bx bx-edit-alt me-1"></i> แก้ไขชื่ออัลบั้ม
                                         </button>
-                                        <button class="dropdown-item toggle-status" data-id="{{ $event->event_id }}">
-                                            <i class="fas fa-check"></i> เลือกแสดงอัลบั้มนี้
-                                        </button>
+
+                                        <!-- ปุ่มเลือกแสดง -->
+                                        @if($event->image_count > 0)
+                                            <button class="dropdown-item toggle-status" data-id="{{ $event->event_id }}">
+                                                <i class="fas fa-check"></i> เลือกแสดงอัลบั้มนี้
+                                            </button>
+                                        @else
+                                            <button class="dropdown-item toggle-status disabled"
+                                                data-id="{{ $event->event_id }}">
+                                                <i class="fas fa-check"></i> เลือกแสดงอัลบั้มนี้
+                                            </button>
+                                        @endif
+
+                                        <!-- ปุ่มลบ -->
                                         <button type="button" class="dropdown-item text-danger delete-event"
                                             data-id="{{ $event->event_id }}">
                                             <i class="bx bx-trash me-1"></i> ลบ
