@@ -96,56 +96,57 @@
           </thead>
 
           <tbody class="align-items-center">
-    @foreach ($data_announce as $item)
+            @foreach ($data_announce as $item)
         <tr>
-            <td class="ms-5 text-start">
-                <div>
-                    {{ $item->name }}
-                    @if ($item->id == $latestNewsId) <!-- ตรวจสอบว่าเป็นข่าวล่าสุด -->
-                        <span class="badge bg-label-danger"> New</span>
-                    @endif
-                </div>
-            </td>
-            <td class="ms-5 text-center">
-                <div>{{ $item->description }}</div>
-            </td>
-            <td class="ms-5 text-center">
-                <div>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</div>
-            </td>
-            <td class="ms-5 text-center">
-                <div>
-                    @if ($item->content_type === 'file')
-                        @if(Storage::disk('public')->exists($item->file))
-                            <a href="{{ route('admin.download', $item->id) }}" class="btn btn-warning col-1" style="width: 130px;">
-                                Download <i class="fas fa-arrow-down"></i>
-                            </a>
-                        @else
-                            <span class="text-danger">ไฟล์ไม่พบ</span>
-                        @endif
-                    @elseif ($item->content_type === 'link')
-                        @if (!empty($item->link))
-                            <a href="{{ $item->link }}" target="_blank" class="btn btn-info col-1" style="width: 130px;">
-                                Link <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        @else
-                            <span class="text-danger">ลิงก์ไม่พบ</span>
-                        @endif
-                    @elseif ($item->content_type === 'youtube')
-                        @if (!empty($item->youtube))
-                            <a href="{{ $item->youtube }}" target="_blank" class="btn btn-danger col-1" style="width: 130px;">
-                                Video <i class="fas fa-play-circle"></i>
-                            </a>
-                        @else
-                            <span class="text-danger">วิดีโอไม่พบ</span>
-                        @endif
-                    @else
-                        <span class="text-muted">ประเภทไม่ถูกต้อง</span>
-                    @endif
-                </div>
-            </td>
+          <td class="ms-5 text-start">
+          <div>
+            {{ $item->name }}
+            @if ($item->id == $latestNewsId) <!-- ตรวจสอบว่าเป็นข่าวล่าสุด -->
+        <span class="badge bg-label-danger"> New</span>
+      @endif
+          </div>
+          </td>
+          <td class="ms-5 text-center">
+          <div>{{ $item->description }}</div>
+          </td>
+          <td class="ms-5 text-center">
+          <div>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</div>
+          </td>
+          <td class="ms-5 text-center">
+          <div>
+            @if ($item->content_type === 'file')
+        @if(Storage::disk('public')->exists($item->file))
+      <a href="{{ route('admin.download', $item->id) }}" class="btn btn-warning col-1"
+      style="width: 130px;">
+      Download <i class="fas fa-arrow-down"></i>
+      </a>
+    @else
+    <span class="text-danger">ไฟล์ไม่พบ</span>
+  @endif
+      @elseif ($item->content_type === 'link')
+    @if (!empty($item->link))
+    <a href="{{ $item->link }}" target="_blank" class="btn btn-info col-1" style="width: 130px;">
+    Link <i class="fas fa-external-link-alt"></i>
+    </a>
+  @else
+  <span class="text-danger">ลิงก์ไม่พบ</span>
+@endif
+  @elseif ($item->content_type === 'youtube')
+  @if (!empty($item->youtube))
+    <a href="{{ $item->youtube }}" target="_blank" class="btn btn-danger col-1" style="width: 130px;">
+    Video <i class="fas fa-play-circle"></i>
+    </a>
+  @else
+    <span class="text-danger">วิดีโอไม่พบ</span>
+  @endif
+@else
+  <span class="text-muted">ประเภทไม่ถูกต้อง</span>
+@endif
+          </div>
+          </td>
         </tr>
-    @endforeach
-</tbody>
+      @endforeach
+          </tbody>
 
         </table>
 
@@ -469,37 +470,110 @@
 
 
     <div class="card mt-4">
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-inner">
-    @foreach($album_event as $event)
+
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          @foreach($album_event as $event)
         @foreach($image_events->where('event_id', $event->event_id) as $key => $image)
-            <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-                <img src="{{ asset('storage/' . $image->image_event) }}" class="d-block w-100" alt="Image">
-            </div>
-        @endforeach
+      <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
+      <div class="carousel-image-container">
+        <img src="{{ asset('storage/' . $image->image_event) }}" class="d-block w-100" alt="Image">
+        <h4 class="carousel-caption text-start ms-3">{{ $event->nameevent }}</h4>
+      </div>
+      </div>
     @endforeach
+      @endforeach
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+          data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+          data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+      <style>
+        .carousel-image-container {
+          position: relative;
+          overflow: hidden;
+          /* ซ่อนส่วนที่เกิน */
+        }
+
+        .carousel-image-container img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          /* ให้ภาพขยายเต็มพื้นที่ */
+          transition: opacity 0.5s ease;
+          /* เพิ่มเอฟเฟกต์การเปลี่ยนแปลง */
+        }
+
+        /* เพิ่มพื้นหลัง gradient แบบ fade-in */
+        .carousel-image-container:hover::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(255, 255, 255, 0));
+          /* เริ่มต้นโปร่งใส */
+          z-index: 1;
+          /* ให้พื้นหลังทึบอยู่ด้านบนของภาพ */
+          animation: fadeIn 0.4s ease-in-out forwards;
+          /* เพิ่ม animation สำหรับพื้นหลัง */
+        }
+
+        /* ชื่อกิจกรรม */
+        .carousel-caption {
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
+          color: white;
+          padding: 5px;
+          font-size: 3em;
+          z-index: 2;
+          /* ชื่อกิจกรรมอยู่ด้านบน */
+          opacity: 0;
+          /* ซ่อนชื่อกิจกรรมเริ่มต้น */
+          transform: translateY(20px);
+          /* ทำให้ชื่ออยู่ข้างล่าง */
+          transition: opacity 0.5s ease, transform 0.5s ease;
+          /* เพิ่ม transition */
+        }
+
+        /* แสดงชื่อกิจกรรมเมื่อ hover */
+        .carousel-image-container:hover .carousel-caption {
+          opacity: 1;
+          /* แสดงชื่อกิจกรรม */
+          transform: translateY(0);
+          /* ทำให้ชื่อเลื่อนขึ้น */
+        }
+
+        /* Animation สำหรับพื้นหลัง fade-in */
+        @keyframes fadeIn {
+          0% {
+            opacity: 0;
+            /* เริ่มต้นจากความโปร่งใส */
+            background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(255, 255, 255, 0));
+            /* เริ่มต้นโปร่งใส */
+          }
+
+          100% {
+            opacity: 1;
+            /* ทำให้พื้นหลังไม่โปร่งใส */
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(255, 255, 255, 0));
+            /* เปลี่ยนเป็นสีดำที่ด้านล่าง */
+          }
+        }
+      </style>
+
+    </div>
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-
-
-
-
-
-  </div>
-
-
-
-
-
-  </div>
 
 
 
@@ -515,7 +589,7 @@
 
 
 
-    
+
 
 
 

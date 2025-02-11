@@ -57,7 +57,7 @@
             <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn btn-success me-4" data-bs-toggle="modal"
                     data-bs-target="#addEventModal">
-                    เพิ่มกิจกรรม
+                    เพิ่มอัลบั้มกิจกรรม
                 </button>
             </div>
         </div>
@@ -68,8 +68,8 @@
                 <thead>
                     <tr class='bg-dark text-center'>
                         <th class='6'>ชื่อกิจกรรม</th>
-                        <th class='1'>สถานะ</th>
                         <th class='3'>จำนวนภาพในอัลบั้ม</th>
+                        <th class='1'>สถานะ</th>
                         <th class='2'>Action</th>
                     </tr>
                 </thead>
@@ -77,11 +77,15 @@
                     @foreach($events as $event)
                         <tr class="text-center" id="event-{{ $event->event_id }}">
                             <td>{{ $event->nameevent }}</td>
-                            <td><span class="status-label" data-id="{{ $event->event_id }}">
-                                    {{ $event->status == 'show' ? 'แสดง' : 'ไม่แสดง' }}
-                                </span></td>
+                            
                             <td>
                                 {{ $event->image_count > 0 ? $event->image_count : 'ไม่มีรูปภาพ' }}
+                            </td>
+                            <td>
+                                <span class="status-label {{ $event->status == 'show' ? 'text-success' : 'text-danger' }}"
+                                    data-id="{{ $event->event_id }}">
+                                    {{ $event->status == 'show' ? 'แสดง' : 'ไม่แสดง' }}
+                                </span>
                             </td>
 
                             <td>
@@ -100,7 +104,7 @@
                                             <i class="bx bx-edit-alt me-1"></i> แก้ไขชื่ออัลบั้ม
                                         </button>
                                         <button class="dropdown-item toggle-status" data-id="{{ $event->event_id }}">
-                                            เลือกแสดงอัลบั้ม
+                                        <i class="fas fa-check"></i> เลือกแสดงอัลบั้มนี้
                                         </button>
 
                                         <button type="button" class="dropdown-item text-danger delete-event"
