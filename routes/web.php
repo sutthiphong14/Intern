@@ -75,11 +75,12 @@ Route::post('/users/{id}/update', [UserController::class, 'update'])->name('user
 // Example route protection
 Route::middleware(['auth', 'check.permission:manage_users'])->group(function () {
     Route::get('/listusers', [UserController::class, 'listUsers'])->name('users.list');
-    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    
     // Other user management routes
 });
 Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 Route::get('/getCenters/{province_id}', [UserController::class, 'getCenters'])->name('getCenters');
+Route::get('/get-centers', [UserController::class, 'getCentersByProvince'])->name('getCentersByProvince');
 
 //************************* */
 

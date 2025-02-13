@@ -14,15 +14,16 @@ class UserController extends Controller
 
     public function listUsers()
     {
-        $users = User::paginate(10); // Adjust the number per page as needed
+        $users = User::with(['province', 'serviceCenter'])->paginate(10);
         return view('users.listusers', compact('users'));
     }
+
 
     function delete($id)
     {
         $user = User::findOrFail($id); // ค้นหา User โดยใช้ Eloquent
         $user->delete();              // ลบผ่าน Eloquent ซึ่งจะเรียก Observer
-        return redirect('/listusers');
+        return redirect('/users');
     }
 
     public function store(Request $request)
@@ -201,26 +202,26 @@ class UserController extends Controller
     }
 
     public function getCentersUser(Request $request)
-{
-    $provinceId = $request->input('province_id');
-    
-    // Validate province_id
-    if (!$provinceId) {
-        return response()->json(['error' => 'Province ID is missing'], 400);
+    {
+        $provinceId = $request->input('province_id');
+
+        // Validate province_id
+        if (!$provinceId) {
+            return response()->json(['error' => 'Province ID is missing'], 400);
+        }
+
+        // Fetch centers based on province_id
+        $centers = ServiceCenterActivity::where('province_id', $provinceId)->get();
+
+        // Return an error if no centers found
+        if ($centers->isEmpty()) {
+            return response()->json(['error' => 'No centers found for this province'], 404);
+        }
+
+        return response()->json($centers);
     }
 
-    // Fetch centers based on province_id
-    $centers = ServiceCenterActivity::where('province_id', $provinceId)->get();
 
-    // Return an error if no centers found
-    if ($centers->isEmpty()) {
-        return response()->json(['error' => 'No centers found for this province'], 404);
-    }
-
-    return response()->json($centers);
-}
-
-    
 
     public function create()
     {
@@ -233,6 +234,12 @@ class UserController extends Controller
         $centers = ServiceCenterActivity::where('province_id', $province_id)->get();
         return response()->json($centers);
     }
+
+    public function getCentersByProvince(Request $request)
+{
+    $centers = ServiceCenterActivity::where('province_id', $request->province_id)->get(['center_id', 'center_name']);
+    return response()->json($centers);
+}
 
 
 
