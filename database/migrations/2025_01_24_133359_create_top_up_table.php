@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id('topUp_id');
             $table->string('phone')->nullable();
             $table->decimal('amount', 10, 2); // 10 หลัก และทศนิยม 2 ตำแหน่ง
+            $table->unsignedBigInteger('type_id');
+            $table->foreign('type_id')->references('type_id')->on('type_activity')->onDelete('cascade');
             $table->unsignedBigInteger('province_id');
             $table->foreign('province_id')->references('province_id')->on('province_activity')->onDelete('cascade');
             $table->unsignedBigInteger('center_id');

@@ -331,6 +331,7 @@ Route::delete('/slideshow/{id}', [SlideshowController::class, 'destroy'])->name(
 
 
 //ส่วนกิจกรรม
+Route::get('/activity_view', [ActivityController::class, 'activityView'])->name('activity_view');
 Route::get('/typeactivity_list', [ActivityController::class, 'ListType'])->name('type_list');
 Route::post('/typeactivity_insert', [ActivityController::class, 'TypeInsert'])->name('type_insert');
 Route::delete('/typeactivity_delete/{type_id}', [ActivityController::class, 'TypeDelete'])->name('type_delete');

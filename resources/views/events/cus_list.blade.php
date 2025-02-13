@@ -90,82 +90,261 @@
         </div>
 
 
-        <table class="table table-bordered">
-            <thead>
-                <tr class="bg-dark text-light text-center">
-                    <th>#</th>
-                    <th>ชื่อ-นามสกุล</th>
-                    {{-- <th>เลขบัตรประชาชน</th>
-                    <th>รูปภาพ</th>
-                    <th>ที่อยู่</th> --}}
-                    <th>กิจกรรม</th>
-                    <th>บริการ</th>
-                    <th>โปรโมชั่น</th>
-                    <th>ความเร็ว</th>
-                    <th>ราคา</th>
-                    <th>(จังหวัด/ศูนย์บริการ)</th>
 
-                    <th>การดำเนินการ</th>
-                </tr>
-            </thead>
-            <tbody id="customerTable">
-                @if ($data->count() > 0)
-                    @foreach ($data as $customer)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td> <!-- ใช้ $loop->iteration สำหรับลำดับแถว -->
-                            <td>{{ $customer->cus_fullname }}</td>
-                            {{-- <td>{{ $customer->id_card }}</td>
-                            <td>
-                                @if ($customer->cus_photo)
-                                <img src="{{ asset('storage/' . $customer->cus_photo) }}" alt="Photo" style="width: 50px; height: 50px;">
+        <div class="nav-align-top mt-4">
+            <ul class="nav nav-tabs nav-fill" role="tablist">
+                <li class="nav-item">
+                    <button type="button" class="nav-link active text-dark bg-warning" role="tab" data-bs-toggle="tab"
+                        data-bs-target="#navs-justified-fttx_broadband" aria-controls="navs-justified-announce"
+                        aria-selected="true">
+                        <span>Fttx Broadband</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link text-dark" role="tab" data-bs-toggle="tab"
+                        data-bs-target="#navs-justified-simmy" aria-controls="navs-justified-document"
+                        aria-selected="false">
+                        <span>SIM my</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link text-dark" role="tab" data-bs-toggle="tab"
+                        data-bs-target="#navs-justified-ict_solution" aria-controls="navs-justified-form"
+                        aria-selected="false">
+                        <span>ICT Solution</span>
+                    </button>
+                </li>
+            </ul>
+
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="navs-justified-fttx_broadband" role="tabpanel">
+                    <!-- Fttx Broadband Content -->
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr class="bg-dark text-light text-center">
+                                <th>#</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>กิจกรรม</th>
+                                <th>บริการ</th>
+                                <th>โปรโมชั่น</th>
+                                <th>ความเร็ว</th>
+                                <th>ราคา</th>
+                                <th>(จังหวัด/ศูนย์บริการ)</th>
+                                <th>การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTable">
+                            @php
+                                $filteredData = $data->filter(function ($customer) {
+                                    return stripos($customer->service->service_name ?? '', 'fttx') !== false;
+                                });
+                            @endphp
+
+                            @if ($filteredData->count() > 0)
+                                @foreach ($filteredData as $customer)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $customer->cus_fullname }}</td>
+                                        <td>{{ $customer->type->type_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->service->service_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->promotion->promotion_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->speed->speed_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->price->price_name ?? 'N/A' }}</td>
+                                        <td>
+                                            {{ $customer->province->province_name ?? 'N/A' }} /
+                                            {{ $customer->center->center_name ?? 'N/A' }}
+                                        </td>
+                                        <td colspan="2">
+                                            <div class="dropdown-menu-start">
+                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                    data-bs-toggle="dropdown">
+                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a href="{{ route('customer_edit', $customer->cus_id) }}"
+                                                        class="btn btn-warning btn-sm">Edit</a>
+                                                    <form id="deleteForm{{ $customer->cus_id }}"
+                                                        action="{{ route('customer_delete', $customer->cus_id) }}"
+                                                        method="POST" style="display: inline-block;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-danger btn-sm"
+                                                            onclick="confirmDelete({{ $customer->cus_id }})">Delete</button>
+                                                    </form>
+                                                    <!-- ปุ่ม View -->
+                                                    <button type="button" class="btn btn-info btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#customerModal{{ $customer->cus_id }}">
+                                                        View
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             @else
-                                No Photo
-                            @endif                            
-                            </td>
-                            <td>{{ $customer->cus_address }}</td> --}}
-                            <td>{{ $customer->type->type_name ?? 'N/A' }}</td>
-                            <td>{{ $customer->service->service_name ?? 'N/A' }}</td>
-                            <td>{{ $customer->promotion->promotion_name ?? 'N/A' }}</td>
-                            <td>{{ $customer->speed->speed_name ?? 'N/A' }}</td> <!-- ดึงชื่อจากสัมพันธ์ speed -->
-                            <td>{{ $customer->price->price_name ?? 'N/A' }}</td> <!-- ดึงชื่อจากสัมพันธ์ price -->
-                            <td>
-                                {{ $customer->province->province_name ?? 'N/A' }} /
-                                {{ $customer->center->center_name ?? 'N/A' }}
-                            </td>
-                            <td colspan="2">
-                                <div class="dropdown-menu-start">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a href="{{ route('customer_edit', $customer->cus_id) }}"
-                                            class="btn btn-warning btn-sm">Edit</a>
-                                        <form id="deleteForm{{ $customer->cus_id }}"
-                                            action="{{ route('customer_delete', $customer->cus_id) }}" method="POST"
-                                            style="display: inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                onclick="confirmDelete({{ $customer->cus_id }})">Delete</button>
-                                        </form>
-                                        <!-- ปุ่ม View -->
-                                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#customerModal{{ $customer->cus_id }}">
-                                            View
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="12" class="text-center">ไม่มีข้อมูลลูกค้า</td>
-                    </tr>
-                @endif
-            </tbody>
-        </table>
+                                <tr>
+                                    <td colspan="12" class="text-center">ไม่มีข้อมูลลูกค้า</td>
+                                </tr>
+                            @endif
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <div class="tab-pane fade" id="navs-justified-simmy" role="tabpanel">
+                    <!-- SIM my Content -->
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr class="bg-dark text-light text-center">
+                                <th>#</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>กิจกรรม</th>
+                                <th>บริการ</th>
+                                <th>โปรโมชั่น</th>
+                                <th>ความเร็ว</th>
+                                <th>ราคา</th>
+                                <th>(จังหวัด/ศูนย์บริการ)</th>
+                                <th>การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTable">
+                            @php
+                                $filteredData = $data->filter(function ($customer) {
+                                    return stripos($customer->service->service_name ?? '', 'sim') !== false;
+                                });
+                            @endphp
+
+                            @if ($filteredData->count() > 0)
+                                @foreach ($filteredData as $customer)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $customer->cus_fullname }}</td>
+                                        <td>{{ $customer->type->type_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->service->service_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->promotion->promotion_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->speed->speed_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->price->price_name ?? 'N/A' }}</td>
+                                        <td>
+                                            {{ $customer->province->province_name ?? 'N/A' }} /
+                                            {{ $customer->center->center_name ?? 'N/A' }}
+                                        </td>
+                                        <td colspan="2">
+                                            <div class="dropdown-menu-start">
+                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                    data-bs-toggle="dropdown">
+                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a href="{{ route('customer_edit', $customer->cus_id) }}"
+                                                        class="btn btn-warning btn-sm">Edit</a>
+                                                    <form id="deleteForm{{ $customer->cus_id }}"
+                                                        action="{{ route('customer_delete', $customer->cus_id) }}"
+                                                        method="POST" style="display: inline-block;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-danger btn-sm"
+                                                            onclick="confirmDelete({{ $customer->cus_id }})">Delete</button>
+                                                    </form>
+                                                    <!-- ปุ่ม View -->
+                                                    <button type="button" class="btn btn-info btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#customerModal{{ $customer->cus_id }}">
+                                                        View
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="12" class="text-center">ไม่มีข้อมูลลูกค้า</td>
+                                </tr>
+                            @endif
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <div class="tab-pane fade" id="navs-justified-ict_solution" role="tabpanel">
+                    <!-- ICT Solution Content -->
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr class="bg-dark text-light text-center">
+                                <th>#</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>กิจกรรม</th>
+                                <th>บริการ</th>
+                                <th>โปรโมชั่น</th>
+                                <th>ความเร็ว</th>
+                                <th>ราคา</th>
+                                <th>(จังหวัด/ศูนย์บริการ)</th>
+                                <th>การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTable">
+                            @php
+                                $filteredData = $data->filter(function ($customer) {
+                                    return stripos($customer->service->service_name ?? '', 'ict') !== false;
+                                });
+                            @endphp
+
+                            @if ($filteredData->count() > 0)
+                                @foreach ($filteredData as $customer)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $customer->cus_fullname }}</td>
+                                        <td>{{ $customer->type->type_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->service->service_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->promotion->promotion_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->speed->speed_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->price->price_name ?? 'N/A' }}</td>
+                                        <td>
+                                            {{ $customer->province->province_name ?? 'N/A' }} /
+                                            {{ $customer->center->center_name ?? 'N/A' }}
+                                        </td>
+                                        <td colspan="2">
+                                            <div class="dropdown-menu-start">
+                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                    data-bs-toggle="dropdown">
+                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a href="{{ route('customer_edit', $customer->cus_id) }}"
+                                                        class="btn btn-warning btn-sm">Edit</a>
+                                                    <form id="deleteForm{{ $customer->cus_id }}"
+                                                        action="{{ route('customer_delete', $customer->cus_id) }}"
+                                                        method="POST" style="display: inline-block;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-danger btn-sm"
+                                                            onclick="confirmDelete({{ $customer->cus_id }})">Delete</button>
+                                                    </form>
+                                                    <!-- ปุ่ม View -->
+                                                    <button type="button" class="btn btn-info btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#customerModal{{ $customer->cus_id }}">
+                                                        View
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="12" class="text-center">ไม่มีข้อมูลลูกค้า</td>
+                                </tr>
+                            @endif
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
 
 
 
@@ -316,13 +495,11 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone</label>
-                                <input type="text" name="phone" id="phone" class="form-control"
-                                    >
+                                <input type="text" name="phone" id="phone" class="form-control">
                             </div>
                             <div class="mb-3">
                                 <label for="amount" class="form-label">Amount</label>
-                                <input type="number" name="amount" id="amount" class="form-control"
-                                     required>
+                                <input type="number" name="amount" id="amount" class="form-control" required>
                             </div>
 
                             <label for="province_id" class="form-label">จังหวัด</label>
@@ -342,8 +519,7 @@
                             <select class="form-select bg-warning text-dark" id="center_id2" name="center_id" required>
                                 <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
                                 @foreach ($centers as $center)
-                                    <option value="{{ $center->center_id }}"
-                                        {{ $center->center_id ? 'selected' : '' }}>
+                                    <option value="{{ $center->center_id }}" {{ $center->center_id ? 'selected' : '' }}>
                                         {{ $center->center_name }}
                                     </option>
                                 @endforeach
@@ -359,7 +535,12 @@
             </div>
         </div>
 
+
+
+
     </div>
+
+
 
 
 
@@ -556,29 +737,29 @@
         });
     </script>
 
-<script>
-    //ค้นหา
-    document.getElementById('createdDate').addEventListener('input', searchCustomers);
-    document.getElementById('searchInput').addEventListener('input', searchCustomers);
-    document.getElementById('type_service').addEventListener('change', searchCustomers);
+    <script>
+        //ค้นหา
+        document.getElementById('createdDate').addEventListener('input', searchCustomers);
+        document.getElementById('searchInput').addEventListener('input', searchCustomers);
+        document.getElementById('type_service').addEventListener('change', searchCustomers);
 
-    function searchCustomers() {
-        let date = document.getElementById('createdDate').value;
-        let searchName = document.getElementById('searchInput').value;
-        let typeService = document.getElementById('type_service').value;
+        function searchCustomers() {
+            let date = document.getElementById('createdDate').value;
+            let searchName = document.getElementById('searchInput').value;
+            let typeService = document.getElementById('type_service').value;
 
-        // ส่งค่าผ่าน URL Params ไปยัง Backend
-        let url = `/customers/search?date=${date}&name=${searchName}&service=${typeService}`;
+            // ส่งค่าผ่าน URL Params ไปยัง Backend
+            let url = `/customers/search?date=${date}&name=${searchName}&service=${typeService}`;
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                let customerTable = document.getElementById('customerTable');
-                customerTable.innerHTML = ''; // ลบข้อมูลเดิมในตาราง
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    let customerTable = document.getElementById('customerTable');
+                    customerTable.innerHTML = ''; // ลบข้อมูลเดิมในตาราง
 
-                if (data.length > 0) {
-                    data.forEach((customer, index) => {
-                        customerTable.innerHTML += `
+                    if (data.length > 0) {
+                        data.forEach((customer, index) => {
+                            customerTable.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${customer.cus_fullname}</td>
@@ -612,16 +793,29 @@
                         </td>
                     </tr>
                 `;
-                    });
-                } else {
-                    customerTable.innerHTML = `
+                        });
+                    } else {
+                        customerTable.innerHTML = `
                 <tr>
                     <td colspan="11" class="text-center">ไม่มีข้อมูลลูกค้า</td>
                 </tr>
             `;
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
-</script>
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+
+    <script>
+        document.querySelectorAll('.nav-tabs .nav-link').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.nav-tabs .nav-link').forEach(el => {
+                    el.classList.remove('active', 'bg-warning', 'text-light');
+                    el.classList.add('text-dark');
+                });
+                this.classList.add('active', 'bg-warning', 'text-light');
+            });
+        });
+    </script>
 @endsection

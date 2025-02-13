@@ -488,10 +488,6 @@ class ActivityController extends Controller
             ->map(function ($items) {
                 return $items->sum('income'); // รวมค่าของ amount ในแต่ละกลุ่ม
             });
-
-
-
-
         return view('events.activity_list', compact(
             'serviceTypes',
             'data',
@@ -506,5 +502,11 @@ class ActivityController extends Controller
             'Ict_count',
             'Ict_income'
         ));
+    }
+
+    public function activityView(){
+
+        $data = Typeactivity::all();
+        return view('events.activity_view', compact('data'));
     }
 }

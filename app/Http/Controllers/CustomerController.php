@@ -97,7 +97,7 @@ class CustomerController extends Controller
 
         // $ictSolution = IctSolution::with('products')->find(9)->first(); //
 
-        
+
 
 
         return view('events.cus_list', compact('data', 'provinces', 'centers', 'fttxNew', 'selfInstall', 'HireInstall', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price', 'TopUp'));
@@ -165,6 +165,7 @@ class CustomerController extends Controller
             $new = $request->input('new');
             $installation_type = $request->input('installation_type');
             $cus_id = $customer->id;  // ดึง cus_id ที่เพิ่งสร้างใหม่มาใช้งาน
+            $type_id = $request->input('type_id');
             $center = $request->input('center_id');
             $province_id = $request->input('province_id');
             $date = $request->input('date');
@@ -174,6 +175,7 @@ class CustomerController extends Controller
                 'new' => $new,
                 'installation_type' => $installation_type,
                 'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
+                'type_id' => $type_id,
                 'center_id' => $center,
                 'province_id' => $province_id,
                 'created_at' => $date
@@ -183,6 +185,7 @@ class CustomerController extends Controller
             $service_id = $request->input('service_id');
             $price_id = $request->input('price_id');
             $cus_id = $customer->id;  // ดึง cus_id ที่เพิ่งสร้างใหม่มาใช้งาน
+            $type_id = $request->input('type_id');
             $center = $request->input('center_id');
             $province_id = $request->input('province_id');
             $date = $request->input('date');
@@ -192,6 +195,7 @@ class CustomerController extends Controller
                 'service_id' => $service_id,
                 'price_id' => $price_id,
                 'cus_id' => $cus_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
+                'type_id' => $type_id,
                 'center_id' => $center,
                 'province_id' => $province_id,
                 'created_at' => $date
@@ -207,6 +211,7 @@ class CustomerController extends Controller
             $ictSolution = IctSolution::create([
                 'income' => $request->input('income'),
                 'cus_id' => $customer->id,
+                'type_id' => $request->input('type_id'),
                 'center_id' => $request->input('center_id'),
                 'province_id' => $request->input('province_id'),
                 'quote' => $filePath,
@@ -263,8 +268,14 @@ class CustomerController extends Controller
         }
         $fttxBroadband = Fttxbroadband::where('cus_id', $cus_id)->first();
         $sim_my = Simmy::where('cus_id', $cus_id)->first();
+        $ict_solution = IctSolution::where('cus_id', $cus_id)->first();
         $customerTypeOptions = Fttxbroadband::select('fttx_id', 'new')->get(); // ตัวเลือกประเภทลูกค้า
         $installationOptions = Fttxbroadband::select('fttx_id', 'installation_type')->get(); // ตัวเลือกวิธีติดตั้ง
+
+        $ict_solution = IctSolution::with('products')->where('cus_id', $cus_id)->first();
+        // ตรวจสอบก่อนว่ามี ICT Solution หรือไม่
+        $productsWithQuantity = $ict_solution ? $ict_solution->products : collect();
+
 
         // ดึงข้อมูลประเภทกิจกรรม, บริการ, และจังหวัดเพื่อใช้ในฟอร์ม
         $types = TypeActivity::all();
@@ -274,8 +285,10 @@ class CustomerController extends Controller
         $speed = SpeedActivity::all(); // ดึงข้อมูลความเร็ว
         $prices = PriceActivity::all(); // ดึงข้อมูลราคา
         $centers = ServiceCenterActivity::all(); // ดึงข้อมูลศูนย์บริการ
+        $products = IctProduct::all();
 
-        return view('events.cus_edit', compact('customer', 'types', 'services', 'promotion', 'provinces', 'speed', 'prices', 'centers', 'fttxBroadband', 'sim_my', 'customerTypeOptions', 'installationOptions'));
+
+        return view('events.cus_edit', compact('products', 'customer', 'types', 'services', 'promotion', 'provinces', 'speed', 'prices', 'centers', 'fttxBroadband', 'sim_my', 'ict_solution', 'productsWithQuantity', 'customerTypeOptions', 'installationOptions'));
     }
 
     public function CustomerUpdate(Request $request, $cus_id)
@@ -325,6 +338,7 @@ class CustomerController extends Controller
                     'cus_id' => $cus_id,
                     'center_id' => $center_id,
                     'province_id' => $province_id,
+                    'type_id' => $type_id,
                     'created_at' => $date
                 ]);
             } else {
@@ -333,13 +347,14 @@ class CustomerController extends Controller
                     'installation_type' => $installation_type,
                     'center_id' => $center_id,
                     'province_id' => $province_id,
-                    'created_at' => $date
-
+                    'type_id' => $type_id,
+                    'updated_at' => $date
                 ]);
             }
 
             // ลบข้อมูลใน Simmy หากเปลี่ยนจาก sim my
             Simmy::where('cus_id', $cus_id)->delete();
+            IctSolution::where('cus_id', $cus_id)->delete();
         } elseif (strpos(strtolower($service_name), 'sim my') !== false) {
             // กรณีเป็น sim my
             $cus_new = $request->input('cus_new');
@@ -353,6 +368,7 @@ class CustomerController extends Controller
                     'price_id' => $price_id,
                     'center_id' => $center_id,
                     'province_id' => $province_id,
+                    'type_id' => $type_id,
                     'created_at' => $date
                 ]);
             } else {
@@ -362,13 +378,83 @@ class CustomerController extends Controller
                     'price_id' => $price_id,
                     'center_id' => $center_id,
                     'province_id' => $province_id,
-                    'created_at' => $date
+                    'type_id' => $type_id,
+                    'updated_at' => $date
                 ]);
             }
 
             // ลบข้อมูลใน Fttxbroadband หากเปลี่ยนจาก fttx_broadband
             Fttxbroadband::where('cus_id', $cus_id)->delete();
+            IctSolution::where('cus_id', $cus_id)->delete();
         } else {
+            // อัปเดตข้อมูลใน ict_solution
+            $ict_solution = IctSolution::where('cus_id', $cus_id)->first();
+
+            if ($ict_solution) {
+                // อัปเดตข้อมูลใน pivot table
+                if ($request->has('product_id')) {
+                    $product_ids = $request->input('product_id');
+                    $quantities = $request->input('quantity');
+
+                    // สร้าง array ที่จะ sync
+                    $pivot_data = [];
+                    foreach ($product_ids as $index => $product_id) {
+                        $pivot_data[$product_id] = ['quantity' => $quantities[$index]];
+                    }
+
+                    // ใช้ sync เพื่ออัปเดต pivot table
+                    $ict_solution->products()->sync($pivot_data);
+                }
+
+
+                // อัปเดตฟิลด์รายได้
+                $ict_solution->update([
+                    'income' => $request->input('income'),
+                    'customer_type' => $request->input('customer_type'),
+                    'quote' => $request->hasFile('quote') ? $request->file('quote')->store('quotes', 'public') : $ict_solution->quote,
+                    'center_id' => $center_id,
+                    'province_id' => $province_id,
+                    'type_id' => $type_id,
+                    'updated_at' => $date
+                ]);
+            } else {
+                // ถ้ายังไม่มีข้อมูลใน ict_solution ให้สร้างใหม่
+                $ict_solution = IctSolution::create([
+                    'cus_id' => $cus_id,
+                    'income' => $request->input('income'),
+                    'customer_type' => $request->input('customer_type'),
+                    'quote' => $request->hasFile('quote') ? $request->file('quote')->store('quotes', 'public') : null,
+                    'center_id' => $center_id,
+                    'province_id' => $province_id,
+                    'type_id' => $type_id,
+                    'created_at' => $date
+                ]);
+            
+                // กรณีที่ต้องการอัปเดตข้อมูลของ Customer
+                Customer::where('cus_id', $cus_id)->update([
+                    'id_card' => null,
+                    'cus_photo' => null,
+                    'promotion_id' => null,
+                    'speed_id' => null,
+                    'price_id' => null,
+                ]);
+            
+                // ✅ เพิ่ม Products ที่เกี่ยวข้องกับ ICT Solution
+                $product_ids = $request->input('product_id'); // รับค่า product_id เป็น array
+                $quantities = $request->input('quantity'); // รับค่า quantity เป็น array
+            
+                if (!empty($product_ids) && !empty($quantities)) {
+                    foreach ($product_ids as $index => $product_id) {
+                        $quantity = $quantities[$index];
+            
+                        // ใช้ attach เพื่อเพิ่มข้อมูลใน pivot table
+                        $ict_solution->products()->attach($product_id, [
+                            'quantity' => $quantity
+                        ]);
+                    }
+                }
+            }
+            
             // ลบข้อมูลทั้ง Fttxbroadband และ Simmy หากเปลี่ยนบริการ
             Fttxbroadband::where('cus_id', $cus_id)->delete();
             Simmy::where('cus_id', $cus_id)->delete();

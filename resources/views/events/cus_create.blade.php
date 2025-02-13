@@ -13,19 +13,23 @@
                     fn($service) => strpos($service->service_name, 'ร่วม') !== false,
                 );
             @endphp
-
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="m-0">เพิ่มลูกค้า</h2>
 
-                <div class="align-items-center ">
-                    <select class="form-select bg-success " id="service_id" name="service_id" required>
-                        <option value="" disabled selected>-- เลือกบริการ --</option>
+                <div class="mt-3">
+                    <p class="mb-2 text-danger">* เลือกบริการ</p>
+                    <select class="form-select bg-success" id="service_id" name="service_id" required>
                         @foreach ($sortedServices as $service)
                             <option value="{{ $service->service_id }}">{{ $service->service_name }}</option>
                         @endforeach
                     </select>
+                    <!-- เพิ่มข้อความคำแนะนำ หรือข้อผิดพลาดได้ -->
+                    @error('service_id')
+                        <div class="text-danger mt-2">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
+
 
             @error('service_id')
                 <small style="color:red">{{ $message }}</small>
@@ -150,12 +154,13 @@
                             </div>
                             <div>
                                 <label for="quantity" class="form-label">จำนวน</label>
-                                <input type="number" id="quantity_id" name="quantity[]" class="form-control" placeholder="ระบุจำนวน" required>
+                                <input type="number" id="quantity_id" name="quantity[]" class="form-control"
+                                    placeholder="ระบุจำนวน" required>
                             </div>
                             <button type="button" class="btn btn-success add-product mt-4">+</button>
                         </div>
                     </div>
-                    
+
                     <label for="income" class="form-label">รายได้</label>
                     <input type="number" id="income" name='income' class="form-control bg-warning" required>
                 </div>
@@ -316,26 +321,26 @@
         });
     </script>
 
-<script>
-    document.getElementById("quote").addEventListener("change", function() {
-        var file = this.files[0];
-        var errorMessage = document.getElementById("file-error");
-        var saveButton = document.getElementById("save-button");
-    
-        if (file) {
-            var fileType = file.type;
-            var validTypes = ["image/jpeg", "image/png", "application/pdf"];
-            
-            if (!validTypes.includes(fileType)) {
-                errorMessage.textContent = "กรุณาเลือกไฟล์ที่ถูกต้อง (รูปภาพหรือ PDF)";
-                errorMessage.style.display = "block";
-                saveButton.disabled = true;        // ทำให้ปุ่ม "Save" ไม่สามารถกดได้
-            } else {
-                errorMessage.style.display = "none";
-                saveButton.disabled = false;        // ทำให้ปุ่ม "Save" สามารถกดได้
+    <script>
+        document.getElementById("quote").addEventListener("change", function() {
+            var file = this.files[0];
+            var errorMessage = document.getElementById("file-error");
+            var saveButton = document.getElementById("save-button");
+
+            if (file) {
+                var fileType = file.type;
+                var validTypes = ["image/jpeg", "image/png", "application/pdf"];
+
+                if (!validTypes.includes(fileType)) {
+                    errorMessage.textContent = "กรุณาเลือกไฟล์ที่ถูกต้อง (รูปภาพหรือ PDF)";
+                    errorMessage.style.display = "block";
+                    saveButton.disabled = true; // ทำให้ปุ่ม "Save" ไม่สามารถกดได้
+                } else {
+                    errorMessage.style.display = "none";
+                    saveButton.disabled = false; // ทำให้ปุ่ม "Save" สามารถกดได้
+                }
             }
-        }
-    });
+        });
     </script>
 
 
@@ -372,7 +377,8 @@
                     $('#fullname_label').text('ชื่อ นามสกุล');
 
                     // ปิด required สำหรับฟอร์มอื่น ๆ
-                    $('#cus_new, #income, #customer_type, #quote, #product_id, #quantity_id ').prop('required', false);
+                    $('#cus_new, #income, #customer_type, #quote, #product_id, #quantity_id ').prop('required',
+                        false);
                 } else if (serviceName.includes('SIM my')) {
                     $('#sim_my,#groupNet, #groupNet1').show();
                     $('#fttx_broadband, #ict_solution, #ict_solution1').hide();
@@ -384,7 +390,8 @@
                     $('#fullname_label').text('ชื่อ นามสกุล');
 
                     // ปิด required สำหรับฟอร์มอื่น ๆ
-                    $('#new, #installation_type, #income, #customer_type, #quote, #product_id, #quantity_id').prop('required', false);
+                    $('#new, #installation_type, #income, #customer_type, #quote, #product_id, #quantity_id').prop(
+                        'required', false);
                 } else if (serviceName.includes('ICT solution')) {
                     $('#ict_solution, #ict_solution1').show();
                     $('#fttx_broadband, #sim_my, #groupNet, #groupNet1').hide();
@@ -403,7 +410,8 @@
                     $('#fttx_broadband, #sim_my, #ict_solution, #ict_solution1').hide();
 
                     // ปิด required สำหรับทุกฟอร์ม
-                    $('#new, #installation_type, #cus_new, #income, #customer_type, #quote , #product_id, #quantity_id').prop('required', false);
+                    $('#new, #installation_type, #cus_new, #income, #customer_type, #quote , #product_id, #quantity_id')
+                        .prop('required', false);
                     // กลับ label เป็น "ชื่อ นามสกุล"
                     $('#fullname_label').text('ชื่อ นามสกุล');
                 }
@@ -423,26 +431,25 @@
         });
     </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const container = document.getElementById("product-container");
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.getElementById("product-container");
 
-        document.addEventListener("click", function(event) {
-            if (event.target.classList.contains("add-product")) {
-                const newRow = event.target.closest(".product-row").cloneNode(true);
-                newRow.querySelector("select").value = "";
-                newRow.querySelector("input").value = "";
-                newRow.querySelector(".add-product").classList.replace("btn-success", "btn-danger");
-                newRow.querySelector(".add-product").textContent = "-";
-                newRow.querySelector(".add-product").classList.replace("add-product", "remove-product");
-                container.appendChild(newRow);
-            }
+            document.addEventListener("click", function(event) {
+                if (event.target.classList.contains("add-product")) {
+                    const newRow = event.target.closest(".product-row").cloneNode(true);
+                    newRow.querySelector("select").value = "";
+                    newRow.querySelector("input").value = "";
+                    newRow.querySelector(".add-product").classList.replace("btn-success", "btn-danger");
+                    newRow.querySelector(".add-product").textContent = "-";
+                    newRow.querySelector(".add-product").classList.replace("add-product", "remove-product");
+                    container.appendChild(newRow);
+                }
 
-            if (event.target.classList.contains("remove-product")) {
-                event.target.closest(".product-row").remove();
-            }
+                if (event.target.classList.contains("remove-product")) {
+                    event.target.closest(".product-row").remove();
+                }
+            });
         });
-    });
-</script>
-
+    </script>
 @endsection

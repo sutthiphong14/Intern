@@ -11,7 +11,7 @@ class IctSolution extends Model
     protected $table = 'ict_solution';
     protected $primaryKey = 'ict_id'; // กำหนด primary key
 
-    protected $fillable = ['customer_type','quote','income','cus_id','province_id','center_id'];
+    protected $fillable = ['customer_type','quote','income','cus_id','type_id','province_id','center_id'];
     public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล
 
     public function customer()
@@ -35,6 +35,8 @@ class IctSolution extends Model
                     ->withPivot('quantity')
                     ->withTimestamps();
     }
+
+    
     
 
 }

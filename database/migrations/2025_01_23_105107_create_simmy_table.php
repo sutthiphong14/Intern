@@ -20,6 +20,8 @@ class CreateSimmyTable extends Migration
             $table->foreign('service_id')->references('service_id')->on('serve_activity')->onDelete('cascade');
             $table->unsignedBigInteger('price_id');
             $table->foreign('price_id')->references('price_id')->on('price_activity')->onDelete('cascade');
+            $table->unsignedBigInteger('type_id');
+            $table->foreign('type_id')->references('type_id')->on('type_activity')->onDelete('cascade');
             $table->unsignedBigInteger('cus_id');
             $table->foreign('cus_id')->references('cus_id')->on('customers')->onDelete('cascade');
             $table->unsignedBigInteger('center_id');

@@ -10,7 +10,7 @@ class TopUp extends Model
     use HasFactory;
 
     protected $table = 'top_up';
-    protected $fillable = ['phone', 'amount','province_id','center_id'];
+    protected $fillable = ['phone', 'amount','type_id','province_id','center_id'];
 
     public function province()
     {
