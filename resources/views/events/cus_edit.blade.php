@@ -518,9 +518,7 @@
                     const newRow = event.target.closest(".product-row").cloneNode(true);
                     newRow.querySelector("select").value = "";
                     newRow.querySelector("input").value = "";
-                    newRow.querySelector(".add-product").classList.replace("btn-success", "btn-danger");
-                    newRow.querySelector(".add-product").textContent = "-";
-                    newRow.querySelector(".add-product").classList.replace("add-product", "remove-product");
+                    newRow.querySelector(".add-product").textContent = "+";
                     container.appendChild(newRow);
                 }
 

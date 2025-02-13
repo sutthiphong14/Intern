@@ -306,7 +306,9 @@ class CustomerController extends Controller
         $cus_address = $request->input('cus_address');
         $type_id = $request->input('type_id');
         $service_id = $request->input('service_id');
-
+        $promotion_id =$request->input('promotion_id');
+        $speed_id =$request->input('speed_id');
+        $price_id =$request->input('price_id');
         $province_id = $request->input('province_id');
         $center_id = $request->input('center_id');
         $date = $request->input('date');
@@ -341,6 +343,15 @@ class CustomerController extends Controller
                     'type_id' => $type_id,
                     'created_at' => $date
                 ]);
+                $updateData = [
+                    'id_card' => $id_card,
+                    'promotion_id' =>$promotion_id,
+                    'speed_id' =>$speed_id,
+                    'price_id' =>$price_id,
+                    'cus_photo' => $cus_photo,
+                    'created_at' => $date,
+                ];
+                $updateResult1 = Customer::where('cus_id', $cus_id)->update($updateData);
             } else {
                 Fttxbroadband::where('cus_id', $cus_id)->update([
                     'new' => $new,
@@ -371,6 +382,15 @@ class CustomerController extends Controller
                     'type_id' => $type_id,
                     'created_at' => $date
                 ]);
+                $updateData = [
+                    'id_card' => $id_card,
+                    'promotion_id' =>$promotion_id,
+                    'speed_id' =>$speed_id,
+                    'price_id' =>$price_id,
+                    'cus_photo' => $cus_photo,
+                    'created_at' => $date,
+                ];
+                $updateResult2 = Customer::where('cus_id', $cus_id)->update($updateData);
             } else {
                 Simmy::where('cus_id', $cus_id)->update([
                     'cus_new' => $cus_new,
@@ -464,14 +484,12 @@ class CustomerController extends Controller
         $updated_at = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
         $updateData = [
             'cus_fullname' => $cus_fullname,
-            'id_card' => $id_card,
             'cus_address' => $cus_address,
             'type_id' => $type_id,
             'service_id' => $service_id,
             'province_id' => $province_id,
             'center_id' => $center_id,
             'other' => $other,
-            'cus_photo' => $cus_photo,
             'created_at' => $date,
             'updated_at' => $updated_at,
         ];
