@@ -32,28 +32,11 @@
                     <input type="text" class="form-control" id="username" name="username" placeholder="กรอกชื่อผู้ใช้"
                         required value="{{ old('username') }}">
                 </div>
-
-                <label for="province_id" class="form-label">จังหวัด</label>
-                <select class="form-select" id="province_id" name="province_id" required>
-                    <option value="" disabled selected>-- เลือกจังหวัด --</option>
-                    @foreach ($provinces as $province)
-                        <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
-                    @endforeach
-                </select>
-
-                <label for="center_id" class="form-label">ศูนย์บริการ</label>
-                <select class="form-select" id="center_id" name="center_id" required>
-                    <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
-                </select>
-
-
-
                 <div class="mb-3">
                     <label for="name" class="form-label text-dark">ชื่อ-นามสกุล</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="กรอกชื่อ-นามสกุล"
                         required value="{{ old('name') }}">
                 </div>
-
                 <div class="mb-3">
                     <label for="emp_id" class="form-label text-dark">รหัสพนักงาน</label>
                     <input type="text" class="form-control" id="emp_id" name="emp_id" placeholder="กรอกรหัสพนักงาน"
@@ -61,9 +44,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="department" class="form-label text-dark">แผนก</label>
-                    <input type="text" class="form-control" id="department" name="department" placeholder="กรอกแผนก"
-                        required value="{{ old('department') }}">
+                    <label for="email" class="form-label text-dark">อีเมล</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="กรอกอีเมล" required
+                        value="{{ old('email') }}">
                 </div>
 
                 <div class="mb-3">
@@ -72,10 +55,30 @@
                         required>
                 </div>
 
+                
+
+
                 <div class="mb-3">
-                    <label for="email" class="form-label text-dark">อีเมล</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="กรอกอีเมล" required
-                        value="{{ old('email') }}">
+                <label for="province_id" class="form-label">จังหวัด</label>
+                <select class="form-select" id="province_id" name="province_id" required>
+                    <option value="" disabled selected>-- เลือกจังหวัด --</option>
+                    @foreach ($provinces as $province)
+                        <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
+                    @endforeach
+                </select>
+                </div>
+
+                <div class="mb-3">
+                <label for="center_id" class="form-label">ศูนย์บริการ</label>
+                <select class="form-select" id="center_id" name="center_id" required>
+                    <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
+                </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="department" class="form-label text-dark">แผนก</label>
+                    <input type="text" class="form-control" id="department" name="department" placeholder="กรอกแผนก"
+                        required value="{{ old('department') }}">
                 </div>
 
                 <!-- Other fields like permission... -->
