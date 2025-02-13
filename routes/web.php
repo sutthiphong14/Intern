@@ -13,6 +13,7 @@ use App\Http\Controllers\RequestsController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SlideshowController;
 use App\Http\Controllers\EventController;
+use App\Models\ServiceCenterActivity;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,23 +49,39 @@ Route::get('/structure', function () {
     return view('structure');
 })->name('structure');
 
-
+//users
 Route::get('/tableusers', function () {
     return view('users.tableusers');
 });
 
-Route::get('/insertusers', function () {
-    return view('users.insertusers');
-})->name('insertusers');
+Route::get('/insertusers', [UserController::class, 'create'])->name('insertusers');
 
-
-
+Route::get('/getCentersUser', [UserController::class, 'getCentersUser']);
 
 Route::get('/listusers', [UserController::class, 'listUsers'])->name('users.list');
 
 Route::get('/permissionsusers', function () {
     return view('users.permissionsusers');
 });
+
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/users', [UserController::class, 'listUsers'])->name('users.list');
+
+Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('delete');
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
+Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
+// Example route protection
+Route::middleware(['auth', 'check.permission:manage_users'])->group(function () {
+    Route::get('/listusers', [UserController::class, 'listUsers'])->name('users.list');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    // Other user management routes
+});
+Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+Route::get('/getCenters/{province_id}', [UserController::class, 'getCenters'])->name('getCenters');
+
+//************************* */
 
 Route::get('/updatenewsfeed', function () {
     return view('newsfeed.updatenewsfeed');
@@ -90,12 +107,9 @@ Route::get('/profile', function () {
 
 Route::get('/download/{id}', [AdminController::class, 'downloadFile'])->name('admin.download');
 
-
-
 Route::post('/createnews', [AdminController::class, 'createnews'])->name('createnews');
 
 Route::post('/changenews/{id}', [AdminController::class, 'changenews']);
-
 
 Route::get('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');
 
@@ -112,7 +126,7 @@ Route::get('/search', [AdminController::class, 'search'])->name('search');
 
 
 
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
 
 
 /* ************************************************************layout************************************************************ */
@@ -241,19 +255,7 @@ Route::get('/data/export2', [ReportController::class, 'export2']); // Export Exc
 Route::get('/incomecurrent', function () {
     return view('report.incomecurrent');
 });
-Route::get('/users', [UserController::class, 'listUsers'])->name('users.list');
 
-Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('delete');
-Route::post('/users', [UserController::class, 'store'])->name('users.store');
-
-Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
-// Example route protection
-Route::middleware(['auth', 'check.permission:manage_users'])->group(function () {
-    Route::get('/listusers', [UserController::class, 'listUsers'])->name('users.list');
-    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-    // Other user management routes
-});
 
 Route::middleware(['auth', 'check.permission:manage_dashboard'])->group(function () {
     Route::get('/listreport', function () {
@@ -282,7 +284,7 @@ Route::get('/viewreport3', function () {
 
 Route::get('/viewreport3', [ReportController::class, 'viewreport3'])->name('viewreport3');
 
-Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+
 
 Route::post('/profile/update-image', [UserController::class, 'updateProfileImage'])
     ->name('profile.update-image')
@@ -403,3 +405,10 @@ Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::cl
 Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::class, 'deleteImage']);
 Route::get('/download-zip/{event_id}', [EventController::class, 'downloadZip'])->name('events.downloadZip');
 
+Route::get('/api/centers/{province_id}', function($province_id) {
+    $centers = ServiceCenterActivity::where('province_id', $province_id)->get();
+    return response()->json(['centers' => $centers]);
+
+
+
+});

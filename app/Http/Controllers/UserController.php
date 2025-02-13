@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\ProvinceActivity;
+use App\Models\ServiceCenterActivity;
 class UserController extends Controller
 {
+
     public function listUsers()
     {
         $users = User::paginate(10); // Adjust the number per page as needed
@@ -26,12 +28,15 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'username' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'emp_id' => 'required|string|max:255', // Ensure emp_id is included
-            'department' => 'required|string|max:255',
+            'username' => 'required|string',
+            'name' => 'required|string',
+            'emp_id' => 'required|string',
+            'department' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
+            'password' => 'required|min:6',
+            'province_id' => 'required|exists:province_activity,province_id',
+            'center_id' => 'nullable|exists:servicecenter_activity,center_id',
+
         ]);
 
         if ($request->hasFile('profile_image')) {
@@ -41,6 +46,8 @@ class UserController extends Controller
             $imageSrc = 'data:image/' . $image->getClientOriginalExtension() . ';base64,' . $imageData;
         }
 
+
+
         $user = User::create([
             'username' => $validatedData['username'],
             'name' => $validatedData['name'],
@@ -49,6 +56,9 @@ class UserController extends Controller
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
             'profile_image' => $imageSrc ?? null,
+            'province_id' => $validatedData['province_id'],
+            'center_id' => $request->has('center_id') && is_numeric($request->center_id) ? $request->center_id : null,
+
             'permission' => json_encode([
                 'manage_users' => $request->has('manage_users_permission') ? 1 : 0,
                 'manage_dashboard' => $request->has('manage_dashboard_permission') ? 1 : 0,
@@ -62,7 +72,7 @@ class UserController extends Controller
 
                 'managenews_feeds' => $request->has('manage_newsfeeds_permission') ? 1 : 0,
                 'viewnews_feeds' => $request->has('view_newsfeeds_permission') ? 1 : 0,
-                
+
                 'managedash_board' => $request->has('managedash_board_permission') ? 1 : 0,
                 'view_fttx' => $request->has('view_fttx_permission') ? 1 : 0,
                 'view_incomecurrent' => $request->has('view_incomecurrent_permission') ? 1 : 0,
@@ -74,13 +84,11 @@ class UserController extends Controller
 
                 'manage_formevent' => $request->has('manage_formevent_permission') ? 1 : 0,
                 'form_event' => $request->has('form_event_permission') ? 1 : 0,
-
-
-
             ]),
         ]);
 
         return redirect()->route('users.list')->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
+
     }
 
 
@@ -98,7 +106,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'emp_id' => 'required|string|max:255', // Ensure emp_id is included
             'department' => 'required|string|max:255',
-            
+
         ]);
 
         // ค้นหาผู้ใช้ที่ต้องการอัปเดต
@@ -184,4 +192,50 @@ class UserController extends Controller
 
         return view('profile', compact('user'));
     }
+
+
+    public function getProvinces()
+    {
+        $provinces = ProvinceActivity::all();
+        return view('eusers.insertusers', compact('provinces'));
+    }
+
+    public function getCentersUser(Request $request)
+{
+    $provinceId = $request->input('province_id');
+    
+    // Validate province_id
+    if (!$provinceId) {
+        return response()->json(['error' => 'Province ID is missing'], 400);
+    }
+
+    // Fetch centers based on province_id
+    $centers = ServiceCenterActivity::where('province_id', $provinceId)->get();
+
+    // Return an error if no centers found
+    if ($centers->isEmpty()) {
+        return response()->json(['error' => 'No centers found for this province'], 404);
+    }
+
+    return response()->json($centers);
+}
+
+    
+
+    public function create()
+    {
+        $provinces = ProvinceActivity::all(); // ดึงข้อมูลจังหวัดทั้งหมด
+        return view('users.insertusers', compact('provinces'));
+    }
+
+    public function getCenters($province_id)
+    {
+        $centers = ServiceCenterActivity::where('province_id', $province_id)->get();
+        return response()->json($centers);
+    }
+
+
+
+
+
 }

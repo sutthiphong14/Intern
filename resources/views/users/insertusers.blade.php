@@ -13,9 +13,17 @@
 <div class="card mb-4">
     <h4 class="card-header">เพิ่มผู้ใช้งานระบบ</h4>
 
-
     <hr class="my-0" />
     <div class="card-body">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="row">
@@ -24,6 +32,21 @@
                     <input type="text" class="form-control" id="username" name="username" placeholder="กรอกชื่อผู้ใช้"
                         required value="{{ old('username') }}">
                 </div>
+
+                <label for="province_id" class="form-label">จังหวัด</label>
+                <select class="form-select" id="province_id" name="province_id" required>
+                    <option value="" disabled selected>-- เลือกจังหวัด --</option>
+                    @foreach ($provinces as $province)
+                        <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
+                    @endforeach
+                </select>
+
+                <label for="center_id" class="form-label">ศูนย์บริการ</label>
+                <select class="form-select" id="center_id" name="center_id" required>
+                    <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
+                </select>
+
+
 
                 <div class="mb-3">
                     <label for="name" class="form-label text-dark">ชื่อ-นามสกุล</label>
@@ -55,82 +78,81 @@
                         value="{{ old('email') }}">
                 </div>
 
-                <hr class="my-3" />
-                <h4 class="card-header">ให้สิทธิ์การใช้งาน</h4>
-                <div class="table-responsive">
-                    <table id="example2" class="table table-bordered table-hover">
-                        <thead class="text-center">
-                            <tr>
-                                <th class='col-4 bg-dark'>สิทธิ์</th>
-                                <th class='col-7 bg-dark'>คำอธิบาย</th>
-                                <th class='col-1 bg-dark'>อนุญาต</th>
-                            </tr>
-                        </thead>
-                        <tbody class='align-items-center'>
-                            <tr>
-                                <td> <i class="fas fa-users-cog"></i> จัดการผู้ใช้งานระบบ</td>
-                                <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข ให้สิทธิ์การใช้งานในระบบต่างๆแก่ผู้ใช้งานระบบ</td>
-                                <td class="align-items-center text-center">
-                                    <div class="form-group d-flex justify-content-center align-items-center">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox"
-                                                name="manage_users_permission" id="manageUsersSwitch"
-                                                style="transform: scale(2);">
-                                            <label class="form-check-label" for="manageUsersSwitch"></label>
-                                        </div>
-                                    </div>
-                                </td>
+                <!-- Other fields like permission... -->
 
-                            </tr>
-                            <tr>
-                                <td> <i class="fas fa-chart-line"></i> จัดการหน้าแดชบอร์ด</td>
-                                <td>สิทธิ์ในการ อัพโหลด ลบ แก้ไข หน้าแดชบอร์ด</td>
-                                <td class="align-items-center text-center">
-                                    <div class="form-group d-flex justify-content-center align-items-center">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox"
-                                                name="manage_dashboard_permission" id="manageDashboardSwitch"
-                                                style="transform: scale(2);">
-                                            <label class="form-check-label" for="manageDashboardSwitch"></label>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><i class="fas fa-newspaper"></i> จัดการแหล่งป้อนข่าว</td>
-                                <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข เปิดปิดการแสดงผลของหน้าฟีดข่าว</td>
-                                <td class="align-items-center text-center">
-                                    <div class="form-group d-flex justify-content-center align-items-center">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox"
-                                                name="manage_newsfeed_permission" id="manageNewsFeedSwitch"
-                                                style="transform: scale(2);">
-                                            <label class="form-check-label" for="manageNewsFeedSwitch"></label>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
                 <div class="card-footer align-items-center text-center">
                     <button type="button" class="btn btn-danger"
                         onclick="window.location='{{ route('users.list') }}'">ยกเลิก</button>
                     <button type="submit" class="btn btn-success">ยืนยัน</button>
                 </div>
-
-
+            </div>
         </form>
     </div>
-    <!-- /Account -->
 </div>
-
-
 
 @endsection
 
 @section('script')
+<script>
+    $(document).ready(function () {
+        // On province_id change, load centers
+        $('#province_id').change(function () {
+            var provinceId = $(this).val();
+            if (provinceId) {
+                $.ajax({
+                    url: '/getCentersUser',
+                    type: 'GET',
+                    data: { province_id: provinceId },
+                    success: function (data) {
+                        $('#center_id').html('<option value="" disabled selected>-- เลือกศูนย์บริการ --</option>');
+                        $.each(data, function (key, center) {
+                            $('#center_id').append('<option value="' + center.center_id + '">' + center.center_name + '</option>');
+                        });
+                        console.log($('#center_id').val()); // Check if it gets the correct value
+                    },
+                    error: function (xhr, status, error) {
+                        alert('เกิดข้อผิดพลาดในการโหลดศูนย์บริการ');
+                    }
+                });
+            } else {
+                $('#center_id').html('<option value="" disabled selected>-- เลือกศูนย์บริการ --</option>');
+            }
+        });
 
+        // Form submission (Make sure center_id is selected)
+        $('#yourForm').submit(function (e) {
+            e.preventDefault(); // Prevent default form submission
 
+            var centerId = $('#center_id').val();
+            if (centerId === undefined || centerId === "") {
+                alert('กรุณาเลือกศูนย์บริการ');
+                return; // Stop form submission if no center is selected
+            }
 
+            // If all required data is ready, submit the form
+            $.ajax({
+                url: $(this).attr('action'), // Use the form's action attribute
+                type: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    username: $('#username').val(),
+                    province_id: $('#province_id').val(),
+                    center_id: centerId,
+                    name: $('#name').val(),
+                    emp_id: $('#emp_id').val(),
+                    department: $('#department').val(),
+                    password: $('#password').val(),
+                    email: $('#email').val()
+                },
+                success: function (response) {
+                    // Handle success response, e.g., redirect or show a message
+                },
+                error: function (xhr, status, error) {
+                    alert('เกิดข้อผิดพลาดในการส่งข้อมูล');
+                }
+            });
+        });
+    });
+
+</script>
 @endsection
