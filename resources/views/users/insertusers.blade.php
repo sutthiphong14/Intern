@@ -9,9 +9,9 @@
 
 @endsection
 @section('content')
-<h4 class="fw-bold py-2 mb-3">
-    <a href="{{ route('home') }}">หน้าแรก</a> / <a href="{{ route('users.list') }}"> รายชื่อผู้ใช้ </a>/ เพิ่มผู้ใช้งาน
-</h4>
+    <h4 class="fw-bold py-2 mb-3">
+        <a href="{{ route('home') }}">หน้าแรก</a> / <a href="{{ route('users.list') }}"> รายชื่อผู้ใช้ </a>/ เพิ่มผู้ใช้งาน
+    </h4>
 
     <div class="card mb-4">
         <h4 class="card-header">เพิ่มผู้ใช้งานระบบ</h4>
@@ -84,14 +84,159 @@
                             required value="{{ old('department') }}">
                     </div>
 
-                    <!-- Other fields like permission... -->
+                    <div class="mb-3">
+                        <label class="form-label text-dark">สิทธิ์การใช้งาน</label>
 
-                    <div class="card-footer align-items-center text-center">
-                        <button type="button" class="btn btn-danger"
-                            onclick="window.location='{{ route('users.list') }}'">ยกเลิก</button>
-                        <button type="submit" class="btn btn-success">ยืนยัน</button>
+                        <!-- สิทธิ์จัดการผู้ใช้ -->
+                        <div class="table-responsive">
+                            <table id="permissionTable" class="table table-bordered table-hover">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th class='col-4 bg-dark text-white'>สิทธิ์</th>
+                                        <th class='col-7 bg-dark text-white'>คำอธิบาย</th>
+                                        <th class='col-1 bg-dark text-white'>อนุญาต</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- ✅ จัดการผู้ใช้งาน -->
+                                    <tr class="text-start ">
+                                        <td><i class="fas fa-users-cog"></i> จัดการผู้ใช้งานระบบ</td>
+                                        <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข และกำหนดสิทธิ์ให้ผู้ใช้งานระบบ</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input user-permission" type="checkbox"
+                                                    name="manage_users_permission" id="manageUsersSwitch"
+                                                    data-group="users">
+                                                <label class="form-check-label" for="manageUsersSwitch"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-start">
+                                        <td><i class="fas fa-user-plus"></i> เพิ่มผู้ใช้</td>
+                                        <td>สิทธิ์ในการเพิ่มบัญชีผู้ใช้งานใหม่เข้าสู่ระบบ</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input user-permission" type="checkbox"
+                                                    name="adduser_permission" data-group="users">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-start">
+                                        <td><i class="fas fa-user-shield"></i> ตั้งค่าสิทธิ์แอดมิน</td>
+                                        <td>กำหนดสิทธิ์การเข้าถึงระดับแอดมิน</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input user-permission" type="checkbox"
+                                                    name="adminper_mission_permission" data-group="users">
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- ✅ จัดการหน้าแดชบอร์ด -->
+                                    <tr class="text-start">
+                                        <td><i class="fas fa-chart-line"></i> จัดการหน้าแดชบอร์ด</td>
+                                        <td>สิทธิ์ในการอัพโหลด ลบ แก้ไข หน้าแดชบอร์ด</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input dashboard-permission" type="checkbox"
+                                                    name="manage_dashboard_permission" id="manageDashboardSwitch"
+                                                    data-group="dashboard">
+                                                <label class="form-check-label" for="manageDashboardSwitch"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-start">
+                                        <td><i class="fas fa-network-wired"></i> ดูข้อมูล FTTX</td>
+                                        <td>สิทธิ์ในการเข้าถึงข้อมูลเครือข่าย FTTX</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input dashboard-permission" type="checkbox"
+                                                    name="view_fttx_permission" data-group="dashboard">
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- ✅ จัดการแหล่งป้อนข่าว -->
+                                    <tr class="text-start">
+                                        <td><i class="fas fa-newspaper"></i> จัดการแหล่งป้อนข่าว</td>
+                                        <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข และเปิด/ปิด การแสดงผลของข่าว</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input master-permission" type="checkbox"
+                                                    name="manage_newsfeed_permission" id="manageNewsFeedSwitch"
+                                                    data-group="news">
+                                                <label class="form-check-label" for="manageNewsFeedSwitch"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-start">
+                                        <td><i class="fas fa-eye"></i> ดูข่าวสาร</td>
+                                        <td>สิทธิ์ในการเข้าถึงและอ่านข่าวสารในระบบ</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input news-permission" type="checkbox"
+                                                    name="viewnews_feeds_permission" data-group="news">
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- ✅ จัดการสื่อประชาสัมพันธ์ -->
+                                    <tr class="text-start">
+                                        <td><i class="fas fa-images"></i> จัดการสื่อประชาสัมพันธ์</td>
+                                        <td>สิทธิ์ในการอัปโหลด ลบ และแก้ไขเนื้อหาสื่อประชาสัมพันธ์</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input master-permission" type="checkbox"
+                                                    name="manage_banner_permission" id="manageBannerSwitch"
+                                                    data-group="banner">
+                                                <label class="form-check-label" for="manageBannerSwitch"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-start">
+                                        <td><i class="fas fa-photo-video"></i> จัดการภาพกิจกรรม</td>
+                                        <td>สิทธิ์ในการอัปโหลดและจัดการภาพกิจกรรม</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input banner-permission" type="checkbox"
+                                                    name="manage_imageevent_permission" data-group="banner">
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- ✅ จัดการแบบฟอร์มกิจกรรม -->
+                                    <tr class="text-start">
+                                        <td><i class="fas fa-clipboard-list"></i> จัดการแบบฟอร์มกิจกรรม</td>
+                                        <td>สิทธิ์ในการสร้างและจัดการแบบฟอร์มกิจกรรม</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input master-permission" type="checkbox"
+                                                    name="manage_formevent_permission" id="manageFormEventSwitch"
+                                                    data-group="event">
+                                                <label class="form-check-label" for="manageFormEventSwitch"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-start">
+                                        <td><i class="fas fa-calendar-check"></i> จัดการกิจกรรม</td>
+                                        <td>สิทธิ์ในการสร้างและแก้ไขกิจกรรม</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input event-permission" type="checkbox"
+                                                    name="form_event_permission" data-group="event">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="card-footer align-items-center text-center">
+                            <button type="button" class="btn btn-danger"
+                                onclick="window.location='{{ route('users.list') }}'">ยกเลิก</button>
+                            <button type="submit" class="btn btn-success">ยืนยัน</button>
+                        </div>
                     </div>
-                </div>
             </form>
         </div>
     </div>
@@ -162,32 +307,57 @@
 
     </script>
     <script>
-    $(document).ready(function () {
-        // ล็อก dropdown ศูนย์บริการ ตอนโหลดหน้า
-        $('#center_id').prop('disabled', true);
+        $(document).ready(function () {
+            // ล็อก dropdown ศูนย์บริการ ตอนโหลดหน้า
+            $('#center_id').prop('disabled', true);
 
-        // เมื่อเลือกจังหวัด
-        $('#province_id').on('change', function () {
-            let provinceId = $(this).val();
+            // เมื่อเลือกจังหวัด
+            $('#province_id').on('change', function () {
+                let provinceId = $(this).val();
 
-            if (provinceId) {
-                // ดึงข้อมูลศูนย์บริการจากเซิร์ฟเวอร์
-                $.ajax({
-                    url: "{{ route('getCentersByProvince') }}",
-                    type: "GET",
-                    data: { province_id: provinceId },
-                    success: function (data) {
-                        $('#center_id').html('<option value="" disabled selected>-- เลือกศูนย์บริการ --</option>');
-                        $.each(data, function (key, value) {
-                            $('#center_id').append('<option value="' + value.center_id + '">' + value.center_name + '</option>');
-                        });
-                        $('#center_id').prop('disabled', false); // ปลดล็อก
-                    }
-                });
-            } else {
-                $('#center_id').prop('disabled', true).html('<option value="" disabled selected>-- เลือกศูนย์บริการ --</option>');
-            }
+                if (provinceId) {
+                    // ดึงข้อมูลศูนย์บริการจากเซิร์ฟเวอร์
+                    $.ajax({
+                        url: "{{ route('getCentersByProvince') }}",
+                        type: "GET",
+                        data: { province_id: provinceId },
+                        success: function (data) {
+                            $('#center_id').html('<option value="" disabled selected>-- เลือกศูนย์บริการ --</option>');
+                            $.each(data, function (key, value) {
+                                $('#center_id').append('<option value="' + value.center_id + '">' + value.center_name + '</option>');
+                            });
+                            $('#center_id').prop('disabled', false); // ปลดล็อก
+                        }
+                    });
+                } else {
+                    $('#center_id').prop('disabled', true).html('<option value="" disabled selected>-- เลือกศูนย์บริการ --</option>');
+                }
+            });
         });
-    });
-</script>
+
+
+
+        $(document).ready(function () {
+            // เมื่อกด checkbox หลัก ให้เลือก-ยกเลิก checkbox ย่อยทั้งหมดในกลุ่มเดียวกัน
+            $('.master-permission').on('change', function () {
+                let group = $(this).data('group'); // ดึงชื่อกลุ่มจาก data-group
+                let isChecked = $(this).prop('checked'); // ตรวจสอบว่า checkbox หลักถูกเลือกหรือไม่
+
+                // ค้นหา checkbox ที่อยู่ในกลุ่มเดียวกัน และตั้งค่าตาม checkbox หลัก
+                $('input[data-group="' + group + '"]').prop('checked', isChecked);
+            });
+
+            // เมื่อกด checkbox ย่อย ให้เช็คว่า checkbox หลักควรถูกเลือกหรือไม่
+            $('input[class$="-permission"]').on('change', function () {
+                let group = $(this).data('group'); // ดึงชื่อกลุ่มจาก data-group
+                let allChecked = $('input[data-group="' + group + '"]:not(.master-permission):checked').length ===
+                    $('input[data-group="' + group + '"]:not(.master-permission)').length;
+
+                // ถ้า checkbox ย่อยถูกเลือกทั้งหมด checkbox หลักต้องถูกเลือกด้วย
+                $('input.master-permission[data-group="' + group + '"]').prop('checked', allChecked);
+            });
+        });
+
+
+    </script>
 @endsection

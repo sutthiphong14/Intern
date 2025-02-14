@@ -50,6 +50,7 @@ class UserController extends Controller
 
 
         $user = User::create([
+            
             'username' => $validatedData['username'],
             'name' => $validatedData['name'],
             'emp_id' => $validatedData['emp_id'],
@@ -61,31 +62,34 @@ class UserController extends Controller
             'center_id' => $request->has('center_id') && is_numeric($request->center_id) ? $request->center_id : null,
 
             'permission' => json_encode([
+                // ✅ จัดการผู้ใช้งาน
                 'manage_users' => $request->has('manage_users_permission') ? 1 : 0,
-                'manage_dashboard' => $request->has('manage_dashboard_permission') ? 1 : 0,
-                'manage_newsfeed' => $request->has('manage_newsfeed_permission') ? 1 : 0,
+                'adduser' => $request->has('manage_users_permission') || $request->has('adduser_permission') ? 1 : 0,
+                'adminper_mission' => $request->has('manage_users_permission') || $request->has('adminper_mission_permission') ? 1 : 0,
+                'permission_users' => $request->has('manage_users_permission') || $request->has('permission_users_permission') ? 1 : 0,
+                'delete_user' => $request->has('manage_users_permission') || $request->has('deleteuser_permission') ? 1 : 0,
+                'edit_user' => $request->has('manage_users_permission') || $request->has('edituser_permission') ? 1 : 0,
 
-                'adduser' => $request->has('adduser_permission') ? 1 : 0,
-                'adminper_mission' => $request->has('adminper_mission_permission') ? 1 : 0,
-                'permission_users' => $request->has('permission_users_permission') ? 1 : 0,
-                'delete_user' => $request->has('deleteuser_permission') ? 1 : 0,
-                'edit_user' => $request->has('edituser_permission') ? 1 : 0,
+                // ✅ จัดการข่าวสาร
+                'managenews_feeds' => $request->has('managenews_feeds_permission') ? 1 : 0,
+                'viewnews_feeds' => $request->has('managenews_feeds_permission') || $request->has('viewnews_feeds_permission') ? 1 : 0,
 
-                'managenews_feeds' => $request->has('manage_newsfeeds_permission') ? 1 : 0,
-                'viewnews_feeds' => $request->has('view_newsfeeds_permission') ? 1 : 0,
-
+                // ✅ จัดการ Dashboard
                 'managedash_board' => $request->has('managedash_board_permission') ? 1 : 0,
-                'view_fttx' => $request->has('view_fttx_permission') ? 1 : 0,
-                'view_incomecurrent' => $request->has('view_incomecurrent_permission') ? 1 : 0,
-                'view_service' => $request->has('view_service_permission') ? 1 : 0,
+                'view_fttx' => $request->has('managedash_board_permission') || $request->has('view_fttx_permission') ? 1 : 0,
+                'view_incomecurrent' => $request->has('managedash_board_permission') || $request->has('view_incomecurrent_permission') ? 1 : 0,
+                'view_service' => $request->has('managedash_board_permission') || $request->has('view_service_permission') ? 1 : 0,
 
+                // ✅ จัดการสื่อประชาสัมพันธ์
                 'manage_banner' => $request->has('manage_banner_permission') ? 1 : 0,
-                'manage_imageevent' => $request->has('manage_imageevent_permission') ? 1 : 0,
-                'manage_album' => $request->has('manage_album_permission') ? 1 : 0,
+                'manage_imageevent' => $request->has('manage_banner_permission') || $request->has('manage_imageevent_permission') ? 1 : 0,
+                'manage_album' => $request->has('manage_banner_permission') || $request->has('manage_album_permission') ? 1 : 0,
 
+                // ✅ จัดการแบบฟอร์มกิจกรรม
                 'manage_formevent' => $request->has('manage_formevent_permission') ? 1 : 0,
-                'form_event' => $request->has('form_event_permission') ? 1 : 0,
+                'form_event' => $request->has('manage_formevent_permission') || $request->has('form_event_permission') ? 1 : 0,
             ]),
+
         ]);
 
         return redirect()->route('users.list')->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
@@ -236,10 +240,10 @@ class UserController extends Controller
     }
 
     public function getCentersByProvince(Request $request)
-{
-    $centers = ServiceCenterActivity::where('province_id', $request->province_id)->get(['center_id', 'center_name']);
-    return response()->json($centers);
-}
+    {
+        $centers = ServiceCenterActivity::where('province_id', $request->province_id)->get(['center_id', 'center_name']);
+        return response()->json($centers);
+    }
 
 
 
