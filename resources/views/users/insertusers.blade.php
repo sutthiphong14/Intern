@@ -98,136 +98,125 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- ✅ จัดการผู้ใช้งาน -->
-                                    <tr class="text-start ">
-                                        <td><i class="fas fa-users-cog"></i> จัดการผู้ใช้งานระบบ</td>
-                                        <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข และกำหนดสิทธิ์ให้ผู้ใช้งานระบบ</td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input user-permission" type="checkbox"
-                                                    name="manage_users_permission" id="manageUsersSwitch"
-                                                    data-group="users">
-                                                <label class="form-check-label" for="manageUsersSwitch"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="text-start">
-                                        <td><i class="fas fa-user-plus"></i> เพิ่มผู้ใช้</td>
-                                        <td>สิทธิ์ในการเพิ่มบัญชีผู้ใช้งานใหม่เข้าสู่ระบบ</td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input user-permission" type="checkbox"
-                                                    name="adduser_permission" data-group="users">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="text-start">
-                                        <td><i class="fas fa-user-shield"></i> ตั้งค่าสิทธิ์แอดมิน</td>
-                                        <td>กำหนดสิทธิ์การเข้าถึงระดับแอดมิน</td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input user-permission" type="checkbox"
-                                                    name="adminper_mission_permission" data-group="users">
-                                            </div>
-                                        </td>
-                                    </tr>
+    <!-- ✅ ตั้งค่าสิทธิ์แอดมิน -->
+    <tr class="text-start">
+        <td><i class="fas fa-user-shield"></i> ตั้งค่าสิทธิ์แอดมิน</td>
+        <td>กำหนดสิทธิ์การเข้าถึงระดับแอดมิน</td>
+        <td>
+            <div class="form-check form-switch">
+                <input class="form-check-input user-permission" type="checkbox"
+                    name="adminper_mission" data-group="users">
+            </div>
+        </td>
+    </tr>
 
-                                    <!-- ✅ จัดการหน้าแดชบอร์ด -->
-                                    <tr class="text-start">
-                                        <td><i class="fas fa-chart-line"></i> จัดการหน้าแดชบอร์ด</td>
-                                        <td>สิทธิ์ในการอัพโหลด ลบ แก้ไข หน้าแดชบอร์ด</td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input dashboard-permission" type="checkbox"
-                                                    name="manage_dashboard_permission" id="manageDashboardSwitch"
-                                                    data-group="dashboard">
-                                                <label class="form-check-label" for="manageDashboardSwitch"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="text-start">
-                                        <td><i class="fas fa-network-wired"></i> ดูข้อมูล FTTX</td>
-                                        <td>สิทธิ์ในการเข้าถึงข้อมูลเครือข่าย FTTX</td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input dashboard-permission" type="checkbox"
-                                                    name="view_fttx_permission" data-group="dashboard">
-                                            </div>
-                                        </td>
-                                    </tr>
+    <!-- ✅ จัดการผู้ใช้งาน -->
+    <tr class="text-start">
+        <td><i class="fas fa-users-cog"></i> จัดการผู้ใช้งานระบบ</td>
+        <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข และกำหนดสิทธิ์ให้ผู้ใช้งานระบบ</td>
+        <td>
+            <div class="form-check form-switch">
+                <input class="form-check-input user-permission" type="checkbox"
+                    name="manage_users" data-group="users">
+            </div>
+        </td>
+    </tr>
 
-                                    <!-- ✅ จัดการแหล่งป้อนข่าว -->
-                                    <tr class="text-start">
-                                        <td><i class="fas fa-newspaper"></i> จัดการแหล่งป้อนข่าว</td>
-                                        <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข และเปิด/ปิด การแสดงผลของข่าว</td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input master-permission" type="checkbox"
-                                                    name="manage_newsfeed_permission" id="manageNewsFeedSwitch"
-                                                    data-group="news">
-                                                <label class="form-check-label" for="manageNewsFeedSwitch"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="text-start">
-                                        <td><i class="fas fa-eye"></i> ดูข่าวสาร</td>
-                                        <td>สิทธิ์ในการเข้าถึงและอ่านข่าวสารในระบบ</td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input news-permission" type="checkbox"
-                                                    name="viewnews_feeds_permission" data-group="news">
-                                            </div>
-                                        </td>
-                                    </tr>
+    <!-- ✅ จัดการหน้าแดชบอร์ด -->
+    <tr class="text-start">
+        <td><i class="fas fa-chart-line"></i> จัดการหน้าแดชบอร์ด</td>
+        <td>สิทธิ์ในการอัปโหลด ลบ แก้ไข หน้าแดชบอร์ด</td>
+        <td>
+            <div class="form-check form-switch">
+                <input class="form-check-input dashboard-permission" type="checkbox"
+                    name="manage_dashboard" data-group="dashboard">
+            </div>
+        </td>
+    </tr>
 
-                                    <!-- ✅ จัดการสื่อประชาสัมพันธ์ -->
-                                    <tr class="text-start">
-                                        <td><i class="fas fa-images"></i> จัดการสื่อประชาสัมพันธ์</td>
-                                        <td>สิทธิ์ในการอัปโหลด ลบ และแก้ไขเนื้อหาสื่อประชาสัมพันธ์</td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input master-permission" type="checkbox"
-                                                    name="manage_banner_permission" id="manageBannerSwitch"
-                                                    data-group="banner">
-                                                <label class="form-check-label" for="manageBannerSwitch"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="text-start">
-                                        <td><i class="fas fa-photo-video"></i> จัดการภาพกิจกรรม</td>
-                                        <td>สิทธิ์ในการอัปโหลดและจัดการภาพกิจกรรม</td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input banner-permission" type="checkbox"
-                                                    name="manage_imageevent_permission" data-group="banner">
-                                            </div>
-                                        </td>
-                                    </tr>
+    <!-- ✅ ดูข้อมูลแดชบอร์ด -->
+    <tr class="text-start">
+        <td><i class="fas fa-chart-line"></i> ดูข้อมูลแดชบอร์ด </td>
+        <td>สิทธิ์ในการดูข้อมูลแดชบอร์ดทุกหน้า</td>
+        <td>
+            <div class="form-check form-switch">
+                <input class="form-check-input dashboard-permission" type="checkbox"
+                    name="view_fttx" data-group="dashboard">
+            </div>
+        </td>
+    </tr>
 
-                                    <!-- ✅ จัดการแบบฟอร์มกิจกรรม -->
-                                    <tr class="text-start">
-                                        <td><i class="fas fa-clipboard-list"></i> จัดการแบบฟอร์มกิจกรรม</td>
-                                        <td>สิทธิ์ในการสร้างและจัดการแบบฟอร์มกิจกรรม</td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input master-permission" type="checkbox"
-                                                    name="manage_formevent_permission" id="manageFormEventSwitch"
-                                                    data-group="event">
-                                                <label class="form-check-label" for="manageFormEventSwitch"></label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="text-start">
-                                        <td><i class="fas fa-calendar-check"></i> จัดการกิจกรรม</td>
-                                        <td>สิทธิ์ในการสร้างและแก้ไขกิจกรรม</td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input event-permission" type="checkbox"
-                                                    name="form_event_permission" data-group="event">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
+    <!-- ✅ จัดการแหล่งป้อนข่าว -->
+    <tr class="text-start">
+        <td><i class="fas fa-newspaper"></i> จัดการแหล่งป้อนข่าว</td>
+        <td>สิทธิ์ในการ เพิ่ม ลบ แก้ไข และเปิด/ปิด การแสดงผลของข่าว</td>
+        <td>
+            <div class="form-check form-switch">
+                <input class="form-check-input " type="checkbox"
+                    name="managenews_feeds" data-group="news">
+            </div>
+        </td>
+    </tr>
+
+    <!-- ✅ จัดการสื่อประชาสัมพันธ์ -->
+    <tr class="text-start">
+        <td><i class="fas fa-images"></i> จัดการรูปภาพ</td>
+        <td>สิทธิ์ในการอัปโหลด ลบ และแก้ไขเนื้อหาจัดการรูปภาพ ปกเว็บ</td>
+        <td>
+            <div class="form-check form-switch">
+                <input class="form-check-input " type="checkbox"
+                    name="manage_banner" data-group="banner">
+            </div>
+        </td>
+    </tr>
+
+    <tr class="text-start">
+        <td><i class="fas fa-images"></i> จัดการจัดการอัลบั้ม</td>
+        <td>สิทธิ์ในการอัปโหลด ลบ และแก้ไขเนื้อหาจัดการรูปภาพ อัลบั้ม</td>
+        <td>
+            <div class="form-check form-switch">
+                <input class="form-check-input " type="checkbox"
+                    name="manage_imageevent" data-group="banner">
+            </div>
+        </td>
+    </tr>
+
+    <!-- ✅ จัดการแบบฟอร์มกิจกรรม -->
+    <tr class="text-start">
+        <td><i class="fas fa-clipboard-list"></i> จัดการแบบฟอร์มกิจกรรม</td>
+        <td>สิทธิ์ในการสร้างและจัดการหมวดหมู่ข้อมูลพื้นฐานกิจกรรม</td>
+        <td>
+            <div class="form-check form-switch">
+                <input class="form-check-input " type="checkbox"
+                    name="manage_formevent" data-group="event">
+            </div>
+        </td>
+    </tr>
+
+    <tr class="text-start">
+        <td><i class="fas fa-clipboard-list"></i> กรอกแบบฟอร์มกิจกรรม</td>
+        <td>สิทธิ์ในการกรอกข้อมูลกิจกรรม</td>
+        <td>
+            <div class="form-check form-switch">
+                <input class="form-check-input " type="checkbox"
+                    name="form_event" data-group="event">
+            </div>
+        </td>
+    </tr>
+
+    <tr class="text-start">
+        <td><i class="fas fa-user-tie"></i> เข้าถึงข้อมูลลูกค้า</td>
+        <td>สิทธิ์ในการเข้าถึงข้อมูลลูกค้า</td>
+        <td>
+            <div class="form-check form-switch">
+                <input class="form-check-input event-permission" type="checkbox"
+                    name="view_customer" data-group="event">
+            </div>
+        </td>
+    </tr>
+</tbody>
+
+
                             </table>
                         </div>
 

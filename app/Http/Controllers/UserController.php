@@ -26,75 +26,62 @@ class UserController extends Controller
         return redirect('/users');
     }
 
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'username' => 'required|string',
-            'name' => 'required|string',
-            'emp_id' => 'required|string',
-            'department' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'province_id' => 'required|exists:province_activity,province_id',
-            'center_id' => 'nullable|exists:servicecenter_activity,center_id',
-
-        ]);
-
-        if ($request->hasFile('profile_image')) {
-            // แปลงรูปเป็น Base64
-            $image = $request->file('profile_image');
-            $imageData = base64_encode(file_get_contents($image));
-            $imageSrc = 'data:image/' . $image->getClientOriginalExtension() . ';base64,' . $imageData;
-        }
-
-
-
-        $user = User::create([
-            
-            'username' => $validatedData['username'],
-            'name' => $validatedData['name'],
-            'emp_id' => $validatedData['emp_id'],
-            'department' => $validatedData['department'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-            'profile_image' => $imageSrc ?? null,
-            'province_id' => $validatedData['province_id'],
-            'center_id' => $request->has('center_id') && is_numeric($request->center_id) ? $request->center_id : null,
-
-            'permission' => json_encode([
-                // ✅ จัดการผู้ใช้งาน
-                'manage_users' => $request->has('manage_users_permission') ? 1 : 0,
-                'adduser' => $request->has('manage_users_permission') || $request->has('adduser_permission') ? 1 : 0,
-                'adminper_mission' => $request->has('manage_users_permission') || $request->has('adminper_mission_permission') ? 1 : 0,
-                'permission_users' => $request->has('manage_users_permission') || $request->has('permission_users_permission') ? 1 : 0,
-                'delete_user' => $request->has('manage_users_permission') || $request->has('deleteuser_permission') ? 1 : 0,
-                'edit_user' => $request->has('manage_users_permission') || $request->has('edituser_permission') ? 1 : 0,
-
-                // ✅ จัดการข่าวสาร
-                'managenews_feeds' => $request->has('managenews_feeds_permission') ? 1 : 0,
-                'viewnews_feeds' => $request->has('managenews_feeds_permission') || $request->has('viewnews_feeds_permission') ? 1 : 0,
-
-                // ✅ จัดการ Dashboard
-                'managedash_board' => $request->has('managedash_board_permission') ? 1 : 0,
-                'view_fttx' => $request->has('managedash_board_permission') || $request->has('view_fttx_permission') ? 1 : 0,
-                'view_incomecurrent' => $request->has('managedash_board_permission') || $request->has('view_incomecurrent_permission') ? 1 : 0,
-                'view_service' => $request->has('managedash_board_permission') || $request->has('view_service_permission') ? 1 : 0,
-
-                // ✅ จัดการสื่อประชาสัมพันธ์
-                'manage_banner' => $request->has('manage_banner_permission') ? 1 : 0,
-                'manage_imageevent' => $request->has('manage_banner_permission') || $request->has('manage_imageevent_permission') ? 1 : 0,
-                'manage_album' => $request->has('manage_banner_permission') || $request->has('manage_album_permission') ? 1 : 0,
-
-                // ✅ จัดการแบบฟอร์มกิจกรรม
-                'manage_formevent' => $request->has('manage_formevent_permission') ? 1 : 0,
-                'form_event' => $request->has('manage_formevent_permission') || $request->has('form_event_permission') ? 1 : 0,
-            ]),
-
-        ]);
-
-        return redirect()->route('users.list')->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
-
+    public function store(Request $request) 
+{
+    // ตรวจสอบข้อมูลที่รับเข้ามา
+    $validatedData = $request->validate([
+        'username' => 'required|string',
+        'name' => 'required|string',
+        'emp_id' => 'required|string',
+        'department' => 'required|string',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6',
+        'province_id' => 'required|exists:province_activity,province_id',
+        'center_id' => 'nullable|exists:servicecenter_activity,center_id',
+    ]);
+    
+    // ถ้ามีการอัพโหลดรูปโปรไฟล์
+    if ($request->hasFile('profile_image')) {
+        $image = $request->file('profile_image');
+        $imageData = base64_encode(file_get_contents($image));
+        $imageSrc = 'data:image/' . $image->getClientOriginalExtension() . ';base64,' . $imageData;
     }
+    
+    // ดึงค่าจาก checkbox permissions ที่ส่งมาจากฟอร์ม
+    $permissions = [
+        'adminper_mission' => $request->has('adminper_mission') ? 1 : 0,
+        'manage_users' => $request->has('manage_users') ? 1 : 0,
+
+        'manage_dashboard' => $request->has('manage_dashboard') ? 1 : 0,
+        'view_fttx' => $request->has('view_fttx') ? 1 : 0,
+
+        'managenews_feeds' => $request->has('managenews_feeds') ? 1 : 0,
+
+        'manage_banner' => $request->has('manage_banner') ? 1 : 0,
+        'manage_imageevent' => $request->has('manage_imageevent') ? 1 : 0,
+        
+        'manage_formevent' => $request->has('manage_formevent') ? 1 : 0,
+        'form_event' => $request->has('form_event') ? 1 : 0,
+        'view_customer' => $request->has('view_customer') ? 1 : 0,
+    ];
+
+    // สร้างผู้ใช้ใหม่ในฐานข้อมูล
+    $user = User::create([
+        'username' => $validatedData['username'],
+        'name' => $validatedData['name'],
+        'emp_id' => $validatedData['emp_id'],
+        'department' => $validatedData['department'],
+        'email' => $validatedData['email'],
+        'password' => Hash::make($validatedData['password']),
+        'profile_image' => $imageSrc ?? null,
+        'province_id' => $validatedData['province_id'],
+        'center_id' => $request->has('center_id') && is_numeric($request->center_id) ? $request->center_id : null,
+        'permission' => $permissions, // ใช้ permission ที่รับมาจากฟอร์ม
+    ]);
+
+    // ส่งกลับไปยังหน้า user list พร้อมข้อความสำเร็จ
+    return redirect()->route('users.list')->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
+}
 
 
     public function edit($id)

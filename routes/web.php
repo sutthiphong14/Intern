@@ -258,7 +258,7 @@ Route::get('/incomecurrent', function () {
 });
 
 
-Route::middleware(['auth', 'check.permission:manage_dashboard'])->group(function () {
+Route::middleware(['auth', 'check.permission:manage_dashboard_permission'])->group(function () {
     Route::get('/listreport', function () {
         return view('report.listreport');
     });
@@ -268,8 +268,7 @@ Route::middleware(['auth', 'check.permission:manage_dashboard'])->group(function
     // Other report-related routes
 });
 
-Route::middleware(['auth', 'check.permission:manage_newsfeed'])->group(function () {
-
+Route::middleware(['auth', 'check.permission:managenews_feeds'])->group(function () {
     Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
     // Other news-related routes
 });

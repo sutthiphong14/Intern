@@ -8,8 +8,8 @@
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('custom/css/custom-style.css') }}">
     <style>
-    
-</style>
+
+    </style>
 @endsection
 @section('content')
 
@@ -34,7 +34,7 @@
                 @if ($latestMonthData->isEmpty())
                     กกราฟแสดงข้อมูลการติดตั้ง FTTx ได้ภายใน 3 วัน ไม่มีข้อมูล
                 @else
-                    กราฟแสดงข้อมูลเปอร์เซ็นเฉลี่ยการติดตั้ง FTTx ได้ภายใน 3 วัน ประจำปี
+                    กราฟแสดงข้อมูลเปอร์เซ็นเฉลี่ยการติดตั้ง FTTx ได้ภายใน 3 วัน ประจำปี {{ $latestMonthData->first()->year }}
                 @endif
 
             </h5>
@@ -52,10 +52,10 @@
                 </form>
 
                 <!-- ปุ่ม Import -->
-                @if (Auth::user()->permission['manage_dashboard'] ?? false)
-                <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow btn-fixed-size">
-    <i class="fas fa-file-import"></i> Import
-</a>
+                @if (Auth::user()->permission['view_fttx'] ?? false)
+                    <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow btn-fixed-size">
+                        <i class="fas fa-file-import"></i> Import
+                    </a>
                 @endif
 
                 <!-- ฟอร์ม Export -->
@@ -159,55 +159,54 @@
 
                     <tbody class="text-center align-items-center">
                         @if (count($sectionsArray) > 1)
-                            @foreach ($sectionsArray as $section)
-                                @if ($section['sum_installation_center'] == 'รวม ตป.1' || $section['sum_installation_center'] == 'รวม ตป.2')
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year'], 'month' => $section['month']]) }}"
-                                                class="btn btn-warning">
-                                                <i class="fas fa-search"></i>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            @if ($section['sum_installation_center'] == 'รวม ตป.1')
-                                                ตป.1
-                                            @elseif ($section['sum_installation_center'] == 'รวม ตป.2')
-                                                ตป.2
-                                            @endif
-                                        </td>
-                                        <!-- ค่าอื่นๆ -->
-                                        <td>{{ $section['sum_num_of_circuits'] }}</td>
-                                        <td>{{ $section['sum_total_preparation_time_days'] }}</td>
-                                        <td>{{ $section['sum_total_processing_time_days'] }}</td>
-                                        <td>{{ $section['sum_sdp_odp_deadline_days'] }}</td>
-                                        <td>{{ $section['sum_wiring_time_days'] }}</td>
-                                        <td>{{ $section['sum_config_nms_days'] }}</td>
-                                        <td>{{ $section['sum_technician_appointment_and_scheduling_time_days'] }}</td>
-                                        <td>{{ $section['sum_customer_waiting_time_days'] }}</td>
-                                        <td>{{ $section['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
-                                        <td>{{ $section['sum_closing_work_time_days'] }}</td>
-                                        <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
-                                        <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
+                                @foreach ($sectionsArray as $section)
+                                        @if ($section['sum_installation_center'] == 'รวม ตป.1' || $section['sum_installation_center'] == 'รวม ตป.2')
+                                                <tr>
+                                                    <td>
+                                                        <a href="{{ route('viewInstallFTTxprovin', ['section' => $section['sum_installation_center'], 'year' => $section['year'], 'month' => $section['month']]) }}"
+                                                            class="btn btn-warning">
+                                                            <i class="fas fa-search"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        @if ($section['sum_installation_center'] == 'รวม ตป.1')
+                                                            ตป.1
+                                                        @elseif ($section['sum_installation_center'] == 'รวม ตป.2')
+                                                            ตป.2
+                                                        @endif
+                                                    </td>
+                                                    <!-- ค่าอื่นๆ -->
+                                                    <td>{{ $section['sum_num_of_circuits'] }}</td>
+                                                    <td>{{ $section['sum_total_preparation_time_days'] }}</td>
+                                                    <td>{{ $section['sum_total_processing_time_days'] }}</td>
+                                                    <td>{{ $section['sum_sdp_odp_deadline_days'] }}</td>
+                                                    <td>{{ $section['sum_wiring_time_days'] }}</td>
+                                                    <td>{{ $section['sum_config_nms_days'] }}</td>
+                                                    <td>{{ $section['sum_technician_appointment_and_scheduling_time_days'] }}</td>
+                                                    <td>{{ $section['sum_customer_waiting_time_days'] }}</td>
+                                                    <td>{{ $section['sum_cable_pulling_and_ont_installation_time_days'] }}</td>
+                                                    <td>{{ $section['sum_closing_work_time_days'] }}</td>
+                                                    <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
+                                                    <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
 
-                                        <td class=""
-                                            style="background-color: {{ $section['sum_installation_percentage_within_3_days'] > 85
-                                                ? 'rgba(68, 180, 40, 1)'
-                                                : ($section['sum_installation_percentage_within_3_days'] > 83
-                                                    ? 'rgb(113, 221, 55,1)'
-                                                    : ($section['sum_installation_percentage_within_3_days'] > 80
-                                                        ? 'rgba(255, 196, 0,1)'
-                                                        : ($section['sum_installation_percentage_within_3_days'] > 77
-                                                            ? 'rgba(253, 126, 20, 1)'
-                                                            : 'rgba(255, 62, 29, 1)'))) }}; color: white;">
-                                            {{ $section['sum_installation_percentage_within_3_days'] }}%
-                                        </td>
-
+                                                    <td class="" style="background-color: {{ $section['sum_installation_percentage_within_3_days'] > 85
+                                            ? 'rgba(68, 180, 40, 1)'
+                                            : ($section['sum_installation_percentage_within_3_days'] > 83
+                                                ? 'rgb(113, 221, 55,1)'
+                                                : ($section['sum_installation_percentage_within_3_days'] > 80
+                                                    ? 'rgba(255, 196, 0,1)'
+                                                    : ($section['sum_installation_percentage_within_3_days'] > 77
+                                                        ? 'rgba(253, 126, 20, 1)'
+                                                        : 'rgba(255, 62, 29, 1)'))) }}; color: white;">
+                                                        {{ $section['sum_installation_percentage_within_3_days'] }}%
+                                                    </td>
 
 
 
-                                    </tr>
-                                @endif
-                            @endforeach
+
+                                                </tr>
+                                        @endif
+                                @endforeach
                         @else
                             <tr>
                                 <td colspan="15">
@@ -333,13 +332,11 @@
 
                 <div class="modal-body">
                     <!-- ฟิลด์สำหรับกรอกข้อมูล -->
-                    <form action="{{ route('export') }}" method="get" enctype="multipart/form-data"
-                        class="form-group">
+                    <form action="{{ route('export') }}" method="get" enctype="multipart/form-data" class="form-group">
                         @csrf
                         <div class="form-group">
                             <label for="year">ปี</label>
-                            <input type="number" id="year" name="year" min="2014" max="3000"
-                                class="form-control" required>
+                            <input type="number" id="year" name="year" min="2014" max="3000" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="month">เดือน</label>
@@ -401,26 +398,26 @@
         if (labels.length === 0 || dataArray.length === 0) {
             // แสดงข้อความในตารางหากไม่มีข้อมูล
             document.getElementById('noDataMessage').innerHTML = `
-        
-           
-                    <div>ไม่มีข้อมูลในปีนี้</div>`;
+
+
+                                            <div>ไม่มีข้อมูลในปีนี้</div>`;
 
         } else {
             // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
             const backgroundColors = dataArray.map(value =>
                 value > 85 ? 'rgba(68, 180, 40, 0.7)' :
-                value > 83 ? 'rgba(113, 221, 55, 0.7)' :
-                value > 80 ? 'rgba(255, 196, 0,0.7)' :
-                value > 77 ? 'rgba(253, 126, 20, 0.7)' :
-                'rgb(255, 0, 0,0.7)'
+                    value > 83 ? 'rgba(113, 221, 55, 0.7)' :
+                        value > 80 ? 'rgba(255, 196, 0,0.7)' :
+                            value > 77 ? 'rgba(253, 126, 20, 0.7)' :
+                                'rgb(255, 0, 0,0.7)'
             );
 
             const borderColors = dataArray.map(value =>
                 value > 85 ? 'rgba(79, 193, 51, 1)' :
-                value > 83 ? 'rgba(113, 221, 55, 1)' :
-                value > 80 ? 'rgba(255, 196, 0,1)' :
-                value > 77 ? 'rgb(253, 126, 20, 1)' :
-                'rgb(255, 38, 0)'
+                    value > 83 ? 'rgba(113, 221, 55, 1)' :
+                        value > 80 ? 'rgba(255, 196, 0,1)' :
+                            value > 77 ? 'rgb(253, 126, 20, 1)' :
+                                'rgb(255, 38, 0)'
             );
 
             const ctx = document.getElementById('myChart');
@@ -452,7 +449,7 @@
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             if (localStorage.getItem('status')) {
                 Swal.fire({
                     icon: 'success',
@@ -475,121 +472,121 @@
 
     <script>
         // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
-        document.getElementById('yearInput').addEventListener('change', function() {
+        document.getElementById('yearInput').addEventListener('change', function () {
             document.getElementById('yearForm').submit();
         });
         // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
-        document.getElementById('yearInput1').addEventListener('change', function() {
+        document.getElementById('yearInput1').addEventListener('change', function () {
             document.getElementById('yearForm1').submit();
         });
         // เมื่อค่าใน input เปลี่ยนให้ส่งฟอร์มทันที
-        document.getElementById('yearInput2').addEventListener('change', function() {
+        document.getElementById('yearInput2').addEventListener('change', function () {
             document.getElementById('yearForm2').submit();
         });
     </script>
 
 
-<script>
-    $(document).ready(function() {
-           const latestYear = @json($latestYear ?? ''); // ใช้ปีปัจจุบันถ้าตัวแปรไม่มีค่า
-           const confirmExportBtn = $('#confirmExport'); // ปุ่ม Confirm Export
-           const month = $('#month'); // ปุ่ม Confirm Export
+    <script>
+        $(document).ready(function () {
+            const latestYear = @json($latestYear ?? ''); // ใช้ปีปัจจุบันถ้าตัวแปรไม่มีค่า
+            const confirmExportBtn = $('#confirmExport'); // ปุ่ม Confirm Export
+            const month = $('#month'); // ปุ่ม Confirm Export
 
-        fetchMonths(latestYear); // ดึงข้อมูลเดือนเมื่อเปิด Modal
+            fetchMonths(latestYear); // ดึงข้อมูลเดือนเมื่อเปิด Modal
 
-    $('#year').val(latestYear); // ตั้งค่าปีเริ่มต้นเป็นปีที่ดึงมาจาก latestMonthData
+            $('#year').val(latestYear); // ตั้งค่าปีเริ่มต้นเป็นปีที่ดึงมาจาก latestMonthData
 
-        function fetchMonths(year) {
-            // ตรวจสอบค่าของ year ก่อน
-            if (!year || year.length !== 4 || isNaN(year)) {
-                console.warn("Invalid year:", year);
-                return; // ไม่ทำงานถ้าค่า year ไม่ถูกต้อง
+            function fetchMonths(year) {
+                // ตรวจสอบค่าของ year ก่อน
+                if (!year || year.length !== 4 || isNaN(year)) {
+                    console.warn("Invalid year:", year);
+                    return; // ไม่ทำงานถ้าค่า year ไม่ถูกต้อง
+                }
+
+                $.ajax({
+                    url: "{{ route('api.existing.months') }}",
+                    method: "GET",
+                    data: {
+                        year: year
+                    },
+                    success: function (response) {
+                        const monthsWithData = response.map(item => item.month);
+                        const monthSelect = $('#month');
+
+                        // เคลียร์ตัวเลือกเดิม
+                        monthSelect.empty();
+
+                        if (monthsWithData.length === 0) {
+
+
+
+                            // เพิ่ม option ว่าไม่มีข้อมูล
+                            // ปิดการใช้งานปุ่ม Confirm Export
+                            $('#no-data-msg').remove();
+                            confirmExportBtn.prop('disabled', true);
+
+                            monthSelect.after('<p id="no-data-msg" class="text-danger">ไม่มีข้อมูลในปีนี้</p>');
+                            return;
+                        }
+                        $('#no-data-msg').remove();
+
+                        // เปิดใช้งานปุ่ม Confirm Export
+                        confirmExportBtn.prop('disabled', false);
+                        // กรองค่าซ้ำจาก monthsWithData โดยใช้ Set
+                        const uniqueMonths = [...new Set(monthsWithData)];
+                        // เพิ่ม months ที่มีข้อมูล
+                        uniqueMonths.forEach(function (month) {
+                            monthSelect.append(`<option value="${month}">${month}</option>`);
+                        });
+                    },
+                    error: function (error) {
+                        console.error("Error fetching data:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'ไม่สามารถดึงข้อมูลได้ โปรดลองอีกครั้ง',
+                            confirmButtonText: 'ตกลง',
+                            customClass: {
+                                container: 'my-swal-container',
+                                popup: 'my-swal-popup'
+                            },
+                            backdrop: true
+                        });
+                    }
+                });
             }
 
-            $.ajax({
-                url: "{{ route('api.existing.months') }}",
-                method: "GET",
-                data: {
-                    year: year
-                },
-                success: function(response) {
-                    const monthsWithData = response.map(item => item.month);
-                    const monthSelect = $('#month');
+            // ดึงข้อมูลเมื่อ Modal เปิด
+            $('#myModal').on('shown.bs.modal', function () {
+                const selectedYear = $('#year').val();
 
-                    // เคลียร์ตัวเลือกเดิม
-                    monthSelect.empty();
+            });
 
-                    if (monthsWithData.length === 0) {
-                        
-                            
-                      
-                        // เพิ่ม option ว่าไม่มีข้อมูล
-                         // ปิดการใช้งานปุ่ม Confirm Export
-                         $('#no-data-msg').remove();
-                        confirmExportBtn.prop('disabled', true);
-                       
-                        monthSelect.after('<p id="no-data-msg" class="text-danger">ไม่มีข้อมูลในปีนี้</p>');
-                        return;
+            // อัปเดตข้อมูลเมื่อป้อนหรือเปลี่ยนค่าปี
+            $('#year').on('keydown', function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    const selectedYear = $(this).val();
+                    if (selectedYear.length === 4 && !isNaN(selectedYear)) {
+                        fetchMonths(selectedYear);
                     }
-                    $('#no-data-msg').remove();
-
-                    // เปิดใช้งานปุ่ม Confirm Export
-                    confirmExportBtn.prop('disabled', false);
-                    // กรองค่าซ้ำจาก monthsWithData โดยใช้ Set
-                    const uniqueMonths = [...new Set(monthsWithData)];
-                    // เพิ่ม months ที่มีข้อมูล
-                    uniqueMonths.forEach(function(month) {
-                        monthSelect.append(`<option value="${month}">${month}</option>`);
-                    });
-                },
-                error: function(error) {
-                    console.error("Error fetching data:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'เกิดข้อผิดพลาด',
-                        text: 'ไม่สามารถดึงข้อมูลได้ โปรดลองอีกครั้ง',
-                        confirmButtonText: 'ตกลง',
-                        customClass: {
-                            container: 'my-swal-container',
-                            popup: 'my-swal-popup'
-                        },
-                        backdrop: true
-                    });
                 }
             });
-        }
 
-        // ดึงข้อมูลเมื่อ Modal เปิด
-        $('#myModal').on('shown.bs.modal', function() {
-            const selectedYear = $('#year').val();
-       
-        });
-
-        // อัปเดตข้อมูลเมื่อป้อนหรือเปลี่ยนค่าปี
-        $('#year').on('keydown', function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
+            $('#year').on('change', function () {
                 const selectedYear = $(this).val();
                 if (selectedYear.length === 4 && !isNaN(selectedYear)) {
                     fetchMonths(selectedYear);
                 }
-            }
+            });
+            fetchMonths(selectedYear);
         });
-
-        $('#year').on('change', function() {
-            const selectedYear = $(this).val();
-            if (selectedYear.length === 4 && !isNaN(selectedYear)) {
-                fetchMonths(selectedYear);
-            }
-        });
-        fetchMonths(selectedYear);
-    });
-</script>
+    </script>
 
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             @if (session('alert'))
                 Swal.fire({
                     icon: 'error',

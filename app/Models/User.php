@@ -12,10 +12,16 @@ class User extends Authenticatable
 
     protected $table = 'users';
 
-    protected $fillable = ['name', 'username', 'emp_id', 'department', 'email', 'password', 'permission', 'profile_image', 'province_id', 'center_id'];
+    protected $fillable = [
+        'name', 'username', 'emp_id', 'department', 'email', 
+        'password', 'permission', 'profile_image', 'province_id', 'center_id'
+    ];
 
     protected $hidden = ['password', 'remember_token'];
 
+    protected $casts = [
+        'permission' => 'array', // แปลงค่าเป็น array แทน 'json'
+    ];
     public function province(): BelongsTo
     {
         return $this->belongsTo(ProvinceActivity::class, 'province_id');
