@@ -31,6 +31,8 @@ class Customer extends Model
         'other'
 
     ];
+    public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล
+    
 
     // ความสัมพันธ์กับ Model อื่น ๆ
     public function type()

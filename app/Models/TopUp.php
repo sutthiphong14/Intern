@@ -11,6 +11,7 @@ class TopUp extends Model
 
     protected $table = 'top_up';
     protected $fillable = ['phone', 'amount','type_id','province_id','center_id'];
+    public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล
 
     public function province()
     {

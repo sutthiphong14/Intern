@@ -287,10 +287,6 @@
                 </div>
 
 
-
-
-
-
                 <label for="other" class="form-label">หมายเหตุ</label>
                 <textarea class="form-control" id="other" name="other" rows="4">{{ $customer->other }}</textarea>
 

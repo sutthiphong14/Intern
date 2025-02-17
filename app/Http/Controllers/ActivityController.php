@@ -22,9 +22,149 @@ class ActivityController extends Controller
     //กิจกรรม
     public function ListType()
     {
-        $data = Typeactivity::all();
 
-        return view('events.TypeActivityList', compact('data'));
+
+
+        $provinces = ProvinceActivity::all();
+
+        // ดึงข้อมูลประเภทบริการ (type_id)
+        $typeActivities = Typeactivity::all();
+
+        // จัดกลุ่มข้อมูลตาม type_id
+        $dataByType = [];
+
+        // ดึงข้อมูล Fttxbroadband ที่ new = 1
+        $fttxNew = Fttxbroadband::where('new', 1)
+            ->get()
+            ->groupBy('type_id') // จัดกลุ่มตาม type_id
+            ->map(function ($items) {
+                return $items->groupBy('province_id')->map(function ($provinceItems) {
+                    return $provinceItems->count('new'); // นับค่าที่ซ้ำกันในแต่ละ province_id
+                });
+            });
+
+        // ดึงข้อมูล Fttxbroadband ที่ติดตั้งเอง
+        $selfInstall = Fttxbroadband::where('installation_type', 1)
+            ->get()
+            ->groupBy('type_id')
+            ->map(function ($items) {
+                return $items->groupBy('province_id')->map(function ($provinceItems) {
+                    return $provinceItems->count('installation_type');
+                });
+            });
+
+        // ดึงข้อมูล Fttxbroadband ที่จ้างผู้รับเหมา
+        $HireInstall = Fttxbroadband::where('installation_type', 0)
+            ->get()
+            ->groupBy('type_id')
+            ->map(function ($items) {
+                return $items->groupBy('province_id')->map(function ($provinceItems) {
+                    return $provinceItems->count('installation_type');
+                });
+            });
+
+        // ดึงข้อมูล Simmy
+        $Simmy_new = Simmy::where('cus_new', 1)
+            ->get()
+            ->groupBy('type_id')
+            ->map(function ($items) {
+                return $items->groupBy('province_id')->map(function ($provinceItems) {
+                    return $provinceItems->count('cus_new');
+                });
+            });
+
+        $Simmy_move = Simmy::where('cus_new', 0)
+            ->get()
+            ->groupBy('type_id')
+            ->map(function ($items) {
+                return $items->groupBy('province_id')->map(function ($provinceItems) {
+                    return $provinceItems->count('cus_new');
+                });
+            });
+
+        $Simmy_count = TopUp::all()
+            ->groupBy('type_id')
+            ->map(function ($items) {
+                return $items->groupBy('province_id')->map(function ($provinceItems) {
+                    return $provinceItems->count();
+                });
+            });
+
+        $Simmy_price = TopUp::all()
+            ->groupBy('type_id')
+            ->map(function ($items) {
+                return $items->groupBy('province_id')->map(function ($provinceItems) {
+                    return $provinceItems->sum('amount');
+                });
+            });
+
+        // ดึงข้อมูล IctSolution
+        $Ict_count = IctSolution::all()
+            ->groupBy('type_id')
+            ->map(function ($items) {
+                return $items->groupBy('province_id')->map(function ($provinceItems) {
+                    return $provinceItems->count(); // นับจำนวนในแต่ละ province_id
+                });
+            });
+
+        $Ict_income = IctSolution::all()
+            ->groupBy('type_id')
+            ->map(function ($items) {
+                return $items->groupBy('province_id')->map(function ($provinceItems) {
+                    return $provinceItems->sum('income'); // รวมรายได้ในแต่ละ province_id
+                });
+            });
+
+        // คำนวณค่ารวมใน Controller
+        $sumByType = [];
+
+        foreach ($typeActivities as $type) {
+            $sumByType[$type->type_id] = [
+                'fttxNew' => 0,
+                'selfInstall' => 0,
+                'hireInstall' => 0,
+                'new' => 0,
+                'move' => 0,
+                'count' => 0,
+                'price' => 0,
+                'ictCount' => 0,
+                'ictIncome' => 0,
+            ];
+
+            // คำนวณค่ารวมในแต่ละ type_id
+            foreach ($provinces as $province) {
+                if (isset($fttxNew[$type->type_id][$province->province_id])) {
+                    $sumByType[$type->type_id]['fttxNew'] += $fttxNew[$type->type_id][$province->province_id];
+                }
+                if (isset($selfInstall[$type->type_id][$province->province_id])) {
+                    $sumByType[$type->type_id]['selfInstall'] += $selfInstall[$type->type_id][$province->province_id];
+                }
+                if (isset($HireInstall[$type->type_id][$province->province_id])) {
+                    $sumByType[$type->type_id]['hireInstall'] += $HireInstall[$type->type_id][$province->province_id];
+                }
+                if (isset($Simmy_new[$type->type_id][$province->province_id])) {
+                    $sumByType[$type->type_id]['new'] += $Simmy_new[$type->type_id][$province->province_id];
+                }
+                if (isset($Simmy_move[$type->type_id][$province->province_id])) {
+                    $sumByType[$type->type_id]['move'] += $Simmy_move[$type->type_id][$province->province_id];
+                }
+                if (isset($Simmy_count[$type->type_id][$province->province_id])) {
+                    $sumByType[$type->type_id]['count'] += $Simmy_count[$type->type_id][$province->province_id];
+                }
+                if (isset($Simmy_price[$type->type_id][$province->province_id])) {
+                    $sumByType[$type->type_id]['price'] += $Simmy_price[$type->type_id][$province->province_id];
+                }
+                if (isset($Ict_count[$type->type_id][$province->province_id])) {
+                    $sumByType[$type->type_id]['ictCount'] += $Ict_count[$type->type_id][$province->province_id];
+                }
+                if (isset($Ict_income[$type->type_id][$province->province_id])) {
+                    $sumByType[$type->type_id]['ictIncome'] += $Ict_income[$type->type_id][$province->province_id];
+                }
+            }
+        }
+        $data = $typeActivities->count();
+
+        return view('events.TypeActivityList', compact('data', 'typeActivities', 'sumByType'));
     }
 
     public function TypeInsert(Request $request)
@@ -328,9 +468,9 @@ class ActivityController extends Controller
         ]);
 
         IctProduct::where('product_id', $product_id)->update([
-                'product_name' => $request->product_name,
-                'description' => $request->description
-            ]);
+            'product_name' => $request->product_name,
+            'description' => $request->description
+        ]);
         $data = IctProduct::all();
         return redirect()->route('product_list', compact('data'))
             ->with('success', 'อัปเดตโปรโมชั่นสำเร็จ');
@@ -406,88 +546,45 @@ class ActivityController extends Controller
 
     public function activity_list(Request $request)
     {
-        // รับค่า type_service จาก request (GET หรือ POST)
         $type_service = $request->input('type_service');
 
-        // กรองข้อมูลตาม type_service
+        // กรองข้อมูล Customer ตาม type_service
+        $dataQuery = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center']);
         if ($type_service !== null) {
-            // กรองข้อมูลตามชื่อบริการในตาราง service
-            $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])
-                ->whereHas('service', function ($query) use ($type_service) {
-                    $query->where('service_name', $type_service);
-                })
-                ->get();
-        } else {
-            // หากไม่เลือก type_service ให้ดึงข้อมูลทั้งหมด
-            $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])->get();
+            $dataQuery->whereHas('service', fn($query) => $query->where('service_name', $type_service));
         }
+        $data = $dataQuery->get();
 
+        // ดึงข้อมูล Province และ TypeActivity
         $provinces = ProvinceActivity::all();
+        $types = TypeActivity::all();
 
-        // ดึงข้อมูล Fttxbroadband ที่ new = 1
-        $fttxNew = Fttxbroadband::where('new', 1)
-            ->get()
-            ->groupBy('province_id') // แยกกลุ่มตาม `province_id`
-            ->map(function ($items) {
-                return $items->count('new'); // รวมค่าที่ซ้ำกันได้
-            });
+        // โหลดข้อมูล Fttxbroadband ครั้งเดียว
+        $fttxData = Fttxbroadband::select('province_id', 'new', 'installation_type')->get()->groupBy('province_id');
+
+        $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
+        $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
+        $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
+
+        // โหลดข้อมูล Simmy และ TopUp ครั้งเดียว
+        $simmyData = Simmy::select('province_id', 'cus_new')->get()->groupBy('province_id');
+        $Simmy_new = $simmyData->map(fn($items) => $items->where('cus_new', 1)->count());
+        $Simmy_move = $simmyData->map(fn($items) => $items->where('cus_new', 0)->count());
+
+        $topUpData = TopUp::select('province_id', 'amount')->get()->groupBy('province_id');
+        $Simmy_count = $topUpData->map(fn($items) => $items->count());
+        $Simmy_price = $topUpData->map(fn($items) => $items->sum('amount'));
+
+        // โหลดข้อมูล IctSolution ครั้งเดียว
+        $ictData = IctSolution::select('province_id', 'income')->get()->groupBy('province_id');
+        $Ict_count = $ictData->map(fn($items) => $items->count());
+        $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
+
+        // ดึงข้อมูลประเภทบริการ
+        $serviceTypes = ServeActivity::all();
 
 
-        // ดึงข้อมูล Fttxbroadband ที่ติดตั้งเอง
-        $selfInstall = Fttxbroadband::where('installation_type', 1)
-            ->get()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
-            });
 
-        // ดึงข้อมูล Fttxbroadband ที่จ้างผู้รับเหมา
-        $HireInstall = Fttxbroadband::where('installation_type', 0)
-            ->get()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->count('installation_type'); // รวมค่าที่ซ้ำกันได้
-            });
-
-        $Simmy_new = Simmy::where('cus_new', 1)
-            ->get()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->count('cus_new'); // รวมค่าที่ซ้ำกันได้
-            });
-
-        $Simmy_move = Simmy::where('cus_new', 0)
-            ->get()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->count('cus_new'); // รวมค่าที่ซ้ำกันได้
-            });
-
-        $Simmy_count = TopUp::all()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->count(); // นับจำนวนรายการในแต่ละกลุ่ม
-            });
-
-        $Simmy_price = TopUp::all()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->sum('amount'); // รวมค่าของ amount ในแต่ละกลุ่ม
-            });
-
-        $serviceTypes = ServeActivity::all(); // หรือสามารถใช้ where หรือ query อื่นๆ ได้ตามต้องการ
-
-        $Ict_count = IctSolution::all()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->count(); // นับจำนวนรายการในแต่ละกลุ่ม
-            });
-
-        $Ict_income = IctSolution::all()
-            ->groupBy('province_id')
-            ->map(function ($items) {
-                return $items->sum('income'); // รวมค่าของ amount ในแต่ละกลุ่ม
-            });
         return view('events.activity_list', compact(
             'serviceTypes',
             'data',
@@ -500,13 +597,143 @@ class ActivityController extends Controller
             'Simmy_count',
             'Simmy_price',
             'Ict_count',
-            'Ict_income'
+            'Ict_income',
+            'types'
         ));
     }
 
-    public function activityView(){
 
-        $data = Typeactivity::all();
-        return view('events.activity_view', compact('data'));
+    public function Eventservices($type_id)
+    {
+
+        // ดึงข้อมูล Province และ TypeActivity
+        $provinces = ProvinceActivity::all();
+        $types = TypeActivity::where('type_id', $type_id)->first();
+
+
+        // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
+        $fttxData = Fttxbroadband::where('type_id', $type_id)
+            ->select('province_id', 'new', 'installation_type')
+            ->get()
+            ->groupBy('province_id');
+
+        $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
+        $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
+        $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
+
+        // โหลดข้อมูล Simmy เฉพาะ type_id
+        $simmyData = Simmy::where('type_id', $type_id)
+            ->select('province_id', 'cus_new')
+            ->get()
+            ->groupBy('province_id');
+
+        $Simmy_new = $simmyData->map(fn($items) => $items->where('cus_new', 1)->count());
+        $Simmy_move = $simmyData->map(fn($items) => $items->where('cus_new', 0)->count());
+
+        // โหลดข้อมูล TopUp เฉพาะ type_id
+        $topUpData = TopUp::where('type_id', $type_id)
+            ->select('province_id', 'amount')
+            ->get()
+            ->groupBy('province_id');
+
+        $Simmy_count = $topUpData->map(fn($items) => $items->count());
+        $Simmy_price = $topUpData->map(fn($items) => $items->sum('amount'));
+
+        // โหลดข้อมูล IctSolution เฉพาะ type_id
+        $ictData = IctSolution::where('type_id', $type_id)
+            ->select('province_id', 'income')
+            ->get()
+            ->groupBy('province_id');
+
+        $Ict_count = $ictData->map(fn($items) => $items->count());
+        $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
+
+        // คำนวณค่ารวมสำหรับ ตป.1 และ ตป.2
+        $sumFttxNew = $sumSelfInstall = $sumHireInstall = 0;
+        $sumNew = $sumMove = $sumCount = $sumPrice = 0;
+        $IctCount = $IctIncome = 0;
+
+        $sumFttxNewOver33 = $sumSelfInstallOver33 = $sumHireInstallOver33 = 0;
+        $sumNewOver33 = $sumMoveOver33 = $sumCountOver33 = $sumPriceOver33 = 0;
+        $IctCountOver33 = $IctIncomeOver33 = 0;
+
+        foreach ($provinces as $province) {
+            $provinceId = $province->province_id;
+
+            if ($provinceId <= 12) {
+                $sumFttxNew += $fttxNew[$provinceId] ?? 0;
+                $sumSelfInstall += $selfInstall[$provinceId] ?? 0;
+                $sumHireInstall += $HireInstall[$provinceId] ?? 0;
+
+                $sumNew += $Simmy_new[$provinceId] ?? 0;
+                $sumMove += $Simmy_move[$provinceId] ?? 0;
+                $sumCount += $Simmy_count[$provinceId] ?? 0;
+                $sumPrice += $Simmy_price[$provinceId] ?? 0;
+
+                $IctCount += $Ict_count[$provinceId] ?? 0;
+                $IctIncome += $Ict_income[$provinceId] ?? 0;
+            } else {
+                $sumFttxNewOver33 += $fttxNew[$provinceId] ?? 0;
+                $sumSelfInstallOver33 += $selfInstall[$provinceId] ?? 0;
+                $sumHireInstallOver33 += $HireInstall[$provinceId] ?? 0;
+
+                $sumNewOver33 += $Simmy_new[$provinceId] ?? 0;
+                $sumMoveOver33 += $Simmy_move[$provinceId] ?? 0;
+                $sumCountOver33 += $Simmy_count[$provinceId] ?? 0;
+                $sumPriceOver33 += $Simmy_price[$provinceId] ?? 0;
+
+                $IctCountOver33 += $Ict_count[$provinceId] ?? 0;
+                $IctIncomeOver33 += $Ict_income[$provinceId] ?? 0;
+            }
+        }
+
+        // คำนวณผลรวมทั้งหมด
+        $total_all = [
+            'sumFttxNew' => $sumFttxNew + $sumFttxNewOver33,
+            'sumSelfInstall' => $sumSelfInstall + $sumSelfInstallOver33,
+            'sumHireInstall' => $sumHireInstall + $sumHireInstallOver33,
+            'sumNew' => $sumNew + $sumNewOver33,
+            'sumMove' => $sumMove + $sumMoveOver33,
+            'sumCount' => $sumCount + $sumCountOver33,
+            'sumPrice' => $sumPrice + $sumPriceOver33,
+            'IctCount' => $IctCount + $IctCountOver33,
+            'IctIncome' => $IctIncome + $IctIncomeOver33
+        ];
+       
+
+        return view('events.events_service', compact(
+            'types',
+            'provinces',
+            'fttxNew',
+            'selfInstall',
+            'HireInstall',
+            'Simmy_new',
+            'Simmy_move',
+            'Simmy_count',
+            'Simmy_price',
+            'Ict_count',
+            'Ict_income',
+            'sumFttxNew',
+            'sumSelfInstall',
+            'sumHireInstall',
+            'sumNew',
+            'sumMove',
+            'sumCount',
+            'sumPrice',
+            'IctCount',
+            'IctIncome',
+            'sumFttxNewOver33',
+            'sumSelfInstallOver33',
+            'sumHireInstallOver33',
+            'sumNewOver33',
+            'sumMoveOver33',
+            'sumCountOver33',
+            'sumPriceOver33',
+            'IctCountOver33',
+            'IctIncomeOver33',
+            'total_all'
+
+
+        ));
     }
 }

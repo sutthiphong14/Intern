@@ -17,6 +17,7 @@ class IctProduct extends Model
         'description',
 
     ];
+    public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล
 
     // เชื่อมความสัมพันธ์ Many-to-Many
     public function ictSolutions()

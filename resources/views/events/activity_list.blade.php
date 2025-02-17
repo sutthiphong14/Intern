@@ -51,6 +51,18 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
+
+                            <div class="mb-3">
+                                <label for="type_id" class="form-label">กิจกรรม</label>
+                                <select class="form-select bg-warning text-dark" id="type_id" name="type_id" required>
+                                    <option value="" disabled selected>-- เลือกกิจกรรม --</option>
+                                    @foreach ($types as $type)
+                                        <option class="bg-secondary" value="{{ $type->type_id }}">
+                                            {{ $type->type_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="mb-3">
                                 <label for="phone" class="form-label">หมายเลขโทรศัพท์มือถือ</label>
                                 <input type="text" class="form-control" id="phone" name="phone">

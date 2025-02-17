@@ -306,12 +306,12 @@ class CustomerController extends Controller
         $cus_address = $request->input('cus_address');
         $type_id = $request->input('type_id');
         $service_id = $request->input('service_id');
-        $promotion_id =$request->input('promotion_id');
-        $speed_id =$request->input('speed_id');
-        $price_id =$request->input('price_id');
+        $promotion_id = $request->input('promotion_id');
+        $speed_id = $request->input('speed_id');
+        $price_id = $request->input('price_id');
         $province_id = $request->input('province_id');
         $center_id = $request->input('center_id');
-        $date = $request->input('date');
+
         $other = $request->input('other');
 
         // ตรวจสอบว่ามีไฟล์รูปภาพอัปโหลดไหม
@@ -333,6 +333,7 @@ class CustomerController extends Controller
             // กรณีเป็น fttx_broadband
             $new = $request->input('new');
             $installation_type = $request->input('installation_type');
+            $date = $request->input('date');
             if ($fttx_cus_id == null) {
                 Fttxbroadband::create([
                     'new' => $new,
@@ -345,9 +346,9 @@ class CustomerController extends Controller
                 ]);
                 $updateData = [
                     'id_card' => $id_card,
-                    'promotion_id' =>$promotion_id,
-                    'speed_id' =>$speed_id,
-                    'price_id' =>$price_id,
+                    'promotion_id' => $promotion_id,
+                    'speed_id' => $speed_id,
+                    'price_id' => $price_id,
                     'cus_photo' => $cus_photo,
                     'created_at' => $date,
                 ];
@@ -359,7 +360,7 @@ class CustomerController extends Controller
                     'center_id' => $center_id,
                     'province_id' => $province_id,
                     'type_id' => $type_id,
-                    'updated_at' => $date
+                    'created_at' => $date
                 ]);
             }
 
@@ -370,6 +371,7 @@ class CustomerController extends Controller
             // กรณีเป็น sim my
             $cus_new = $request->input('cus_new');
             $price_id = $request->input('price_id');
+            $date = $request->input('date');
 
             if ($simmy_cus_id == null) {
                 Simmy::create([
@@ -384,9 +386,9 @@ class CustomerController extends Controller
                 ]);
                 $updateData = [
                     'id_card' => $id_card,
-                    'promotion_id' =>$promotion_id,
-                    'speed_id' =>$speed_id,
-                    'price_id' =>$price_id,
+                    'promotion_id' => $promotion_id,
+                    'speed_id' => $speed_id,
+                    'price_id' => $price_id,
                     'cus_photo' => $cus_photo,
                     'created_at' => $date,
                 ];
@@ -399,7 +401,9 @@ class CustomerController extends Controller
                     'center_id' => $center_id,
                     'province_id' => $province_id,
                     'type_id' => $type_id,
-                    'updated_at' => $date
+                    'created_at' => $date
+
+
                 ]);
             }
 
@@ -409,17 +413,26 @@ class CustomerController extends Controller
         } else {
             // อัปเดตข้อมูลใน ict_solution
             $ict_solution = IctSolution::where('cus_id', $cus_id)->first();
+            $date = $request->input('date');
 
             if ($ict_solution) {
                 // อัปเดตข้อมูลใน pivot table
                 if ($request->has('product_id')) {
                     $product_ids = $request->input('product_id');
                     $quantities = $request->input('quantity');
+                    $dates = $request->input('date');
+
 
                     // สร้าง array ที่จะ sync
                     $pivot_data = [];
+
                     foreach ($product_ids as $index => $product_id) {
-                        $pivot_data[$product_id] = ['quantity' => $quantities[$index]];
+                        $quantity = $quantities[$index] ?? 0; // ป้องกัน error ถ้า index ไม่ตรงกัน
+                        $date = $dates ?? now();
+                        $pivot_data[$product_id] = [
+                            'quantity' => $quantity,
+                            'created_at' => $date
+                        ];
                     }
 
                     // ใช้ sync เพื่ออัปเดต pivot table
@@ -428,18 +441,21 @@ class CustomerController extends Controller
 
 
                 // อัปเดตฟิลด์รายได้
-                $ict_solution->update([
+                IctSolution::where('cus_id', $cus_id)->update([
                     'income' => $request->input('income'),
                     'customer_type' => $request->input('customer_type'),
                     'quote' => $request->hasFile('quote') ? $request->file('quote')->store('quotes', 'public') : $ict_solution->quote,
                     'center_id' => $center_id,
                     'province_id' => $province_id,
                     'type_id' => $type_id,
-                    'updated_at' => $date
+                    'created_at' => $date
+
+
                 ]);
             } else {
-                // ถ้ายังไม่มีข้อมูลใน ict_solution ให้สร้างใหม่
-                $ict_solution = IctSolution::create([
+                $date = Carbon::parse($date)->toDateTimeString(); // แปลงให้เป็น datetime ที่ถูกต้อง
+                // ✅ สร้าง IctSolution และเก็บค่าในตัวแปร
+                $ict_solution_new = IctSolution::create([
                     'cus_id' => $cus_id,
                     'income' => $request->input('income'),
                     'customer_type' => $request->input('customer_type'),
@@ -447,10 +463,12 @@ class CustomerController extends Controller
                     'center_id' => $center_id,
                     'province_id' => $province_id,
                     'type_id' => $type_id,
-                    'created_at' => $date
+
                 ]);
-            
-                // กรณีที่ต้องการอัปเดตข้อมูลของ Customer
+                // ✅ บังคับให้สร้าง created_at ด้วย forceFill()
+                $ict_solution_new->forceFill(['created_at' => $date])->save();
+
+                // ✅ อัปเดตข้อมูล Customer
                 Customer::where('cus_id', $cus_id)->update([
                     'id_card' => null,
                     'cus_photo' => null,
@@ -458,23 +476,28 @@ class CustomerController extends Controller
                     'speed_id' => null,
                     'price_id' => null,
                 ]);
-            
+
                 // ✅ เพิ่ม Products ที่เกี่ยวข้องกับ ICT Solution
-                $product_ids = $request->input('product_id'); // รับค่า product_id เป็น array
-                $quantities = $request->input('quantity'); // รับค่า quantity เป็น array
-            
+                $product_ids = $request->input('product_id', []);
+                $quantities = $request->input('quantity', []);
+
                 if (!empty($product_ids) && !empty($quantities)) {
+                    $pivot_data = [];
+
                     foreach ($product_ids as $index => $product_id) {
-                        $quantity = $quantities[$index];
-            
-                        // ใช้ attach เพื่อเพิ่มข้อมูลใน pivot table
-                        $ict_solution->products()->attach($product_id, [
-                            'quantity' => $quantity
-                        ]);
+                        $quantity = $quantities[$index] ?? 0;
+
+                        $pivot_data[$product_id] = [
+                            'quantity' => $quantity,
+                            'created_at' => $date
+                        ];
                     }
+
+                    // ✅ ใช้ attach เพื่อเพิ่มข้อมูลลง pivot table
+                    $ict_solution_new->products()->attach($pivot_data);
                 }
             }
-            
+
             // ลบข้อมูลทั้ง Fttxbroadband และ Simmy หากเปลี่ยนบริการ
             Fttxbroadband::where('cus_id', $cus_id)->delete();
             Simmy::where('cus_id', $cus_id)->delete();
@@ -509,12 +532,14 @@ class CustomerController extends Controller
         $amount = $request->input('amount');
         $province_id = $request->input('province_id');
         $center_id = $request->input('center_id');
+        $type_id = $request->input('type_id');
 
         TopUp::create([
             'phone' => $phone,
             'amount' => $amount,
             'province_id' => $province_id, // ใช้ cus_id จากลูกค้าใหม่ที่สร้างมา
             'center_id' => $center_id,
+            'type_id' => $type_id
         ]);
 
         return redirect()->route('customer_list')->with('success', 'เพิ่มข้อมูลการเติมเงินสำเร็จ');

@@ -331,7 +331,6 @@ Route::delete('/slideshow/{id}', [SlideshowController::class, 'destroy'])->name(
 
 
 //ส่วนกิจกรรม
-Route::get('/activity_view', [ActivityController::class, 'activityView'])->name('activity_view');
 Route::get('/typeactivity_list', [ActivityController::class, 'ListType'])->name('type_list');
 Route::post('/typeactivity_insert', [ActivityController::class, 'TypeInsert'])->name('type_insert');
 Route::delete('/typeactivity_delete/{type_id}', [ActivityController::class, 'TypeDelete'])->name('type_delete');
@@ -404,6 +403,9 @@ Route::post('/topUp_insert', [CustomerController::class,'insertTopup'])->name('t
 Route::delete('/topUp_delete/{topUp_id}', [CustomerController::class, 'TopUpDelete'])->name('topUp_delete');
 Route::put('/top-up/update/{id}', [CustomerController::class, 'TopUpUpdate'])->name('topUp_update');
 Route::get('/getTopUpDetails/{topUpId}', [CustomerController::class, 'getTopUpDetails'])->name('getTopUpDetails');
+
+
+Route::get('/Event_services/{type_id}', [ActivityController::class, 'Eventservices'])->name('event_services');
 
 
 
