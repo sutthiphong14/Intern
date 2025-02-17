@@ -408,6 +408,10 @@ Route::get('/getTopUpDetails/{topUpId}', [CustomerController::class, 'getTopUpDe
 Route::get('/Event_services/{type_id}', [ActivityController::class, 'Eventservices'])->name('event_services');
 Route::get('/Event_center/{province_id},{type_id}', [ActivityController::class, 'Eventcenter'])->name('event_center');
 Route::get('/Event_customer_list/{type_id}', [ActivityController::class, 'EventCustomer'])->name('event_customer');
+Route::get('/topup_list', [ActivityController::class, 'TopUp_list'])->name('top_up_list');
+Route::get('/topups/search', [ActivityController::class, 'searchTopUp'])->name('top_up_search');
+
+
 
 
 

@@ -10,8 +10,7 @@
 
                 <div class="col-auto"> <a href="{{ route('customer_create') }}" class="btn btn-primary">เพิ่มข้อมูลลูกค้า</a>
                 </div>
-                <div class="col-auto"><button class="btn btn-warning" data-bs-toggle="modal"
-                        data-bs-target="#Top_up">เติมเงิน</button></div>
+                
             </div>
 
 
@@ -56,62 +55,7 @@
 
 
 
-        <!-- Modal สำหรับเติมเงิน -->
-        <div class="modal fade" id="Top_up" tabindex="-1" aria-labelledby="Top_uplLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <form id="priceForm" action="{{ route('topUp_insert') }}" method="POST">
-                    @csrf
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h2 class="modal-title" id="PriceModalLabel">เติมเงิน</h2>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-
-                            <div class="mb-3">
-                                <label for="type_id" class="form-label">กิจกรรม</label>
-                                <select class="form-select bg-warning text-dark" id="type_id" name="type_id" required>
-                                    @foreach ($types as $type)
-                                        <option class="bg-secondary" value="{{ $type->type_id }}">
-                                            {{ $type->type_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="phone" class="form-label">หมายเลขโทรศัพท์มือถือ</label>
-                                <input type="text" class="form-control" id="phone" name="phone">
-                            </div>
-                            <div class="mb-3">
-                                <label for="amount" class="form-label">จำนวนเงินที่เติม</label>
-                                <input type="number" class="form-control" id="amount" name="amount" required>
-                            </div>
-
-                            <label for="province_id" class="form-label">จังหวัด</label>
-                            <select class="form-select bg-warning text-dark" id="province_id" name="province_id" required>
-                                <option value="" disabled selected>-- เลือกจังหวัด --</option>
-                                @foreach ($provinces as $province)
-                                    <option class="bg-secondary" value="{{ $province->province_id }}">
-                                        {{ $province->province_name }}</option>
-                                @endforeach
-                            </select>
-
-
-                            <!-- Center -->
-                            <label for="center_id" class="form-label">ศูนย์บริการ</label>
-                            <select class="form-select bg-warning text-dark" id="center_id" name="center_id" required>
-                                <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
-                            </select>
-
-                        </div>
-                        <div class="modal-footer ">
-                            <button type="submit" class="btn btn-success">บันทึก</button>
-
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+       
 
 
         <table class="table table-bordered">

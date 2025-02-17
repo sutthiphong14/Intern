@@ -744,11 +744,11 @@ class ActivityController extends Controller
         // ดึงข้อมูล Province และ TypeActivity
         $centers = ServiceCenterActivity::where('province_id', $province_id)->get();
         $types = TypeActivity::where('type_id', $type_id)->first();
-        $provinces = ProvinceActivity::where('province_id',$province_id)->first();
+        $provinces = ProvinceActivity::where('province_id', $province_id)->first();
 
         // โหลดข้อมูล Fttxbroadband เฉพาะ province_id ที่ส่งมา
         $fttxData = Fttxbroadband::where('province_id', $province_id)->where('type_id', $type_id)
-            ->select('province_id', 'new', 'installation_type','center_id')
+            ->select('province_id', 'new', 'installation_type', 'center_id')
             ->get()
             ->groupBy('center_id');
 
@@ -758,7 +758,7 @@ class ActivityController extends Controller
 
         // โหลดข้อมูล Simmy เฉพาะ province_id
         $simmyData = Simmy::where('province_id', $province_id)->where('type_id', $type_id)
-            ->select('province_id', 'cus_new','center_id')
+            ->select('province_id', 'cus_new', 'center_id')
             ->get()
             ->groupBy('center_id');
 
@@ -767,7 +767,7 @@ class ActivityController extends Controller
 
         // โหลดข้อมูล TopUp เฉพาะ province_id
         $topUpData = TopUp::where('province_id', $province_id)->where('type_id', $type_id)
-            ->select('province_id', 'amount','center_id')
+            ->select('province_id', 'amount', 'center_id')
             ->get()
             ->groupBy('center_id');
 
@@ -776,7 +776,7 @@ class ActivityController extends Controller
 
         // โหลดข้อมูล IctSolution เฉพาะ province_id
         $ictData = IctSolution::where('province_id', $province_id)->where('type_id', $type_id)
-            ->select('province_id', 'income','center_id')
+            ->select('province_id', 'income', 'center_id')
             ->get()
             ->groupBy('center_id');
 
@@ -834,7 +834,7 @@ class ActivityController extends Controller
             'IctCount' => $IctCount + $IctCountOver33,
             'IctIncome' => $IctIncome + $IctIncomeOver33
         ];
-        
+
 
 
 
@@ -880,23 +880,23 @@ class ActivityController extends Controller
         // กรองข้อมูล Customer ตาม type_service และ type_id
         $dataQuery = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])
             ->where('type_id', $type_id); // เพิ่มเงื่อนไขตาม type_id
-        
+
         $data = $dataQuery->get();
-    
+
         // ดึงข้อมูล Province และ TypeActivity
         $provinces = ProvinceActivity::all();
         $types = TypeActivity::where('type_id', $type_id)->get(); // กรอง TypeActivity ตาม type_id
-    
+
         // โหลดข้อมูล Fttxbroadband และกรองตาม type_id
         $fttxData = Fttxbroadband::select('province_id', 'new', 'installation_type')
             ->where('type_id', $type_id) // กรองตาม type_id
             ->get()
             ->groupBy('province_id');
-    
+
         $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
         $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
         $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
-    
+
         // โหลดข้อมูล Simmy และกรองตาม type_id
         $simmyData = Simmy::select('province_id', 'cus_new')
             ->where('type_id', $type_id) // กรองตาม type_id
@@ -904,7 +904,7 @@ class ActivityController extends Controller
             ->groupBy('province_id');
         $Simmy_new = $simmyData->map(fn($items) => $items->where('cus_new', 1)->count());
         $Simmy_move = $simmyData->map(fn($items) => $items->where('cus_new', 0)->count());
-    
+
         // โหลดข้อมูล TopUp และกรองตาม type_id
         $topUpData = TopUp::select('province_id', 'amount')
             ->where('type_id', $type_id) // กรองตาม type_id
@@ -912,7 +912,7 @@ class ActivityController extends Controller
             ->groupBy('province_id');
         $Simmy_count = $topUpData->map(fn($items) => $items->count());
         $Simmy_price = $topUpData->map(fn($items) => $items->sum('amount'));
-    
+
         // โหลดข้อมูล IctSolution และกรองตาม type_id
         $ictData = IctSolution::select('province_id', 'income')
             ->where('type_id', $type_id) // กรองตาม type_id
@@ -920,10 +920,10 @@ class ActivityController extends Controller
             ->groupBy('province_id');
         $Ict_count = $ictData->map(fn($items) => $items->count());
         $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
-    
+
         // ดึงข้อมูลประเภทบริการ
         $serviceTypes = ServeActivity::all();
-    
+
         return view('events.events_customer_list', compact(
             'serviceTypes',
             'data',
@@ -940,5 +940,45 @@ class ActivityController extends Controller
             'types'
         ));
     }
-    
+
+    public function TopUp_list()
+    {
+        $provinces = ProvinceActivity::all();
+        $centers = ServiceCenterActivity::all();
+        $types = TypeActivity::all();
+        $TopUp = TopUp::with(['province', 'center'])->get();
+        return view('events.top_up', compact('TopUp', 'provinces', 'centers', 'types'));
+    }
+
+    public function searchTopUp(Request $request)
+    {
+        // รับค่าจาก Request
+        $date = $request->input('date');
+        $phone = $request->input('phone');
+        $service = $request->input('service');
+
+        // เริ่มต้น query สำหรับการค้นหา
+        $query = TopUp::query();
+
+        // ตรวจสอบว่า date ไม่ว่าง และกรองข้อมูลตามวันที่
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        }
+
+        // ตรวจสอบว่า phone ไม่ว่าง และกรองข้อมูลตามหมายเลขโทรศัพท์
+        if ($phone) {
+            $query->where('phone', 'like', '%' . $phone . '%');
+        }
+
+        // ตรวจสอบว่า service ไม่ว่าง และกรองข้อมูลตามประเภทบริการ
+        if ($service) {
+            $query->where('type_id', $service);
+        }
+
+        // ดึงข้อมูลที่กรองแล้ว
+        $topUps = $query->with(['province', 'center'])->get();
+
+        // คืนค่าผลลัพธ์ในรูปแบบ JSON
+        return response()->json($topUps);
+    }
 }

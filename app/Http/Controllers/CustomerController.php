@@ -542,7 +542,7 @@ class CustomerController extends Controller
             'type_id' => $type_id
         ]);
 
-        return redirect()->route('customer_list')->with('success', 'เพิ่มข้อมูลการเติมเงินสำเร็จ');
+        return redirect()->route('top_up_list')->with('success', 'เพิ่มข้อมูลการเติมเงินสำเร็จ');
     }
 
     public function TopUpDelete($topUp_id)
@@ -593,6 +593,7 @@ class CustomerController extends Controller
         $topUp = TopUp::where('topUp_id', $id);
 
         $topUp->update([
+            'type_id' => $request->type_id,
             'phone' => $request->phone,
             'amount' => $request->amount,
             'province_id' => $request->province_id,
