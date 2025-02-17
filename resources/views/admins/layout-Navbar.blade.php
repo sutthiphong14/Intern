@@ -158,8 +158,8 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link-main" aria-current="page" href="{{ route('fttx_broadband') }}">
-         fttx_broadband
+        <a class="nav-link-main" aria-current="page" href="{{ route('customer_list') }}">
+         customer list
         </a>
       </li>
 
@@ -169,11 +169,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link-main" aria-current="page" href="{{ route('sim_my') }}">
-         sim_my
-        </a>
-      </li>
+     
       @endif
     </ul>
 
@@ -566,7 +562,7 @@
           </div>
 
           <div class="col-3 mb-4">
-            <a href="customer_list" class="text-decoration-none">
+            <a href="{{route('customer_create')}}" class="text-decoration-none">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">

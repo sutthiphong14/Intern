@@ -4,9 +4,11 @@
 @section('content')
     <div class="container">
         <h2>จัดการกิจกรรม</h2>
-        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addTypeModal">
-            เพิ่มกิจกรรม
-        </button>
+  
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addTypeModal">
+                เพิ่มกิจกรรม
+            </button>
+          
 
         <table class="table table-bordered">
             <thead>

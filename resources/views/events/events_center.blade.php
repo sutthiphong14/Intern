@@ -11,7 +11,7 @@
         <table class="table table-bordered ">
             <thead>
                 <tr class="bg-dark text-center align-center">
-                    <th rowspan="4">ลำดับ</th>
+                    <th rowspan="4">ดูข้อมูล</th>
                     <th rowspan="4">ศูยน์บริกาาร</th>
                     <th colspan="3">FTTX</th>
                     <th colspan="4">SIM my</th>

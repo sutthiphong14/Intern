@@ -640,13 +640,20 @@ class CustomerController extends Controller
         $date = $request->get('date');
         $name = $request->get('name');
         $service = $request->get('service');
+        $type_id = $request->get('type_id');
+        $province_id = $request->get('province_id');
 
-        // เริ่มต้น Query
-        $query = Customer::query();
+        // เริ่มต้น Query และกรองตาม type_id ทันที
+        $query = Customer::query()->where('type_id', $type_id);
 
         // ค้นหาตามวันที่
         if ($date) {
             $query->whereDate('created_at', $date);
+        }
+
+        // กรองตาม province_id
+        if ($province_id) {
+            $query->where('province_id', $province_id);
         }
 
         // ค้นหาตามชื่อ

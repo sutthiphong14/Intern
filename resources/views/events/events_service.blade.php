@@ -3,13 +3,14 @@
 @endsection
 @section('content')
     <div class="container">
-        <div class="mt-5">
+        <div class="mt-5 d-flex justify-content-between">
             <h3>สรุปผลการดำเนินงานกิจกรรมการตลาด {{ $types->type_name }}</h3>
+            <a class="btn btn-secondary mb-3 text-white" href="{{route('event_customer',$types->type_id)}}" >ดูข้อมูลลูกค้า</a>
         </div>
         <table class="table table-bordered ">
             <thead>
                 <tr class="bg-dark text-center align-center">
-                    <th rowspan="4">ลำดับ</th>
+                    <th rowspan="4">ดูข้อมูล</th>
                     <th rowspan="4">จังหวัด</th>
                     <th colspan="3">FTTX</th>
                     <th colspan="4">SIM my</th>
