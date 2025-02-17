@@ -12,6 +12,7 @@ use App\Models\PriceActivity;
 use App\Models\ProvinceActivity;
 use App\Models\PromotionActivity;
 use App\Models\ServeActivity;
+use App\Models\ServiceCenterActivity;
 use App\Models\SpeedActivity;
 use App\Models\TypeActivity;
 use Illuminate\Http\Request;
@@ -699,11 +700,148 @@ class ActivityController extends Controller
             'IctCount' => $IctCount + $IctCountOver33,
             'IctIncome' => $IctIncome + $IctIncomeOver33
         ];
-       
+
+
 
         return view('events.events_service', compact(
             'types',
             'provinces',
+            'fttxNew',
+            'selfInstall',
+            'HireInstall',
+            'Simmy_new',
+            'Simmy_move',
+            'Simmy_count',
+            'Simmy_price',
+            'Ict_count',
+            'Ict_income',
+            'sumFttxNew',
+            'sumSelfInstall',
+            'sumHireInstall',
+            'sumNew',
+            'sumMove',
+            'sumCount',
+            'sumPrice',
+            'IctCount',
+            'IctIncome',
+            'sumFttxNewOver33',
+            'sumSelfInstallOver33',
+            'sumHireInstallOver33',
+            'sumNewOver33',
+            'sumMoveOver33',
+            'sumCountOver33',
+            'sumPriceOver33',
+            'IctCountOver33',
+            'IctIncomeOver33',
+            'total_all'
+
+
+        ));
+    }
+
+    public function Eventcenter($province_id, $type_id)
+    {
+        // ดึงข้อมูล Province และ TypeActivity
+        $centers = ServiceCenterActivity::where('province_id', $province_id)->get();
+        $types = TypeActivity::where('type_id', $type_id)->first();
+        $provinces = ProvinceActivity::where('province_id',$province_id)->first();
+
+        // โหลดข้อมูล Fttxbroadband เฉพาะ province_id ที่ส่งมา
+        $fttxData = Fttxbroadband::where('province_id', $province_id)->where('type_id', $type_id)
+            ->select('province_id', 'new', 'installation_type','center_id')
+            ->get()
+            ->groupBy('center_id');
+
+        $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
+        $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
+        $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
+
+        // โหลดข้อมูล Simmy เฉพาะ province_id
+        $simmyData = Simmy::where('province_id', $province_id)->where('type_id', $type_id)
+            ->select('province_id', 'cus_new','center_id')
+            ->get()
+            ->groupBy('center_id');
+
+        $Simmy_new = $simmyData->map(fn($items) => $items->where('cus_new', 1)->count());
+        $Simmy_move = $simmyData->map(fn($items) => $items->where('cus_new', 0)->count());
+
+        // โหลดข้อมูล TopUp เฉพาะ province_id
+        $topUpData = TopUp::where('province_id', $province_id)->where('type_id', $type_id)
+            ->select('province_id', 'amount','center_id')
+            ->get()
+            ->groupBy('center_id');
+
+        $Simmy_count = $topUpData->map(fn($items) => $items->count());
+        $Simmy_price = $topUpData->map(fn($items) => $items->sum('amount'));
+
+        // โหลดข้อมูล IctSolution เฉพาะ province_id
+        $ictData = IctSolution::where('province_id', $province_id)->where('type_id', $type_id)
+            ->select('province_id', 'income','center_id')
+            ->get()
+            ->groupBy('center_id');
+
+        $Ict_count = $ictData->map(fn($items) => $items->count());
+        $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
+
+        // คำนวณค่ารวมสำหรับ ตป.1 และ ตป.2
+        $sumFttxNew = $sumSelfInstall = $sumHireInstall = 0;
+        $sumNew = $sumMove = $sumCount = $sumPrice = 0;
+        $IctCount = $IctIncome = 0;
+
+        $sumFttxNewOver33 = $sumSelfInstallOver33 = $sumHireInstallOver33 = 0;
+        $sumNewOver33 = $sumMoveOver33 = $sumCountOver33 = $sumPriceOver33 = 0;
+        $IctCountOver33 = $IctIncomeOver33 = 0;
+
+        foreach ($centers as $center) {
+            $centerId = $center->center_id;
+
+            if ($centerId <= 12) {
+                $sumFttxNew += $fttxNew[$centerId] ?? 0;
+                $sumSelfInstall += $selfInstall[$centerId] ?? 0;
+                $sumHireInstall += $HireInstall[$centerId] ?? 0;
+
+                $sumNew += $Simmy_new[$centerId] ?? 0;
+                $sumMove += $Simmy_move[$centerId] ?? 0;
+                $sumCount += $Simmy_count[$centerId] ?? 0;
+                $sumPrice += $Simmy_price[$centerId] ?? 0;
+
+                $IctCount += $Ict_count[$centerId] ?? 0;
+                $IctIncome += $Ict_income[$centerId] ?? 0;
+            } else {
+                $sumFttxNewOver33 += $fttxNew[$centerId] ?? 0;
+                $sumSelfInstallOver33 += $selfInstall[$centerId] ?? 0;
+                $sumHireInstallOver33 += $HireInstall[$centerId] ?? 0;
+
+                $sumNewOver33 += $Simmy_new[$centerId] ?? 0;
+                $sumMoveOver33 += $Simmy_move[$centerId] ?? 0;
+                $sumCountOver33 += $Simmy_count[$centerId] ?? 0;
+                $sumPriceOver33 += $Simmy_price[$centerId] ?? 0;
+
+                $IctCountOver33 += $Ict_count[$centerId] ?? 0;
+                $IctIncomeOver33 += $Ict_income[$centerId] ?? 0;
+            }
+        }
+
+        // คำนวณผลรวมทั้งหมด
+        $total_all = [
+            'sumFttxNew' => $sumFttxNew + $sumFttxNewOver33,
+            'sumSelfInstall' => $sumSelfInstall + $sumSelfInstallOver33,
+            'sumHireInstall' => $sumHireInstall + $sumHireInstallOver33,
+            'sumNew' => $sumNew + $sumNewOver33,
+            'sumMove' => $sumMove + $sumMoveOver33,
+            'sumCount' => $sumCount + $sumCountOver33,
+            'sumPrice' => $sumPrice + $sumPriceOver33,
+            'IctCount' => $IctCount + $IctCountOver33,
+            'IctIncome' => $IctIncome + $IctIncomeOver33
+        ];
+        
+
+
+
+        return view('events.events_center', compact(
+            'types',
+            'provinces',
+            'centers',
             'fttxNew',
             'selfInstall',
             'HireInstall',

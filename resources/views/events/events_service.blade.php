@@ -4,7 +4,7 @@
 @section('content')
     <div class="container">
         <div class="mt-5">
-            <h3>สรุปผลการดำเนินงานกิจกรรมการตลาด {{$types->type_name}}</h3>
+            <h3>สรุปผลการดำเนินงานกิจกรรมการตลาด {{ $types->type_name }}</h3>
         </div>
         <table class="table table-bordered ">
             <thead>
@@ -40,11 +40,15 @@
 
             </thead>
             <tbody class="text-center">
-                @foreach ($provinces as $index => $province)
+                @foreach ($provinces as $province)
                     {{-- Province ID <= 33 --}}
                     @if ($province->province_id <= 12)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td>
+                                <a href="{{ route('event_center', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}" class="btn btn-warning">
+                                    <i class="fas fa-search"></i>
+                                </a>                                
+                            </td>
                             <td>{{ $province->province_name }}</td>
                             <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
                             <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
@@ -57,7 +61,6 @@
                             <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
                         </tr>
-
                     @endif
                     {{-- แสดงผลรวมตรงกลางเมื่อเปลี่ยนกลุ่ม --}}
                     @if ($province->province_id == 12)
@@ -78,7 +81,11 @@
                     {{-- Province ID > 33 --}}
                     @if ($province->province_id > 12)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td>
+                                <a href="{{ route('event_center', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}" class="btn btn-warning">
+                                    <i class="fas fa-search"></i>
+                                </a>                                
+                            </td>
                             <td>{{ $province->province_name }}</td>
                             <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
                             <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
@@ -90,7 +97,7 @@
                             <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
-                        </tr> 
+                        </tr>
                     @endif
                 @endforeach
 
@@ -128,5 +135,3 @@
         </table>
     </div>
 @endsection
-
-
