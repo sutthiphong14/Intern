@@ -36,7 +36,7 @@
     @endforeach
     @else
     <div class="carousel-item active">
-    <img src="{{ asset('storage/slideshow_images/none.png') }}" class="d-block w-100 rounded"
+    <img src="{{ asset('storage/banner/none.png') }}" class="d-block w-100 rounded"
       alt="Default Banner">
     </div>
   @endif

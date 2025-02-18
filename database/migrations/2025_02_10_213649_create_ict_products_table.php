@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('ict_products', function (Blueprint $table) {
+            $table->id('product_id'); // Primary Key
+            $table->string('product_name'); // ชื่อสินค้า
+            $table->text('description')->nullable(); // รายละเอียดสินค้า
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('ict_products');
+    }
+};

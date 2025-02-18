@@ -12,11 +12,10 @@ class Customer extends Model
     // ชื่อตารางในฐานข้อมูล
     protected $table = 'customers';
 
-    // Primary Key
-    protected $primaryKey = 'cus_id';
 
     // คอลัมน์ที่อนุญาตให้เพิ่มหรือแก้ไขข้อมูล
     protected $fillable = [
+        'cus_id',
         'cus_fullname',
         'id_card',
         'cus_photo',
@@ -28,9 +27,12 @@ class Customer extends Model
         'price_id',
         'province_id',
         'center_id',
+        'created_at',
         'other'
 
     ];
+    public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล
+    
 
     // ความสัมพันธ์กับ Model อื่น ๆ
     public function type()

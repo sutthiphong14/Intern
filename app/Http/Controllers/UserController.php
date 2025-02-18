@@ -65,6 +65,11 @@ class UserController extends Controller
             'view_customer' => $request->has('view_customer') ? 1 : 0,
         ];
 
+
+
+
+
+
         // สร้างผู้ใช้ใหม่ในฐานข้อมูล
         $user = User::create([
             'username' => $validatedData['username'],
