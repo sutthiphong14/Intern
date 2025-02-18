@@ -12,7 +12,7 @@
     <section class="content">
 
     <h4 class="fw-bold py-2 mb-3">
-        <a href="{{ route('home') }}">หน้าแรก</a> / <a href="{{ route('users.list') }}"> รายชื่อผู้ใช้ </a>/ เพิ่มผู้ใช้งาน
+        <a href="{{ route('home') }}">หน้าแรก</a> / <a href="{{ route('users.list') }}"> รายชื่อผู้ใช้ </a>/ แก้ไขผู้ใช้งาน
     </h4>
 
     <div class="card mb-4">

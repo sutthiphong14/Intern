@@ -5,7 +5,7 @@
 
     aside .nav-icon {
         font-size: 1rem !important;
-        
+
     }
 
     .main-sidebar {
@@ -41,12 +41,11 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-1 ">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 <li class="nav-item menu-open">
-                   
+
                 </li>
                 <li class="nav-item ">
                     <a href="/" class="nav-link">
@@ -56,13 +55,13 @@
                 </li>
                 <li class="nav-item ">
                     <a href="incomecurrent" class="nav-link">
-                    <i class="fas fa-money-bill-wave"></i>
+                        <i class="fas fa-money-bill-wave"></i>
                         <p>รายได้รวม</p>
                     </a>
                 </li>
                 <li class="nav-item ">
                     <a href="{{route('viewInstallFTTx')}}" class="nav-link">
-                    <i class="fas fa-wrench"></i>
+                        <i class="fas fa-wrench"></i>
                         <p>ติดตั้ง FTTx ได้ภายใน 3 วัน</p>
                     </a>
                 </li>
@@ -304,7 +303,7 @@
                     <ul class="nav nav-treeview bg-dark">
                         <li class="nav-item">
                             <a href="#" class="nav-link text-white">
-                               <i class="fas fa-users-cog"></i>
+                                <i class="fas fa-users-cog"></i>
                                 <p>กลุ่มขายและปฏิบัติการลูกค้าภาคเหนือ
                                     ภน.1</p>
                             </a>
@@ -312,14 +311,14 @@
 
                         <li class="nav-item">
                             <a href="#" class="nav-link text-white">
-                               <i class="fas fa-users-cog"></i>
+                                <i class="fas fa-users-cog"></i>
                                 <p>กลุ่มขายและปฏิบัติการลูกค้า ภาค
                                     ตะวันออกเฉียงเหนือตอนบน ภน.2</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link text-white">
-                               <i class="fas fa-users-cog"></i>
+                                <i class="fas fa-users-cog"></i>
                                 <p>กลุ่มขายและปฏิบัติการลูกค้า ภาค
                                     ตะวันออกเฉียงเหนือตอนล่าง ภน.3</p>
                             </a>
@@ -443,7 +442,7 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         // ตรวจสอบ URL ที่เปิดอยู่เพื่อ active ลิงก์ที่ตรงกับ URL
         const currentLocation = window.location.pathname;
         const menuLinks = document.querySelectorAll(".nav-link");
@@ -455,7 +454,7 @@
             }
 
             // เมื่อคลิก ให้ลบ class active ออกจากลิงก์อื่นแล้วเพิ่ม class active ให้กับลิงก์ที่คลิก
-            link.addEventListener("click", function() {
+            link.addEventListener("click", function () {
                 menuLinks.forEach(l => l.classList.remove("active"));
                 link.classList.add("active");
             });
