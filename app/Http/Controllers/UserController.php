@@ -186,14 +186,18 @@ class UserController extends Controller
     }
     public function showProfile()
     {
-        $user = auth()->user(); // Dapatkan pengguna yang saat ini login
+        $user = auth()->user(); // หรือ $user = User::find($id); หากต้องการดึงข้อมูลของผู้ใช้คนอื่น
 
-        if (!$user) {
-            return redirect()->route('login'); // Redirect ke halaman login jika tidak ada pengguna login
-        }
+        // ดึงชื่อจังหวัด
+        $provinceName = $user->province ? $user->province->province_name : 'ยังไม่มีข้อมูล';
 
-        return view('profile', compact('user'));
+        // ดึงชื่อศูนย์บริการ
+        $centerName = $user->serviceCenter ? $user->serviceCenter->center_name : 'ยังไม่มีข้อมูล';
+
+        // ส่งข้อมูลไปยัง view
+        return view('profile', compact('user', 'provinceName', 'centerName'));
     }
+
 
 
     public function getProvinces()
