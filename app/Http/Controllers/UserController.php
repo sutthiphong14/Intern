@@ -26,69 +26,73 @@ class UserController extends Controller
         return redirect('/users');
     }
 
-    public function store(Request $request) 
-{
-    // ตรวจสอบข้อมูลที่รับเข้ามา
-    $validatedData = $request->validate([
-        'username' => 'required|string',
-        'name' => 'required|string',
-        'emp_id' => 'required|string',
-        'department' => 'required|string',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|min:6',
-        'province_id' => 'required|exists:province_activity,province_id',
-        'center_id' => 'nullable|exists:servicecenter_activity,center_id',
-    ]);
-    
-    // ถ้ามีการอัพโหลดรูปโปรไฟล์
-    if ($request->hasFile('profile_image')) {
-        $image = $request->file('profile_image');
-        $imageData = base64_encode(file_get_contents($image));
-        $imageSrc = 'data:image/' . $image->getClientOriginalExtension() . ';base64,' . $imageData;
+    public function store(Request $request)
+    {
+        // ตรวจสอบข้อมูลที่รับเข้ามา
+        $validatedData = $request->validate([
+            'username' => 'required|string',
+            'name' => 'required|string',
+            'emp_id' => 'required|string',
+            'department' => 'required|string',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'province_id' => 'required|exists:province_activity,province_id',
+            'center_id' => 'nullable|exists:servicecenter_activity,center_id',
+        ]);
+
+        // ถ้ามีการอัพโหลดรูปโปรไฟล์
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $imageData = base64_encode(file_get_contents($image));
+            $imageSrc = 'data:image/' . $image->getClientOriginalExtension() . ';base64,' . $imageData;
+        }
+
+        // ดึงค่าจาก checkbox permissions ที่ส่งมาจากฟอร์ม
+        $permissions = [
+            'adminper_mission' => $request->has('adminper_mission') ? 1 : 0,
+            'manage_users' => $request->has('manage_users') ? 1 : 0,
+
+            'manage_dashboard' => $request->has('manage_dashboard') ? 1 : 0,
+            'view_fttx' => $request->has('view_fttx') ? 1 : 0,
+
+            'managenews_feeds' => $request->has('managenews_feeds') ? 1 : 0,
+
+            'manage_banner' => $request->has('manage_banner') ? 1 : 0,
+            'manage_imageevent' => $request->has('manage_imageevent') ? 1 : 0,
+
+            'manage_formevent' => $request->has('manage_formevent') ? 1 : 0,
+            'form_event' => $request->has('form_event') ? 1 : 0,
+            'view_customer' => $request->has('view_customer') ? 1 : 0,
+        ];
+
+        // สร้างผู้ใช้ใหม่ในฐานข้อมูล
+        $user = User::create([
+            'username' => $validatedData['username'],
+            'name' => $validatedData['name'],
+            'emp_id' => $validatedData['emp_id'],
+            'department' => $validatedData['department'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'profile_image' => $imageSrc ?? null,
+            'province_id' => $validatedData['province_id'],
+            'center_id' => $request->has('center_id') && is_numeric($request->center_id) ? $request->center_id : null,
+            'permission' => $permissions, // ใช้ permission ที่รับมาจากฟอร์ม
+        ]);
+
+        // ส่งกลับไปยังหน้า user list พร้อมข้อความสำเร็จ
+        return redirect()->route('users.list')->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
     }
-    
-    // ดึงค่าจาก checkbox permissions ที่ส่งมาจากฟอร์ม
-    $permissions = [
-        'adminper_mission' => $request->has('adminper_mission') ? 1 : 0,
-        'manage_users' => $request->has('manage_users') ? 1 : 0,
-
-        'manage_dashboard' => $request->has('manage_dashboard') ? 1 : 0,
-        'view_fttx' => $request->has('view_fttx') ? 1 : 0,
-
-        'managenews_feeds' => $request->has('managenews_feeds') ? 1 : 0,
-
-        'manage_banner' => $request->has('manage_banner') ? 1 : 0,
-        'manage_imageevent' => $request->has('manage_imageevent') ? 1 : 0,
-        
-        'manage_formevent' => $request->has('manage_formevent') ? 1 : 0,
-        'form_event' => $request->has('form_event') ? 1 : 0,
-        'view_customer' => $request->has('view_customer') ? 1 : 0,
-    ];
-
-    // สร้างผู้ใช้ใหม่ในฐานข้อมูล
-    $user = User::create([
-        'username' => $validatedData['username'],
-        'name' => $validatedData['name'],
-        'emp_id' => $validatedData['emp_id'],
-        'department' => $validatedData['department'],
-        'email' => $validatedData['email'],
-        'password' => Hash::make($validatedData['password']),
-        'profile_image' => $imageSrc ?? null,
-        'province_id' => $validatedData['province_id'],
-        'center_id' => $request->has('center_id') && is_numeric($request->center_id) ? $request->center_id : null,
-        'permission' => $permissions, // ใช้ permission ที่รับมาจากฟอร์ม
-    ]);
-
-    // ส่งกลับไปยังหน้า user list พร้อมข้อความสำเร็จ
-    return redirect()->route('users.list')->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
-}
 
 
     public function edit($id)
-    {
-        $user = User::findOrFail($id);
-        return view('users.editusers', compact('user'));
-    }
+{
+    $user = User::findOrFail($id);
+    $provinces = ProvinceActivity::all(); // ดึงข้อมูลจังหวัดทั้งหมด
+    $centers = ServiceCenterActivity::where('province_id', $user->province_id)->get(); // ดึงศูนย์บริการของจังหวัดที่เลือก
+
+    return view('users.editusers', compact('user', 'provinces', 'centers'));
+}
+
 
     public function update(Request $request, $id)
     {
@@ -96,55 +100,59 @@ class UserController extends Controller
             'username' => 'required|string|max:255',
             'email' => 'required|string|max:255',
             'name' => 'required|string|max:255',
-            'emp_id' => 'required|string|max:255', // Ensure emp_id is included
+            'emp_id' => 'required|string|max:255',
             'department' => 'required|string|max:255',
-
+            'province_id' => 'required|exists:province_activity,province_id',
+            'center_id' => 'nullable|exists:servicecenter_activity,center_id',
+            'password' => 'nullable|min:6',
         ]);
 
-        // ค้นหาผู้ใช้ที่ต้องการอัปเดต
         $user = User::findOrFail($id);
 
-        // อัปเดตข้อมูลที่ไม่เกี่ยวข้องกับรูปภาพ
-        $user->username = $validatedData['username'];
-        $user->email = $validatedData['email'];
-        $user->name = $validatedData['name'];
-        $user->emp_id = $validatedData['emp_id'];
-        $user->department = $validatedData['department'];
+        // อัปเดตข้อมูลพื้นฐาน
+        $user->update([
+            'username' => $validatedData['username'],
+            'email' => $validatedData['email'],
+            'name' => $validatedData['name'],
+            'emp_id' => $validatedData['emp_id'],
+            'department' => $validatedData['department'],
+            'province_id' => $validatedData['province_id'],
+            'center_id' => $request->has('center_id') && is_numeric($request->center_id) ? $request->center_id : null,
+        ]);
 
-        if (!empty($validatedData['password'])) {
+        // อัปเดตรหัสผ่านถ้ามีการส่งค่าใหม่
+        if ($request->filled('password')) {
             $user->password = Hash::make($validatedData['password']);
         }
 
-        // การอัปเดตรูปภาพ
+        // อัปเดตรูปภาพถ้ามีการอัปโหลดใหม่
         if ($request->hasFile('profile_image')) {
-            // ลบรูปเก่าก่อน
-            if ($user->profile_image) {
-                // ลบข้อมูล Base64 ของรูปเก่า
-                $user->profile_image = null;
-            }
-
-            // แปลงรูปภาพเป็น Base64
             $image = $request->file('profile_image');
             $imageData = base64_encode(file_get_contents($image));
             $imageSrc = 'data:image/' . $image->getClientOriginalExtension() . ';base64,' . $imageData;
-
-            // บันทึกรูป Base64 ลงในฐานข้อมูล
             $user->profile_image = $imageSrc;
         }
 
-        // อัปเดตสิทธิ์การใช้งาน
-        $user->permission = json_encode([
-            'manage_users' => $request->has('manage_users_permission') ? 1 : 0,
-            'manage_dashboard' => $request->has('manage_dashboard_permission') ? 1 : 0,
-            'manage_newsfeed' => $request->has('manage_newsfeed_permission') ? 1 : 0,
-        ]);
+        // อัปเดตสิทธิ์การใช้งานให้ตรงกับ store()
+        $permissions = [
+            'adminper_mission' => $request->has('adminper_mission') ? 1 : 0,
+            'manage_users' => $request->has('manage_users') ? 1 : 0,
+            'manage_dashboard' => $request->has('manage_dashboard') ? 1 : 0,
+            'view_fttx' => $request->has('view_fttx') ? 1 : 0,
+            'managenews_feeds' => $request->has('managenews_feeds') ? 1 : 0,
+            'manage_banner' => $request->has('manage_banner') ? 1 : 0,
+            'manage_imageevent' => $request->has('manage_imageevent') ? 1 : 0,
+            'manage_formevent' => $request->has('manage_formevent') ? 1 : 0,
+            'form_event' => $request->has('form_event') ? 1 : 0,
+            'view_customer' => $request->has('view_customer') ? 1 : 0,
+        ];
+        $user->permission = $permissions; // ไม่ต้อง `json_encode()` เพราะ model ใช้ `cast` เป็น array แล้ว
 
-        // บันทึกข้อมูลที่อัปเดต
         $user->save();
 
-        // ส่งกลับไปยังหน้าเดิมพร้อมข้อความสำเร็จ
         return redirect()->route('users.list')->with('success', 'อัปเดตผู้ใช้สำเร็จ!');
     }
+
 
     public function search(Request $request)
     {
@@ -189,7 +197,7 @@ class UserController extends Controller
     public function getProvinces()
     {
         $provinces = ProvinceActivity::all();
-        return view('eusers.insertusers', compact('provinces'));
+        return view('users.insertusers', compact('provinces'));
     }
 
     public function getCentersUser(Request $request)
@@ -219,6 +227,7 @@ class UserController extends Controller
         $provinces = ProvinceActivity::all(); // ดึงข้อมูลจังหวัดทั้งหมด
         return view('users.insertusers', compact('provinces'));
     }
+
 
     public function getCenters($province_id)
     {

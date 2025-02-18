@@ -71,7 +71,8 @@ Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('delete')
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
 Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
+Route::match(['PUT', 'POST'], '/users/{id}/update', [UserController::class, 'update'])->name('users.update');
+
 // Example route protection
 Route::middleware(['auth', 'check.permission:manage_users'])->group(function () {
     Route::get('/listusers', [UserController::class, 'listUsers'])->name('users.list');

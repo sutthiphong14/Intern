@@ -99,7 +99,7 @@
                         class="form-control" style="width: 200px;" required min="2000" max="9999">
                 </form>
                 <!-- ปุ่ม Import -->
-                @if (Auth::user()->permission['manage_dashboard'] ?? false)
+                @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_dashboard'] ?? false))
                     <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow">
                         <i class="fas fa-file-import"></i> Import
                     </a>
@@ -400,7 +400,7 @@
             document.getElementById('noDataMessage').innerHTML = `
 
 
-                                            <div>ไม่มีข้อมูลในปีนี้</div>`;
+                                                <div>ไม่มีข้อมูลในปีนี้</div>`;
 
         } else {
             // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
