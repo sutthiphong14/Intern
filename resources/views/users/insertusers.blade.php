@@ -32,9 +32,13 @@
                 <div class="row">
                     <div class="mb-3">
                         <label for="username" class="form-label text-dark">ชื่อผู้ใช้</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="กรอกชื่อผู้ใช้"
-                            required value="{{ old('username') }}">
+                        <input type="text" class="form-control @error('username') is-invalid @enderror" id="username"
+                            name="username" placeholder="กรอกชื่อผู้ใช้" required value="{{ old('username') }}">
+                        @error('username')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="name" class="form-label text-dark">ชื่อ-นามสกุล</label>
                         <input type="text" class="form-control" id="name" name="name" placeholder="กรอกชื่อ-นามสกุล"
@@ -48,8 +52,11 @@
 
                     <div class="mb-3">
                         <label for="email" class="form-label text-dark">อีเมล</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="กรอกอีเมล" required
-                            value="{{ old('email') }}">
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                            name="email" placeholder="กรอกอีเมล" required value="{{ old('email') }}">
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-3">

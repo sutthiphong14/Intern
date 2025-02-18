@@ -30,7 +30,7 @@ class UserController extends Controller
     {
         // ตรวจสอบข้อมูลที่รับเข้ามา
         $validatedData = $request->validate([
-            'username' => 'required|string',
+            'username' => 'required|unique:users,username',
             'name' => 'required|string',
             'emp_id' => 'required|string',
             'department' => 'required|string',
@@ -85,29 +85,31 @@ class UserController extends Controller
 
 
     public function edit($id)
-{
-    $user = User::findOrFail($id);
-    $provinces = ProvinceActivity::all(); // ดึงข้อมูลจังหวัดทั้งหมด
-    $centers = ServiceCenterActivity::where('province_id', $user->province_id)->get(); // ดึงศูนย์บริการของจังหวัดที่เลือก
+    {
+        $user = User::findOrFail($id);
+        $provinces = ProvinceActivity::all(); // ดึงข้อมูลจังหวัดทั้งหมด
+        $centers = ServiceCenterActivity::where('province_id', $user->province_id)->get(); // ดึงศูนย์บริการของจังหวัดที่เลือก
 
-    return view('users.editusers', compact('user', 'provinces', 'centers'));
-}
+        return view('users.editusers', compact('user', 'provinces', 'centers'));
+    }
 
 
     public function update(Request $request, $id)
     {
+        // ค้นหาผู้ใช้ที่ต้องการอัปเดต
+        $user = User::findOrFail($id);
+
+        // อัปเดต validation
         $validatedData = $request->validate([
-            'username' => 'required|string|max:255',
-            'email' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
+            'username' => ['required', 'unique:users,username,' . $id],  // Exclude current user from unique check
+            'email' => ['required', 'email', 'unique:users,email,' . $id], // Exclude current user from unique check
+            'name' => 'required|string|max:255|unique:users,name,' . $id, // Exclude current user from unique check
             'emp_id' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'province_id' => 'required|exists:province_activity,province_id',
             'center_id' => 'nullable|exists:servicecenter_activity,center_id',
             'password' => 'nullable|min:6',
         ]);
-
-        $user = User::findOrFail($id);
 
         // อัปเดตข้อมูลพื้นฐาน
         $user->update([
@@ -146,13 +148,13 @@ class UserController extends Controller
             'form_event' => $request->has('form_event') ? 1 : 0,
             'view_customer' => $request->has('view_customer') ? 1 : 0,
         ];
-        $user->permission = $permissions; // ไม่ต้อง `json_encode()` เพราะ model ใช้ `cast` เป็น array แล้ว
+        $user->permission = $permissions;
 
+        // บันทึกข้อมูล
         $user->save();
 
         return redirect()->route('users.list')->with('success', 'อัปเดตผู้ใช้สำเร็จ!');
     }
-
 
     public function search(Request $request)
     {
@@ -240,9 +242,5 @@ class UserController extends Controller
         $centers = ServiceCenterActivity::where('province_id', $request->province_id)->get(['center_id', 'center_name']);
         return response()->json($centers);
     }
-
-
-
-
 
 }
