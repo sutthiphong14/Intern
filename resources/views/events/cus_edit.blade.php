@@ -126,34 +126,35 @@
                 </select>
 
                 <div id="groupNet">
-                <label for="promotion_id" class="form-label">โปรโมชั่น</label>
-                <select class="form-select" id="promotion_id" name="promotion_id" required>
-                    @foreach ($promotion as $promotion)
-                        <option value="{{ $promotion->promotion_id }}"
-                            {{ $customer->promotion_id == $promotion->promotion_id ? 'selected' : '' }}>
-                            {{ $promotion->promotion_name }}</option>
-                    @endforeach
-                </select>
+                    <label for="promotion_id" class="form-label">โปรโมชั่น</label>
+                    <select class="form-select" id="promotion_id" name="promotion_id" required>
+                        @foreach ($promotion as $promotion)
+                            <option value="{{ $promotion->promotion_id }}"
+                                {{ $customer->promotion_id == $promotion->promotion_id ? 'selected' : '' }}>
+                                {{ $promotion->promotion_name }}</option>
+                        @endforeach
+                    </select>
 
-                <label for="speed_id" class="form-label">ความเร็ว</label>
-                <select class="form-select" id="speed_id" name="speed_id" required>
-                    @foreach ($speed as $speed)
-                        <option value="{{ $speed->speed_id }}"
-                            {{ $customer->speed_id == $speed->speed_id ? 'selected' : '' }}>{{ $speed->speed_name }}
-                        </option>
-                    @endforeach
-                </select>
-       
+                    <label for="speed_id" class="form-label">ความเร็ว</label>
+                    <select class="form-select" id="speed_id" name="speed_id" required>
+                        @foreach ($speed as $speed)
+                            <option value="{{ $speed->speed_id }}"
+                                {{ $customer->speed_id == $speed->speed_id ? 'selected' : '' }}>{{ $speed->speed_name }}
+                            </option>
+                        @endforeach
+                    </select>
 
-                <label for="price_id" class="form-label">ราคา</label>
-                <select class="form-select" id="price_id" name="price_id" required>
-                    @foreach ($prices as $prices)
-                        <option value="{{ $prices->price_id }}"
-                            {{ $customer->prices_id == $prices->price_id ? 'selected' : '' }}>{{ $prices->price_name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+
+                    <label for="price_id" class="form-label">ราคา</label>
+                    <select class="form-select" id="price_id" name="price_id" required>
+                        @foreach ($prices as $prices)
+                            <option value="{{ $prices->price_id }}"
+                                {{ $customer->prices_id == $prices->price_id ? 'selected' : '' }}>
+                                {{ $prices->price_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
                 <!-- Dropdown for Province -->
                 <label for="province_id" class="form-label">จังหวัด</label>
@@ -213,7 +214,7 @@
                             <div class="d-flex product-row">
                                 <div>
                                     <label for="product_id" class="form-label">Product</label>
-                                    <select class="form-select" name="product_id[]" >
+                                    <select class="form-select" name="product_id[]">
                                         <option value="" disabled selected>-- เลือก Product --</option>
                                         @foreach ($products as $product)
                                             <option value="{{ $product->product_id }}">{{ $product->product_name }}
@@ -223,8 +224,8 @@
                                 </div>
                                 <div>
                                     <label for="quantity" class="form-label">จำนวน</label>
-                                    <input type="number" name="quantity[]" class="form-control" placeholder="ระบุจำนวน"
-                                        >
+                                    <input type="number" name="quantity[]" class="form-control"
+                                        placeholder="ระบุจำนวน">
                                 </div>
                                 <button type="button" class="btn btn-success add-product mt-4">+</button>
                                 <button type="button" class="btn btn-danger remove-product mt-4">-</button>
@@ -486,6 +487,9 @@
                     // ปิด required สำหรับทุกฟอร์ม
                     $('#new, #installation_type, #cus_new, #income, #customer_type, #quote , #product_id, #quantity_id')
                         .prop('required', false);
+
+                    $('#save-button').prop('disabled', true);
+
                     // กลับ label เป็น "ชื่อ นามสกุล"
                     $('#fullname_label').text('ชื่อ นามสกุล');
                 }

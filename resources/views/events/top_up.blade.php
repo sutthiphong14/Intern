@@ -19,7 +19,8 @@
                 </div>
 
                 <div class="flex-grow-1">
-                    <input type="text" id="searchInput" name="phone" class="form-control" placeholder="ค้นหาหมายเลขโทรศััพท์">
+                    <input type="text" id="searchInput" name="phone" class="form-control"
+                        placeholder="ค้นหาหมายเลขโทรศััพท์">
                 </div>
 
                 <div class="mt-2">
@@ -35,7 +36,7 @@
                 <div class="w-auto flex-shrink-0 mb-4">
                     <p class="text-danger mb-1">*เลือกกิจกรรม</p>
                     <select class="form-select bg-success" id="type_service" name="service">
-                     
+
                         @foreach ($types as $type)
                             <option value="{{ $type->type_id }}">{{ $type->type_name }}</option>
                         @endforeach
@@ -103,8 +104,8 @@
 
 
 
-      
-        <table class=" table table-bordered text-center " >
+
+        <table class=" table table-bordered text-center ">
             <thead>
                 <tr class="bg-dark text-light">
                     <th>ลำดับ</th>
@@ -116,9 +117,9 @@
                     <th>เครื่องมือ</th>
                 </tr>
             </thead>
-            <tbody id="topUpTable" >
+            <tbody id="topUpTable">
                 @foreach ($TopUp as $TopUp)
-                    <tr >
+                    <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $TopUp->phone ?? 'ไม่ระบุ' }}</td>
                         <td>{{ $TopUp->amount }}</td>
@@ -236,20 +237,19 @@
 @endsection
 
 @section('script')
+    <script>
+        $(document).ready(function() {
+            $('#province_search').select2({
+                placeholder: "เลือกจังหวัด",
+                allowClear: true
+            });
 
-<script>
-    $(document).ready(function() {
-        $('#province_search').select2({
-            placeholder: "เลือกจังหวัด",
-            allowClear: true
+            // ใช้ jQuery ดักจับค่า Select2 ที่เปลี่ยนแปลง
+            $('#province_search').on('change', function() {
+                searchTopUp();
+            });
         });
-
-        // ใช้ jQuery ดักจับค่า Select2 ที่เปลี่ยนแปลง
-        $('#province_search').on('change', function() {
-            searchTopUp();
-        });
-    });
-</script>
+    </script>
 
 
     <script>
@@ -420,6 +420,8 @@
                                             <form id="deleteForm${TopUp.topUp_id}"
                                                 action="/topUp_delete/${TopUp.topUp_id}" method="POST"
                                                 style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
                                                 <button type="button" class="dropdown-item text-danger deleteBtn"
                                                     onclick="confirmDeleteTop(${TopUp.topUp_id})">
                                                     <i class="bx bx-trash"></i> Delete
@@ -443,12 +445,9 @@
                 .catch(error => console.error('Error:', error));
         }
 
-         // เรียกใช้ฟังก์ชันการค้นหาทันทีเมื่อหน้าโหลด
-         document.addEventListener('DOMContentLoaded', function() {
+        // เรียกใช้ฟังก์ชันการค้นหาทันทีเมื่อหน้าโหลด
+        document.addEventListener('DOMContentLoaded', function() {
             searchTopUp(); // เรียกใช้ฟังก์ชันนี้หลังจากหน้าโหลดเสร็จ
         });
     </script>
-
-
-   
 @endsection

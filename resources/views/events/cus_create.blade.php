@@ -13,12 +13,12 @@
                     fn($service) => strpos($service->service_name, 'ร่วม') !== false,
                 );
             @endphp
-            <div class="d-flex justify-content-between align-items-center mb-3">
+           
                 <h2 class="m-0">เพิ่มลูกค้า</h2>
-
                 <div class="mt-3">
-                    <p class="mb-2 text-danger">* เลือกบริการ</p>
-                    <select class="form-select bg-success" id="service_id" name="service_id" required>
+                    <p class="mb-2 text-danger ">* เลือกบริการ</p>
+                    <select class="form-select  bg-success" id="service_id" name="service_id" required>
+                        <option value="" selected disabled>กรุณาเลือกบริการ</option>
                         @foreach ($sortedServices as $service)
                             <option value="{{ $service->service_id }}">{{ $service->service_name }}</option>
                         @endforeach
@@ -28,7 +28,7 @@
                         <div class="text-danger mt-2">{{ $message }}</div>
                     @enderror
                 </div>
-            </div>
+           
 
 
             @error('service_id')
@@ -37,7 +37,8 @@
 
             <div class="mb-3">
                 <!-- Fullname -->
-                <label for="cus_fullname" class="form-label" id="fullname_label">ชื่อ นามสกุล</label>
+                <p id="service-alert" class="text-danger bg-light" style="display: none;">กรุณาเลือกบริการก่อน</p>
+                <label for="cus_fullname" class="form-label mt-3" id="fullname_label">ชื่อ นามสกุล</label>
                 @error('cus_fullname')
                     <p style="color:red">{{ $message }}</p>
                 @enderror
@@ -379,6 +380,9 @@
                     // ปิด required สำหรับฟอร์มอื่น ๆ
                     $('#cus_new, #income, #customer_type, #quote, #product_id, #quantity_id ').prop('required',
                         false);
+                    $('#save-button').prop('disabled', false);
+
+
                 } else if (serviceName.includes('SIM my')) {
                     $('#sim_my,#groupNet, #groupNet1').show();
                     $('#fttx_broadband, #ict_solution, #ict_solution1').hide();
@@ -392,6 +396,8 @@
                     // ปิด required สำหรับฟอร์มอื่น ๆ
                     $('#new, #installation_type, #income, #customer_type, #quote, #product_id, #quantity_id').prop(
                         'required', false);
+                    $('#save-button').prop('disabled', false);
+
                 } else if (serviceName.includes('ICT solution')) {
                     $('#ict_solution, #ict_solution1').show();
                     $('#fttx_broadband, #sim_my, #groupNet, #groupNet1').hide();
@@ -405,6 +411,7 @@
                     $('#new, #installation_type, #cus_new, #promotion_id, #speed_id, #price_id, #id_card, #cus_photo')
                         .prop('required',
                             false);
+                    $('#save-button').prop('disabled', false);
                 } else {
                     // ซ่อนฟอร์มทั้งหมด
                     $('#fttx_broadband, #sim_my, #ict_solution, #ict_solution1').hide();
@@ -412,6 +419,9 @@
                     // ปิด required สำหรับทุกฟอร์ม
                     $('#new, #installation_type, #cus_new, #income, #customer_type, #quote , #product_id, #quantity_id')
                         .prop('required', false);
+
+                    $('#save-button').prop('disabled', true);
+
                     // กลับ label เป็น "ชื่อ นามสกุล"
                     $('#fullname_label').text('ชื่อ นามสกุล');
                 }
@@ -451,5 +461,25 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+    // เมื่อมีการพิมพ์ในช่อง cus_fullname
+    $('#cus_fullname').on('input', function() {
+        var selectedService = $('#service_id').val(); // ดึงค่าของ service_id
+        if (!selectedService) { // ถ้ายังไม่ได้เลือกบริการ
+            $('#service-alert').show(); // แสดงข้อความแจ้งเตือน
+            $(this).val(''); // ลบค่าที่พิมพ์ไป
+        } else {
+            $('#service-alert').hide(); // ซ่อนข้อความแจ้งเตือนถ้าเลือกบริการแล้ว
+        }
+    });
+
+    // เมื่อมีการเปลี่ยนค่าใน select (service_id)
+    $('#service_id').on('change', function() {
+        $('#service-alert').hide(); // ซ่อนข้อความแจ้งเตือนเมื่อเลือกบริการ
+    });
+});
     </script>
 @endsection

@@ -238,7 +238,7 @@ class CustomerController extends Controller
 
 
 
-        return redirect()->route('customer_list')->with('success', 'เพิ่มข้อมูลลูกค้าสำเร็จ');
+        return redirect()->route('type_list')->with('success', 'เพิ่มข้อมูลลูกค้าสำเร็จ');
     }
 
     public function CustomerDelete($cus_id)
@@ -254,9 +254,9 @@ class CustomerController extends Controller
             // Delete the customer
             $customer->delete();
 
-            return redirect()->route('customer_list')->with('success', 'ลบข้อมูลสำเร็จ');
+            return redirect()->route('type_list')->with('success', 'ลบข้อมูลสำเร็จ');
         } else {
-            return redirect()->route('customer_list')->with('error', 'Customer not found');
+            return redirect()->route('type_list')->with('error', 'Customer not found');
         }
     }
 
@@ -264,7 +264,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::where('cus_id', $cus_id)->first();
         if (!$customer) {
-            return redirect()->route('customer_list')->with('error', 'ไม่พบข้อมูลลูกค้า');
+            return redirect()->back()->with('error', 'ไม่พบข้อมูลลูกค้า');
         }
         $fttxBroadband = Fttxbroadband::where('cus_id', $cus_id)->first();
         $sim_my = Simmy::where('cus_id', $cus_id)->first();
@@ -297,7 +297,7 @@ class CustomerController extends Controller
         $customer = Customer::where('cus_id', $cus_id)->firstOrFail();
 
         if (!$customer) {
-            return redirect()->route('customer_list')->with('error', 'ไม่พบข้อมูลลูกค้า');
+            return redirect()->route('type_list')->with('error', 'ไม่พบข้อมูลลูกค้า');
         }
 
         // รับค่าจากฟอร์ม
@@ -520,9 +520,9 @@ class CustomerController extends Controller
         $updateResult = Customer::where('cus_id', $cus_id)->update($updateData);
 
         if ($updateResult) {
-            return redirect()->route('customer_list')->with('success', 'อัปเดตข้อมูลลูกค้าเรียบร้อยแล้ว');
+            return redirect()->route('type_list')->with('success', 'อัปเดตข้อมูลลูกค้าเรียบร้อยแล้ว');
         } else {
-            return redirect()->route('customer_list')->with('error', 'การอัปเดตล้มเหลว');
+            return redirect()->route('type_list')->with('error', 'การอัปเดตล้มเหลว');
         }
     }
 
@@ -558,9 +558,9 @@ class CustomerController extends Controller
             // Delete the customer
             $customer->delete();
 
-            return redirect()->route('customer_list')->with('success', 'ลบข้อมูลสำเร็จ');
+            return redirect()->back()->with('success', 'ลบข้อมูลสำเร็จ');
         } else {
-            return redirect()->route('customer_list')->with('error', 'Customer not found');
+            return redirect()->back()->with('error', 'Customer not found');
         }
     }
     public function getTopUpDetails($topUpId)

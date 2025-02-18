@@ -881,7 +881,11 @@ class ActivityController extends Controller
         $dataQuery = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])
             ->where('type_id', $type_id); // เพิ่มเงื่อนไขตาม type_id
 
+        $dataIct = IctSolution::where('type_id',$type_id)->get();
+      
         $data = $dataQuery->get();
+
+        
 
         // ดึงข้อมูล Province และ TypeActivity
         $provinces = ProvinceActivity::all();
@@ -927,6 +931,7 @@ class ActivityController extends Controller
         return view('events.events_customer_list', compact(
             'serviceTypes',
             'data',
+            'dataIct',
             'provinces',
             'fttxNew',
             'selfInstall',
