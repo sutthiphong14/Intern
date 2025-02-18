@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="container">
+        <h3 id="top_up" class="text-center text-warning">-ข้อมูลการเติมเงิน-🪙</h3>
         <div class="d-flex justify-content-between align-items-center">
             <!-- ปุ่มเติมเงิน (ซ้ายสุด) -->
             <div>
@@ -21,6 +22,16 @@
                     <input type="text" id="searchInput" name="phone" class="form-control" placeholder="ค้นหาหมายเลขโทรศััพท์">
                 </div>
 
+                <div class="mt-2">
+                    <!-- ช่องเลือกจังหวัด -->
+                    <select class="form-select bg-warning" id="province_search" name="province_search">
+                        <option value="" disabled selected>เลือกจังหวัด</option>
+                        @foreach ($provinces as $province)
+                            <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="w-auto flex-shrink-0 mb-4">
                     <p class="text-danger mb-1">*เลือกกิจกรรม</p>
                     <select class="form-select bg-success" id="type_service" name="service">
@@ -32,9 +43,6 @@
                 </div>
             </div>
         </div>
-
-
-
 
         <!-- Modal สำหรับเติมเงิน -->
         <div class="modal fade" id="Top_up" tabindex="-1" aria-labelledby="Top_uplLabel" aria-hidden="true">
@@ -95,7 +103,7 @@
 
 
 
-        <h3 id="top_up">ข้อมูลการเติมเงิน</h3>
+      
         <table class=" table table-bordered text-center " >
             <thead>
                 <tr class="bg-dark text-light">
@@ -228,6 +236,22 @@
 @endsection
 
 @section('script')
+
+<script>
+    $(document).ready(function() {
+        $('#province_search').select2({
+            placeholder: "เลือกจังหวัด",
+            allowClear: true
+        });
+
+        // ใช้ jQuery ดักจับค่า Select2 ที่เปลี่ยนแปลง
+        $('#province_search').on('change', function() {
+            searchTopUp();
+        });
+    });
+</script>
+
+
     <script>
         $('#province_id').change(function() {
             var provinceId = $(this).val();
@@ -348,15 +372,17 @@
     <script>
         document.getElementById('createdDate').addEventListener('input', searchTopUp);
         document.getElementById('searchInput').addEventListener('input', searchTopUp);
+        document.getElementById('province_search').addEventListener('change', searchTopUp);
         document.getElementById('type_service').addEventListener('change', searchTopUp);
 
         function searchTopUp() {
             let date = document.getElementById('createdDate').value;
             let searchPhone = document.getElementById('searchInput').value;
+            let provinceId = document.getElementById('province_search').value;
             let typeService = document.getElementById('type_service').value;
 
             // ส่งค่าผ่าน URL Params ไปยัง Backend
-            let url = `/topups/search?date=${date}&phone=${searchPhone}&service=${typeService}`;
+            let url = `/topups/search?date=${date}&phone=${searchPhone}&service=${typeService}&province_id=${provinceId}`;
 
             fetch(url)
                 .then(response => response.json())

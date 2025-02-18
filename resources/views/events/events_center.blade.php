@@ -11,7 +11,6 @@
         <table class="table table-bordered ">
             <thead>
                 <tr class="bg-dark text-center align-center">
-                    <th rowspan="4">ดูข้อมูล</th>
                     <th rowspan="4">ศูยน์บริกาาร</th>
                     <th colspan="3">FTTX</th>
                     <th colspan="4">SIM my</th>
@@ -44,28 +43,23 @@
             <tbody class="text-center">
                 @foreach ($centers as $center)
                     {{-- Province ID <= 33 --}}
-                        <tr>
-                            <td>
-                                <a href="#" class="btn btn-warning">
-                                    <i class="fas fa-search"></i>
-                                </a>                                
-                             
-                            </td>
-                            <td>{{ $center->center_name }}</td>
-                            <td>{{ $fttxNew[$center->center_id] ?? 0 }}</td>
-                            <td>{{ $selfInstall[$center->center_id] ?? 0 }}</td>
-                            <td>{{ $HireInstall[$center->center_id] ?? 0 }}</td>
-                            
-                            <td>{{ $Simmy_new[$center->center_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_move[$center->center_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_count[$center->center_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_price[$center->center_id] ?? 0 }}</td>
-                            <td>{{ $Ict_count[$center->center_id] ?? 0 }}</td>
-                            <td>{{ $Ict_income[$center->center_id] ?? 0 }}</td>
-                            
-                            
-                        </tr>
-                        @endforeach
+                    <tr>
+
+                        <td>{{ $center->center_name }}</td>
+                        <td>{{ $fttxNew[$center->center_id] ?? 0 }}</td>
+                        <td>{{ $selfInstall[$center->center_id] ?? 0 }}</td>
+                        <td>{{ $HireInstall[$center->center_id] ?? 0 }}</td>
+
+                        <td>{{ $Simmy_new[$center->center_id] ?? 0 }}</td>
+                        <td>{{ $Simmy_move[$center->center_id] ?? 0 }}</td>
+                        <td>{{ $Simmy_count[$center->center_id] ?? 0 }}</td>
+                        <td>{{ $Simmy_price[$center->center_id] ?? 0 }}</td>
+                        <td>{{ $Ict_count[$center->center_id] ?? 0 }}</td>
+                        <td>{{ $Ict_income[$center->center_id] ?? 0 }}</td>
+
+
+                    </tr>
+                @endforeach
             </tbody>
 
 

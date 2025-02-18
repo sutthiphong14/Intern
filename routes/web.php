@@ -401,7 +401,7 @@ Route::get('/customers/search', [CustomerController::class, 'searchCustomers'])-
 
 Route::post('/topUp_insert', [CustomerController::class,'insertTopup'])->name('topUp_insert');
 Route::delete('/topUp_delete/{topUp_id}', [CustomerController::class, 'TopUpDelete'])->name('topUp_delete');
-Route::put('/top-up/update/{id}', [CustomerController::class, 'TopUpUpdate'])->name('topUp_update');
+Route::put('/topUp_update/{id}', [CustomerController::class, 'TopUpUpdate'])->name('topUp_update');
 Route::get('/getTopUpDetails/{topUpId}', [CustomerController::class, 'getTopUpDetails'])->name('getTopUpDetails');
 
 

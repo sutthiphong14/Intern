@@ -956,6 +956,7 @@ class ActivityController extends Controller
         $date = $request->input('date');
         $phone = $request->input('phone');
         $service = $request->input('service');
+        $province_id = $request->get('province_id');
 
         // เริ่มต้น query สำหรับการค้นหา
         $query = TopUp::query();
@@ -968,6 +969,11 @@ class ActivityController extends Controller
         // ตรวจสอบว่า phone ไม่ว่าง และกรองข้อมูลตามหมายเลขโทรศัพท์
         if ($phone) {
             $query->where('phone', 'like', '%' . $phone . '%');
+        }
+
+        // กรองตาม province_id
+        if ($province_id) {
+            $query->where('province_id', $province_id);
         }
 
         // ตรวจสอบว่า service ไม่ว่าง และกรองข้อมูลตามประเภทบริการ

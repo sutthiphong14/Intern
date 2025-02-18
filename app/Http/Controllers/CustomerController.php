@@ -591,7 +591,6 @@ class CustomerController extends Controller
         ]);
 
         $topUp = TopUp::where('topUp_id', $id);
-
         $topUp->update([
             'type_id' => $request->type_id,
             'phone' => $request->phone,
@@ -600,7 +599,7 @@ class CustomerController extends Controller
             'center_id' => $request->center_id,
         ]);
 
-        return redirect()->back()->with('success', 'TopUp updated successfully!');
+        return redirect()->route('top_up_list')->with('success', 'TopUp updated successfully!');
     }
 
 
