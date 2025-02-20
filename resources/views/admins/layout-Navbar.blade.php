@@ -138,6 +138,27 @@
     overflow-y: auto;
     /* เปิดให้เลื่อนเฉพาะส่วนเนื้อหา */
   }
+
+
+        .user-profile-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        #showuser .modal-dialog {
+            max-width: 400px;
+            /* ปรับความกว้างของ modal */
+            height: auto;
+            /* ความสูงปรับตามเนื้อหา */
+        }
+
+        #showuser .modal-content {
+            height: auto;
+            /* ความสูงของ content ปรับตามเนื้อหาภายใน */
+        }
+
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm rounded border p-2">
@@ -168,13 +189,14 @@
       <div class="dropdown">
       <a class="nav-link-main dropdown-toggle hide-arrow" href="javascript:void(0);" id="userDropdown"
         data-bs-toggle="dropdown" aria-expanded="false">
-        @if (Auth::user()->profile_image)
-      <img src="{{ Auth::user()->profile_image }}" alt="User Avatar" class="w-px-40 h-auto rounded-circle">
+        @if (Auth::user()->profile_image )
+      <img src="{{ Auth::user()->profile_image }}" alt="User Avatar" class="user-profile-image">
     @else
     <img src="{{ asset('dist/img/defult_profile.jpg') }}" alt="Default Profile Image"
-    class="w-px-40 h-auto rounded-circle">
+    class="user-profile-image">
+    
   @endif
-        <span class="text-dark">{{ Auth::user()->name }}</span>
+        <span class="text-dark"> &nbsp{{ Auth::user()->name }}</span>
       </a>
       <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="userDropdown">
         <li>

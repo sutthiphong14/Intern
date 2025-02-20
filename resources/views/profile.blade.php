@@ -61,6 +61,13 @@
         .hidden-file-input {
             display: none;
         }
+
+        .user-profile-image {
+            width: 500px;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
     </style>
 
 @endsection
@@ -73,23 +80,19 @@
         <div class="card-body">
             <div class="d-flex align-items-start align-items-sm-center gap-4">
                 @if ($user->profile_image)
-                    <img src="{{ $user->profile_image }}" alt="user-avatar" class="d-block rounded" height="100" width="100"
-                        id="uploadedAvatar">
+                    <img src="{{ $user->profile_image }}" alt="user-avatar" class="d-block rounded user-profile-image " 
+                        id="uploadedAvatar" >
                 @else
-                    <img src="dist/img/defult_profile.jpg" alt="user-avatar" class="d-block rounded" height="100" width="100"
-                        id="uploadedAvatar">
+                    <img src="dist/img/defult_profile.jpg" alt="user-avatar" class="d-block rounded user-profile-image " 
+                        id="uploadedAvatar" >
                 @endif
 
                 <form id="profileImageForm" action="{{ route('profile.update-image') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="button-wrapper">
-                        <label for="upload" class="btn btn-warning me-2 mb-4" tabindex="0">
-                            <span class="d-none d-sm-block">แก้ไขบัญชี</span>
-                            <i class="bx bx-upload d-block d-sm-none"></i>
-                            <input type="file" id="upload" class="account-file-input" name="profile_image" hidden
-                                accept="image/png, image/jpeg" />
-                        </label>
+                                <!-- ปุ่มสำหรับไปที่หน้าแก้ไขโปรไฟล์ -->
+                                <a href="{{ route('profile.edit') }}" class="btn btn-warning">แก้ไขบัญชี</a>
                     </div>
                 </form>
             </div>
@@ -109,7 +112,7 @@
                     <label for="firstName" class="form-label">รหัสพนักงาน</label>
                     <h4>{{ $user->emp_id }}</h4>
                 </div>
-                
+
                 <div class="mb-3 col-md-6">
                     <label for="lastName" class="form-label">อีเมล</label>
                     <h4>{{ $user->email }}</h4>

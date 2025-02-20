@@ -103,9 +103,13 @@ Route::get('/newsfeed', function () {
 
 Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
 
-Route::get('/profile', function () {
-    return view('profile');
+// ต้องล็อกอินก่อนถึงเข้าถึงโปรไฟล์ได้
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [UserController::class, 'editprofile'])->name('profile.edit');
+    Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update'); // เปลี่ยนเป็น PUT
 });
+
+
 
 Route::get('/download/{id}', [AdminController::class, 'downloadFile'])->name('admin.download');
 

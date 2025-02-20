@@ -65,11 +65,6 @@ class UserController extends Controller
             'view_customer' => $request->has('view_customer') ? 1 : 0,
         ];
 
-
-
-
-
-
         // สร้างผู้ใช้ใหม่ในฐานข้อมูล
         $user = User::create([
             'username' => $validatedData['username'],
@@ -89,14 +84,26 @@ class UserController extends Controller
     }
 
 
-    public function edit($id)
+    public function edit()
     {
-        $user = User::findOrFail($id);
-        $provinces = ProvinceActivity::all(); // ดึงข้อมูลจังหวัดทั้งหมด
-        $centers = ServiceCenterActivity::where('province_id', $user->province_id)->get(); // ดึงศูนย์บริการของจังหวัดที่เลือก
+        $user = auth()->user(); // ดึงข้อมูลผู้ใช้ที่ล็อกอินอยู่
+        $provinces = ProvinceActivity::all();
+        $centers = ServiceCenterActivity::where('province_id', $user->province_id)->get();
 
         return view('users.editusers', compact('user', 'provinces', 'centers'));
     }
+
+    public function editprofile()
+    {
+        $user = auth()->user(); // ดึงข้อมูลของผู้ใช้ที่ล็อกอินอยู่
+        $provinces = ProvinceActivity::all();
+        $centers = ServiceCenterActivity::where('province_id', $user->province_id)->get();
+
+        return view('profileedit', compact('user', 'provinces', 'centers')); // เปลี่ยนชื่อ view
+    }
+
+
+
 
 
     public function update(Request $request, $id)
@@ -161,6 +168,42 @@ class UserController extends Controller
         return redirect()->route('users.list')->with('success', 'อัปเดตผู้ใช้สำเร็จ!');
     }
 
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+    
+        // ตรวจสอบการอัปโหลดรูปภาพใหม่
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $imageName = 'profile_' . $user->id . '.' . $image->getClientOriginalExtension();
+    
+            // ลบรูปเดิมออกจาก storage ถ้ามี
+            if ($user->profile_image && Storage::exists(str_replace('storage/', 'public/', $user->profile_image))) {
+                Storage::delete(str_replace('storage/', 'public/', $user->profile_image));
+            }
+    
+            // บันทึกไฟล์ใหม่ลง storage
+            $path = $image->storeAs('public/profile_images', $imageName);
+            $user->profile_image = str_replace('public/', 'storage/', $path);
+        } 
+    
+        // ตรวจสอบว่ามีการกรอกรหัสผ่านใหม่หรือไม่
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+    
+        // อัปเดตข้อมูลผู้ใช้ (ยกเว้น profile_image และ password ที่ตรวจสอบแล้ว)
+        $user->update($request->except(['profile_image', 'password']));
+    
+        // คืนค่าผลลัพธ์
+        return redirect()->route('profile')->with('success', 'อัปเดตโปรไฟล์เรียบร้อย!');
+    }
+    
+
+    
+
+
+
     public function search(Request $request)
     {
         $query = $request->input('query');
@@ -202,7 +245,6 @@ class UserController extends Controller
         // ส่งข้อมูลไปยัง view
         return view('profile', compact('user', 'provinceName', 'centerName'));
     }
-
 
 
     public function getProvinces()

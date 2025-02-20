@@ -543,14 +543,9 @@ class ReportController extends Controller
             ->where('month', '=', $month)
             ->get();
 
-
-
-
         // ดึงข้อมูลสำหรับ labels และ data
         $labels = $installData->pluck('installation_center'); // ใช้ชื่อของ section หรือ center เป็น label
         $data = $installData->pluck('installation_percentage_within_3_days'); // ใช้เปอร์เซ็นต์การติดตั้ง
-
-
 
         // ส่งข้อมูลไปยัง view
         return view('report.viewInstallFTTxcenter', compact('installData', 'labels', 'data', 'section', 'year', 'month'));

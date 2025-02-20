@@ -55,6 +55,10 @@
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ asset('dist/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('dist/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
+    <!-- Cropper.js -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
 
 
     <!-- Page CSS -->
@@ -86,7 +90,7 @@
                 <div class="container-xxl flex-grow-1 container-p-y">
                     @include('admins.layout-Navbar')
                     @yield('content')
-                    
+
                 </div>
                 @include('admins.footer')
             </div>
