@@ -84,14 +84,14 @@ class UserController extends Controller
     }
 
 
-    public function edit()
-    {
-        $user = auth()->user(); // ดึงข้อมูลผู้ใช้ที่ล็อกอินอยู่
-        $provinces = ProvinceActivity::all();
-        $centers = ServiceCenterActivity::where('province_id', $user->province_id)->get();
-
-        return view('users.editusers', compact('user', 'provinces', 'centers'));
-    }
+    public function edit($id)
+{
+    $user = User::findOrFail($id); // ดึงข้อมูล user ตาม ID ที่ส่งมา
+    $provinces = ProvinceActivity::all();
+    $centers = ServiceCenterActivity::where('province_id', $user->province_id)->get();
+    
+    return view('users.editusers', compact('user', 'provinces', 'centers'));
+}
 
     public function editprofile()
     {
@@ -101,6 +101,9 @@ class UserController extends Controller
 
         return view('profileedit', compact('user', 'provinces', 'centers')); // เปลี่ยนชื่อ view
     }
+
+
+    
 
 
 

@@ -94,9 +94,7 @@
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('users.edit', $user->id) }}">
-                                                <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                                            </a>
+                                        <a href="{{ route('users.edit', $user->id) }}" class="dropdown-item">แก้ไข</a>
                                             <form action="{{ route('delete', $user->id) }}" method="POST"
                                                 class="d-inline delete-form">
                                                 @csrf

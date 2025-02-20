@@ -104,10 +104,21 @@ Route::get('/newsfeed', function () {
 Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
 
 // ต้องล็อกอินก่อนถึงเข้าถึงโปรไฟล์ได้
+
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile/edit', [UserController::class, 'editprofile'])->name('profile.edit');
-    Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update'); // เปลี่ยนเป็น PUT
+    Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile.edit');
+    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+    
+    
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/users/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
+
+    Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
+    
+});
+
 
 
 

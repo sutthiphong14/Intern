@@ -32,8 +32,7 @@
         <hr class="my-0" />
                             <!-- Form Start -->
                             <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                    @method('PUT')  {{-- แก้ปัญหา "PUT method is not supported" --}}
+    @csrf
 
                                 <div class="card-body">
                                     @if ($errors->any())

@@ -5,73 +5,69 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\RateLimiter;
 
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
     protected $redirectTo = '/';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
 
-    /**
-     * Change the authentication field to 'username'
-     *
-     * @return string
-     */
     public function username()
     {
         return 'username';
     }
 
-    /**
-     * Override the login method to use username
-     */
     public function login(Request $request)
     {
         $this->validateLogin($request);
 
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application.
-        if (method_exists($this, 'hasTooManyLoginAttempts') &&
-            $this->hasTooManyLoginAttempts($request)) {
+        if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-
             return $this->sendLockoutResponse($request);
         }
 
         if ($this->attemptLogin($request)) {
+            $request->session()->flash('success', 'เข้าสู่ระบบสำเร็จ');
             return $this->sendLoginResponse($request);
         }
 
-        // If the login attempt was unsuccessful we will increment the number of attempts
         $this->incrementLoginAttempts($request);
-
         return $this->sendFailedLoginResponse($request);
     }
 
-    /**
-     * Validate login request with username
-     */
     protected function validateLogin(Request $request)
     {
         $request->validate([
             $this->username() => 'required|string',
             'password' => 'required|string',
+        ], [
+            'username.required' => 'กรุณากรอกชื่อผู้ใช้',
+            'password.required' => 'กรุณากรอกรหัสผ่าน',
+        ]);
+    }
+
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        throw ValidationException::withMessages([
+            'username' => ['ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'],
+        ]);
+    }
+
+    protected function sendLockoutResponse(Request $request)
+    {
+        $seconds = RateLimiter::availableIn($this->throttleKey($request));
+
+        return back()->withErrors([
+            'username' => "บัญชีถูกล็อก กรุณาลองอีกครั้งในอีก $seconds วินาที",
         ]);
     }
 }
