@@ -91,6 +91,7 @@
                                     data-id="{{ $event->event_id }}">
                                     {{ $event->status == 'show' ? 'แสดง' : 'ไม่แสดง' }}
                                 </span>
+                                
                             </td>
 
                             <td>

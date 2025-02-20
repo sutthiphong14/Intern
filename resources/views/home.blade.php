@@ -36,8 +36,7 @@
     @endforeach
     @else
     <div class="carousel-item active">
-    <img src="{{ asset('storage/banner/none.png') }}" class="d-block w-100 rounded"
-      alt="Default Banner">
+    <img src="{{ asset('storage/banner/none.png') }}" class="d-block w-100 rounded" alt="Default Banner">
     </div>
   @endif
       </div>
@@ -499,117 +498,77 @@
       </button>
       </div>
 
-
-      <style>
-      .carousel-image-container {
-        position: relative;
-        overflow: hidden;
-        /* ซ่อนส่วนที่เกิน */
-      }
-
-      .carousel-image-container img {
-        width: 990px;
-        height: 540px;
-        object-fit: cover;
-        /* ให้ภาพขยายเต็มพื้นที่ */
-        transition: opacity 0.5s ease;
-        /* เพิ่มเอฟเฟกต์การเปลี่ยนแปลง */
-        border-radius: 20px; /* ปรับค่าตามต้องการเพื่อทำให้ขอบโค้ง */
-      }
-
-      /* เพิ่มพื้นหลัง gradient แบบ fade-in */
-      .carousel-image-container:hover::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.63), rgba(255, 255, 255, 0));
-        /* เริ่มต้นโปร่งใส */
-        z-index: 1;
-        /* ให้พื้นหลังทึบอยู่ด้านบนของภาพ */
-        animation: fadeIn 0.4s ease-in-out forwards;
-        /* เพิ่ม animation สำหรับพื้นหลัง */
-      }
-
-      /* ชื่อกิจกรรม */
-      .carousel-caption {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        color: white;
-        padding: 10px;
-        font-size: 3em;
-        z-index: 2;
-        /* ชื่อกิจกรรมอยู่ด้านบน */
-        opacity: 0;
-        /* ซ่อนชื่อกิจกรรมเริ่มต้น */
-        transform: translateY(20px);
-        /* ทำให้ชื่ออยู่ข้างล่าง */
-        transition: opacity 0.5s ease, transform 0.5s ease;
-        /* เพิ่ม transition */
-      }
-
-      /* แสดงชื่อกิจกรรมเมื่อ hover */
-      .carousel-image-container:hover .carousel-caption {
-        opacity: 1;
-        /* แสดงชื่อกิจกรรม */
-        transform: translateY(0);
-        /* ทำให้ชื่อเลื่อนขึ้น */
-      }
-
-      /* Animation สำหรับพื้นหลัง fade-in */
-      @keyframes fadeIn {
-        0% {
-        opacity: 0;
-        /* เริ่มต้นจากความโปร่งใส */
-        background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(255, 255, 255, 0));
-        /* เริ่มต้นโปร่งใส */
-        }
-
-        100% {
-        opacity: 1;
-        /* ทำให้พื้นหลังไม่โปร่งใส */
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(255, 255, 255, 0));
-        /* เปลี่ยนเป็นสีดำที่ด้านล่าง */
-        }
-      }
-      </style>
+    </div>
 
     </div>
     </div>
 
 
+    <style>
+    #carouselExampleControls {
+      width: 100%;
+      height: 1080;
+      overflow: hidden;
+    }
+
+    /* เอฟเฟกต์พื้นหลังดำเมื่อ hover ทั้ง Carousel */
+    #carouselExampleControls:hover::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1080px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(255, 255, 255, 0));
+      z-index: 1;
+      animation: fadeIn 0.4s ease-in-out forwards;
+    }
+
+    /* Animation สำหรับพื้นหลัง fade-in */
+    @keyframes fadeIn {
+      0% {
+      opacity: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(255, 255, 255, 0));
+      }
+
+      100% {
+      opacity: 1;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(255, 255, 255, 0));
+      }
+    }
+
+    /* ทำให้ชื่ออัลบั้มแสดงขึ้นเมื่อ hover ทั้ง carousel */
+    #carouselExampleControls:hover .carousel-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ปรับแต่งชื่อกิจกรรม */
+    .carousel-caption {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+      padding: 10px;
+      font-size: 3em;
+      z-index: 2;
+      opacity: 0;
+      /* ซ่อนเริ่มต้น */
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    </style>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  </div>
-
-  <script>
+    <script>
     // SweetAlert function for unauthorized access
     function showUnauthorizedAlert() {
-    Swal.fire({
+      Swal.fire({
       icon: 'warning',
       title: 'ไม่มีสิทธิเข้าถึง',
       text: 'กรุณาเข้าสู่ระบบเพื่อใช้งานฟังก์ชันนี้',
       confirmButtonText: 'ตกลง',
-    });
+      });
     }
-  </script>
-@endsection
+    </script>
+  @endsection
