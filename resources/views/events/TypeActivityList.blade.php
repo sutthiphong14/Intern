@@ -4,13 +4,132 @@
 @section('content')
     <div class="container">
         <h2>จัดการกิจกรรม</h2>
-  
-            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addTypeModal">
-                เพิ่มกิจกรรม
-            </button>
-          
 
-        <table class="table table-bordered">
+        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addTypeModal">
+            เพิ่มกิจกรรม
+        </button>
+
+        <div class="nav-align-top mt-4">
+            <ul class="nav nav-tabs nav-fill" role="tablist">
+                <li class="nav-item">
+                    <button type="button" class="nav-link active text-dark bg-warning" role="tab" data-bs-toggle="tab"
+                        data-bs-target="#navs-justified-fttx_broadband" aria-controls="navs-justified-announce"
+                        aria-selected="true">
+                        <span>Fttx Broadband</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link text-dark" role="tab" data-bs-toggle="tab"
+                        data-bs-target="#navs-justified-simmy" aria-controls="navs-justified-document"
+                        aria-selected="false">
+                        <span>SIM my</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link text-dark" role="tab" data-bs-toggle="tab"
+                        data-bs-target="#navs-justified-ict_solution" aria-controls="navs-justified-form"
+                        aria-selected="false">
+                        <span>ICT Solution</span>
+                    </button>
+                </li>
+            </ul>
+
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="navs-justified-fttx_broadband" role="tabpanel">
+
+                    <div class="mb-3 d-flex justify-content-between">
+                        <h5>กราฟ Fttx broadband</h5>
+
+                        <div>
+                            <label for="typeSelect" class="form-label">-เลือกกิจกรรม-</label>
+                            <select id="typeSelect" class="form-select" aria-label="Single select example"
+                                style="max-width: 300px;">
+                                @foreach ($typeActivities as $type)
+                                    <option value="{{ $type['type_id'] }}"
+                                        {{ $type['type_id'] == old('typeSelect', $maxTypeId) ? 'selected' : '' }}>
+                                        {{ $type['type_name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <h3 id="noDataMessage" style="display: block; color: red;" class="text-center">-ไม่มีข้อมูล-
+                            </h3>
+                        </div>
+                        <canvas
+                            id="installChart"style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%; display: block;"></canvas>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="navs-justified-simmy" role="tabpanel">
+                    <!-- SIM my Content -->
+
+                    <div class="mb-3 d-flex justify-content-between">
+                        <h5>กราฟ SIM my</h5>
+
+                        <div>
+                            <label for="typeSelect" class="form-label">-เลือกกิจกรรม-</label>
+                            <!-- Dropdown เลือกประเภท -->
+                            <select id="typeSelect1" class="form-select" aria-label="Single select example"
+                                style="max-width: 300px;">
+                                @foreach ($typeActivities as $type)
+                                    <option value="{{ $type['type_id'] }}"
+                                        {{ $type['type_id'] == old('typeSelect', $maxTypeId) ? 'selected' : '' }}>
+                                        {{ $type['type_name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <h3 id="noDataMessage1" style="display: block; color: red;" class="text-center">-ไม่มีข้อมูล-
+                            </h3>
+                        </div>
+                        <canvas
+                            id="simMy"style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%; display: block;"></canvas>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="navs-justified-ict_solution" role="tabpanel">
+                    <div class="mb-3 d-flex justify-content-between">
+                        <h5>กราฟ ICT</h5>
+
+                        <div>
+                            <label for="typeSelect" class="form-label">-เลือกกิจกรรม-</label>
+                            <!-- Dropdown เลือกประเภท -->
+                            <select id="typeSelect2" class="form-select" aria-label="Single select example"
+                                style="max-width: 300px;">
+                                @foreach ($typeActivities as $type)
+                                    <option value="{{ $type['type_id'] }}"
+                                        {{ $type['type_id'] == old('typeSelect', $maxTypeId) ? 'selected' : '' }}>
+                                        {{ $type['type_name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <h3 id="noDataMessage2" style="display: block; color: red;" class="text-center">-ไม่มีข้อมูล-
+                            </h3>
+                        </div>
+                        <canvas
+                            id="ICT"style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%; display: block;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+
+
+
+        <table class="table table-bordered mt-3">
+            <h5>สรุปรายงานผลการดำเนินงานกิจกรรมการตลาด</h5>
             <thead>
                 <tr class="bg-dark text-center align-center">
                     <th rowspan="4">ดูข้อมูล</th>
@@ -110,7 +229,8 @@
 
 
         {{-- modal add --}}
-        <div class="modal fade" id="addTypeModal" tabindex="-1" aria-labelledby="addTypeModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addTypeModal" tabindex="-1" aria-labelledby="addTypeModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -140,7 +260,8 @@
 
 
         <!-- Modal Edit -->
-        <div class="modal fade" id="editTypeModal" tabindex="-1" aria-labelledby="editTypeModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editTypeModal" tabindex="-1" aria-labelledby="editTypeModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -272,4 +393,304 @@
             });
         </script>
     @endif
+    <script>
+        document.querySelectorAll('.nav-tabs .nav-link').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.nav-tabs .nav-link').forEach(el => {
+                    el.classList.remove('active', 'bg-warning', 'text-light');
+                    el.classList.add('text-dark');
+                });
+                this.classList.add('active', 'bg-warning', 'text-light');
+            });
+        });
+    </script>
+
+    <!-- ChartJS -->
+    <script src="plugins/chart.js/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById('installChart').getContext('2d');
+            const typeSelect = document.getElementById('typeSelect');
+            const noDataMessage = document.getElementById('noDataMessage');
+            let installChart = null;
+
+            const maxTypeId = @json($maxTypeId);
+            const typeIds = @json(collect($typeActivities)->pluck('type_id')->toArray());
+            const fttxDataArray = @json($fttxNewData);
+            const selfInstallDataArray = @json($selfInstallData);
+            const hireInstallDataArray = @json($hireInstallData);
+
+
+            function updateChart(selectedTypeId) {
+                const index = typeIds.indexOf(parseInt(selectedTypeId));
+
+                if (index === -1) {
+                    console.error("ไม่พบ type_id ที่เลือก");
+                    return;
+                }
+
+                const selectedTypeName = @json($typeNames)[index] ?? 'ไม่ระบุ';
+                const fttxData = fttxDataArray[index] ?? 0;
+                const selfInstallData = selfInstallDataArray[index] ?? 0;
+                const hireInstallData = hireInstallDataArray[index] ?? 0;
+
+                console.log("Data:", fttxData, selfInstallData, hireInstallData);
+
+                if (fttxData === 0 && selfInstallData === 0 && hireInstallData === 0) {
+                    noDataMessage.style.display = 'block';
+                    document.getElementById('installChart').style.display = 'none';
+                    return;
+                } else {
+                    noDataMessage.style.display = 'none';
+                    document.getElementById('installChart').style.display = 'block';
+                }
+
+                if (installChart) {
+                    installChart.destroy();
+                }
+
+                installChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [selectedTypeName],
+                        datasets: [{
+                                label: 'New',
+                                backgroundColor: 'rgba(32, 118, 232, 0.8)',
+                                borderColor: 'rgba(32, 118, 232, 1)',
+                                borderWidth: 1,
+                                data: [fttxData]
+                            },
+                            {
+                                label: 'ติดตั้งเอง',
+                                backgroundColor: 'rgba(32, 232, 93, 0.8)',
+                                borderColor: 'rgba(32, 232, 93, 1)',
+                                borderWidth: 1,
+                                data: [selfInstallData]
+                            },
+                            {
+                                label: 'จ้างผู้รับเหมา',
+                                backgroundColor: 'rgba(232, 201, 32, 0.8)',
+                                borderColor: 'rgba(232, 201, 32, 1)',
+                                borderWidth: 1,
+                                data: [hireInstallData]
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true, // เริ่มต้นที่ 0
+                                ticks: {
+                                    stepSize: 1, // กำหนดขนาดแต่ละขั้นที่แกน Y
+                                    callback: function(value) {
+                                        return value.toFixed(
+                                            1); // แสดงค่าของ Y ในรูปแบบทศนิยม 1 ตำแหน่ง
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            typeSelect.value = maxTypeId;
+            updateChart(maxTypeId);
+
+            typeSelect.addEventListener('change', function() {
+                updateChart(parseInt(this.value));
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById('simMy').getContext('2d');
+            const typeSelect = document.getElementById('typeSelect1');
+            const noDataMessage = document.getElementById('noDataMessage1');
+            let installChart = null;
+
+            const maxTypeId = @json($maxTypeId);
+            const typeIds = @json(collect($typeActivities)->pluck('type_id')->toArray());
+            const newDataArray = @json(collect($sumByType)->pluck('new')->toArray());
+            const moveDataArray = @json(collect($sumByType)->pluck('move')->toArray());
+            const countDataArray = @json(collect($sumByType)->pluck('count')->toArray());
+            const typeNames = @json($typeNames); // ชื่อประเภท
+
+            function updateChart(selectedTypeId) {
+                const index = typeIds.indexOf(parseInt(selectedTypeId));
+
+                if (index === -1) {
+                    console.error("ไม่พบ type_id ที่เลือก");
+                    return;
+                }
+
+                const selectedTypeName = typeNames[index] ?? 'ไม่ระบุ';
+                const newData = newDataArray[index] ?? 0;
+                const moveData = moveDataArray[index] ?? 0;
+                const countData = countDataArray[index] ?? 0;
+
+                if (newData === 0 && moveData === 0 && countData === 0) {
+                    noDataMessage.style.display = 'block';
+                    document.getElementById('simMy').style.display = 'none';
+                    return;
+                } else {
+                    noDataMessage.style.display = 'none';
+                    document.getElementById('simMy').style.display = 'block';
+                }
+
+                if (installChart) {
+                    installChart.destroy();
+                }
+
+                installChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [selectedTypeName], // แสดงชื่อประเภทที่เลือก
+                        datasets: [{
+                                label: 'ลูกค้าใหม่',
+                                backgroundColor: 'rgba(153, 102, 255, 1)',
+                                borderColor: 'rgba(153, 102, 255, 1)',
+                                borderWidth: 1,
+                                data: [newData] // ข้อมูลลูกค้าใหม่
+                            },
+                            {
+                                label: 'ลูกค้า(ย้ายค่าย)',
+                                backgroundColor: 'rgba(255, 159, 64, 1)',
+                                borderColor: 'rgba(255, 159, 64, 1)',
+                                borderWidth: 1,
+                                data: [moveData] // ข้อมูลลูกค้า (ย้ายค่าย)
+                            },
+                            {
+                                label: 'เติมเงินรายปี',
+                                backgroundColor: 'rgba(255, 205, 86, 1)',
+                                borderColor: 'rgba(255, 205, 86, 1)',
+                                borderWidth: 1,
+                                data: [countData] // ข้อมูลเติมเงินรายปี
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true, // เริ่มต้นที่ 0
+                                ticks: {
+                                    stepSize: 1, // กำหนดขนาดแต่ละขั้นที่แกน Y
+                                    callback: function(value) {
+                                        return value.toFixed(
+                                            1); // แสดงค่าของ Y ในรูปแบบทศนิยม 1 ตำแหน่ง
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            typeSelect.value = maxTypeId;
+            updateChart(maxTypeId);
+
+            typeSelect.addEventListener('change', function() {
+                updateChart(parseInt(this.value));
+            });
+        });
+    </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const ctx = document.getElementById('ICT').getContext('2d');
+    const typeSelect = document.getElementById('typeSelect2');
+    const noDataMessage = document.getElementById('noDataMessage2');
+    let ICTchart = null;
+
+    const maxTypeId = @json($maxTypeId);
+    const typeIds = @json(collect($typeActivities)->pluck('type_id')->toArray());
+    const typeNames = @json($typeNames);
+    const ictCountData = @json(collect($sumByType)->pluck('ictCount')->toArray());
+    const ictIncomeData = @json(collect($sumByType)->pluck('ictIncome')->toArray());
+
+    function updateChart(selectedTypeId) {
+        const index = typeIds.indexOf(parseInt(selectedTypeId));
+        if (index === -1) {
+            console.error("ไม่พบ type_id ที่เลือก");
+            return;
+        }
+
+        const selectedTypeName = typeNames[index] ?? 'ไม่ระบุ';
+        const ictCount = ictCountData[index] ?? 0;
+        const ictIncome = ictIncomeData[index] ?? 0;
+
+        console.log("Data:", selectedTypeName, ictCount, ictIncome);
+
+        if (ictCount === 0 && ictIncome === 0) {
+            noDataMessage.style.display = 'block';
+            document.getElementById('ICT').style.display = 'none';
+            return;
+        } else {
+            noDataMessage.style.display = 'none';
+            document.getElementById('ICT').style.display = 'block';
+        }
+
+        if (ICTchart) {
+            ICTchart.destroy();
+        }
+
+        ICTchart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [selectedTypeId], // ใช้ selectedTypeId เพื่อค้นหาข้อมูลที่ตรงกัน
+                datasets: [
+                    {
+                        label: 'รายได้ ICT',
+                        backgroundColor: 'rgba(232, 201, 32, 0.8)',
+                        borderColor: 'rgba(232, 201, 32, 1)',
+                        borderWidth: 1,
+                        data: [ictIncome]
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                const selectedIndex = typeIds.indexOf(parseInt(tooltipItem.label));
+                                if (selectedIndex === -1) return "ไม่มีข้อมูล";
+
+                                const activityName = typeNames[selectedIndex] ?? 'ไม่ระบุ';
+                                const ictCountValue = ictCountData[selectedIndex] ?? 0;
+                                const ictIncomeValue = ictIncomeData[selectedIndex] ?? 0;
+                                return ` จำนวน: ${ictCountValue} ราย / รายได้: ${ictIncomeValue} บาท`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                           
+                            callback: function (value) {
+                                return value.toFixed(1);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    typeSelect.value = maxTypeId;
+    updateChart(maxTypeId);
+
+    typeSelect.addEventListener('change', function () {
+        updateChart(parseInt(this.value));
+    });
+});
+
+</script>
 @endsection

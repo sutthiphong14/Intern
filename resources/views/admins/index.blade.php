@@ -25,7 +25,8 @@
     <!-- BS Stepper -->
     <link rel="stylesheet" href="{{ URL::asset('plugins/bs-stepper/css/bs-stepper.min.css') }}">
     <!-- Theme style -->
-    
+
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -134,8 +135,11 @@
 <!-- ChartJS -->
 <script src="{{ URL::asset('plugins/chart.js/Chart.min.js') }}"></script>
 
+
+
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <!-- Yield section for additional scripts -->
 @yield('script')

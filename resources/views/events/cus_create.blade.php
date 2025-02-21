@@ -162,7 +162,7 @@
                         </div>
                     </div>
 
-                    <label for="income" class="form-label">รายได้</label>
+                    <label for="income" class="form-label">รายได้ต่อเดือน</label>
                     <input type="number" id="income" name='income' class="form-control bg-warning" required>
                 </div>
 

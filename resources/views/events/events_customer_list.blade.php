@@ -153,7 +153,7 @@
                                 <p><span class="fw-bold text-dark">รหัสบัตรประชาชน:</span> {{ $customer->id_card }}</p>
                             @else
                                 <p><span class="fw-bold text-dark">ประเภทลูกค้า:</span>
-                                    {{ $dataIct->first()->customer_type }}</p>
+                                    {{ $dataIct->where('cus_id', $customer->cus_id)->first()->customer_type }}</p>
                             @endif
                             <p><span class="fw-bold text-dark">ที่อยู่:</span> {{ $customer->cus_address }}</p>
                             <p><span class="fw-bold text-dark">กิจกรรม:</span>
@@ -186,7 +186,7 @@
 @elseif ($simmyData && str_contains(strtolower($customer->service->service_name), 'sim my'))
 <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $simmyData->cus_new == 1 ? 'ลูกค้าใหม่' : 'ลูกค้า(ย้ายค่าย)' }}<br>
 @elseif ($ictData && str_contains(strtolower($customer->service->service_name), 'ict solution'))
-<strong class='text-warning'>รายได้:   </strong> {{ $ictData->income }}
+<strong class='text-warning'>รายได้ต่อเดือน:   </strong> {{ $ictData->income }}
                                                     
                                                   
 <br>
@@ -233,10 +233,10 @@
                                     {{ $customer->center->center_name }}
                                 </p>
 
-                                @if ($dataIct->isNotEmpty() && $dataIct->first()->quote)
+                                @if ($dataIct->isNotEmpty() && $dataIct->where('cus_id', $customer->cus_id)->first()->quote)
                                 @php
-                                    $quotePath = asset('storage/' . $dataIct->first()->quote);
-                                    $fileExtension = pathinfo($dataIct->first()->quote, PATHINFO_EXTENSION);
+                                    $quotePath = asset('storage/' . $dataIct->where('cus_id', $customer->cus_id)->first()->quote);
+                                    $fileExtension = pathinfo($dataIct->where('cus_id', $customer->cus_id)->first()->quote, PATHINFO_EXTENSION);
                                 @endphp
                             
                                 <div class="d-flex">
@@ -244,9 +244,11 @@
                             
                                     @if (in_array(strtolower($fileExtension), ['png', 'jpg', 'jpeg', 'gif']))
                                         <!-- แสดงรูปภาพ -->
+                                        <br>
                                         <img src="{{ $quotePath }}" alt="Customer Quote"
                                             style="width: 100%; max-width: 100px;" class="mt-3">
                                     @elseif (strtolower($fileExtension) === 'pdf')
+                                    
                                         <!-- แสดงลิงก์สำหรับไฟล์ PDF -->
                                         <p >
                                             <a href="{{ $quotePath }}" target="_blank" >
@@ -278,12 +280,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($ictData->first()->products as $product)
+                                        @if ($dataIct->where('cus_id', $customer->cus_id)->isNotEmpty())
+                                        @foreach ($dataIct->where('cus_id', $customer->cus_id)->first()->products as $product)
                                             <tr class="text-center">
-                                                <td>{{ $product->product_name?? 'ไม่มีสินค้า' }}</td>
-                                                <td>{{ $product->pivot->quantity?? '-' }}</td> <!-- ดึงข้อมูลจาก pivot table -->
+                                                <td>{{ $product->product_name ?? 'ไม่มีสินค้า' }}</td>
+                                                <td>{{ $product->pivot->quantity ?? '-' }}</td>
                                             </tr>
                                         @endforeach
+                                    @else
+                                        <tr><td colspan="2">ไม่มีข้อมูลสินค้า</td></tr>
+                                    @endif
+                                    
                                     </tbody>
                                 </table>
                             @endif
@@ -484,11 +491,11 @@
 
 
 
+
                             data.forEach((customer, index) => {
                                 let customerTableH = document.getElementById('table-heard');
                                 let ictData = dataIct.find(ict => ict.cus_id === customer.cus_id);
 
-                                console.log(ictData)
                                 customerTableH.innerHTML = `
                              <tr class="bg-dark text-light">
                               <th>#</th>

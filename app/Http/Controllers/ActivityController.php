@@ -16,6 +16,7 @@ use App\Models\ServiceCenterActivity;
 use App\Models\SpeedActivity;
 use App\Models\TypeActivity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 
 class ActivityController extends Controller
@@ -164,8 +165,27 @@ class ActivityController extends Controller
             }
         }
         $data = $typeActivities->count();
+        $typeIds = collect($typeActivities)->pluck('type_id')->toArray();  // ดึงแค่ type_id
+        $maxTypeId = max($typeIds);  // หาค่ามากสุดจาก type_id
 
-        return view('events.TypeActivityList', compact('data', 'typeActivities', 'sumByType'));
+
+        $typeNames = [];
+        $fttxNewData = [];
+        $selfInstallData = [];
+        $hireInstallData = [];
+
+        foreach ($sumByType as $typeId => $data) {
+            // ค้นหาชื่อ type_name จาก $typeActivities ที่ตรงกับ $typeId
+            $typeName = collect($typeActivities)->firstWhere('type_id', $typeId)->type_name ?? 'ไม่ระบุ';
+            $typeNames[] = $typeName;
+            $fttxNewData[] = $data['fttxNew'];
+            $selfInstallData[] = $data['selfInstall'];
+            $hireInstallData[] = $data['hireInstall'];
+        }
+
+
+
+        return view('events.TypeActivityList', compact('data', 'typeActivities', 'sumByType', 'maxTypeId', 'typeNames', 'fttxNewData', 'selfInstallData', 'hireInstallData'));
     }
 
     public function TypeInsert(Request $request)
@@ -780,6 +800,8 @@ class ActivityController extends Controller
             ->get()
             ->groupBy('center_id');
 
+
+
         $Ict_count = $ictData->map(fn($items) => $items->count());
         $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
 
@@ -869,7 +891,8 @@ class ActivityController extends Controller
             'sumPriceOver33',
             'IctCountOver33',
             'IctIncomeOver33',
-            'total_all'
+            'total_all',
+            'ictData'
 
 
         ));
@@ -881,11 +904,13 @@ class ActivityController extends Controller
         $dataQuery = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])
             ->where('type_id', $type_id); // เพิ่มเงื่อนไขตาม type_id
 
-        $dataIct = IctSolution::where('type_id',$type_id)->get();
-      
+        $dataIct = IctSolution::where('type_id', $type_id)->get();
+
+
+
         $data = $dataQuery->get();
 
-        
+
 
         // ดึงข้อมูล Province และ TypeActivity
         $provinces = ProvinceActivity::all();
@@ -991,5 +1016,71 @@ class ActivityController extends Controller
 
         // คืนค่าผลลัพธ์ในรูปแบบ JSON
         return response()->json($topUps);
+    }
+    public function getProductCenter($center_id, $type_id)
+    {
+        // ดึงข้อมูล center_name
+
+        $center = ServiceCenterActivity::find($center_id);
+
+        if (!$center) {
+            return response()->json(['error' => 'ไม่พบข้อมูลศูนย์บริการ'], 404);
+        }
+
+        // ดึงข้อมูล products โดยแยกตาม type_id
+        $solutions = IctSolution::where('center_id', $center_id)
+            ->where('type_id', $type_id) // กรองข้อมูลตาม type_id
+            ->with('products') // โหลดข้อมูลจากความสัมพันธ์ products()
+            ->get();
+
+
+
+        $productsInfo = [];
+
+        foreach ($solutions as $solution) {
+            foreach ($solution->products as $product) {
+                $productsInfo[] = [
+                    'product_name' => $product->product_name ?? 'ไม่มีข้อมูลสินค้า',
+                    'quantity' => $product->pivot->quantity ?? 'ไม่มีข้อมูล',
+                    'center_id' => $solution->ict_id ?? 'ไม่มีข้อมูล' // ✅ ดึงจาก IctSolution
+                ];
+            }
+        }
+
+        // ✅ สร้างตัวแปร productCounts แยกต่างหาก
+        $productCounts = [];
+
+        foreach ($productsInfo as $product) {
+            $productName = $product['product_name'];
+            $quantity = $product['quantity'];
+
+            if (!isset($productCounts[$productName])) {
+                $productCounts[$productName] = 0;
+            }
+            $productCounts[$productName] += $quantity;
+        }
+
+        // ✅ ส่งค่ากลับไปพร้อม productCounts
+        return response()->json([
+            'center_name' => $center->center_name,
+            'products' => $productsInfo,
+            'product_counts' => $productCounts // ✅ แยก productCounts ออกมา ไม่ใส่ใน productsInfo
+        ]);
+    }
+
+    public function getCustomerDetail($center_id)
+    {
+        // แปลงค่า $center_ids ที่เป็น string เช่น '1,2,3' ให้อยู่ในรูปแบบ array
+        $centerIdsArray = explode(',', $center_id);
+        // ดึง cus_id ที่ตรงกับ ict_id จาก IctSolution
+        $cusIds = IctSolution::whereIn('ict_id', $centerIdsArray)->pluck('cus_id');
+
+        // ใช้ whereIn เพื่อดึงข้อมูลที่มี center_id ที่ตรงกับ array
+        $dataIct = IctSolution::whereIn('ict_id', $centerIdsArray)->get();
+
+        // ใช้ whereIn เพื่อดึงข้อมูลจาก Customer ที่มี cus_id ตรงกับค่าใน $cusIds
+        $data = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])->whereIn('cus_id', $cusIds)->get();
+     
+        return view('events.detail_center',  compact('data', 'dataIct'));
     }
 }
