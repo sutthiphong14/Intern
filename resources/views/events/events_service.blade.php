@@ -109,7 +109,7 @@
                         </tr>
                     @endif
                 @endforeach
-
+                @if ($province->province_id > 12)
                 {{-- แสดงผลรวมสำหรับ province_id > 33 --}}
                 <tr class="bg-warning">
                     <td colspan="2">รวม ตป.2</td>
@@ -124,6 +124,7 @@
                     <td>{{ $IctCountOver33 }}</td>
                     <td>{{ $IctIncomeOver33 }}</td>
                 </tr>
+                @endif
 
                 <tr class="bg-success">
                     <td colspan="2">รวม ทั้งหมด</td>

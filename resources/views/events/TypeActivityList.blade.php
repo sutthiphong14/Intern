@@ -435,7 +435,7 @@
                 const selfInstallData = selfInstallDataArray[index] ?? 0;
                 const hireInstallData = hireInstallDataArray[index] ?? 0;
 
-                console.log("Data:", fttxData, selfInstallData, hireInstallData);
+              
 
                 if (fttxData === 0 && selfInstallData === 0 && hireInstallData === 0) {
                     noDataMessage.style.display = 'block';
@@ -622,7 +622,7 @@
         const ictCount = ictCountData[index] ?? 0;
         const ictIncome = ictIncomeData[index] ?? 0;
 
-        console.log("Data:", selectedTypeName, ictCount, ictIncome);
+  
 
         if (ictCount === 0 && ictIncome === 0) {
             noDataMessage.style.display = 'block';

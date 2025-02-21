@@ -185,12 +185,9 @@ class ActivityController extends Controller
             $hireInstallData[] = $hireInstall;
         }
         
-        // ✅ คำนวณผลรวมของค่าทั้งหมด
-        $totalFttxNew = array_sum($fttxNewData);
-      
+ 
 
         
-     
         
 
 
@@ -646,9 +643,19 @@ class ActivityController extends Controller
             ->get()
             ->groupBy('province_id');
 
+             // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
+        $adjustData = Fttxbroadband::where('type_id', $type_id)
+        ->select('province_id', 'new', 'installation_type')->where('new',0)
+        ->get()
+        ->groupBy('province_id');
+
+
         $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
         $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
         $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
+        $adjust = $adjustData->map(fn($items) => $items->where('new', 0)->count())->toArray();
+
+        
 
         // โหลดข้อมูล Simmy เฉพาะ type_id
         $simmyData = Simmy::where('type_id', $type_id)
@@ -715,21 +722,7 @@ class ActivityController extends Controller
                 $IctIncomeOver33 += $Ict_income[$provinceId] ?? 0;
             }
         }
-
-        // คำนวณผลรวมทั้งหมด
-        $total_all = [
-            'sumFttxNew' => $sumFttxNew + $sumFttxNewOver33,
-            'sumSelfInstall' => $sumSelfInstall + $sumSelfInstallOver33,
-            'sumHireInstall' => $sumHireInstall + $sumHireInstallOver33,
-            'sumNew' => $sumNew + $sumNewOver33,
-            'sumMove' => $sumMove + $sumMoveOver33,
-            'sumCount' => $sumCount + $sumCountOver33,
-            'sumPrice' => $sumPrice + $sumPriceOver33,
-            'IctCount' => $IctCount + $IctCountOver33,
-            'IctIncome' => $IctIncome + $IctIncomeOver33
-        ];
-
-
+        
 
         return view('events.events_department', compact(
             'types',
@@ -761,7 +754,7 @@ class ActivityController extends Controller
             'sumPriceOver33',
             'IctCountOver33',
             'IctIncomeOver33',
-            'total_all'
+            'adjust'
 
 
         ));
@@ -771,7 +764,7 @@ class ActivityController extends Controller
     public function Eventservices($province_id,$type_id)
     {
         $provinces = ($province_id == 1) ? 
-        ProvinceActivity::where('province_id', '<', 12)->get() :
+        ProvinceActivity::where('province_id', '<', 13)->get() :
         ProvinceActivity::where('province_id', '>', 12)->get();
         $types = TypeActivity::where('type_id', $type_id)->first();
 
@@ -898,7 +891,8 @@ class ActivityController extends Controller
             'sumPriceOver33',
             'IctCountOver33',
             'IctIncomeOver33',
-            'total_all'
+            'total_all',
+            
 
 
         ));
