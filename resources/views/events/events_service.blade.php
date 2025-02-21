@@ -4,8 +4,14 @@
 @section('content')
     <div class="container">
         <div class="mt-5 d-flex justify-content-between">
-            <h3>สรุปผลการดำเนินงานกิจกรรมการตลาด {{ $types->type_name }}</h3>
-            <a class="btn btn-secondary mb-3 text-white" href="{{route('event_customer',$types->type_id)}}" >ดูข้อมูลลูกค้า</a>
+            <h3>สรุปผลการดำเนินงานกิจกรรมการตลาด  {{ $types->type_name }} <br>@if ($province_id == 1)
+                    ตป.1
+                @else
+                    ตป.2
+                @endif
+            </h3>
+            <a class="btn btn-secondary mb-3 text-white"
+                href="{{ route('event_customer', $types->type_id) }}">ดูข้อมูลลูกค้า</a>
         </div>
         <table class="table table-bordered ">
             <thead>
@@ -46,9 +52,10 @@
                     @if ($province->province_id <= 12)
                         <tr>
                             <td>
-                                <a href="{{ route('event_center', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}" class="btn btn-warning">
+                                <a href="{{ route('event_center', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
+                                    class="btn btn-warning">
                                     <i class="fas fa-search"></i>
-                                </a>                                
+                                </a>
                             </td>
                             <td>{{ $province->province_name }}</td>
                             <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
@@ -83,9 +90,10 @@
                     @if ($province->province_id > 12)
                         <tr>
                             <td>
-                                <a href="{{ route('event_center', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}" class="btn btn-warning">
+                                <a href="{{ route('event_center', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
+                                    class="btn btn-warning">
                                     <i class="fas fa-search"></i>
-                                </a>                                
+                                </a>
                             </td>
                             <td>{{ $province->province_name }}</td>
                             <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>

@@ -178,12 +178,12 @@
                     @foreach ($activities as $row)
                         <tr>
                             <td>
-                                <a href="{{ route('event_services', $typeId) }}" class="btn btn-warning">
+                                <a href="{{ route('event_department', $typeId) }}" class="btn btn-warning">
                                     <i class="fas fa-search"></i>
                                 </a>
                             </td>
                             <td>{{ $row->type_name }}</td>
-                            <td>{{ $data['fttxNew'] ?? 0 }}</td>
+                            <td>{{ ($data['selfInstall'] ?? 0) + ($data['hireInstall'] ?? 0) }}</td>
                             <td>{{ $data['selfInstall'] ?? 0 }}</td>
                             <td>{{ $data['hireInstall'] ?? 0 }}</td>
                             <td>{{ $data['new'] ?? 0 }}</td>

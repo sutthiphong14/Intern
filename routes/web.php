@@ -405,13 +405,16 @@ Route::put('/topUp_update/{id}', [CustomerController::class, 'TopUpUpdate'])->na
 Route::get('/getTopUpDetails/{topUpId}', [CustomerController::class, 'getTopUpDetails'])->name('getTopUpDetails');
 
 
-Route::get('/Event_services/{type_id}', [ActivityController::class, 'Eventservices'])->name('event_services');
+Route::get('/Event_deparment/{type_id}', [ActivityController::class, 'EventDepartment'])->name('event_department');
+Route::get('/Event_services/{province_id},{type_id}', [ActivityController::class, 'Eventservices'])->name('event_services');
 Route::get('/Event_center/{province_id},{type_id}', [ActivityController::class, 'Eventcenter'])->name('event_center');
 Route::get('/Event_customer_list/{type_id}', [ActivityController::class, 'EventCustomer'])->name('event_customer');
 Route::get('/topup_list', [ActivityController::class, 'TopUp_list'])->name('top_up_list');
 Route::get('/topups/search', [ActivityController::class, 'searchTopUp'])->name('top_up_search');
 Route::get('/get_product/{center_id}/{type_id}', [ActivityController::class, 'getProductCenter'])->name('getproduct_center');
 Route::get('/detail/{center_id}', [ActivityController::class, 'getCustomerDetail'])->name('detail_cus');
+
+
 
 
 
