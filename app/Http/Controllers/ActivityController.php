@@ -771,7 +771,7 @@ class ActivityController extends Controller
 
         // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
         $fttxData = Fttxbroadband::where('type_id', $type_id)
-            ->select('province_id', 'new', 'installation_type')
+            ->select('province_id', 'new', 'installation_type')->where('new',1)
             ->get()
             ->groupBy('province_id');
 
