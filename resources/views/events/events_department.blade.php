@@ -3,12 +3,12 @@
 @endsection
 @section('content')
     <div class="container">
-        <div class="d-flex justify-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center">
             <h3>สรุปผลการดำเนินงานกิจกรรมการตลาด {{ $types->type_name }}</h3>
-        
-            <div class="form-group">
-                <label for="chartFilter">เลือกข้อมูลที่ต้องการแสดง:</label>
-                <select id="chartFilter" class="form-control">
+            
+            <div class="form-group mb-3">
+                <label for="chartFilter" class="mr-2">เลือกข้อมูลที่ต้องการแสดง:</label>
+                <select id="chartFilter" class="form-control form-select">
                     <option value="total" {{ request('chartFilter') == 'total' ? 'selected' : '' }}>รวมทั้งหมด</option>
                     <option value="tp1" {{ request('chartFilter') == 'tp1' ? 'selected' : '' }}>รวม ตป.1</option>
                     <option value="tp2" {{ request('chartFilter') == 'tp2' ? 'selected' : '' }}>รวม ตป.2</option>
@@ -16,41 +16,54 @@
             </div>
         </div>
         
+        
         <div class="row">
             <!-- Card แรก -->
             <div class="col-md-7">
                 <div class="card">
-                    <div class="card-body">
-                        <h3 class="mb-4">Fttxbroadband</h3>
-                        <canvas id="myChart"
-                            style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Fttxbroadband</h3>
+                        <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart1">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="card-body collapse show" id="chart1">
+                        <canvas id="myChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
                     </div>
                 </div>
             </div>
-
+        
             <!-- Card ที่สอง -->
             <div class="col-md-5">
                 <div class="card">
-                    <div class="card-body">
-                        <h3 class="mb-4">ICT solution</h3>
-                        <canvas id="myChart2"
-                            style="min-height: 300px; height: 290px; max-height: 300px; max-width: 100%;"></canvas>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">ICT solution</h3>
+                        <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart2">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="card-body collapse show" id="chart2">
+                        <canvas id="myChart2" style="min-height: 300px; height: 290px; max-height: 300px; max-width: 100%;"></canvas>
                     </div>
                 </div>
             </div>
-
+        
             <!-- Card ที่สาม -->
             <div class="col-md-12 mt-4">
                 <div class="card">
-                    <div class="card-body">
-                        <h3 class="mb-4">SIM my</h3>
-                        <canvas id="myChart3"
-                            style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">SIM my</h3>
+                        <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart3">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="card-body collapse show" id="chart3">
+                        <canvas id="myChart3" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-
+        
 
 
 
