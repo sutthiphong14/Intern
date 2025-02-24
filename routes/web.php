@@ -328,6 +328,10 @@ Route::put('/requests/{id}', [RequestsController::class, 'update'])->name('reque
 Route::delete('/requests/{id}', [RequestsController::class, 'destroy'])->name('requests.delete');
 Route::get('/requests/search', [RequestsController::class, 'search'])->name('requests.search');
 Route::post('/requests/{id}/approve', [RequestsController::class, 'approve'])->name('requests.approve');
+Route::get('/getCentersUserRequests', [RequestsController::class, 'getCentersUserRequests'])->name('getCentersUserRequests');
+
+Route::get('/getCentersByProvince', [RequestsController::class, 'getCentersByProvince'])->name('getCentersByProvince');
+
 
 
 Route::get('/news/search', [AdminController::class, 'search'])->name('news.search');

@@ -17,4 +17,5 @@ class ProvinceActivity extends Model
     {
         return $this->hasMany(ServiceCenterActivity::class, 'province_id');
     }
+    
 }

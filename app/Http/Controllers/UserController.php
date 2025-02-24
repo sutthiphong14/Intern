@@ -291,10 +291,15 @@ class UserController extends Controller
         return response()->json($centers);
     }
 
+
     public function getCentersByProvince(Request $request)
-    {
-        $centers = ServiceCenterActivity::where('province_id', $request->province_id)->get(['center_id', 'center_name']);
-        return response()->json($centers);
-    }
+{
+    $provinceId = $request->input('province_id');
+    $centers = ServiceCenterActivity::where('province_id', $provinceId)->get();
+    return response()->json($centers);
+}
+
+
+    
 
 }
