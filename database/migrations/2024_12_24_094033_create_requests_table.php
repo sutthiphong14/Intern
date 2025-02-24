@@ -15,10 +15,11 @@ class CreateRequestsTable extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->id('id_request');
+            $table->string('user_request');
+            $table->string('password_request');
             $table->string('id_employee');
             $table->string('name_request');
             $table->string('email_request');
-            $table->string('phone_request');
             $table->text('description_request');
             $table->timestamps(); // สร้าง created_at และ updated_at
         });

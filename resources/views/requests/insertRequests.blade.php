@@ -50,11 +50,7 @@
                                 <input type="email" class="form-control" id="email_request" name="email_request" required>
                             </div>
 
-                            <div class="form-group">
-                                <label for="phone_request">เบอร์โทร</label>
-                                <input type="text" class="form-control" id="phone_request" name="phone_request" required>
-                            </div>
-
+                          
                             <div class="form-group">
                                 <label for="password_request">รหัสผ่าน</label>
                                 <input type="password" id="password_request" name="password_request" class="form-control"

@@ -11,10 +11,11 @@ class Request extends Model
     protected $fillable = [
         'id_employee',
         'user_request',
+        'password_request',
         'name_request',
         'email_request',
-        'phone_request',
+
         'description_request',
-        'password_request'
+
     ];
 }

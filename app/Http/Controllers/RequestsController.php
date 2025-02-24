@@ -42,7 +42,6 @@ class RequestsController extends Controller
             'user_request' => 'required|string|max:255',
             'name_request' => 'required|string|max:255',
             'email_request' => 'required|email|max:255',
-            'phone_request' => 'required|string|max:20',
             'description_request' => 'required|string',
             'password_request' => 'nullable|string|min:6'
         ]);
@@ -73,7 +72,6 @@ class RequestsController extends Controller
             'user_request' => 'required|string|max:255',
             'name_request' => 'required|string|max:255',
             'email_request' => 'required|email|max:255',
-            'phone_request' => 'required|string|max:20',
             'description_request' => 'required|string',
             'password_request' => 'nullable|string|min:6'
         ]);
@@ -116,7 +114,6 @@ class RequestsController extends Controller
         $requests = Request::where('name_request', 'LIKE', "%{$query}%")
             ->orWhere('id_employee', 'LIKE', "%{$query}%")
             ->orWhere('email_request', 'LIKE', "%{$query}%")
-            ->orWhere('phone_request', 'LIKE', "%{$query}%")
             ->get();
 
         return view('requests.listRequests', compact('requests'));
