@@ -10,6 +10,7 @@
 
                 <div class="col-auto"> <a href="{{ route('customer_create') }}" class="btn btn-primary">เพิ่มข้อมูลลูกค้า</a>
                 </div>
+                <a href="{{route('top_up_list')}}" class="btn btn-warning col-auto">เติมเงินรายปี</a>
 
             </div>
 

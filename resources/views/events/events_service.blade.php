@@ -11,8 +11,7 @@
                     ตป.2
                 @endif
             </h3>
-            <a class="btn btn-secondary mb-3 text-white"
-                href="{{ route('event_customer', $types->type_id) }}">ดูข้อมูลลูกค้า</a>
+           
         </div>
 
         <div class="row">
@@ -70,7 +69,7 @@
                 <tr class="bg-dark text-center align-center">
                     <th rowspan="4">ดูข้อมูล</th>
                     <th rowspan="4">จังหวัด</th>
-                    <th colspan="3">FTTX</th>
+                    <th colspan="4">FTTX</th>
                     <th colspan="4">SIM my</th>
                     <th colspan="2">Ict Solution</th>
 
@@ -80,6 +79,7 @@
                     <th rowspan="4">new</th>
                     <th rowspan="4">ติดตั้งเอง</th>
                     <th rowspan="4">จ้างผู้รับเหมา</th>
+                    <th rowspan="4">ปรับโปรโมชั่น</th>
 
                 </tr>
                 <tr class="bg-dark text-center">
@@ -113,7 +113,7 @@
                             <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
                             <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
                             <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
-
+                            <td>{{ $adjust12 [$province->province_id] ?? 0}}</td>
                             <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
@@ -129,6 +129,8 @@
                             <td>{{ $sumFttxNew }}</td>
                             <td>{{ $sumSelfInstall }}</td>
                             <td>{{ $sumHireInstall }}</td>
+                            <td>{{ $sumAdjust }}</td>
+                            
 
                             <td>{{ $sumNew }}</td>
                             <td>{{ $sumMove }}</td>
@@ -151,7 +153,7 @@
                             <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
                             <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
                             <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
-
+                            <td>{{ $adjustover12 [$province->province_id] ?? 0}}</td>
                             <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
@@ -168,13 +170,14 @@
                         <td>{{ $sumFttxNewOver33 }}</td>
                         <td>{{ $sumSelfInstallOver33 }}</td>
                         <td>{{ $sumHireInstallOver33 }}</td>
-
+                        <td>{{ $sumAdjustOver33 }}</td>
                         <td>{{ $sumNewOver33 }}</td>
                         <td>{{ $sumMoveOver33 }}</td>
                         <td>{{ $sumCountOver33 }}</td>
                         <td>{{ $sumPriceOver33 }}</td>
                         <td>{{ $IctCountOver33 }}</td>
                         <td>{{ $IctIncomeOver33 }}</td>
+                       
                     </tr>
                 @endif
 
@@ -196,65 +199,84 @@
         var fttxNewData = [];
         var selfInstallData = [];
         var hireInstallData = [];
-
+        var adJust = [];
+    
         @foreach ($provinces as $province)
             @if ($province->province_id <= 12)
                 provinceNames.push("{{ $province->province_name }}");
                 fttxNewData.push({{ $fttxNew[$province->province_id] ?? 0 }});
                 selfInstallData.push({{ $selfInstall[$province->province_id] ?? 0 }});
                 hireInstallData.push({{ $HireInstall[$province->province_id] ?? 0 }});
+                adJust.push({{ $adjust12[$province->province_id] ?? 0 }});
             @else
                 provinceNames.push("{{ $province->province_name }}");
                 fttxNewData.push({{ $fttxNew[$province->province_id] ?? 0 }});
                 selfInstallData.push({{ $selfInstall[$province->province_id] ?? 0 }});
                 hireInstallData.push({{ $HireInstall[$province->province_id] ?? 0 }});
+                adJust.push({{ $adjustover12[$province->province_id] ?? 0 }});
             @endif
         @endforeach
-
+    
         var ctx = document.getElementById('myChart').getContext('2d');
+    
+        var datasets = [
+            {
+                label: 'New',
+                data: fttxNewData,
+                backgroundColor: 'rgba(1, 15, 11, 0.8)',
+                borderColor: 'rgba(1, 15, 11, 1)',
+                borderWidth: 1,
+                stack: 'stack1'
+            },
+            {
+                label: 'ติดตั้งเอง',
+                data: selfInstallData,
+                backgroundColor: 'rgba(2, 178, 125, 0.8)',
+                borderColor: 'rgba(2, 178, 125, 1)',
+                borderWidth: 1,
+                stack: 'stack1'
+            },
+            {
+                label: 'จ้างผู้รับเหมา',
+                data: hireInstallData,
+                backgroundColor: 'rgba(54, 162, 67, 0.8)',
+                borderColor: 'rgba(54, 162, 67, 1)',
+                borderWidth: 1,
+                stack: 'stack1'
+            }
+        ];
+    
+        // ถ้ามีค่าปรับโปรโมชั่น ให้เพิ่มเป็นแท่งแยก
+        if (adJust.length > 0) {
+            datasets.push({
+                label: 'ปรับโปรโมชั่น',
+                backgroundColor: 'rgba(204, 204, 204, 0.8)', // สีเทา
+                borderColor: 'rgba(204, 204, 204, 1)',
+                borderWidth: 1,
+                data: adJust, // ใช้ adJust ตรงๆ ไม่ต้องใส่ []
+                stack: 'stack2' // ให้ adjust อยู่คนละกลุ่ม
+            });
+        }
+    
         new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: provinceNames,
-                datasets: [{
-                        label: 'New',
-                        data: fttxNewData,
-                        backgroundColor: 'rgba(1, 15, 11, 0.8)',
-                        borderColor: 'rgba(1, 15, 11, 1)',
-                        borderWidth: 1,
-                        stack: 'stack1' // Grouping FTTX New into 'stack1'
-                    },
-                    {
-                        label: 'ติดตั้งเอง',
-                        data: selfInstallData,
-                        backgroundColor: 'rgba(2, 178, 125, 0.8)',
-                        borderColor: 'rgba(2, 178, 125, 1)',
-                        borderWidth: 1,
-                        stack: 'stack1' // Grouping Self Install into the same stack
-                    },
-                    {
-                        label: 'จ้างผู้รับเหมา',
-                        data: hireInstallData,
-                        backgroundColor: 'rgba(54, 162, 67, 0.8)',
-                        borderColor: 'rgba(54, 162, 67, 1)',
-                        borderWidth: 1,
-                        stack: 'stack1' // Grouping Hire Install into the same stack
-                    }
-                ]
+                datasets: datasets
             },
             options: {
                 responsive: true,
                 scales: {
                     x: {
-                        stacked: true // Enable stacking on the x-axis
+                        stacked: true
                     },
                     y: {
                         beginAtZero: true,
-                        stacked: true, // Enable stacking on the y-axis as well
+                        stacked: true,
                         ticks: {
                             stepSize: 1000,
                             callback: function(value) {
-                                return value.toFixed(0); // แสดงค่าทศนิยม 0 ตำแหน่ง
+                                return value.toFixed(0);
                             }
                         }
                     }
@@ -262,7 +284,7 @@
             }
         });
     </script>
-
+    
     <script>
         var provinceNames = [];
         var ictCount = [];
@@ -388,9 +410,9 @@
                     data: Simmy_move
                 },
                 {
-                    label: 'จำนวน',
-                    backgroundColor: 'rgba(255, 99, 132, 0.8)', // สีแดง
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    label: 'เติมเงินรายปี',
+                    backgroundColor: 'rgba(232, 201, 32, 0.8)', // สีแดง
+                    borderColor: 'rgba(232, 201, 32, 1)',
                     borderWidth: 1,
                     data: Simmy_count // เพิ่มข้อมูลสำหรับ Simmy_count
                 }

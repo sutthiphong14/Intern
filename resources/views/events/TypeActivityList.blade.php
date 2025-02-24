@@ -16,49 +16,33 @@
             <h5>สรุปรายงานผลการดำเนินงานกิจกรรมการตลาด</h5>
             <thead>
                 <tr class="bg-dark text-center align-center">
-                    <th rowspan="4">ดูข้อมูล</th>
-                    <th rowspan="4">ชื่อกิจกรรม</th>
-                    <th colspan="3">FTTX</th>
+                    <th rowspan="2">ดูข้อมูล</th>
+                    <th rowspan="2">ชื่อกิจกรรม</th>
+                    <th colspan="4">FTTX</th>
                     <th colspan="4">SIM my</th>
                     <th colspan="2">Ict Solution</th>
-                    <th rowspan="4">เครื่องมือ</th>
-
-
-
+                    <th rowspan="2">เครื่องมือ</th>
+                    <th rowspan="2">ลูกค้า</th>
                 </tr>
                 <tr class="bg-dark text-center">
-
-                    <th rowspan="4">new</th>
-                    <th rowspan="4">ติดตั้งเอง</th>
-                    <th rowspan="4">จ้างผู้รับเหมา</th>
-
-
-                </tr>
-                <tr class="bg-dark text-center">
-                    <th rowspan="2">ลูกค้าใหม่</th>
-                    <th rowspan="2">ลูกค้า (ย้ายค่าย)</th>
-                    <th colspan="2">เติมเงินรายปี</th>
-                    <th rowspan="2">จำนวน
-                        (ราย)</th>
-                    <th rowspan="2">รายได้</th>
-
-                </tr>
-                <tr class="bg-dark text-center ">
-                    <th>จำนวน
-                        (ราย)</th>
+                    <th>new</th>
+                    <th>ติดตั้งเอง</th>
+                    <th>จ้างผู้รับเหมา</th>
+                    <th>ปรับโปรโมชั่น</th>
+                    <th>ลูกค้าใหม่</th>
+                    <th>ลูกค้า (ย้ายค่าย)</th>
+                    <th>จำนวน (ราย)</th>
                     <th>ยอดเงิน</th>
-
+                    <th>จำนวน (ราย)</th>
+                    <th>รายได้</th>
                 </tr>
-
             </thead>
             <tbody class="text-center">
-
                 @foreach ($sumByType as $typeId => $data)
                     @php
                         // กรองเฉพาะกิจกรรมที่ตรงกับ typeId ปัจจุบัน
                         $activities = collect($typeActivities)->where('type_id', $typeId);
                     @endphp
-
                     @foreach ($activities as $row)
                         <tr>
                             <td>
@@ -70,13 +54,14 @@
                             <td>{{ ($data['selfInstall'] ?? 0) + ($data['hireInstall'] ?? 0) }}</td>
                             <td>{{ $data['selfInstall'] ?? 0 }}</td>
                             <td>{{ $data['hireInstall'] ?? 0 }}</td>
+                            <td>{{ $data['adjust'] ?? 0 }}</td>
                             <td>{{ $data['new'] ?? 0 }}</td>
                             <td>{{ $data['move'] ?? 0 }}</td>
                             <td>{{ $data['count'] ?? 0 }}</td>
                             <td>{{ $data['price'] ?? 0 }}</td>
                             <td>{{ $data['ictCount'] ?? 0 }}</td>
                             <td>{{ $data['ictIncome'] ?? 0 }}</td>
-                            <td colspan="2">
+                            <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn btn-light btn-sm p-1 dropdown-toggle hide-arrow"
                                         data-bs-toggle="dropdown">
@@ -103,13 +88,16 @@
                                         </li>
                                     </ul>
                                 </div>
-
+                            </td>
+                            <td>
+                                <a href="{{ route('event_customer', $row->type_id ) }}" class="btn btn-sm btn-primary text-light">ดูข้อมูลลูกค้า</a>
                             </td>
                         </tr>
                     @endforeach
                 @endforeach
             </tbody>
         </table>
+        
 
 
         {{-- modal add --}}
