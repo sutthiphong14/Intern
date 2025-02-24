@@ -120,6 +120,7 @@ class RequestsController extends Controller
         $requests = RequestModel::where('name_request', 'LIKE', "%{$query}%")
             ->orWhere('id_employee_request', 'LIKE', "%{$query}%")
             ->orWhere('email_request', 'LIKE', "%{$query}%")
+            ->orWhere('user_request', 'LIKE', "%{$query}%")
             ->get();
 
         return view('requests.listRequests', compact('requests'));
