@@ -16,7 +16,7 @@
 
         <div class="row">
             <!-- Card แรก -->
-            <div class="col-md-7">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">Fttxbroadband</h3>
@@ -30,9 +30,10 @@
                     </div>
                 </div>
             </div>
+            
 
             <!-- Card ที่สอง -->
-            <div class="col-md-5">
+            <div class="col-md-12 mt-4">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">ICT solution</h3>
@@ -58,6 +59,22 @@
                     </div>
                     <div class="card-body collapse show" id="chart3">
                         <canvas id="myChart3"
+                            style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+               <!-- Card ที่สี่ -->
+               <div class="col-md-12 mt-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">เติมเงินรายปี</h3>
+                        <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart4">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="card-body collapse show" id="chart4">
+                        <canvas id="myChart4"
                             style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
                     </div>
                 </div>
@@ -218,71 +235,70 @@
         @endforeach
     
         var ctx = document.getElementById('myChart').getContext('2d');
-    
-        var datasets = [
-            {
-                label: 'New',
-                data: fttxNewData,
-                backgroundColor: 'rgba(1, 15, 11, 0.8)',
-                borderColor: 'rgba(1, 15, 11, 1)',
-                borderWidth: 1,
-                stack: 'stack1'
+
+var datasets = [
+    {
+        label: 'New',
+        data: fttxNewData,
+        backgroundColor: 'rgba(1, 15, 11, 0.8)',
+        borderColor: 'rgba(1, 15, 11, 0.8)',
+        borderWidth: 2
+    },
+    {
+        label: 'ติดตั้งเอง',
+        data: selfInstallData,
+        backgroundColor: 'rgba(2, 178, 125, 1)',
+        borderColor: 'rgba(2, 178, 150, 0.8)',
+        borderWidth: 2
+    },
+    {
+        label: 'จ้างผู้รับเหมา',
+        data: hireInstallData,
+        backgroundColor: 'rgba(54, 250, 110, 0.8)',
+        borderColor: 'rgba(54, 250, 110, 1)',
+        borderWidth: 2
+    }
+];
+
+// ถ้ามีค่าปรับโปรโมชั่น ให้เพิ่มเป็นแท่งแยก
+if (adJust.length > 0) {
+    datasets.push({
+        label: 'ปรับโปรโมชั่น',
+        backgroundColor: 'rgba(204, 204, 204, 0.8)', // สีเทา
+        borderColor: 'rgba(204, 220, 220, 1)',
+        borderWidth: 1,
+        data: adJust
+    });
+}
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: provinceNames,
+        datasets: datasets
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                stacked: false // ❌ ปิด stacked เพื่อแยกแท่ง
             },
-            {
-                label: 'ติดตั้งเอง',
-                data: selfInstallData,
-                backgroundColor: 'rgba(2, 178, 125, 0.8)',
-                borderColor: 'rgba(2, 178, 125, 1)',
-                borderWidth: 1,
-                stack: 'stack1'
-            },
-            {
-                label: 'จ้างผู้รับเหมา',
-                data: hireInstallData,
-                backgroundColor: 'rgba(54, 162, 67, 0.8)',
-                borderColor: 'rgba(54, 162, 67, 1)',
-                borderWidth: 1,
-                stack: 'stack1'
-            }
-        ];
-    
-        // ถ้ามีค่าปรับโปรโมชั่น ให้เพิ่มเป็นแท่งแยก
-        if (adJust.length > 0) {
-            datasets.push({
-                label: 'ปรับโปรโมชั่น',
-                backgroundColor: 'rgba(204, 204, 204, 0.8)', // สีเทา
-                borderColor: 'rgba(204, 204, 204, 1)',
-                borderWidth: 1,
-                data: adJust, // ใช้ adJust ตรงๆ ไม่ต้องใส่ []
-                stack: 'stack2' // ให้ adjust อยู่คนละกลุ่ม
-            });
-        }
-    
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: provinceNames,
-                datasets: datasets
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        stacked: true
-                    },
-                    y: {
-                        beginAtZero: true,
-                        stacked: true,
-                        ticks: {
-                            stepSize: 1000,
-                            callback: function(value) {
-                                return value.toFixed(0);
-                            }
-                        }
+            y: {
+                beginAtZero: true,
+                stacked: false, // ❌ ปิด stacked เพื่อแยกแท่ง
+                ticks: {
+                    stepSize: 0.5,
+                    callback: function(value) {
+                        return value.toFixed(0);
                     }
                 }
             }
-        });
+        },
+        barPercentage: 1, // ✅ ปรับให้แท่งไม่กว้างเกินไป
+        categoryPercentage: 0.8 // ✅ กำหนดระยะห่างของแต่ละแท่ง
+    }
+});
+
     </script>
     
     <script>
@@ -313,8 +329,8 @@
                 datasets: [{
                     label: 'รายได้',
                     backgroundColor: 'rgba(236, 229, 21, 0.8)', // สีเหลือง
-                    borderColor: 'rgba(236, 229, 21, 1)',
-                    borderWidth: 1,
+                    borderColor: 'rgba(236, 229, 80, 1)',
+                    borderWidth: 5,
                     data: ictIncome, // แสดงรายได้
                     stack: 'stack2' // stack อยู่ในกลุ่ม 'stack2'
                 }]
@@ -366,107 +382,121 @@
 
 <script>
     var provinceNames = [];
-    var Simmy_count = [];
-    var Simmy_move = [];
-    var Simmy_new = [];
-    var Simmy_price = [];
+var Simmy_count = [];
+var Simmy_move = [];
+var Simmy_new = [];
+var Simmy_price = [];
 
-    // ข้อมูลจาก PHP
-    @foreach ($provinces as $province)
-        @if ($province->province_id <= 12)
-            provinceNames.push("{{ $province->province_name }}");
-            Simmy_count.push({{ $Simmy_count[$province->province_id] ?? 0 }});
-            Simmy_move.push({{ $Simmy_move[$province->province_id] ?? 0 }});
-            Simmy_new.push({{ $Simmy_new[$province->province_id] ?? 0 }});
-            Simmy_price.push({{ $Simmy_price[$province->province_id] ?? 0 }});
-        @else
-            provinceNames.push("{{ $province->province_name }}");
-            Simmy_count.push({{ $Simmy_count[$province->province_id] ?? 0 }});
-            Simmy_move.push({{ $Simmy_move[$province->province_id] ?? 0 }});
-            Simmy_new.push({{ $Simmy_new[$province->province_id] ?? 0 }});
-            Simmy_price.push({{ $Simmy_price[$province->province_id] ?? 0 }});
-        @endif
-    @endforeach
+// ข้อมูลจาก PHP
+@foreach ($provinces as $province)
+    provinceNames.push("{{ $province->province_name }}");
+    Simmy_count.push({{ $Simmy_count[$province->province_id] ?? 0 }});
+    Simmy_move.push({{ $Simmy_move[$province->province_id] ?? 0 }});
+    Simmy_new.push({{ $Simmy_new[$province->province_id] ?? 0 }});
+    Simmy_price.push({{ $Simmy_price[$province->province_id] ?? 0 }});
+@endforeach
 
-    // สร้างกราฟที่ 2
-    var ctx3 = document.getElementById('myChart3').getContext('2d');
+// 🎯 กราฟ 1: ลูกค้าใหม่ และย้ายค่าย
+var ctx3 = document.getElementById('myChart3').getContext('2d');
 
-    var myChart3 = new Chart(ctx3, {
-        type: 'bar',
-        data: {
-            labels: provinceNames, // ป้ายชื่อที่แสดงในกราฟ
-            datasets: [{
-                    label: 'ลูกค้าใหม่',
-                    backgroundColor: 'rgba(32, 118, 232, 0.8)', // สีฟ้า
-                    borderColor: 'rgba(32, 118, 232, 1)',
-                    borderWidth: 1,
-                    data: Simmy_new
-                },
-                {
-                    label: 'ลูกค้า(ย้ายค่าย)',
-                    backgroundColor: 'rgba(32, 232, 93, 0.8)', // สีเขียว
-                    borderColor: 'rgba(32, 232, 93, 1)',
-                    borderWidth: 1,
-                    data: Simmy_move
-                },
-                {
-                    label: 'เติมเงินรายปี',
-                    backgroundColor: 'rgba(232, 201, 32, 0.8)', // สีแดง
-                    borderColor: 'rgba(232, 201, 32, 1)',
-                    borderWidth: 1,
-                    data: Simmy_count // เพิ่มข้อมูลสำหรับ Simmy_count
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            maxBarThickness: 90,
-            scales: {
-                x: {
-                    stacked: false, // ปรับเป็น false เพื่อแสดงเป็นแท่งแยก
-                    maxBarThickness: 20 // กำหนดขนาดแท่ง
-                },
-                y: {
-                    beginAtZero: true, // เริ่มจาก 0 ที่แกน Y
-                    stacked: false, // ปรับเป็น false เพื่อแสดงเป็นแท่งแยก
-                    ticks: {
-                        stepSize: 1000,
-                        callback: function(value) {
-                            return value.toFixed(2); // แสดงค่าทศนิยม 0 ตำแหน่ง
-                        }
-                    }
-                }
+var myChart3 = new Chart(ctx3, {
+    type: 'bar',
+    data: {
+        labels: provinceNames,
+        datasets: [
+            {
+                label: 'ลูกค้าใหม่',
+                backgroundColor: 'rgba(32, 118, 200, 0.8)', // สีฟ้า
+                borderColor: 'rgba(2, 178, 200, 1)',
+                borderWidth: 3,
+                data: Simmy_new
             },
-            plugins: {
-                legend: {
-                    position: 'top' // ตำแหน่ง legend
-                },
-                tooltip: {
-                    enabled: true, // เปิด tooltip
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            // เช็คว่า tooltipItem.datasetIndex คือ dataset ของ "จำนวน"
-                            if (tooltipItem.datasetIndex === 2) { // index ของ dataset "จำนวน"
+            {
+                label: 'ลูกค้า(ย้ายค่าย)',
+                backgroundColor: 'rgba(32, 232, 93, 0.8)', // สีเขียว
+                borderColor: 'rgba(54, 250, 110, 1)',
+                borderWidth: 3,
+                data: Simmy_move
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        maxBarThickness: 90,
+        scales: {
+            x: { stacked: false },
+            y: { beginAtZero: true, stacked: false,
+                ticks: {
+                            stepSize: 1,
+                            callback: function(value) {
+                                return value.toFixed(0); // แสดงค่าทศนิยม 0 ตำแหน่ง
+                            }
+                        }
+             }
+        },
+        plugins: {
+            legend: { position: 'top' }
+        }
+    }
+});
+
+// 🎯 กราฟ 2: เติมเงินรายปี
+var ctx4 = document.getElementById('myChart4').getContext('2d');
+
+var myChart4 = new Chart(ctx4, {
+    type: 'bar',
+    data: {
+        labels: provinceNames,
+        datasets: [
+           
+            {
+                label: 'เติมเงินรายปี (ยอดเงิน)',
+                backgroundColor: 'rgba(244, 29, 255, 0.8)', // สีแดง
+                borderColor: 'rgba(244, 29, 255, 1)',
+                borderWidth: 3,
+                data: Simmy_price
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        maxBarThickness: 90,
+        scales: {
+            x: { stacked: false },
+            y: { beginAtZero: true, stacked: false ,
+                ticks: {
+                    
+                            callback: function(value) {
+                                return value.toFixed(2); // แสดงค่าทศนิยม 0 ตำแหน่ง
+                            }
+                        }
+            }
+        },
+        plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+                enabled: true,
+                callbacks: {
+                    label: function(tooltipItem) {
+                        
                                 var Simmy_countValue = Simmy_count[tooltipItem.dataIndex]; // ดึงค่า Simmy_count
                                 var Simmy_priceValue = Simmy_price[tooltipItem.dataIndex]; // ดึงค่า Simmy_price
 
                                 // แสดงข้อมูลใน tooltip เฉพาะสำหรับ "จำนวน"
-                                return [
+                                return ['เติมเงินรายปี',
                                     'จำนวน : ' + Simmy_countValue + ' ราย',
-                                    'รายได้ : ' + Simmy_priceValue + ' บาท'
+                                    'ยอดเงิน : ' + Simmy_priceValue + ' บาท'
                                 ];
-                            } else {
-                                // ถ้าไม่ใช่ dataset ของ "จำนวน" ก็ให้แสดงข้อมูลของแท่งนั้นๆ
-                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw;
-                            }
-                        }
+                   
                     }
                 }
             }
         }
-    });
-</script>
+    }
+});
 
+</script>
 
 @endsection

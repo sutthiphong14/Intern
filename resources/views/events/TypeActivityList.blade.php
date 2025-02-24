@@ -3,7 +3,7 @@
 @endsection
 @section('content')
     <div class="container">
-        <h2>จัดการกิจกรรม</h2>
+        <h3>จัดการกิจกรรม</h3>
 
         <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addTypeModal">
             เพิ่มกิจกรรม

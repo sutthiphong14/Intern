@@ -74,7 +74,22 @@
 
 
                     </tr>
+                   
                 @endforeach
+                <tr class="bg-warning">
+
+                    <td colspan="1">รวม</td>
+                    <td>{{ $sumFttxNew + $sumFttxNewOver33 }}</td>
+                    <td>{{ $sumSelfInstall + $sumSelfInstallOver33 }}</td>
+                    <td>{{ $sumHireInstall + $sumHireInstallOver33 }}</td>
+                    <td>{{ $sumAdjust + $sumAdjustOver33 }}</td>
+                    <td>{{ $sumNew + $sumNewOver33 }}</td>
+                    <td>{{ $sumMove + $sumMoveOver33 }}</td>
+                    <td>{{ $sumCount + $sumCountOver33 }}</td>
+                    <td>{{ $sumPrice + $sumPriceOver33 }}</td>
+                    <td>{{ $IctCount + $IctCountOver33 }}</td>
+                    <td>{{ $IctIncome + $IctIncomeOver33 }}</td>
+                </tr>
             </tbody>
 
 

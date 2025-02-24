@@ -1003,12 +1003,14 @@ class ActivityController extends Controller
         $sumFttxNew = $sumSelfInstall = $sumHireInstall = 0;
         $sumNew = $sumMove = $sumCount = $sumPrice = 0;
         $IctCount = $IctIncome = 0;
-
+        $sumAdjust = 0;
 
 
         $sumFttxNewOver33 = $sumSelfInstallOver33 = $sumHireInstallOver33 = 0;
         $sumNewOver33 = $sumMoveOver33 = $sumCountOver33 = $sumPriceOver33 = 0;
         $IctCountOver33 = $IctIncomeOver33 = 0;
+        $sumAdjustOver33 = 0;
+
 
         foreach ($centers as $center) {
             $centerId = $center->center_id;
@@ -1017,6 +1019,7 @@ class ActivityController extends Controller
                 $sumFttxNew += $fttxNew[$centerId] ?? 0;
                 $sumSelfInstall += $selfInstall[$centerId] ?? 0;
                 $sumHireInstall += $HireInstall[$centerId] ?? 0;
+                $sumAdjust += $adjust[$centerId] ?? 0;
 
                 $sumNew += $Simmy_new[$centerId] ?? 0;
                 $sumMove += $Simmy_move[$centerId] ?? 0;
@@ -1029,6 +1032,7 @@ class ActivityController extends Controller
                 $sumFttxNewOver33 += $fttxNew[$centerId] ?? 0;
                 $sumSelfInstallOver33 += $selfInstall[$centerId] ?? 0;
                 $sumHireInstallOver33 += $HireInstall[$centerId] ?? 0;
+                $sumAdjustOver33 += $adjust[$centerId] ?? 0;
 
                 $sumNewOver33 += $Simmy_new[$centerId] ?? 0;
                 $sumMoveOver33 += $Simmy_move[$centerId] ?? 0;
@@ -1091,7 +1095,10 @@ class ActivityController extends Controller
             'IctIncomeOver33',
             'total_all',
             'ictData',
-            'adjust'
+            'adjust',
+            'sumAdjust',
+            'sumAdjustOver33',
+            
 
 
         ));
