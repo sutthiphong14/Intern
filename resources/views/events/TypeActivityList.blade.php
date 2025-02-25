@@ -3,52 +3,106 @@
 @endsection
 @section('content')
     <div class="container">
-        <h2>จัดการกิจกรรม</h2>
+        <h3>จัดการกิจกรรม</h3>
+
         <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addTypeModal">
             เพิ่มกิจกรรม
         </button>
 
-        <table class="table table-bordered ">
+       
+
+
+        <table class="table table-bordered mt-3">
+            <h5>สรุปรายงานผลการดำเนินงานกิจกรรมการตลาด</h5>
             <thead>
-                <tr class="bg-dark text-light">
-                    <th>ชื่อกิจกรรม</th>
-                    <th>เครื่องมือ</th>
+                <tr class="bg-dark text-center align-center">
+                    <th rowspan="2">ดูข้อมูล</th>
+                    <th rowspan="2">ชื่อกิจกรรม</th>
+                    <th colspan="4">FTTX</th>
+                    <th colspan="4">SIM my</th>
+                    <th colspan="2">Ict Solution</th>
+                    <th rowspan="2">เครื่องมือ</th>
+                    <th rowspan="2">ลูกค้า</th>
+                </tr>
+                <tr class="bg-dark text-center">
+                    <th>new</th>
+                    <th>ติดตั้งเอง</th>
+                    <th>จ้างผู้รับเหมา</th>
+                    <th>ปรับโปรโมชั่น</th>
+                    <th>ลูกค้าใหม่</th>
+                    <th>ลูกค้า (ย้ายค่าย)</th>
+                    <th>จำนวน (ราย)</th>
+                    <th>ยอดเงิน</th>
+                    <th>จำนวน (ราย)</th>
+                    <th>รายได้</th>
                 </tr>
             </thead>
-            <tbody>
-                @if ($data->count() > 0)
-                    @foreach ($data as $row)
+            <tbody class="text-center">
+                @foreach ($sumByType as $typeId => $data)
+                    @php
+                        // กรองเฉพาะกิจกรรมที่ตรงกับ typeId ปัจจุบัน
+                        $activities = collect($typeActivities)->where('type_id', $typeId);
+                    @endphp
+                    @foreach ($activities as $row)
                         <tr>
-                            <td class="col-5">{{ $row->type_name }}</td>
                             <td>
-                                <button class="btn btn-warning btn-sm editBtn" data-id="{{ $row->type_id }}"
-                                    data-name="{{ $row->type_name }}" data-bs-toggle="modal"
-                                    data-bs-target="#editTypeModal">
-                                    Edit
-                                </button>
-                                <form action="{{ route('type_delete', $row->type_id) }}" method="POST"
-                                    style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm deleteBtn"
-                                        id="deleteBtn{{ $row->type_id }}">
-                                        Delete
+                                <a href="{{ route('event_department', $typeId) }}" class="btn btn-warning">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                            </td>
+                            <td>{{ $row->type_name }}</td>
+                            <td>{{ ($data['selfInstall'] ?? 0) + ($data['hireInstall'] ?? 0) }}</td>
+                            <td>{{ $data['selfInstall'] ?? 0 }}</td>
+                            <td>{{ $data['hireInstall'] ?? 0 }}</td>
+                            <td>{{ $data['adjust'] ?? 0 }}</td>
+                            <td>{{ $data['new'] ?? 0 }}</td>
+                            <td>{{ $data['move'] ?? 0 }}</td>
+                            <td>{{ $data['count'] ?? 0 }}</td>
+                            <td>{{ $data['price'] ?? 0 }}</td>
+                            <td>{{ $data['ictCount'] ?? 0 }}</td>
+                            <td>{{ $data['ictIncome'] ?? 0 }}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-light btn-sm p-1 dropdown-toggle hide-arrow"
+                                        data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded fs-5"></i>
                                     </button>
-                                </form>
+                                    <ul class="dropdown-menu shadow border-0 rounded">
+                                        <li>
+                                            <button class="dropdown-item text-warning editBtn"
+                                                data-id="{{ $row->type_id }}" data-name="{{ $row->type_name }}"
+                                                data-bs-toggle="modal" data-bs-target="#editTypeModal">
+                                                <i class="bx bx-edit"></i> Edit
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <form action="{{ route('type_delete', $row->type_id) }}" method="POST"
+                                                class="m-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item text-danger deleteBtn"
+                                                    id="deleteBtn{{ $row->type_id }}">
+                                                    <i class="bx bx-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{{ route('event_customer', $row->type_id ) }}" class="btn btn-sm btn-primary text-light">ดูข้อมูลลูกค้า</a>
                             </td>
                         </tr>
                     @endforeach
-                @else
-                    <tr>
-                        <td colspan="2" class="text-center">ไม่มีข้อมูลกิจกรรม</td>
-                    </tr>
-                @endif
+                @endforeach
             </tbody>
         </table>
+        
 
 
         {{-- modal add --}}
-        <div class="modal fade" id="addTypeModal" tabindex="-1" aria-labelledby="addTypeModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addTypeModal" tabindex="-1" aria-labelledby="addTypeModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -78,7 +132,8 @@
 
 
         <!-- Modal Edit -->
-        <div class="modal fade" id="editTypeModal" tabindex="-1" aria-labelledby="editTypeModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editTypeModal" tabindex="-1" aria-labelledby="editTypeModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -91,7 +146,8 @@
                             @method('PUT')
                             <div class="mb-3">
                                 <label for="edit_type_name" class="form-label">ชื่อกิจกรรม</label>
-                                <input type="text" class="form-control" id="edit_type_name" name="type_name" required>
+                                <input type="text" class="form-control" id="edit_type_name" name="type_name"
+                                    required>
                             </div>
                             <div class="text-end">
                                 <button type="submit" class="btn btn-success">Update</button>
@@ -103,8 +159,6 @@
             </div>
         </div>
     </div>
-
-
 @endsection
 
 
@@ -211,4 +265,23 @@
             });
         </script>
     @endif
+    <script>
+        document.querySelectorAll('.nav-tabs .nav-link').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.nav-tabs .nav-link').forEach(el => {
+                    el.classList.remove('active', 'bg-warning', 'text-light');
+                    el.classList.add('text-dark');
+                });
+                this.classList.add('active', 'bg-warning', 'text-light');
+            });
+        });
+    </script>
+
+    <!-- ChartJS -->
+    <script src="plugins/chart.js/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+
 @endsection

@@ -21,13 +21,13 @@
       </a>
     </li>
     <li class="menu-header small text-uppercase">
-      <span class="menu-header-text text-dark">DashBoard</span>
-    </li>
-    <li class="menu-item {{ Request::is('customer_list') ? 'active' : '' }}">
-      <a href="  customer_list" class="menu-link">
-        <i class="menu-icon  fas fa-users"></i>
-        <div data-i18n="Analytics">ลูกค้า</div>
-      </a>
+              <span class="menu-header-text text-dark">DashBoard</span>
+            </li>
+    <li class="menu-item {{ Route::is('type_list') ? 'active' : '' }}">
+            <a href="{{route('type_list')}}" class="menu-link">
+              <i class="menu-icon fas fa-calendar-plus"></i>
+                  <div data-i18n="Analytics">กิจกรรม</div>
+            </a>
     </li>
     <li class="menu-item {{ Request::is('incomecurrent') ? 'active' : '' }}">
       <a href="incomecurrent" class="menu-link">

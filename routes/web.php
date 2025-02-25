@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SlideshowController;
 use App\Http\Controllers\EventController;
 use App\Models\ServiceCenterActivity;
-
+use App\Models\Fttxbroadband;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -384,6 +384,12 @@ Route::post('/price_insert/{service_id}/{promotion_id}/{speed_id}', [ActivityCon
 Route::delete('/price_delete/{service_id}/{promotion_id}/{speed_id}/{price_id}', [ActivityController::class, 'PriceDelete'])->name('price_delete');
 Route::put('/price_update/{service_id}/{promotion_id}/{speed_id}/{price_id}', [ActivityController::class, 'PriceUpdate'])->name('price_update');
 
+//ส่วนproduct
+Route::get('/product_list', [ActivityController::class, 'ListProduct'])->name('product_list');
+Route::post('/product_insert', [ActivityController::class, 'ProductInsert'])->name('product_insert');
+Route::delete('/product_delete/{product_id}', [ActivityController::class, 'ProductDelete'])->name('product_delete');
+Route::put('/product_update/{product_id}', [ActivityController::class, 'Productupdate'])->name('product_update');
+
 //จังหวัด
 Route::get('/provinceactivityList', [ProvinceController::class, 'indexprovince'])->name('provinceactivityList');
 Route::post('/provincactivityadd', [ProvinceController::class, 'storeprovince'])->name('provinceactivityadd');
@@ -404,11 +410,14 @@ Route::delete('/customer_delete/{cus_id}', [CustomerController::class, 'Customer
 Route::get('/customer_edit/{cus_id}', [CustomerController::class, 'CustomerEdit'])->name('customer_edit');
 Route::put('/customer_update/{cus_id}', [CustomerController::class, 'CustomerUpdate'])->name('customer_update');
 
+Route::get('/fttx_broadband', [ActivityController::class, 'Fttxlist'])->name('fttx_broadband');
+Route::get('/sim_my', [ActivityController::class, 'Sim_my'])->name('sim_my');
+Route::get('/activity_list', [ActivityController::class, 'activity_list'])->name('activity_list');
+
 Route::get('/getPromotions', [CustomerController::class, 'getPromotions']);
 Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);
 Route::get('/getPrices', [CustomerController::class, 'getPrices']);
 Route::get('/getCenters', [CustomerController::class, 'getCenters']);
-
 
 Route::get('/events', [EventController::class, 'showListView'])->name('events.list');
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
@@ -433,3 +442,58 @@ Route::get('/api/centers/{province_id}', function($province_id) {
 
 
 });
+
+Route::get('/customers/search', [CustomerController::class, 'searchCustomers'])->name('customer_search');
+
+
+
+Route::post('/topUp_insert', [CustomerController::class,'insertTopup'])->name('topUp_insert');
+Route::delete('/topUp_delete/{topUp_id}', [CustomerController::class, 'TopUpDelete'])->name('topUp_delete');
+Route::put('/topUp_update/{id}', [CustomerController::class, 'TopUpUpdate'])->name('topUp_update');
+Route::get('/getTopUpDetails/{topUpId}', [CustomerController::class, 'getTopUpDetails'])->name('getTopUpDetails');
+
+
+Route::get('/Event_deparment/{type_id}', [ActivityController::class, 'EventDepartment'])->name('event_department');
+Route::get('/Event_services/{province_id},{type_id}', [ActivityController::class, 'Eventservices'])->name('event_services');
+Route::get('/Event_center/{province_id},{type_id}', [ActivityController::class, 'Eventcenter'])->name('event_center');
+Route::get('/Event_customer_list/{type_id}', [ActivityController::class, 'EventCustomer'])->name('event_customer');
+Route::get('/topup_list', [ActivityController::class, 'TopUp_list'])->name('top_up_list');
+Route::get('/topups/search', [ActivityController::class, 'searchTopUp'])->name('top_up_search');
+Route::get('/get_product/{center_id}/{type_id}', [ActivityController::class, 'getProductCenter'])->name('getproduct_center');
+Route::get('/detail/{center_id}', [ActivityController::class, 'getCustomerDetail'])->name('detail_cus');
+
+Route::get('/customers/search', [CustomerController::class, 'searchCustomers'])->name('customer_search');
+
+
+
+Route::post('/topUp_insert', [CustomerController::class,'insertTopup'])->name('topUp_insert');
+Route::delete('/topUp_delete/{topUp_id}', [CustomerController::class, 'TopUpDelete'])->name('topUp_delete');
+Route::put('/topUp_update/{id}', [CustomerController::class, 'TopUpUpdate'])->name('topUp_update');
+Route::get('/getTopUpDetails/{topUpId}', [CustomerController::class, 'getTopUpDetails'])->name('getTopUpDetails');
+
+
+Route::get('/Event_deparment/{type_id}', [ActivityController::class, 'EventDepartment'])->name('event_department');
+Route::get('/Event_services/{province_id},{type_id}', [ActivityController::class, 'Eventservices'])->name('event_services');
+Route::get('/Event_center/{province_id},{type_id}', [ActivityController::class, 'Eventcenter'])->name('event_center');
+Route::get('/Event_customer_list/{type_id}', [ActivityController::class, 'EventCustomer'])->name('event_customer');
+Route::get('/topup_list', [ActivityController::class, 'TopUp_list'])->name('top_up_list');
+Route::get('/topups/search', [ActivityController::class, 'searchTopUp'])->name('top_up_search');
+Route::get('/get_product/{center_id}/{type_id}', [ActivityController::class, 'getProductCenter'])->name('getproduct_center');
+Route::get('/detail/{center_id}', [ActivityController::class, 'getCustomerDetail'])->name('detail_cus');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

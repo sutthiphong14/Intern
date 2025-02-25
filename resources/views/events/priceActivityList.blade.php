@@ -9,7 +9,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr class="bg-dark text-light">
-                    <th>ชื่อราคา</th>
+                    <th>ราคา</th>
                     <th>เครื่องมือ</th>
                 </tr>
             </thead>
@@ -60,8 +60,8 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="price_name" class="form-label">ชื่อราคา</label>
-                                <input type="text" class="form-control" id="price_name" name="price_name" required>
+                                <label for="price_name" class="form-label">จำนวนราคา</label>
+                                <input type="number" class="form-control" id="price_name" name="price_name" required>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -86,8 +86,8 @@
                         @method('PUT')
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="priceName" class="form-label">ชื่อราคา</label>
-                                <input type="text" class="form-control" id="priceName" name="price_name" required>
+                                <label for="priceName" class="form-label">จำนวนราคา</label>
+                                <input type="number" class="form-control" id="priceName" name="price_name" required>
                             </div>
                         </div>
                         <div class="modal-footer">
