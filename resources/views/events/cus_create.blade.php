@@ -368,7 +368,7 @@
     <script>
         $(document).ready(function() {
             function toggleForms(serviceName) {
-                if (serviceName.includes('fttx_broadband')) {
+                if (serviceName.includes('fttx')) {
                     $('#fttx_broadband,#groupNet, #groupNet1').show();
                     $('#sim_my, #ict_solution, #ict_solution1').hide();
 
