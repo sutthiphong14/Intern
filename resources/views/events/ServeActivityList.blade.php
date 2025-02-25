@@ -3,8 +3,12 @@
 @endsection
 @section('content')
     <div class="container">
-        <h2>จัดการบริการ</h2>
+        <div class="d-flex align-items-end">
+            <h2>จัดการบริการ </h2>
+            <p>กิจกรรม {{ $typeName }}</p>
+        </div>
         <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#serviceModal">เพิ่มบริการ</button>
+        <a href="{{ route('type_list') }}" class="btn btn-secondary mb-3">Back</a>
         <table class="table table-bordered ">
             <thead>
                 <tr class="bg-dark text-light">
@@ -39,12 +43,11 @@
                                 </form>
 
                                 @if (stripos($row->service_name, 'ict') === false)
-                                <a href="{{ route('promotion_list', $row->service_id) }}"
-                                    class="btn btn-info btn-sm">ดูโปรโมชั่น</a>
-                                    @else
-                                    <a href="{{ route('product_list') }}"
-                                        class="btn btn-info btn-sm">product</a>
-                            @endif
+                                    <a href="{{ route('promotion_list', $row->service_id) }}"
+                                        class="btn btn-info btn-sm">ดูโปรโมชั่น</a>
+                                @else
+                                    <a href="{{ route('product_list',$type_id) }}" class="btn btn-info btn-sm">product</a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

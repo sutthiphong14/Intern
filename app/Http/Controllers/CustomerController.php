@@ -117,6 +117,7 @@ class CustomerController extends Controller
         $centers = ServiceCenterActivity::all(); // ดึงข้อมูลศูนย์บริการ
         $products = IctProduct::all();
 
+
         return view('events.cus_create', compact('types', 'services', 'promotion', 'provinces', 'speeds', 'prices', 'centers', 'products'));
     }
 
@@ -161,7 +162,7 @@ class CustomerController extends Controller
         $service_name = ServeActivity::where('service_id', $data['service_id'])->value('service_name');
 
 
-        if (strpos(strtolower($service_name), 'fttx_broadband') !== false) {
+        if (strpos(strtolower($service_name), 'fttx') !== false) {
             $new = $request->input('new');
             $installation_type = $request->input('installation_type');
             $cus_id = $customer->id;  // ดึง cus_id ที่เพิ่งสร้างใหม่มาใช้งาน
@@ -180,7 +181,7 @@ class CustomerController extends Controller
                 'province_id' => $province_id,
                 'created_at' => $date
             ]);
-        } else if (strpos(strtolower($service_name), 'sim my') !== false) {
+        } else if (strpos(strtolower($service_name), 'sim') !== false) {
             $cus_new = $request->input('cus_new');
             $service_id = $request->input('service_id');
             $price_id = $request->input('price_id');
@@ -200,7 +201,7 @@ class CustomerController extends Controller
                 'province_id' => $province_id,
                 'created_at' => $date
             ]);
-        } elseif (strpos(strtolower($service_name), 'ict solution') !== false) {
+        } elseif (strpos(strtolower($service_name), 'ict') !== false) {
             // ตัวแปรสำหรับไฟล์ quote
             $filePath = null;
             if ($request->hasFile('quote')) {
@@ -329,7 +330,7 @@ class CustomerController extends Controller
         $fttx_cus_id = Fttxbroadband::where('cus_id', $cus_id)->value('cus_id');
         $simmy_cus_id = Simmy::where('cus_id', $cus_id)->value('cus_id');
 
-        if (strpos(strtolower($service_name), 'fttx_broadband') !== false) {
+        if (strpos(strtolower($service_name), 'fttx') !== false) {
             // กรณีเป็น fttx_broadband
             $new = $request->input('new');
             $installation_type = $request->input('installation_type');
@@ -367,7 +368,7 @@ class CustomerController extends Controller
             // ลบข้อมูลใน Simmy หากเปลี่ยนจาก sim my
             Simmy::where('cus_id', $cus_id)->delete();
             IctSolution::where('cus_id', $cus_id)->delete();
-        } elseif (strpos(strtolower($service_name), 'sim my') !== false) {
+        } elseif (strpos(strtolower($service_name), 'sim') !== false) {
             // กรณีเป็น sim my
             $cus_new = $request->input('cus_new');
             $price_id = $request->input('price_id');
@@ -604,6 +605,21 @@ class CustomerController extends Controller
 
 
 
+    public function getService(Request $request)
+    {
+        $typeId = $request->input('type_id');
+        $services = ServeActivity::where('type_id', $typeId)->get();
+        return response()->json($services);  // ส่งข้อมูลกลับในรูปแบบ JSON
+    }
+
+
+    public function getProduct(Request $request)
+    {
+        $serviceId = $request->input('service_id');
+        $typeId = ServeActivity::where('service_id', $serviceId)->pluck('type_id')->first();
+        $products = IctProduct::where('type_id', $typeId)->get();
+        return response()->json($products);  // ส่งข้อมูลกลับในรูปแบบ JSON
+    }
 
 
     public function getPromotions(Request $request)

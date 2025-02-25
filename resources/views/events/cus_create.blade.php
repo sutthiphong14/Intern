@@ -7,28 +7,34 @@
 
         <form action="{{ route('customer_insert') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @php
-                // จัดเรียงรายการให้ 'ร่วม' ขึ้นก่อน
-                $sortedServices = $services->sortByDesc(
-                    fn($service) => strpos($service->service_name, 'ร่วม') !== false,
-                );
-            @endphp
            
-                <h2 class="m-0">เพิ่มลูกค้า</h2>
-                <div class="mt-3">
-                    <p class="mb-2 text-danger ">* เลือกบริการ</p>
-                    <select class="form-select  bg-success" id="service_id" name="service_id" required>
-                        <option value="" selected disabled>กรุณาเลือกบริการ</option>
-                        @foreach ($sortedServices as $service)
-                            <option value="{{ $service->service_id }}">{{ $service->service_name }}</option>
-                        @endforeach
-                    </select>
-                    <!-- เพิ่มข้อความคำแนะนำ หรือข้อผิดพลาดได้ -->
-                    @error('service_id')
-                        <div class="text-danger mt-2">{{ $message }}</div>
-                    @enderror
-                </div>
-           
+
+            <h2 class="m-0">เพิ่มลูกค้า</h2>
+            <div class="mt-3">
+
+                <!-- Type -->
+                <label for="type_id" class="form-label text-danger">* กรุณาเลือกกิจกรรมก่อน</label>
+                <select class="form-select" id="type_id" name="type_id" required>
+                    <option value="" disabled selected>-- เลือกกิจกรรม --</option>
+                    @foreach ($types as $type)
+                        <option value="{{ $type->type_id }}">{{ $type->type_name }}</option>
+                    @endforeach
+                </select>
+                @error('type_id')
+                    <small style="color:red">{{ $message }}</small>
+                @enderror
+
+                <label for="service_id" class="form-label">บริการ</label>
+                <select class="form-select  bg-success" id="service_id" name="service_id" required>
+                    <option value="" selected disabled>กรุณาเลือกบริการ</option>
+                   
+                </select>
+                <!-- เพิ่มข้อความคำแนะนำ หรือข้อผิดพลาดได้ -->
+                @error('service_id')
+                    <div class="text-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+
 
 
             @error('service_id')
@@ -75,28 +81,12 @@
                     <p id="file-error" style="color:red; display:none;">กรุณาเลือกไฟล์ที่ถูกต้อง (รูปภาพหรือ PDF)</p>
                 </div>
 
-
-
                 <!-- Address -->
                 <label for="cus_address" class="form-label">ที่อยู่</label>
                 <textarea class="form-control" id="cus_address" name="cus_address" rows="4" required>{{ old('cus_address') }}</textarea>
                 @error('cus_address')
                     <p style="color:red">{{ $message }}</p>
                 @enderror
-
-                <!-- Type -->
-                <label for="type_id" class="form-label">กิจกรรม</label>
-                <select class="form-select" id="type_id" name="type_id" required>
-                    <option value="" disabled selected>-- เลือกกิจกรรม --</option>
-                    @foreach ($types as $type)
-                        <option value="{{ $type->type_id }}">{{ $type->type_name }}</option>
-                    @endforeach
-                </select>
-                @error('type_id')
-                    <small style="color:red">{{ $message }}</small>
-                @enderror
-
-
 
                 <div id="groupNet">
                     <!-- Promotion -->
@@ -148,9 +138,7 @@
                                 <label for="product_id" class="form-label">Product</label>
                                 <select class="form-select" id="product_id" name="product_id[]" required>
                                     <option value="" disabled selected>-- เลือกProduct --</option>
-                                    @foreach ($products as $product)
-                                        <option value="{{ $product->product_id }}">{{ $product->product_name }}</option>
-                                    @endforeach
+                                   
                                 </select>
                             </div>
                             <div>
@@ -212,10 +200,84 @@
 
 
 @section('script')
+
+<script>
+     $('#service_id').change(function() {
+            var serviceId = $(this).val();
+           
+            $.ajax({
+                url: '/getProduct',
+                type: 'GET',
+                data: {
+                    service_id: serviceId
+                },
+
+             
+                success: function(data) {
+                    $('#product_id').empty();
+                    $('#product_id').append(
+                        '<option value="" disabled selected>-- เลือกProduct --</option>'
+                    );
+
+                    // เพิ่ม options สำหรับบริการ
+                    $.each(data, function(index, products) {
+                        $('#product_id').append('<option value="' + products.product_id + '">' +
+                            products.product_name + '</option>');
+                    });
+                },
+                error: function() {
+                    console.log('Error fetching services');
+                    alert('เกิดข้อผิดพลาดในการดึงข้อมูลบริการ');
+                }
+            });
+        });
+</script>
     <script>
         document.getElementById("date").valueAsDate = new Date();
     </script>
+
     <script>
+       $('#type_id').change(function() {
+    var typeId = $(this).val();
+
+    $.ajax({
+        url: '/getService',
+        type: 'GET',
+        data: {
+            type_id: typeId
+        },
+        success: function(data) {
+            $('#service_id').empty();
+            $('#service_id').append(
+                '<option value="" disabled selected>-- เลือกบริการ --</option>'
+            );
+
+            // แยกบริการที่มีคำว่า "ร่วม" ออกมา
+            var servicesWithR = data.filter(function(service) {
+                return service.service_name.includes('ร่วม');
+            });
+
+            var servicesWithoutR = data.filter(function(service) {
+                return !service.service_name.includes('ร่วม');
+            });
+
+            // รวมบริการที่มีคำว่า "ร่วม" ขึ้นมาก่อน
+            var allServices = servicesWithR.concat(servicesWithoutR);
+
+            // เพิ่ม options สำหรับบริการ
+            $.each(allServices, function(index, services) {
+                $('#service_id').append('<option value="' + services.service_id + '">' +
+                    services.service_name + '</option>');
+            });
+        },
+        error: function() {
+            console.log('Error fetching services');
+            alert('เกิดข้อผิดพลาดในการดึงข้อมูลบริการ');
+        }
+    });
+});
+
+
         $(document).ready(function() {
             $('#service_id').change(function() {
                 var serviceId = $(this).val(); // เก็บค่า service_id ที่เลือก
@@ -368,7 +430,7 @@
     <script>
         $(document).ready(function() {
             function toggleForms(serviceName) {
-                if (serviceName.includes('fttx')) {
+                if (serviceName.toLowerCase().includes('fttx')) {
                     $('#fttx_broadband,#groupNet, #groupNet1').show();
                     $('#sim_my, #ict_solution, #ict_solution1').hide();
 
@@ -383,7 +445,7 @@
                     $('#save-button').prop('disabled', false);
 
 
-                } else if (serviceName.includes('SIM my')) {
+                } else if (serviceName.toLowerCase().includes('sim')) {
                     $('#sim_my,#groupNet, #groupNet1').show();
                     $('#fttx_broadband, #ict_solution, #ict_solution1').hide();
 
@@ -398,7 +460,7 @@
                         'required', false);
                     $('#save-button').prop('disabled', false);
 
-                } else if (serviceName.includes('ICT solution')) {
+                } else if (serviceName.toLowerCase().includes('ict')) {
                     $('#ict_solution, #ict_solution1').show();
                     $('#fttx_broadband, #sim_my, #groupNet, #groupNet1').hide();
 
@@ -465,21 +527,21 @@
 
     <script>
         $(document).ready(function() {
-    // เมื่อมีการพิมพ์ในช่อง cus_fullname
-    $('#cus_fullname').on('input', function() {
-        var selectedService = $('#service_id').val(); // ดึงค่าของ service_id
-        if (!selectedService) { // ถ้ายังไม่ได้เลือกบริการ
-            $('#service-alert').show(); // แสดงข้อความแจ้งเตือน
-            $(this).val(''); // ลบค่าที่พิมพ์ไป
-        } else {
-            $('#service-alert').hide(); // ซ่อนข้อความแจ้งเตือนถ้าเลือกบริการแล้ว
-        }
-    });
+            // เมื่อมีการพิมพ์ในช่อง cus_fullname
+            $('#cus_fullname').on('input', function() {
+                var selectedService = $('#service_id').val(); // ดึงค่าของ service_id
+                if (!selectedService) { // ถ้ายังไม่ได้เลือกบริการ
+                    $('#service-alert').show(); // แสดงข้อความแจ้งเตือน
+                    $(this).val(''); // ลบค่าที่พิมพ์ไป
+                } else {
+                    $('#service-alert').hide(); // ซ่อนข้อความแจ้งเตือนถ้าเลือกบริการแล้ว
+                }
+            });
 
-    // เมื่อมีการเปลี่ยนค่าใน select (service_id)
-    $('#service_id').on('change', function() {
-        $('#service-alert').hide(); // ซ่อนข้อความแจ้งเตือนเมื่อเลือกบริการ
-    });
-});
+            // เมื่อมีการเปลี่ยนค่าใน select (service_id)
+            $('#service_id').on('change', function() {
+                $('#service-alert').hide(); // ซ่อนข้อความแจ้งเตือนเมื่อเลือกบริการ
+            });
+        });
     </script>
 @endsection

@@ -180,11 +180,16 @@ class ActivityController extends Controller
         }
         $data = $typeActivities->count();
         $typeIds = collect($typeActivities)->pluck('type_id')->toArray();  // ดึงแค่ type_id
-        $maxTypeId = max($typeIds);  // หาค่ามากสุดจาก type_id
+        
+        $maxTypeId = !empty($typeIds) ? max($typeIds) : null;  // ตรวจสอบก่อนใช้ max()
+        
+       
+        
 
 
         $typeNames = [];
-        $fttxNewData = $selfInstallData = $hireInstallData = $adjust = [];
+        $fttxNewData = $selfInstallData = $hireInstallData = $adjustData = [];
+
 
         foreach ($sumByType as $typeId => $data) {
             // ตรวจสอบว่า type_id มีใน $typeActivities หรือไม่
@@ -215,18 +220,49 @@ class ActivityController extends Controller
         $request->validate([
             'type_name' => 'required|string|max:255',
         ]);
-
+    
         try {
-            // บันทึกข้อมูลและเก็บผลลัพธ์
-            $newRecord = Typeactivity::create($request->all());
+            // บันทึกข้อมูลลงใน type_activity
+            $newRecord = Typeactivity::create([
+                'type_name' => $request->type_name
+            ]);
+    
+            // บันทึกข้อมูลลงใน serve_activity โดยใช้ id ของ type_activity
+            ServeActivity::create([
+                'service_name' => 'Fttx Broadband',
+                'type_id' => $newRecord->id  // ใช้ $newRecord->id ไม่ใช่ $newRecord->type_id
+            ]);
 
-            // ส่งข้อมูลสำเร็จกลับไปในรูปแบบ JSON พร้อม ID
-            return response()->json(['success' => true, 'message' => 'เพิ่มกิจกรรมสำเร็จ', 'id' => $newRecord->id]);
+            ServeActivity::create([
+                'service_name' => 'SIM my(เติมเงิน)',
+                'type_id' => $newRecord->id  // ใช้ $newRecord->id ไม่ใช่ $newRecord->type_id
+            ]);
+
+            ServeActivity::create([
+                'service_name' => 'SIM my(รายเดือน)',
+                'type_id' => $newRecord->id  // ใช้ $newRecord->id ไม่ใช่ $newRecord->type_id
+            ]);
+
+            ServeActivity::create([
+                'service_name' => 'ICT solution',
+                'type_id' => $newRecord->id  // ใช้ $newRecord->id ไม่ใช่ $newRecord->type_id
+            ]);
+    
+            // ส่งข้อมูลสำเร็จกลับไป
+            return response()->json([
+                'success' => true, 
+                'message' => 'เพิ่มกิจกรรมสำเร็จ', 
+                'id' => $newRecord->id
+            ]);
         } catch (\Exception $e) {
             // กรณีเกิดข้อผิดพลาด
-            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+            return response()->json([
+                'success' => false, 
+                'message' => $e->getMessage()
+            ]);
         }
     }
+    
 
 
 
@@ -264,11 +300,16 @@ class ActivityController extends Controller
 
 
     //บริการ
-    public function ListService()
+    public function ListService($type_id)
     {
-        $data = ServeActivity::all();
+        
+            $data = ServeActivity::where('type_id', $type_id)->get();
+            $typeName = TypeActivity::where('type_id', $type_id)->pluck('type_name')->first();
+           
+            
+      
 
-        return view("events.ServeActivityList", compact('data'));
+        return view("events.ServeActivityList", compact('data','typeName','type_id'));
     }
 
     public function ServiceInsert(Request $request)
@@ -311,8 +352,8 @@ class ActivityController extends Controller
                 ->with('error', 'Service not found');
         }
 
-        return redirect()->route('service_list')
-            ->with('success', 'อัพเดทบริการสำเร็จ!');
+        return redirect()->back()->with('success', 'อัพเดทบริการสำเร็จ!');
+
     }
 
 
@@ -321,7 +362,10 @@ class ActivityController extends Controller
     public function ListPromotion($service_id)
     {
         $data = PromotionActivity::where('service_id', $service_id)->get();
-        return view('events.promotionActivityList', compact('data', 'service_id'));
+        $typeId = ServeActivity::where('service_id', $service_id)->pluck('type_id')->first();
+
+        
+        return view('events.promotionActivityList', compact('data', 'service_id','typeId'));
     }
 
 
@@ -472,14 +516,14 @@ class ActivityController extends Controller
 
     //โปรดัก
 
-    public function ListProduct()
+    public function ListProduct($type_id)
     {
-        $data = IctProduct::all();
-        return view('events.product_list', compact('data'));
+        $data = IctProduct::where('type_id',$type_id)->get();
+        return view('events.product_list', compact('data','type_id'));
     }
 
 
-    public function ProductInsert(Request $request)
+    public function ProductInsert(Request $request ,$type_id)
     {
         $request->validate([
             'product_name' => 'required|string|max:255',
@@ -488,11 +532,14 @@ class ActivityController extends Controller
 
         IctProduct::create([
             'product_name' => $request->product_name,
-            'description' => $request->description
+            'description' => $request->description,
+            'type_id' => $type_id
         ]);
         $data = IctProduct::all();
-        return redirect()->route('product_list', compact('data'))
-            ->with('success', 'เพิ่มโปรโมชั่นสำเร็จ');
+        return redirect()->back()
+            ->with('success', 'เพิ่มโปรโมชั่นสำเร็จ')
+            ->with('data', $data);
+
     }
 
     public function ProductDelete($product_id)
@@ -1157,7 +1204,7 @@ class ActivityController extends Controller
         $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
 
         // ดึงข้อมูลประเภทบริการ
-        $serviceTypes = ServeActivity::all();
+        $serviceTypes = ServeActivity::where('type_id',$type_id)->get();
 
         return view('events.events_customer_list', compact(
             'serviceTypes',

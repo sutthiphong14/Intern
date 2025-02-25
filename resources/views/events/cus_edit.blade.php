@@ -9,7 +9,8 @@
 
 
 
-        <form action="{{ route('customer_update', $customer->cus_id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('customer_update', $customer->cus_id) }}" method="POST" enctype="multipart/form-data"
+            id="formID">
             @csrf
             @method('PUT') <!-- Method for updating data -->
             @php
@@ -21,39 +22,40 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2>แก้ไขข้อมูลลูกค้า</h2>
 
-                <div class="">
-                    <p class="mb-2 text-danger">* เลือกบริการ</p>
-                    <select class="form-select bg-success" id="service_id" name="service_id" required>
-                        <option value="" disabled>-- เลือกบริการ --</option>
-                        @foreach ($services as $service)
-                            @if (strpos($service->service_name, 'ร่วม') !== false)
-                                <option value="{{ $service->service_id }}"
-                                    {{ $customer->service_id == $service->service_id ? 'selected' : '' }}>
-                                    {{ $service->service_name }}
-                                </option>
-                            @endif
-                        @endforeach
 
-                        @foreach ($services as $service)
-                            @if (strpos($service->service_name, 'ร่วม') === false)
-                                <option value="{{ $service->service_id }}"
-                                    {{ $customer->service_id == $service->service_id ? 'selected' : '' }}>
-                                    {{ $service->service_name }}
-                                </option>
-                            @endif
-                        @endforeach
 
-                    </select>
-                    <!-- เพิ่มข้อความคำแนะนำ หรือข้อผิดพลาดได้ -->
-                    @error('service_id')
-                        <div class="text-danger mt-2">{{ $message }}</div>
-                    @enderror
-                </div>
+
             </div>
 
 
 
             <div class="mb-3">
+                <!-- Dropdown for Type -->
+                <label for="type_id" class="form-label">กิจกรรม</label>
+                <select class="form-select" id="type_id" name="type_id" required>
+                    <option value="" disabled>-- เลือกกิจกรรม --</option>
+                    @foreach ($types as $type)
+                        <option value="{{ $type->type_id }}" {{ $customer->type_id == $type->type_id ? 'selected' : '' }}>
+                            {{ $type->type_name }}</option>
+                    @endforeach
+                </select>
+
+                <label for="service_id" class="form-label">บริการ</label>
+                <select class="form-select bg-success" id="service_id" name="service_id" required>
+                    <option value="" disabled>-- เลือกบริการ --</option>
+                    @foreach ($services as $service)
+                        <option value="{{ $service->service_id }}"
+                            {{ $customer->service_id == $service->service_id ? 'selected' : '' }}>
+                            {{ $service->service_name }}
+                        </option>
+                    @endforeach
+                </select>
+                <!-- เพิ่มข้อความคำแนะนำ หรือข้อผิดพลาดได้ -->
+                @error('service_id')
+                    <div class="text-danger mt-2">{{ $message }}</div>
+                @enderror
+
+
                 <label for="cus_fullname" class="form-label" id="fullname_label">ชื่อ นามสกุล</label>
                 <input type="text" class="form-control" id="cus_fullname" name="cus_fullname"
                     value="{{ $customer->cus_fullname }}" required>
@@ -115,15 +117,6 @@
                 <label for="cus_address" class="form-label">ที่อยู่</label>
                 <textarea class="form-control" id="cus_address" name="cus_address" rows="4" required>{{ $customer->cus_address }}</textarea>
 
-                <!-- Dropdown for Type -->
-                <label for="type_id" class="form-label">กิจกรรม</label>
-                <select class="form-select" id="type_id" name="type_id" required>
-                    <option value="" disabled>-- เลือกกิจกรรม --</option>
-                    @foreach ($types as $type)
-                        <option value="{{ $type->type_id }}" {{ $customer->type_id == $type->type_id ? 'selected' : '' }}>
-                            {{ $type->type_name }}</option>
-                    @endforeach
-                </select>
 
                 <div id="groupNet">
                     <label for="promotion_id" class="form-label">โปรโมชั่น</label>
@@ -190,7 +183,7 @@
                                 <div class="d-flex product-row">
                                     <div>
                                         <label for="product_id" class="form-label">Product</label>
-                                        <select class="form-select" name="product_id[]" required>
+                                        <select class="form-select" id="product_id" name="product_id[]" required>
                                             <option value="" disabled>-- เลือก Product --</option>
                                             @foreach ($products as $product)
                                                 <option value="{{ $product->product_id }}"
@@ -214,7 +207,7 @@
                             <div class="d-flex product-row">
                                 <div>
                                     <label for="product_id" class="form-label">Product</label>
-                                    <select class="form-select" name="product_id[]">
+                                    <select class="form-select" id="product_id" name="product_id[]">
                                         <option value="" disabled selected>-- เลือก Product --</option>
                                         @foreach ($products as $product)
                                             <option value="{{ $product->product_id }}">{{ $product->product_name }}
@@ -301,6 +294,103 @@
 
 @section('script')
     <script>
+    $(document).ready(function() {
+    // กำหนดค่าเริ่มต้นเมื่อโหลดหน้า
+    var serviceId = $('#service_id').val();
+    // สมมติว่ามีตัวแปรที่เก็บค่า product_id ที่เลือกไว้ก่อนหน้า
+    var selectedProductId = "{{ $customer->product_id ?? '' }}";  // ปรับตามโครงสร้างข้อมูลของคุณ
+    
+    if (serviceId) {
+        loadProducts(serviceId, selectedProductId);
+    }
+    
+    // เมื่อเปลี่ยนค่า service_id
+    $('#service_id').change(function() {
+        var serviceId = $(this).val();
+        loadProducts(serviceId, selectedProductId);
+    });
+    
+    function loadProducts(serviceId, selectedProductId) {
+        $.ajax({
+            url: '/getProduct',
+            type: 'GET',
+            data: {
+                service_id: serviceId
+            },
+            success: function(data) {
+                $('#product_id').empty();
+                $('#product_id').append(
+                    '<option value="" disabled>-- เลือก Product --</option>'
+                );
+                
+                // เพิ่ม options สำหรับ product
+                $.each(data, function(index, product) {
+                    // ตรวจสอบว่าเป็น product ที่เคยเลือกไว้หรือไม่
+                    var selected = (product.product_id == selectedProductId) ? 'selected' : '';
+                    
+                    $('#product_id').append('<option value="' + product.product_id + '" ' + selected + '>' +
+                        product.product_name + '</option>');
+                });
+                
+                // ถ้าไม่มีข้อมูลที่เลือกไว้ก่อนหน้า ให้เลือกตัวแรก
+                if (data.length > 0 && !selectedProductId) {
+                    // เลือกตัวแรกเป็นค่าเริ่มต้น (ถ้าต้องการ)
+                    // $('#product_id').val(data[0].product_id);
+                }
+            },
+            error: function() {
+                console.log('Error fetching products');
+                alert('เกิดข้อผิดพลาดในการดึงข้อมูล Product');
+            }
+        });
+    }
+});
+    </script>
+    <script>
+        $(document).ready(function() {
+            // ดึงค่า type_id ปัจจุบัน
+            var typeId = $('#type_id').val();
+            var currentServiceId = "{{ $customer->service_id }}"; // ดึงค่า service_id ที่บันทึกไว้
+
+            // เรียกใช้ AJAX ทันที
+            loadServices(typeId, currentServiceId);
+
+            // ยังคงมี event listener สำหรับการเปลี่ยนค่าในภายหลัง
+            $('#type_id').change(function() {
+                var typeId = $(this).val();
+                loadServices(typeId, currentServiceId);
+            });
+
+            // แยกโค้ด AJAX เป็นฟังก์ชันเพื่อลดการเขียนซ้ำ
+            function loadServices(typeId, currentServiceId) {
+                $.ajax({
+                    url: '/getService',
+                    type: 'GET',
+                    data: {
+                        type_id: typeId
+                    },
+                    success: function(data) {
+                        $('#service_id').empty();
+                        $('#service_id').append('<option value="" disabled>-- เลือกบริการ --</option>');
+
+                        // วนลูปเพิ่มข้อมูลทั้งหมดจากฐานข้อมูล
+                        $.each(data, function(index, service) {
+                            // ตรวจสอบว่า service_id ตรงกับค่าที่บันทึกไว้หรือไม่
+                            var selectedAttr = (service.service_id == currentServiceId) ?
+                                'selected' : '';
+
+                            $('#service_id').append('<option value="' + service.service_id +
+                                '" ' + selectedAttr + '>' +
+                                service.service_name + '</option>');
+                        });
+                    },
+                    error: function() {
+                        console.log('Error fetching services');
+                        alert('เกิดข้อผิดพลาดในการดึงข้อมูลบริการ');
+                    }
+                });
+            }
+        });
         $(document).ready(function() {
             $('#service_id').change(function() {
                 var serviceId = $(this).val(); // เก็บค่า service_id ที่เลือก
@@ -442,7 +532,7 @@
     <script>
         $(document).ready(function() {
             function toggleForms(serviceName) {
-                if (serviceName.includes('fttx_broadband')) {
+                if (serviceName.toLowerCase().includes('fttx')) {
                     $('#fttx_broadband,#groupNet, #groupNet1').show();
                     $('#sim_my, #ict_solution, #ict_solution1').hide();
 
@@ -454,7 +544,7 @@
                     // ปิด required สำหรับฟอร์มอื่น ๆ
                     $('#cus_new, #income, #customer_type, #quote, #product_id, #quantity_id ').prop('required',
                         false);
-                } else if (serviceName.includes('SIM my')) {
+                } else if (serviceName.toLowerCase().includes('sim')) {
                     $('#sim_my,#groupNet, #groupNet1').show();
                     $('#fttx_broadband, #ict_solution, #ict_solution1').hide();
 
@@ -467,7 +557,7 @@
                     // ปิด required สำหรับฟอร์มอื่น ๆ
                     $('#new, #installation_type, #income, #customer_type, #quote, #product_id, #quantity_id').prop(
                         'required', false);
-                } else if (serviceName.includes('ICT solution')) {
+                } else if (serviceName.toLowerCase().includes('ict')) {
                     $('#ict_solution, #ict_solution1').show();
                     $('#fttx_broadband, #sim_my, #groupNet, #groupNet1').hide();
 
@@ -488,7 +578,6 @@
                     $('#new, #installation_type, #cus_new, #income, #customer_type, #quote , #product_id, #quantity_id')
                         .prop('required', false);
 
-                    $('#save-button').prop('disabled', true);
 
                     // กลับ label เป็น "ชื่อ นามสกุล"
                     $('#fullname_label').text('ชื่อ นามสกุล');
