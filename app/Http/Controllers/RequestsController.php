@@ -18,10 +18,9 @@ class RequestsController extends Controller
      */
     public function index()
     {
-        $requests = RequestModel::orderBy('created_at', 'desc')->get();
+        $requests = RequestModel::with(['province', 'serviceCenter'])->orderBy('created_at', 'desc')->get();
         return view('requests.listRequests', compact('requests'));
     }
-
     public function create()
 {
     $provinces = ProvinceActivity::all(); // ดึงจังหวัดทั้งหมด
@@ -47,8 +46,8 @@ class RequestsController extends Controller
             'description_request' => 'required|string',
             'department_request' => 'required|string',
             'password_request' => 'nullable|string|min:6',
-            'province_id_request' => 'nullable|exists:province_activity,province_id',
-            'center_id_request' => 'nullable|exists:servicecenter_activity,center_id',
+            'province_id' => 'nullable|exists:province_activity,province_id',
+            'center_id' => 'nullable|exists:servicecenter_activity,center_id',
         ]);
 
         if ($validator->fails()) {
@@ -78,8 +77,8 @@ class RequestsController extends Controller
             'description_request' => 'required|string',
             'department_request' => 'required|string',
             'password_request' => 'nullable|string|min:6',
-            'province_id_request' => 'nullable|exists:province_activity,province_id',
-            'center_id_request' => 'nullable|exists:servicecenter_activity,center_id',
+            'province_id' => 'nullable|exists:province_activity,province_id',
+            'center_id' => 'nullable|exists:servicecenter_activity,center_id',
         ]);
 
         if ($validator->fails()) {
@@ -141,8 +140,8 @@ class RequestsController extends Controller
             'department' => $request->department_request,
             'email' => $request->email_request,
             'password' => Hash::make($request->password_request),
-            'province_id' => $request->province_id_request,
-            'center_id' => $request->center_id_request,
+            'province_id' => $request->province_id,
+            'center_id' => $request->center_id,
         ]);
 
         // ลบคำขอหลังจากยอมรับ

@@ -77,10 +77,19 @@
                             @forelse($requests as $request)
                                 <tr>
                                     <td>
-                                        <button class="btn btn-warning view-user-btn">
+                                        <button class="btn btn-warning view-user-btn" data-bs-toggle="modal"
+                                            data-bs-target="#userModal" data-user_request="{{ $request->user_request }}"
+                                            data-name_request="{{ $request->name_request }}"
+                                            data-email_request="{{ $request->email_request }}"
+                                            data-description_request="{{ $request->description_request }}"
+                                            data-created_at="{{ $request->created_at }}"
+                                            data-department_request="{{ $request->department_request ?? 'N/A' }}"
+                                            data-province="{{ $request->province->province_name ?? 'N/A' }}"
+                                            data-center="{{ $request->serviceCenter->center_name ?? 'N/A' }}">
                                             <i class="fas fa-search"></i>
                                         </button>
                                     </td>
+
                                     <td>{{ $request->user_request }}</td>
                                     <td>{{ $request->name_request }}</td>
                                     <td>{{ $request->email_request }}</td>
@@ -139,6 +148,9 @@
                         <h5><strong>อีเมล:</strong> <span id="modal-email-request"></span></h5>
                         <h5><strong>รายละเอียด:</strong> <span id="modal-description-request"></span></h5>
                         <h5><strong>วันที่ส่งคำขอ:</strong> <span id="modal-created-at"></span></h5>
+                        <h5><strong>แผนก:</strong> <span id="modal-department-request"></span></h5>
+                        <h5><strong>จังหวัด:</strong> <span id="modal-province-request"></span></h5>
+                        <h5><strong>ศูนย์บริการ:</strong> <span id="modal-center-request"></span></h5>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
@@ -153,35 +165,33 @@
 
 
     <script>
-        $(document).ready(function () {
-            $('.view-user-btn').on('click', function () {
-                // ค้นหาข้อมูลจากแถวที่กดปุ่ม
-                var row = $(this).closest('tr');
-                var userRequest = row.find('td:eq(1)').text().trim();
-                var nameRequest = row.find('td:eq(2)').text().trim();
-                var emailRequest = row.find('td:eq(3)').text().trim();
-                var descriptionRequest = row.find('td:eq(4)').text().trim();
-                var createdAt = row.find('td:eq(5)').text().trim();
+    document.addEventListener("DOMContentLoaded", function () {
+        const viewButtons = document.querySelectorAll(".view-user-btn");
 
-                // ตรวจสอบว่ามีฟิลด์ข้อมูลเพิ่มเติมหรือไม่ (เผื่อไว้ใช้ในอนาคต)
-                var departmentRequest = row.find('td:eq(6)').text().trim() || 'N/A';
-                var provinceIdRequest = row.find('td:eq(7)').text().trim() || 'N/A';
-                var centerIdRequest = row.find('td:eq(8)').text().trim() || 'N/A';
+        viewButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                // ดึงค่าจาก data-attributes
+                const userRequest = this.getAttribute("data-user_request");
+                const nameRequest = this.getAttribute("data-name_request");
+                const emailRequest = this.getAttribute("data-email_request");
+                const descriptionRequest = this.getAttribute("data-description_request");
+                const createdAt = this.getAttribute("data-created_at");
+                const departmentRequest = this.getAttribute("data-department_request");
+                const province = this.getAttribute("data-province");
+                const center = this.getAttribute("data-center");
 
-                // ใส่ข้อมูลลงใน Modal
-                $('#modal-user-request').text(userRequest);
-                $('#modal-name-request').text(nameRequest);
-                $('#modal-email-request').text(emailRequest);
-                $('#modal-description-request').text(descriptionRequest);
-                $('#modal-created-at').text(createdAt);
-                $('#modal-department-request').text(departmentRequest);
-                $('#modal-province-id-request').text(provinceIdRequest);
-                $('#modal-center-id-request').text(centerIdRequest);
-
-                // แสดง Modal
-                $('#userModal').modal('show');
+                // อัปเดตข้อมูลใน Modal
+                document.getElementById("modal-user-request").textContent = userRequest;
+                document.getElementById("modal-name-request").textContent = nameRequest;
+                document.getElementById("modal-email-request").textContent = emailRequest;
+                document.getElementById("modal-description-request").textContent = descriptionRequest;
+                document.getElementById("modal-created-at").textContent = createdAt;
+                document.getElementById("modal-department-request").textContent = departmentRequest;
+                document.getElementById("modal-province-request").textContent = province;
+                document.getElementById("modal-center-request").textContent = center;
             });
         });
+    });
+</script>
 
-    </script>
 @endsection

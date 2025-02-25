@@ -18,17 +18,17 @@ class RequestModel extends Model
         'email_request',
         'department_request',
         'description_request',
-        'province_id_request',
-        'center_id_request',
+        'province_id',
+        'center_id',
     ];
 
     public function province()
     {
-        return $this->belongsTo(ProvinceActivity::class, 'province_id_request', 'province_id');
+        return $this->belongsTo(ProvinceActivity::class, 'province_id', 'province_id');
     }
 
     public function serviceCenter()
     {
-        return $this->belongsTo(ServiceCenterActivity::class, 'center_id_request', 'center_id');
+        return $this->belongsTo(ServiceCenterActivity::class, 'center_id', 'center_id');
     }
 }
