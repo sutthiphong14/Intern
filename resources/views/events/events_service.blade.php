@@ -287,7 +287,7 @@ new Chart(ctx, {
                 beginAtZero: true,
                 stacked: false, // ❌ ปิด stacked เพื่อแยกแท่ง
                 ticks: {
-                    stepSize: 0.5,
+                    stepSize: 1,
                     callback: function(value) {
                         return value.toFixed(0);
                     }
