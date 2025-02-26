@@ -5,26 +5,27 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
 
 class CheckUserPermissions
 {
-    public function handle(Request $request, Closure $next, $permission)
+    public function handle(Request $request, Closure $next, ...$permissions)
     {
-        // Check if user is authenticated
+        // ตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่
         if (!Auth::check()) {
             return redirect('/login')->with('error', 'กรุณาล็อกอินก่อน');
         }
 
-        // Get user permissions
-        $userPermissions = Auth::user()->permission;
+        // ดึงข้อมูล permission ของผู้ใช้
+        $userPermissions = Auth::user()->permission ?? [];
 
-        // Check specific permission
-        if (!$userPermissions || !($userPermissions[$permission] ?? false)) {
-            // Redirect or show error if no permission
-            return redirect('/home')->with('error', 'คุณไม่มีสิทธิ์เข้าถึงหน้านี้');
+        // ตรวจสอบว่ามีสิทธิ์อย่างน้อย 1 อย่างจากที่กำหนดหรือไม่
+        foreach ($permissions as $permission) {
+            if (!empty($userPermissions[$permission])) {
+                return $next($request); // มีสิทธิ์ เข้าได้
+            }
         }
 
-        return $next($request);
+        // ถ้าไม่มีสิทธิ์เลย ให้ redirect กลับไปหน้า home
+        return redirect('/home')->with('error', 'คุณไม่มีสิทธิ์เข้าถึงหน้านี้');
     }
 }
