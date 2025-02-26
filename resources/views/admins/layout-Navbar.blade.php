@@ -182,19 +182,6 @@
       </a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link-main" aria-current="page" href="{{ route('customer_list') }}">
-         customer list
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link-main" aria-current="page" href="{{ route('activity_list') }}">
-          activity_list
-        </a>
-      </li>
-
-     
       @endif
     </ul>
 

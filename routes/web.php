@@ -320,13 +320,11 @@ Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->nam
 
 Route::get('/requests/create', [RequestsController::class, 'create'])->name('insertRequests');
 Route::post('/requests', [RequestsController::class, 'store'])->name('requests.store');
-
+Route::get('/getCentersByProvince', [RequestsController::class, 'getCentersByProvince'])->name('getCentersByProvince');
 
 
 Route::middleware(['auth', 'check.permission:manage_users,adminper_mission'])->group(function () {
-
 Route::get('/requests', [RequestsController::class, 'index'])->name('requests.list');
-
 Route::get('/requests/{id}/edit', [RequestsController::class, 'edit'])->name('requests.edit');
 Route::put('/requests/{id}', [RequestsController::class, 'update'])->name('requests.update');
 Route::delete('/requests/{id}', [RequestsController::class, 'destroy'])->name('requests.delete');
@@ -335,7 +333,6 @@ Route::post('/requests/{id}/approve', [RequestsController::class, 'approve'])->n
 Route::get('/getCentersUserRequests', [RequestsController::class, 'getCentersUserRequests'])->name('getCentersUserRequests');
 Route::get('/requests/approve/{id}', [RequestsController::class, 'approveForm'])->name('requests.approve');
 Route::post('/requests/createUser/{id}', [RequestsController::class, 'createUser'])->name('requests.createUser');
-Route::get('/getCentersByProvince', [RequestsController::class, 'getCentersByProvince'])->name('getCentersByProvince');
 
 });
 

@@ -203,7 +203,7 @@ class CustomerController extends Controller
                 'created_at' => $date
             ]);
         } elseif (strpos(strtolower($service_name), 'ict') !== false) {
-            // ตัวแปรสำหรับไฟล์ quote
+            $type_id = $request->input('type_id');
             $filePath = null;
             if ($request->hasFile('quote')) {
                 $filePath = $request->file('quote')->store('quotes', 'public');
