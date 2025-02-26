@@ -106,9 +106,10 @@
         <div class="d-flex justify-content-between align-items-center gap-2">
             <!-- หัวข้อ -->
             <h3 class="card-header text-dark">
-                จัดการ Slideshow
+                จัดการ Slideshow 
             </h3>
             <div class="d-flex align-items-center gap-2">
+            <button class = 'btn bg-white' >ขนาดภาพที่แนะนำ 1600 X 400 px หรือ 1200 X 300 px</button>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     ลบ
                 </button>
@@ -230,7 +231,7 @@
 
                             <button type="button" style="width: 160px; height: 40px;" data-bs-toggle="modal"
                                 data-bs-target="#exportModal" class="btn btn-dark flex-shrink-0">
-                                เพิ่มหน้า
+                                เพิ่มรูปภาพ
                             </button>
                         </div>
                     </div>
@@ -349,15 +350,16 @@
                 </div>
                 <div class="modal-body text-dark">
                     <p>
-                        รายงานระยะเวลาเฉลี่ยในการติดตั้ง
-                        หน้าหลัก รายงานระยะเวลาเฉลี่ยในการติดตั้ง
+                        วิธีเพิ่มรูปภาพ
                     </p>
+                    <p>- กดที่ปุ่มเพิ่มรูปภาพ</p>
+                    <p>- เลือกรูปภาพที่ต้องการ</p>
+                    <p>- ขนาดภาพที่แนะนำ 1600 X 400 px หรือ 1200 X 300 px</p>
+                    <p>- สามารถใส่ Link เพิ่มให้รูปภาพสามารถเชื่อมต่อไปยังที่อื่นได้</p>
+
+                    
                     <p>
-                        หมายเหตุ : รายงานระยะเวลาเฉลี่ยในการติดตั้ง ตามศูนย์บริการติดตั้ง
-                    </p>
-                    <p>
-                        • จำนวนวงจร : จะนับเฉพาะใบคำขอที่ทำการปิดงานเรียบร้อยบนระบบ FTTxSM เท่านั้น (ไม่รวมข้อมูลใบคำขอที
-                        import มาจากสผ.และใบคำขอที่ยังไม่เคยปิดงานเรียบร้อย) ตามช่วงเวลาที่เลือก
+                        วิธีลบรูปภาพ
                     </p>
                     <p>
                         • ระยะเวลาเตรียมข้อมูลรวม : ยอดรวมระยะเวลาที่ใช้ในเตรียมเอกสารของวงจรตามช่วงเวลาที่เลือก

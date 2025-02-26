@@ -41,12 +41,15 @@
 
 @section('content')
     <section class="content">
-
+    <h4 class="fw-bold py-2 mb-3">
+        <a href="{{ route('home') }}">หน้าแรก</a> / เพิ่มผู้ใช้งาน
+    </h4>
 
         <div class="content-wrapper">
             <div class="card">
                 <div class="d-flex justify-content-between align-items-center gap-2">
                     <h3 class="card-header text-dark">รายการคำขอ</h3>
+                    
                     <div class="d-flex align-items-center gap-2">
                         <form action="{{ route('requests.search') }}" method="GET" class="d-flex w-100">
                             <input type="text" name="query" class="form-control" placeholder="ค้นหาคำขอ..."
@@ -63,14 +66,14 @@
                 <div class="card-body">
                     <table id="example2" class="table table-hover text-center">
                         <thead class='text-center'>
-                            <tr class='bg-dark'>
-                                <th>ตรวจสอบ</th>
-                                <th>ผู้ร้องขอ</th>
-                                <th>ชื่อ-สกุล</th>
-                                <th>อีเมล</th>
-                                <th>รายละเอียด</th>
-                                <th>วันที่ส่งคำขอ</th>
-                                <th>การดำเนินการ</th>
+                            <tr class='bg-dark col-12'>
+                                <th class = 'col-1'>ตรวจสอบ</th>
+                                <th class = 'col-1'>ผู้ร้องขอ</th>
+                                <th class = 'col-2'>ชื่อ-สกุล</th>
+                                <th class = 'col-2'>อีเมล</th>
+                                <th class = 'col-3'>รายละเอียด</th>
+                                <th class = 'col-1'>วันที่ส่งคำขอ</th>
+                                <th class = 'col-2'>การดำเนินการ</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,19 +106,13 @@
                                             ยอมรับ
                                         </a>
 
-                                        <!-- ปุ่ม แก้ไข -->
-                                        <a href="{{ route('requests.edit', $request->id_request) }}"
-                                            class="btn btn-warning btn-sm">
-                                            แก้ไข
-                                        </a>
-
                                         <!-- ปุ่ม ลบ -->
                                         <form action="{{ route('requests.delete', $request->id_request) }}" method="POST"
                                             class="d-inline delete-form">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบคำขอนี้?')">ลบ</button>
+                                                onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบคำขอนี้?')">ปฎิเสธ</button>
                                         </form>
                                     </td>
 
@@ -130,10 +127,7 @@
                 </div>
             </div>
         </div>
-        </div>
-        </div>
-        </div>
-        </div>
+
 
         <!-- Modal -->
         <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
@@ -147,11 +141,13 @@
                         <h5><strong>ผู้ร้องขอ:</strong> <span id="modal-user-request"></span></h5>
                         <h5><strong>ชื่อ-สกุล:</strong> <span id="modal-name-request"></span></h5>
                         <h5><strong>อีเมล:</strong> <span id="modal-email-request"></span></h5>
+                        <h5><strong>รหัสผ่าน:</strong> <span id="modal-password-request"></span></h5>
                         <h5><strong>รายละเอียด:</strong> <span id="modal-description-request"></span></h5>
                         <h5><strong>วันที่ส่งคำขอ:</strong> <span id="modal-created-at"></span></h5>
                         <h5><strong>แผนก:</strong> <span id="modal-department-request"></span></h5>
                         <h5><strong>จังหวัด:</strong> <span id="modal-province-request"></span></h5>
                         <h5><strong>ศูนย์บริการ:</strong> <span id="modal-center-request"></span></h5>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
@@ -174,7 +170,7 @@
                     // ดึงค่าจาก data-attributes
                     const userRequest = this.getAttribute("data-user_request");
                     const nameRequest = this.getAttribute("data-name_request");
-                    const passwordRequest = this.getAttribute("data-password_request");
+                    const passwordRequest = this.getAttribute("data-password_request"); // เพิ่มการดึง password
                     const emailRequest = this.getAttribute("data-email_request");
                     const descriptionRequest = this.getAttribute("data-description_request");
                     const createdAt = this.getAttribute("data-created_at");
@@ -185,6 +181,7 @@
                     // อัปเดตข้อมูลใน Modal
                     document.getElementById("modal-user-request").textContent = userRequest;
                     document.getElementById("modal-name-request").textContent = nameRequest;
+                    document.getElementById("modal-password-request").textContent = passwordRequest; // แสดงรหัสผ่าน
                     document.getElementById("modal-email-request").textContent = emailRequest;
                     document.getElementById("modal-description-request").textContent = descriptionRequest;
                     document.getElementById("modal-created-at").textContent = createdAt;
@@ -194,6 +191,7 @@
                 });
             });
         });
+
     </script>
 
 @endsection

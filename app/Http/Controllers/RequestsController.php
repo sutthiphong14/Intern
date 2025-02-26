@@ -43,7 +43,7 @@ class RequestsController extends Controller
             'user_request' => 'required|string|max:255',
             'name_request' => 'required|string|max:255',
             'email_request' => 'required|email|max:255|unique:requests,email_request',
-            'description_request' => 'required|string',
+            'description_request' => 'nullable|string',
             'department_request' => 'required|string',
             'password_request' => 'nullable|string|min:6',
             'province_id' => 'nullable|exists:province_activity,province_id',
@@ -59,9 +59,7 @@ class RequestsController extends Controller
 
         RequestModel::create($request->all());
 
-        return redirect()
-            ->route('requests.list')
-            ->with('success', 'เพิ่มคำขอสำเร็จ');
+        return redirect()->route('home')->with('success', 'ยืนยันคำขอเข้าใช้งานเสร็จสิ้น โปรดรอการยืนยันอนุมัติ');
     }
 
     /**

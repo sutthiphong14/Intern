@@ -501,74 +501,89 @@
     </div>
 
     </div>
-    </div>
+  </div>
 
 
-    <style>
+  <style>
     #carouselExampleControls {
-      width: 100%;
-      height: 1080;
-      overflow: hidden;
+    width: 100%;
+    height: 1080;
+    overflow: hidden;
     }
 
     /* เอฟเฟกต์พื้นหลังดำเมื่อ hover ทั้ง Carousel */
     #carouselExampleControls:hover::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 1080px;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(255, 255, 255, 0));
-      z-index: 1;
-      animation: fadeIn 0.4s ease-in-out forwards;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1080px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(255, 255, 255, 0));
+    z-index: 1;
+    animation: fadeIn 0.4s ease-in-out forwards;
     }
 
     /* Animation สำหรับพื้นหลัง fade-in */
     @keyframes fadeIn {
-      0% {
+    0% {
       opacity: 0;
       background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(255, 255, 255, 0));
-      }
+    }
 
-      100% {
+    100% {
       opacity: 1;
       background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(255, 255, 255, 0));
-      }
+    }
     }
 
     /* ทำให้ชื่ออัลบั้มแสดงขึ้นเมื่อ hover ทั้ง carousel */
     #carouselExampleControls:hover .carousel-caption {
-      opacity: 1;
-      transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
     }
 
     /* ปรับแต่งชื่อกิจกรรม */
     .carousel-caption {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      color: white;
-      padding: 10px;
-      font-size: 3em;
-      z-index: 2;
-      opacity: 0;
-      /* ซ่อนเริ่มต้น */
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    padding: 10px;
+    font-size: 3em;
+    z-index: 2;
+    opacity: 0;
+    /* ซ่อนเริ่มต้น */
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    </style>
+  </style>
 
 
-    <script>
+  <script>
     // SweetAlert function for unauthorized access
     function showUnauthorizedAlert() {
-      Swal.fire({
+    Swal.fire({
       icon: 'warning',
       title: 'ไม่มีสิทธิเข้าถึง',
       text: 'กรุณาเข้าสู่ระบบเพื่อใช้งานฟังก์ชันนี้',
       confirmButtonText: 'ตกลง',
-      });
+    });
     }
-    </script>
-  @endsection
+  </script>
+  <!-- เพิ่ม SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    @if(session('success'))
+    Swal.fire({
+      title: "สำเร็จ!",
+      text: "{{ session('success') }}",
+      icon: "success",
+      confirmButtonText: "ตกลง"
+    });
+  @endif
+    });
+  </script>
+@endsection

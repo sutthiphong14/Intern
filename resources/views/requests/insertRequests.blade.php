@@ -9,13 +9,18 @@
 
 @section('content')
     <section class="content">
+    <h4 class="fw-bold py-2 mb-3">
+        <a href="{{ route('home') }}">หน้าแรก</a> / <a href="{{ route('users.list') }}"> รายชื่อผู้ใช้ </a>/ เพิ่มผู้ใช้งาน
+    </h4>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <div class="card card-warning mt-2">
                         <div class="card-header">
-                            <h3 class="card-title">แบบฟอร์ทขอเข้าใช้งานระบบ</h3>
+                            <h3 class="card-title">แบบฟอร์มขอเข้าใช้งานระบบ</h3>
+                            
                         </div>
+                        <hr class="my-0" />
 
                         <form method="POST" action="{{ route('requests.store') }}">
                             @csrf
@@ -31,46 +36,30 @@
                                 @endif
 
                                 
-                                <div class="form-group">
+                                <div class="form-group mt-3">
                                     <label for="user_request">ชื่อผู้ใช้</label>
-                                    <input type="text" class="form-control" id="user_request" name="user_request"
+                                    <input type="text" class="form-control" id="user_request" name="user_request" placeholder="กรอกชื่อผู้ใช้งานที่ต้องการในระบบ"
                                         value="{{ old('user_request') }}" required>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group mt-3">
                                     <label for="name_request">ชื่อ-สกุล</label>
-                                    <input type="text" class="form-control" id="name_request" name="name_request"
+                                    <input type="text" class="form-control" id="name_request" name="name_request" placeholder="กรอก ชื่อ-สกุล"
                                         value="{{ old('name_request') }}" required>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group mt-3">
                                     <label for="email_request">อีเมล</label>
-                                    <input type="email" class="form-control" id="email_request" name="email_request"
+                                    <input type="email" class="form-control" id="email_request" name="email_request" placeholder="กรอก อีเมล"
                                         value="{{ old('email_request') }}" required>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group mt-3">
                                     <label for="password_request">รหัสผ่าน</label>
                                     <input type="password" id="password_request" name="password_request"
                                         class="form-control" placeholder="กรอกรหัสผ่าน...">
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="department_request">แผนก</label>
-                                    <input class="form-control" id="department_request" name="department_request"
-                                        required>{{ old('department_request') }}</input>
-                                </div>
-                                <div class="form-group">
-                                    <label for="id_employee_request">รหัสพนักงาน</label>
-                                    <input type="text" class="form-control" id="id_employee_request"
-                                        name="id_employee_request" value="{{ old('id_employee_request') }}" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="description_request">รายละเอียด</label>
-                                    <textarea class="form-control" id="description_request" name="description_request"
-                                        rows="3" required>{{ old('description_request') }}</textarea>
-                                </div>
 
                                 <div class="mb-3">
                                     <label for="province_id" class="form-label">จังหวัด</label>
@@ -82,7 +71,6 @@
                                     </select>
                                 </div>
 
-
                                 <div class="mb-3">
                                     <label for="center_id" class="form-label">ศูนย์บริการ</label>
                                     <select class="form-select" id="center_id" name="center_id" required disabled>
@@ -90,15 +78,30 @@
                                     </select>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="department" class="form-label text-dark">แผนก</label>
-                                    <input type="text" class="form-control" id="department" name="department"
-                                        placeholder="กรอกแผนก" required value="{{ old('department') }}">
+                                <div class="form-group mt-3">
+                                    <label for="department_request">แผนก</label>
+                                    <input class="form-control" id="department_request" name="department_request"
+                                        required placeholder="กรอกชื่อผู้ใช้งานที่ต้องการในระบบ..." >{{ old('department_request') }}</input>
                                 </div>
+
+                                
+                                <div class="form-group mt-3">
+                                    <label for="id_employee_request">รหัสพนักงาน</label>
+                                    <input type="text" class="form-control" id="id_employee_request" 
+                                        name="id_employee_request" value="{{ old('id_employee_request') }}" placeholder="กรอกรหัสพนักงาน" required>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="description_request">รายละเอียดคำขอเข้าใช้งาน</label>
+                                    <textarea class="form-control" id="description_request" name="description_request"
+                                        rows="3" placeholder="กรอกรายละเอียดคำขอเข้าใช้งานระบบ...." >{{ old('description_request') }}</textarea>
+                                </div>
+
+
 
                                 <div class="card-footer text-center">
                                     <button type="button" class="btn btn-danger"
-                                        onclick="window.location='{{ route('requests.list') }}'">ยกเลิก</button>
+                                        onclick="window.location='{{ route('home') }}'">ยกเลิก</button>
                                     <button type="submit" class="btn btn-success">บันทึก</button>
                                 </div>
                             </div>
@@ -201,7 +204,8 @@
         });
 
 
-    </script>
+
+
 
 
 

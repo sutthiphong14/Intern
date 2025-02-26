@@ -308,7 +308,7 @@
         </div>
 
         <div class="col-3 mb-4">
-          <a href="{{ route('insertusers') }}" class="text-decoration-none">
+          <a href="{{ route('requests.list') }}" class="text-decoration-none">
           <div class="row align-items-center">
             <div class="col-auto">
             <div class="app-icon bg-orange d-flex justify-content-center align-items-center">
