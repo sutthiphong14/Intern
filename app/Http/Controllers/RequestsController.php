@@ -22,10 +22,10 @@ class RequestsController extends Controller
         return view('requests.listRequests', compact('requests'));
     }
     public function create()
-{
-    $provinces = ProvinceActivity::all(); // ดึงจังหวัดทั้งหมด
-    return view('requests.insertRequests', compact('provinces'));
-}
+    {
+        $provinces = ProvinceActivity::all(); // ดึงจังหวัดทั้งหมด
+        return view('requests.insertRequests', compact('provinces'));
+    }
 
     public function edit($id)
     {
@@ -128,29 +128,68 @@ class RequestsController extends Controller
     /**
      * อนุมัติคำขอและสร้างบัญชีผู้ใช้
      */
-    public function approve($id)
+    public function approveForm($id)
     {
         $request = RequestModel::findOrFail($id);
-
-        // สร้าง User ใหม่จากข้อมูล Request
-        User::create([
-            'username' => $request->user_request,
-            'name' => $request->name_request,
-            'emp_id' => $request->id_employee_request,
-            'department' => $request->department_request,
-            'email' => $request->email_request,
-            'password' => Hash::make($request->password_request),
-            'province_id' => $request->province_id,
-            'center_id' => $request->center_id,
-        ]);
-
-        // ลบคำขอหลังจากยอมรับ
-        $request->delete();
-
-        return redirect()
-            ->route('requests.list')
-            ->with('success', 'ยอมรับคำขอและเพิ่มผู้ใช้สำเร็จ');
+        return view('requests.approve', compact('request'));
     }
+
+    public function createUser(Request $request, $id)
+    {
+        $requestData = RequestModel::findOrFail($id);
+    
+        // กำหนดค่า permission เป็น 1 ทั้งหมดโดยค่าเริ่มต้น
+        $permissions = [
+            'adminper_mission' => $request->has('adminper_mission') ? 1 : 0,
+            'manage_users' => $request->has('manage_users') ? 1 : 0,
+
+            'manage_dashboard' => $request->has('manage_dashboard') ? 1 : 0,
+            'view_fttx' => $request->has('view_fttx') ? 1 : 0,
+
+            'managenews_feeds' => $request->has('managenews_feeds') ? 1 : 0,
+
+            'manage_banner' => $request->has('manage_banner') ? 1 : 0,
+            'manage_imageevent' => $request->has('manage_imageevent') ? 1 : 0,
+
+            'manage_formevent' => $request->has('manage_formevent') ? 1 : 0,
+            'form_event' => $request->has('form_event') ? 1 : 0,
+            'view_customer' => $request->has('view_customer') ? 1 : 0,
+        ];
+    
+        try {
+            // สร้าง User ใหม่จากข้อมูล Request
+            $user = User::create([
+                'username' => $requestData->user_request,
+                'name' => $requestData->name_request,
+                'emp_id' => $requestData->id_employee_request,
+                'department' => $requestData->department_request,
+                'email' => $requestData->email_request,
+                'password' => Hash::make($requestData->password_request),
+                'province_id' => $requestData->province_id,
+                'center_id' => $requestData->center_id,
+                'permission' => $permissions, // ใช้ permission ที่รับมาจากฟอร์ม
+            ]);
+    
+            if ($user) {
+                // ลบคำขอหลังจากยอมรับสำเร็จ
+                $requestData->delete();
+                return redirect()
+                    ->route('requests.list')
+                    ->with('success', 'ยอมรับคำขอและเพิ่มผู้ใช้สำเร็จ');
+            } else {
+                return redirect()
+                    ->route('requests.list')
+                    ->with('error', 'เกิดข้อผิดพลาดในการเพิ่มผู้ใช้');
+            }
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('requests.list')
+                ->with('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());
+        }
+    }
+
+
+
 
     public function insertRequests()
     {
@@ -165,26 +204,26 @@ class RequestsController extends Controller
     }
 
     public function getCentersUserRequests(Request $request)
-{
-    $province_id = $request->input('province_id');
-    $centers = ServiceCenterActivity::where('province_id', $province_id)->get();
-    
-    dd($centers);
-    return response()->json($centers);
-}
-public function getCentersByProvince(Request $request)
-{
-    $provinceId = $request->input('province_id');
+    {
+        $province_id = $request->input('province_id');
+        $centers = ServiceCenterActivity::where('province_id', $province_id)->get();
 
-    if ($provinceId) {
-        // ดึงข้อมูลศูนย์บริการที่ตรงกับ province_id
-        $centers = ServiceCenterActivity::where('province_id', $provinceId)->get();
-
-        return response()->json($centers); // ส่งกลับข้อมูลในรูปแบบ JSON
+        dd($centers);
+        return response()->json($centers);
     }
+    public function getCentersByProvince(Request $request)
+    {
+        $provinceId = $request->input('province_id');
 
-    return response()->json([]); // หากไม่พบ province_id หรือข้อมูลว่าง
-}
+        if ($provinceId) {
+            // ดึงข้อมูลศูนย์บริการที่ตรงกับ province_id
+            $centers = ServiceCenterActivity::where('province_id', $provinceId)->get();
+
+            return response()->json($centers); // ส่งกลับข้อมูลในรูปแบบ JSON
+        }
+
+        return response()->json([]); // หากไม่พบ province_id หรือข้อมูลว่าง
+    }
 
 
 

@@ -21,9 +21,9 @@
             /
         </span>
         @if ($section == '2')
-            ภน.2.1
+            ตป.2.1
         @elseif ($section == '3')
-            ภน.2.2
+            ตป.2.2
         @else
             {{ $section }}
             <!-- ถ้าค่าของ section ไม่ตรงกับที่กำหนด จะพิมพ์ค่าของ section -->

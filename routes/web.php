@@ -329,10 +329,9 @@ Route::delete('/requests/{id}', [RequestsController::class, 'destroy'])->name('r
 Route::get('/requests/search', [RequestsController::class, 'search'])->name('requests.search');
 Route::post('/requests/{id}/approve', [RequestsController::class, 'approve'])->name('requests.approve');
 Route::get('/getCentersUserRequests', [RequestsController::class, 'getCentersUserRequests'])->name('getCentersUserRequests');
-
+Route::get('/requests/approve/{id}', [RequestsController::class, 'approveForm'])->name('requests.approve');
+Route::post('/requests/createUser/{id}', [RequestsController::class, 'createUser'])->name('requests.createUser');
 Route::get('/getCentersByProvince', [RequestsController::class, 'getCentersByProvince'])->name('getCentersByProvince');
-
-
 
 Route::get('/news/search', [AdminController::class, 'search'])->name('news.search');
 Route::delete('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');

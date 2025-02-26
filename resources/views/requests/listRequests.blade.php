@@ -80,6 +80,7 @@
                                         <button class="btn btn-warning view-user-btn" data-bs-toggle="modal"
                                             data-bs-target="#userModal" data-user_request="{{ $request->user_request }}"
                                             data-name_request="{{ $request->name_request }}"
+                                            data-password_request="{{ $request->password_request }}"
                                             data-email_request="{{ $request->email_request }}"
                                             data-description_request="{{ $request->description_request }}"
                                             data-created_at="{{ $request->created_at }}"
@@ -97,16 +98,16 @@
                                     <td>{{ $request->created_at }}</td>
                                     <td class="text-center">
                                         <!-- ปุ่ม ยอมรับ -->
-                                        <form action="{{ route('requests.approve', $request->id_request) }}" method="POST"
-                                            class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="btn btn-success btn-sm"
-                                                onclick="return confirm('คุณแน่ใจหรือไม่ที่จะยอมรับคำขอนี้?')">ยอมรับ</button>
-                                        </form>
+                                        <a href="{{ route('requests.approve', $request->id_request) }}"
+                                            class="btn btn-success btn-sm">
+                                            ยอมรับ
+                                        </a>
 
                                         <!-- ปุ่ม แก้ไข -->
                                         <a href="{{ route('requests.edit', $request->id_request) }}"
-                                            class="btn btn-warning btn-sm">แก้ไข</a>
+                                            class="btn btn-warning btn-sm">
+                                            แก้ไข
+                                        </a>
 
                                         <!-- ปุ่ม ลบ -->
                                         <form action="{{ route('requests.delete', $request->id_request) }}" method="POST"
@@ -165,33 +166,34 @@
 
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const viewButtons = document.querySelectorAll(".view-user-btn");
+        document.addEventListener("DOMContentLoaded", function () {
+            const viewButtons = document.querySelectorAll(".view-user-btn");
 
-        viewButtons.forEach(button => {
-            button.addEventListener("click", function () {
-                // ดึงค่าจาก data-attributes
-                const userRequest = this.getAttribute("data-user_request");
-                const nameRequest = this.getAttribute("data-name_request");
-                const emailRequest = this.getAttribute("data-email_request");
-                const descriptionRequest = this.getAttribute("data-description_request");
-                const createdAt = this.getAttribute("data-created_at");
-                const departmentRequest = this.getAttribute("data-department_request");
-                const province = this.getAttribute("data-province");
-                const center = this.getAttribute("data-center");
+            viewButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    // ดึงค่าจาก data-attributes
+                    const userRequest = this.getAttribute("data-user_request");
+                    const nameRequest = this.getAttribute("data-name_request");
+                    const passwordRequest = this.getAttribute("data-password_request");
+                    const emailRequest = this.getAttribute("data-email_request");
+                    const descriptionRequest = this.getAttribute("data-description_request");
+                    const createdAt = this.getAttribute("data-created_at");
+                    const departmentRequest = this.getAttribute("data-department_request");
+                    const province = this.getAttribute("data-province");
+                    const center = this.getAttribute("data-center");
 
-                // อัปเดตข้อมูลใน Modal
-                document.getElementById("modal-user-request").textContent = userRequest;
-                document.getElementById("modal-name-request").textContent = nameRequest;
-                document.getElementById("modal-email-request").textContent = emailRequest;
-                document.getElementById("modal-description-request").textContent = descriptionRequest;
-                document.getElementById("modal-created-at").textContent = createdAt;
-                document.getElementById("modal-department-request").textContent = departmentRequest;
-                document.getElementById("modal-province-request").textContent = province;
-                document.getElementById("modal-center-request").textContent = center;
+                    // อัปเดตข้อมูลใน Modal
+                    document.getElementById("modal-user-request").textContent = userRequest;
+                    document.getElementById("modal-name-request").textContent = nameRequest;
+                    document.getElementById("modal-email-request").textContent = emailRequest;
+                    document.getElementById("modal-description-request").textContent = descriptionRequest;
+                    document.getElementById("modal-created-at").textContent = createdAt;
+                    document.getElementById("modal-department-request").textContent = departmentRequest;
+                    document.getElementById("modal-province-request").textContent = province;
+                    document.getElementById("modal-center-request").textContent = center;
+                });
             });
         });
-    });
-</script>
+    </script>
 
 @endsection

@@ -23,7 +23,7 @@
         </a>
         /
         <a href="javascript:history.go(-2)" class="">
-            ศูนย์ ภน.
+            ศูนย์ ตป.
         </a>
         /
         <a href="javascript:history.back()" class="">
@@ -31,12 +31,8 @@
         </a>
         /
     </span> ศูนย์บริการ
-    
 
 </h4>
-
-
-
 <div class='card'>
     <div class="d-flex justify-content-between align-items-center gap-2">
         <!-- หัวข้อ -->
