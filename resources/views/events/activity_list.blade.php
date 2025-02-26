@@ -7,7 +7,7 @@
         <div class="d-flex justify-content-between">
             <div class="row mb-3">
                 <div class="col-auto">
-                    <a href="{{ route('customer_create') }}" class="btn btn-primary">เพิ่มข้อมูลลูกค้า</a>
+                    {{-- <a href="{{ route('customer_create') }}" class="btn btn-primary">เพิ่มข้อมูลลูกค้า</a> --}}
                 </div>
                 <div class="col-auto">
                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#Top_up">เติมเงิน</button>

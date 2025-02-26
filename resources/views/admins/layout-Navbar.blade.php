@@ -596,21 +596,7 @@
 
          
 
-          <div class="col-3 mb-4">
-            <a href="{{route('top_up_list')}}" class="text-decoration-none">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
-                    <i class="fas fa-donate"></i>
-                  </div>
-                </div>
-                <div class="col">
-                  <h5 class="mb-1">เติมเงิน</h5>
-                  <h6 class="text-muted mb-0">เพิ่มข้อมูลการเติมเงิน</h6>
-                </div>
-              </div>
-            </a>
-          </div>
+          
 
           <div class="col-3 mb-4">
             <a href="{{ route('user-logs') }}" class="text-decoration-none">

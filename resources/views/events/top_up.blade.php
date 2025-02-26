@@ -4,15 +4,20 @@
 
 @section('content')
     <div class="container">
-        <h3 id="top_up" class="text-center text-warning">-ข้อมูลการเติมเงิน-🪙</h3>
+        <div class=" d-flex align-items-end justify-content-center ">
+            <h3 class="text-warning" id="top_up" >-ข้อมูลการเติมเงิน-</h3>
+        </div>
+        <div class="text-warning d-flex align-items-end justify-content-center ">
+            <h5>กิจกกรม {{ $types->first()->type_name ?? '-' }}</h5>
+        </div>
         <div class="d-flex justify-content-between align-items-center">
             <!-- ปุ่มเติมเงิน (ซ้ายสุด) -->
             <div>
-                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#Top_up">เติมเงิน</button>
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#Top_up">เพิ่มข้อมูล</button>
             </div>
 
             <!-- ช่องค้นหาและเลือกประเภทบริการ (ขวาสุด) -->
-            <div class="d-flex gap-3">
+            <div class="d-flex gap-3 mb-3">
                 <div class="w-auto">
                     <span><i class="fa-solid fa-calendar-days"></i></span>
                     <input type="date" id="createdDate" name="date" class="form-control" placeholder="ค้นหาตามวันที่">
@@ -22,6 +27,8 @@
                     <input type="text" id="searchInput" name="phone" class="form-control"
                         placeholder="ค้นหาหมายเลขโทรศััพท์">
                 </div>
+
+                <input type="hidden" name="type_idcheck" id="type_idcheck" value="{{ $types->first()->type_id }}">
 
                 <div class="mt-2">
                     <!-- ช่องเลือกจังหวัด -->
@@ -33,15 +40,7 @@
                     </select>
                 </div>
 
-                <div class="w-auto flex-shrink-0 mb-4">
-                    <p class="text-danger mb-1">*เลือกกิจกรรม</p>
-                    <select class="form-select bg-success" id="type_service" name="service">
 
-                        @foreach ($types as $type)
-                            <option value="{{ $type->type_id }}">{{ $type->type_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
             </div>
         </div>
 
@@ -59,7 +58,6 @@
                             <div class="mb-3">
                                 <label for="type_id" class="form-label">กิจกรรม</label>
                                 <select class="form-select bg-warning text-dark" id="type_id" name="type_id" required>
-                                    <option value="" disabled selected>-- เลือกกิจกรรม --</option>
                                     @foreach ($types as $type)
                                         <option class="bg-secondary" value="{{ $type->type_id }}">
                                             {{ $type->type_name }}</option>
@@ -118,51 +116,52 @@
                 </tr>
             </thead>
             <tbody id="topUpTable">
-                @foreach ($TopUp as $TopUp)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $TopUp->phone ?? 'ไม่ระบุ' }}</td>
-                        <td>{{ $TopUp->amount }}</td>
-                        <td>{{ $TopUp->province->province_name ?? 'ไม่ระบุ' }} /
-                            {{ $TopUp->center->center_name ?? 'ไม่ระบุ' }}</td>
-                        <td colspan="2">
-                            <div class="dropdown">
-                                <button type="button" class="btn btn-light btn-sm p-1 dropdown-toggle hide-arrow"
-                                    data-bs-toggle="dropdown">
-                                    <i class="bx bx-dots-vertical-rounded fs-5"></i>
-                                </button>
-                                <ul class="dropdown-menu shadow border-0 rounded">
-                                    <li>
-                                        <button class="dropdown-item text-warning editBtn" data-bs-toggle="modal"
-                                            data-bs-target="#editTopUpModal"
-                                            data-url="{{ route('topUp_update', $TopUp->topUp_id) }}"
-                                            data-id="{{ $TopUp->topUp_id }}" data-name="{{ $TopUp->phone }}"
-                                            data-amount="{{ $TopUp->amount }}" data-province="{{ $TopUp->province_id }}"
-                                            data-center="{{ $TopUp->center_id }}" data-type={{ $TopUp->type_id }}>
-                                            แก้ไข
+                @forelse ($TopUp as $topUp)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $topUp->phone ?? 'ไม่ระบุ' }}</td>
+                    <td>{{ $topUp->amount }}</td>
+                    <td>{{ $topUp->province->province_name ?? 'ไม่ระบุ' }} /
+                        {{ $topUp->center->center_name ?? 'ไม่ระบุ' }}</td>
+                    <td colspan="2">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-light btn-sm p-1 dropdown-toggle hide-arrow"
+                                data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded fs-5"></i>
+                            </button>
+                            <ul class="dropdown-menu shadow border-0 rounded">
+                                <li>
+                                    <button class="dropdown-item text-warning editBtn" data-bs-toggle="modal"
+                                        data-bs-target="#editTopUpModal"
+                                        data-url="{{ route('topUp_update', $topUp->topUp_id) }}"
+                                        data-id="{{ $topUp->topUp_id }}" data-name="{{ $topUp->phone }}"
+                                        data-amount="{{ $topUp->amount }}" data-province="{{ $topUp->province_id }}"
+                                        data-center="{{ $topUp->center_id }}" data-type={{ $topUp->type_id }}>
+                                        แก้ไข
+                                    </button>
+                                </li>
+                                <li>
+                                    <form id="deleteForm{{ $topUp->topUp_id }}"
+                                        action="{{ route('topUp_delete', $topUp->topUp_id) }}" method="POST"
+                                        style="display: inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="dropdown-item text-danger deleteBtn"
+                                            onclick="confirmDeleteTop({{ $topUp->topUp_id }})">
+                                            <i class="bx bx-trash"></i> Delete
                                         </button>
-                                    </li>
-                                    <li>
-
-                                        <form id="deleteForm{{ $TopUp->topUp_id }}"
-                                            action="{{ route('topUp_delete', $TopUp->topUp_id) }}" method="POST"
-                                            style="display: inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="dropdown-item text-danger deleteBtn"
-                                                onclick="confirmDeleteTop({{ $TopUp->topUp_id }})">
-                                                <i class="bx bx-trash"></i> Delete
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
-
-                        </td>
-
-
-                    </tr>
-                @endforeach
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">ไม่มีข้อมูล</td>
+                </tr>
+            @endforelse
+            
 
             </tbody>
         </table>
@@ -179,18 +178,21 @@
                     <form id="editTopUpForm" method="POST" action="">
                         @csrf
                         @method('PUT')
+                        
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="type_id" class="form-label">กิจกรรม</label>
-                                <select class="form-select bg-warning text-dark" id="type_id2" name="type_id" required>
-                                    <option value="" disabled selected>-- เลือกกิจกรรม --</option>
-                                    @foreach ($types as $type)
-                                        <option class="bg-secondary" value="{{ $type->type_id }}"
-                                            {{ $type->type_id ? 'selected' : '' }}>
-                                            {{ $type->type_name }}</option>
-                                    @endforeach
-                                </select>
+                                    <label for="type_id" class="form-label">กิจกรรม</label>
+                                    <select class="form-select bg-warning text-dark" id="type_id2" name="type_id2" required>
+                                        @foreach ($types as $type)
+                                            <option class="bg-secondary" value="{{ $type->type_id }}" 
+                                                {{ $type->type_id ? 'selected' : '' }}>
+                                                {{ $type->type_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                  
                             </div>
+                            
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone</label>
                                 <input type="text" name="phone" id="phone" class="form-control">
@@ -357,6 +359,8 @@
                 const center = button.getAttribute('data-center');
                 const type = button.getAttribute('data-type');
 
+                
+
                 // ใส่ค่าลงในฟอร์ม
                 const form = document.getElementById('editTopUpForm');
                 form.action = url;
@@ -372,17 +376,19 @@
     <script>
         document.getElementById('createdDate').addEventListener('input', searchTopUp);
         document.getElementById('searchInput').addEventListener('input', searchTopUp);
+        document.getElementById('type_idcheck').addEventListener('input', searchTopUp);
         document.getElementById('province_search').addEventListener('change', searchTopUp);
-        document.getElementById('type_service').addEventListener('change', searchTopUp);
-
+     
+        
         function searchTopUp() {
             let date = document.getElementById('createdDate').value;
             let searchPhone = document.getElementById('searchInput').value;
             let provinceId = document.getElementById('province_search').value;
-            let typeService = document.getElementById('type_service').value;
+            let typeCheck = document.getElementById('type_idcheck').value;
+            
 
             // ส่งค่าผ่าน URL Params ไปยัง Backend
-            let url = `/topups/search?date=${date}&phone=${searchPhone}&service=${typeService}&province_id=${provinceId}`;
+            let url = `/topups/search?date=${date}&phone=${searchPhone}&province_id=${provinceId}&type_id=${typeCheck}`;
 
             fetch(url)
                 .then(response => response.json())
