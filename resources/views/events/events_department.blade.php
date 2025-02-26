@@ -422,6 +422,7 @@
                 data: [sumPrice]
             }
         ];
+        
 
         // สร้างกราฟที่ 4 (เติมเงินรายปี)
         var ctx4 = document.getElementById('myChart4').getContext('2d');
@@ -529,23 +530,25 @@
             myChart2.data.datasets[0].data = [newIctIncome]; // อัปเดตข้อมูลรายได้
             ictCount = newIctCount; // อัปเดตค่า ictCount
             ictIncome = newIctIncome; // อัปเดตค่า ictIncome
-
             // อัปเดตกราฟ
             myChart2.update();
 
             // อัปเดตข้อมูลใน datasets3
             myChart3.data.datasets[0].data = [newSumNew]; // ลูกค้าใหม่
             myChart3.data.datasets[1].data = [newSumMove]; // ลูกค้า(ย้ายค่าย)
-            myChart3.data.datasets[2].data = [newSumCount]; // เติมเงินรายปี
+           
+            
 
             // อัปเดต sumTotal สำหรับ Tooltip
             sumNew = newSumNew;
             sumMove = newSumMove;
             sumCount = newSumCount;
             sumPrice = newSumPrice;
-
             // อัปเดตกราฟ
             myChart3.update();
+
+            myChart4.data.datasets[0].data = [newSumCount]; // เติมเงินรายปี
+            myChart4.update();
         }
     </script>
 @endsection

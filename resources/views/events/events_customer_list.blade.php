@@ -4,11 +4,11 @@
 
 @section('content')
     <div class="container">
-        <h3 class="text-center text-warning">-ลูกค้ากิจกรรม{{ $data->first()->type->type_name ?? '-' }}-😊</h3>
+        <h3 class="text-center text-warning">-ลูกค้ากิจกรรม{{ $types->first()->type_name ?? '-' }}-😊</h3>
         <div class="d-flex justify-content-between">
             <div class="row mb-3">
 
-                <div class="col-auto"> <a href="{{ route('customer_create') }}" class="btn btn-primary">เพิ่มข้อมูลลูกค้า</a>
+                <div class="col-auto"> <a href="{{ route('customer_create',$type_id) }}" class="btn btn-primary">เพิ่มข้อมูลลูกค้า</a>
                 </div>
                 <a href="{{route('top_up_list')}}" class="btn btn-warning col-auto">เติมเงินรายปี</a>
 
@@ -17,7 +17,8 @@
 
             <div class="d-flex">
                 <div class="mb-3">
-                    <input type="hidden" id="type_id" value="{{ $data->first()->type->type_id }}">
+                    <input type="hidden" id="type_id" value="{{ $data->isNotEmpty() && isset($data->first()->type) ? $data->first()->type->type_id : '' }}">
+
 
                     <!-- ช่องกรอกวันที่ -->
                     <span><i class="fa-solid fa-calendar-days"></i></span>
@@ -149,12 +150,13 @@
                         <div class="modal-body">
 
                             <p><span class="fw-bold text-dark">ชื่อ-นามสกุล:</span> {{ $customer->cus_fullname }}</p>
-                            @if (strpos(strtolower($customer->service->service_name), 'fttx_broadband') !== false ||
-                                    strpos(strtolower($customer->service->service_name), 'sim my') !== false)
+                            @if (strpos(strtolower($customer->service->service_name), 'fttx') !== false ||
+                                    strpos(strtolower($customer->service->service_name), 'sim') !== false)
                                 <p><span class="fw-bold text-dark">รหัสบัตรประชาชน:</span> {{ $customer->id_card }}</p>
                             @else
                                 <p><span class="fw-bold text-dark">ประเภทลูกค้า:</span>
-                                    {{ $dataIct->where('cus_id', $customer->cus_id)->first()->customer_type }}</p>
+                                    <p>{{ $dataIct->where('cus_id', $customer->cus_id)->first() ? $dataIct->where('cus_id', $customer->cus_id)->first()->customer_type : 'ไม่มีข้อมูล' }}</p>
+
                             @endif
                             <p><span class="fw-bold text-dark">ที่อยู่:</span> {{ $customer->cus_address }}</p>
                             <p><span class="fw-bold text-dark">กิจกรรม:</span>
@@ -181,12 +183,12 @@
                                             )->first();
 
                                         @endphp
-                                @if ($fttxData && str_contains(strtolower($customer->service->service_name), 'fttx_broadband'))
+                                @if ($fttxData && str_contains(strtolower($customer->service->service_name), 'fttx'))
 <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
                                             <strong class='text-warning'>งานติดตั้ง:   </strong> {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
-@elseif ($simmyData && str_contains(strtolower($customer->service->service_name), 'sim my'))
+@elseif ($simmyData && str_contains(strtolower($customer->service->service_name), 'sim'))
 <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $simmyData->cus_new == 1 ? 'ลูกค้าใหม่' : 'ลูกค้า(ย้ายค่าย)' }}<br>
-@elseif ($ictData && str_contains(strtolower($customer->service->service_name), 'ict solution'))
+@elseif ($ictData && str_contains(strtolower($customer->service->service_name), 'ict'))
 <strong class='text-warning'>รายได้ต่อเดือน:   </strong> {{ $ictData->income }}
                                                     
                                                   
@@ -200,8 +202,8 @@
                                     รายละเอียด
                                 </a>
                             </p>
-                            @if (strpos(strtolower($customer->service->service_name), 'fttx_broadband') !== false ||
-                                    strpos(strtolower($customer->service->service_name), 'sim my') !== false)
+                            @if (strpos(strtolower($customer->service->service_name), 'fttx') !== false ||
+                                    strpos(strtolower($customer->service->service_name), 'sim') !== false)
                                 <p><span class="fw-bold text-dark">โปรโมชั่น:</span>
                                     {{ $customer->promotion->promotion_name ?? 'ไม่ระบุ' }}</p>
                                 <p><span class="fw-bold text-dark">ความเร็ว:</span>

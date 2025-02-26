@@ -5,7 +5,8 @@
     <div class="container">
         <h2>จัดการProduct</h2>
         <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#ProductModal">เพิ่มProduct</button>
-        <a href="{{ route('service_list') }}" class="btn btn-secondary mb-3">Back</a>
+        <a href="{{ route('service_list',$type_id) }}" class="btn btn-secondary mb-3">Back</a>
+
         <table class="table table-bordered">
             <thead>
                 <tr class="bg-dark text-light">
@@ -54,7 +55,7 @@
         <!-- Modal สำหรับเพิ่ม -->
         <div class="modal fade" id="ProductModal" tabindex="-1" aria-labelledby="ProductModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <form id="productForm" action="{{ route('product_insert') }}" method="POST">
+                <form id="productForm" action="{{ route('product_insert',$type_id) }}" method="POST">
                     @csrf
                     <div class="modal-content">
                         <div class="modal-header">

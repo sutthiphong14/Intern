@@ -5,7 +5,7 @@
     <div class="container">
         <h2>จัดการโปรโมชัน</h2>
         <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#PromotionModal">เพิ่มโปรโมชัน</button>
-        <a href="{{ route('service_list') }}" class="btn btn-secondary mb-3">Back</a>
+        <a href="{{ route('service_list',$typeId) }}" class="btn btn-secondary mb-3">Back</a>
         <table class="table table-bordered">
             <thead>
                 <tr class="bg-dark text-light">

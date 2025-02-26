@@ -23,6 +23,7 @@
                     <th colspan="2">Ict Solution</th>
                     <th rowspan="2">เครื่องมือ</th>
                     <th rowspan="2">ลูกค้า</th>
+                    <th rowspan="2">บริการ</th>
                 </tr>
                 <tr class="bg-dark text-center">
                     <th>new</th>
@@ -37,65 +38,77 @@
                     <th>รายได้</th>
                 </tr>
             </thead>
-            <tbody class="text-center">
-                @foreach ($sumByType as $typeId => $data)
-                    @php
-                        // กรองเฉพาะกิจกรรมที่ตรงกับ typeId ปัจจุบัน
-                        $activities = collect($typeActivities)->where('type_id', $typeId);
-                    @endphp
-                    @foreach ($activities as $row)
-                        <tr>
-                            <td>
-                                <a href="{{ route('event_department', $typeId) }}" class="btn btn-warning">
-                                    <i class="fas fa-search"></i>
-                                </a>
-                            </td>
-                            <td>{{ $row->type_name }}</td>
-                            <td>{{ ($data['selfInstall'] ?? 0) + ($data['hireInstall'] ?? 0) }}</td>
-                            <td>{{ $data['selfInstall'] ?? 0 }}</td>
-                            <td>{{ $data['hireInstall'] ?? 0 }}</td>
-                            <td>{{ $data['adjust'] ?? 0 }}</td>
-                            <td>{{ $data['new'] ?? 0 }}</td>
-                            <td>{{ $data['move'] ?? 0 }}</td>
-                            <td>{{ $data['count'] ?? 0 }}</td>
-                            <td>{{ $data['price'] ?? 0 }}</td>
-                            <td>{{ $data['ictCount'] ?? 0 }}</td>
-                            <td>{{ $data['ictIncome'] ?? 0 }}</td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn btn-light btn-sm p-1 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded fs-5"></i>
+           <tbody class="text-center">
+    @if (!empty($sumByType) && count($sumByType) > 0)
+        @foreach ($sumByType as $typeId => $data)
+            @php
+                // กรองเฉพาะกิจกรรมที่ตรงกับ typeId ปัจจุบัน
+                $activities = collect($typeActivities)->where('type_id', $typeId);
+            @endphp
+            @foreach ($activities as $row)
+                <tr>
+                    <td>
+                        <a href="{{ route('event_department', $typeId) }}" class="btn btn-warning">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    </td>
+                    <td>{{ $row->type_name }}</td>
+                    <td>{{ ($data['selfInstall'] ?? 0) + ($data['hireInstall'] ?? 0) }}</td>
+                    <td>{{ $data['selfInstall'] ?? 0 }}</td>
+                    <td>{{ $data['hireInstall'] ?? 0 }}</td>
+                    <td>{{ $data['adjust'] ?? 0 }}</td>
+                    <td>{{ $data['new'] ?? 0 }}</td>
+                    <td>{{ $data['move'] ?? 0 }}</td>
+                    <td>{{ $data['count'] ?? 0 }}</td>
+                    <td>{{ $data['price'] ?? 0 }}</td>
+                    <td>{{ $data['ictCount'] ?? 0 }}</td>
+                    <td>{{ $data['ictIncome'] ?? 0 }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-light btn-sm p-1 dropdown-toggle hide-arrow"
+                                data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded fs-5"></i>
+                            </button>
+                            <ul class="dropdown-menu shadow border-0 rounded">
+                                <li>
+                                    <button class="dropdown-item text-warning editBtn"
+                                        data-id="{{ $row->type_id }}" data-name="{{ $row->type_name }}"
+                                        data-bs-toggle="modal" data-bs-target="#editTypeModal">
+                                        <i class="bx bx-edit"></i> Edit
                                     </button>
-                                    <ul class="dropdown-menu shadow border-0 rounded">
-                                        <li>
-                                            <button class="dropdown-item text-warning editBtn"
-                                                data-id="{{ $row->type_id }}" data-name="{{ $row->type_name }}"
-                                                data-bs-toggle="modal" data-bs-target="#editTypeModal">
-                                                <i class="bx bx-edit"></i> Edit
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <form action="{{ route('type_delete', $row->type_id) }}" method="POST"
-                                                class="m-0">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item text-danger deleteBtn"
-                                                    id="deleteBtn{{ $row->type_id }}">
-                                                    <i class="bx bx-trash"></i> Delete
-                                                </button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                            <td>
-                                <a href="{{ route('event_customer', $row->type_id ) }}" class="btn btn-sm btn-primary text-light">ดูข้อมูลลูกค้า</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endforeach
-            </tbody>
+                                </li>
+                                <li>
+                                    <form action="{{ route('type_delete', $row->type_id) }}" method="POST"
+                                        class="m-0">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="dropdown-item text-danger deleteBtn"
+                                            id="deleteBtn{{ $row->type_id }}">
+                                            <i class="bx bx-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <a href="{{ route('event_customer', $row->type_id ) }}" class="btn btn-sm btn-primary text-light">ดูข้อมูลลูกค้า</a>
+                    </td>
+                    <td>
+                        <a href="{{ route('service_list', $row->type_id ) }}" class="btn btn-sm btn-success text-light">จัดการบริการ</a>
+                    </td>
+                </tr>
+            @endforeach
+        @endforeach
+    @else
+        <tr>
+            <td colspan="15" class="text-center text-danger">
+                ไม่มีข้อมูลกิจกรรมในขณะนี้
+            </td>
+        </tr>
+    @endif
+</tbody>
+
         </table>
         
 

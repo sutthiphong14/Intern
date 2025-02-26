@@ -368,7 +368,7 @@ Route::put('/typeactivity_update/{type_id}', [ActivityController::class, 'Typeup
 
 
 //ส่วนที่ใช้ส่วนบริการ
-Route::get('/severactivity_list', [ActivityController::class, 'ListService'])->name('service_list');
+Route::get('/severactivity_list/{type_id}', [ActivityController::class, 'ListService'])->name('service_list');
 Route::post('/severactivity_insert', [ActivityController::class, 'ServiceInsert'])->name('service_insert');
 Route::delete('/severactivity_delete/{service_id}', [ActivityController::class, 'ServiceDelete'])->name('service_delete');
 Route::put('/severactivity_update/{service_id}', [ActivityController::class, 'Serviceupdate'])->name('serve_update');
@@ -392,8 +392,8 @@ Route::delete('/price_delete/{service_id}/{promotion_id}/{speed_id}/{price_id}',
 Route::put('/price_update/{service_id}/{promotion_id}/{speed_id}/{price_id}', [ActivityController::class, 'PriceUpdate'])->name('price_update');
 
 //ส่วนproduct
-Route::get('/product_list', [ActivityController::class, 'ListProduct'])->name('product_list');
-Route::post('/product_insert', [ActivityController::class, 'ProductInsert'])->name('product_insert');
+Route::get('/product_list,{type_id}', [ActivityController::class, 'ListProduct'])->name('product_list');
+Route::post('/product_insert,{type_id}', [ActivityController::class, 'ProductInsert'])->name('product_insert');
 Route::delete('/product_delete/{product_id}', [ActivityController::class, 'ProductDelete'])->name('product_delete');
 Route::put('/product_update/{product_id}', [ActivityController::class, 'Productupdate'])->name('product_update');
 
@@ -411,7 +411,7 @@ Route::put('/servicecenteractivityputedit/{id}', [ProvinceController::class, 'up
 
 //ลูกค้า
 Route::get('/customer_list', [CustomerController::class, 'CustomerList'])->name('customer_list');
-Route::get('/customer_create_view', [CustomerController::class, 'CustomerCreate'])->name('customer_create');
+Route::get('/customer_create_view/{type_id}', [CustomerController::class, 'CustomerCreate'])->name('customer_create');
 Route::post('/customer_insert', [CustomerController::class, 'CustomerInsert'])->name('customer_insert');
 Route::delete('/customer_delete/{cus_id}', [CustomerController::class, 'CustomerDelete'])->name('customer_delete');
 Route::get('/customer_edit/{cus_id}', [CustomerController::class, 'CustomerEdit'])->name('customer_edit');
@@ -421,6 +421,8 @@ Route::get('/fttx_broadband', [ActivityController::class, 'Fttxlist'])->name('ft
 Route::get('/sim_my', [ActivityController::class, 'Sim_my'])->name('sim_my');
 Route::get('/activity_list', [ActivityController::class, 'activity_list'])->name('activity_list');
 
+Route::get('/getService', [CustomerController::class, 'getService']);
+Route::get('/getProduct', [CustomerController::class, 'getProduct']);
 Route::get('/getPromotions', [CustomerController::class, 'getPromotions']);
 Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);
 Route::get('/getPrices', [CustomerController::class, 'getPrices']);
