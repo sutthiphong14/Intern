@@ -106,9 +106,10 @@ class CustomerController extends Controller
 
 
 
-    public function CustomerCreate()
+    public function CustomerCreate($type_id)
     {
-        $types = TypeActivity::all();
+        $types = TypeActivity::where('type_id', $type_id)->get();
+
         $services = ServeActivity::all();
         $promotion = PromotionActivity::all();
         $provinces = ProvinceActivity::all();
@@ -237,9 +238,8 @@ class CustomerController extends Controller
             }
         }
 
-
-
-        return redirect()->route('type_list')->with('success', 'เพิ่มข้อมูลลูกค้าสำเร็จ');
+        return redirect()->route('event_customer', ['type_id' => $type_id])
+            ->with('success', 'เพิ่มข้อมูลลูกค้าสำเร็จ');
     }
 
     public function CustomerDelete($cus_id)
@@ -255,9 +255,9 @@ class CustomerController extends Controller
             // Delete the customer
             $customer->delete();
 
-            return redirect()->route('type_list')->with('success', 'ลบข้อมูลสำเร็จ');
+            return redirect()->back()->with('success', 'ลบข้อมูลสำเร็จ');
         } else {
-            return redirect()->route('type_list')->with('error', 'Customer not found');
+            return redirect()->back()->with('error', 'Customer not found');
         }
     }
 
@@ -312,6 +312,8 @@ class CustomerController extends Controller
         $price_id = $request->input('price_id');
         $province_id = $request->input('province_id');
         $center_id = $request->input('center_id');
+
+
 
         $other = $request->input('other');
 
@@ -521,9 +523,9 @@ class CustomerController extends Controller
         $updateResult = Customer::where('cus_id', $cus_id)->update($updateData);
 
         if ($updateResult) {
-            return redirect()->route('type_list')->with('success', 'อัปเดตข้อมูลลูกค้าเรียบร้อยแล้ว');
+            return redirect()->route('event_customer', ['type_id' => $type_id])->with('success', 'อัปเดตข้อมูลลูกค้าเรียบร้อยแล้ว');
         } else {
-            return redirect()->route('type_list')->with('error', 'การอัปเดตล้มเหลว');
+            return redirect()->route('event_customer', ['type_id' => $type_id])->with('error', 'การอัปเดตล้มเหลว');
         }
     }
 

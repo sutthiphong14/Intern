@@ -547,21 +547,7 @@
             </a>
           </div>
 
-          <div class="col-3 mb-4">
-            <a href="{{route('customer_create')}}" class="text-decoration-none">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <div class="app-icon bg-yellow d-flex justify-content-center align-items-center">
-                    <i class="fas fa-file-alt"></i>
-                  </div>
-                </div>
-                <div class="col">
-                  <h5 class="mb-1">แบบฟอร์มกิจกรรม</h5>
-                  <h6 class="text-muted mb-0">เพิ่มข้อมูลลูกค้า</h6>
-                </div>
-              </div>
-            </a>
-          </div>
+         
 
           <div class="col-3 mb-4">
             <a href="{{route('top_up_list')}}" class="text-decoration-none">

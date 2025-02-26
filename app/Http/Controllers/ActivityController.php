@@ -1220,7 +1220,8 @@ class ActivityController extends Controller
             'Simmy_price',
             'Ict_count',
             'Ict_income',
-            'types'
+            'types',
+            'type_id'
         ));
     }
 

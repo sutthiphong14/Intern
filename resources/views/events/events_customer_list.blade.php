@@ -4,11 +4,11 @@
 
 @section('content')
     <div class="container">
-        <h3 class="text-center text-warning">-ลูกค้ากิจกรรม{{ $data->first()->type->type_name ?? '-' }}-😊</h3>
+        <h3 class="text-center text-warning">-ลูกค้ากิจกรรม{{ $types->first()->type_name ?? '-' }}-😊</h3>
         <div class="d-flex justify-content-between">
             <div class="row mb-3">
 
-                <div class="col-auto"> <a href="{{ route('customer_create') }}" class="btn btn-primary">เพิ่มข้อมูลลูกค้า</a>
+                <div class="col-auto"> <a href="{{ route('customer_create',$type_id) }}" class="btn btn-primary">เพิ่มข้อมูลลูกค้า</a>
                 </div>
                 <a href="{{route('top_up_list')}}" class="btn btn-warning col-auto">เติมเงินรายปี</a>
 

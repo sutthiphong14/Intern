@@ -13,9 +13,8 @@
             <div class="mt-3">
 
                 <!-- Type -->
-                <label for="type_id" class="form-label text-danger">* กรุณาเลือกกิจกรรมก่อน</label>
+                <label for="type_id" class="form-label text-danger">กิจกรรม</label>
                 <select class="form-select" id="type_id" name="type_id" required>
-                    <option value="" disabled selected>-- เลือกกิจกรรม --</option>
                     @foreach ($types as $type)
                         <option value="{{ $type->type_id }}">{{ $type->type_name }}</option>
                     @endforeach
@@ -237,45 +236,57 @@
     </script>
 
     <script>
-       $('#type_id').change(function() {
-    var typeId = $(this).val();
+  $(document).ready(function() {
+    // ฟังก์ชันเพื่อดึงข้อมูลบริการจาก type_id
+    function loadServices(typeId) {
+        $.ajax({
+            url: '/getService', // URL สำหรับดึงข้อมูลบริการ
+            type: 'GET',
+            data: {
+                type_id: typeId
+            },
+            success: function(data) {
+                $('#service_id').empty(); // เคลียร์ตัวเลือกเก่าใน #service_id
+                $('#service_id').append('<option value="" disabled selected>-- เลือกบริการ --</option>');
 
-    $.ajax({
-        url: '/getService',
-        type: 'GET',
-        data: {
-            type_id: typeId
-        },
-        success: function(data) {
-            $('#service_id').empty();
-            $('#service_id').append(
-                '<option value="" disabled selected>-- เลือกบริการ --</option>'
-            );
+                // แยกบริการที่มีคำว่า "ร่วม" ออกมา
+                var servicesWithR = data.filter(function(service) {
+                    return service.service_name.includes('ร่วม');
+                });
 
-            // แยกบริการที่มีคำว่า "ร่วม" ออกมา
-            var servicesWithR = data.filter(function(service) {
-                return service.service_name.includes('ร่วม');
-            });
+                var servicesWithoutR = data.filter(function(service) {
+                    return !service.service_name.includes('ร่วม');
+                });
 
-            var servicesWithoutR = data.filter(function(service) {
-                return !service.service_name.includes('ร่วม');
-            });
+                // รวมบริการที่มีคำว่า "ร่วม" ขึ้นมาก่อน
+                var allServices = servicesWithR.concat(servicesWithoutR);
 
-            // รวมบริการที่มีคำว่า "ร่วม" ขึ้นมาก่อน
-            var allServices = servicesWithR.concat(servicesWithoutR);
+                // เพิ่ม options สำหรับบริการ
+                $.each(allServices, function(index, service) {
+                    $('#service_id').append('<option value="' + service.service_id + '">' +
+                        service.service_name + '</option>');
+                });
+            },
+            error: function() {
+                console.log('Error fetching services');
+                alert('เกิดข้อผิดพลาดในการดึงข้อมูลบริการ');
+            }
+        });
+    }
 
-            // เพิ่ม options สำหรับบริการ
-            $.each(allServices, function(index, services) {
-                $('#service_id').append('<option value="' + services.service_id + '">' +
-                    services.service_name + '</option>');
-            });
-        },
-        error: function() {
-            console.log('Error fetching services');
-            alert('เกิดข้อผิดพลาดในการดึงข้อมูลบริการ');
-        }
+    // ดึงค่า type_id จาก select เมื่อโหลดหน้า
+    var currentTypeId = $('#type_id').val(); // ค่า type_id ปัจจุบัน
+    if (currentTypeId) {
+        loadServices(currentTypeId); // เรียกใช้ฟังก์ชันเพื่อดึงบริการ
+    }
+
+    // เมื่อมีการเปลี่ยนแปลงค่าใน #type_id
+    $('#type_id').change(function() {
+        var typeId = $(this).val(); // ดึงค่า type_id ที่เลือก
+        loadServices(typeId); // ดึงข้อมูลบริการใหม่
     });
 });
+
 
 
         $(document).ready(function() {

@@ -21,27 +21,26 @@
             @endphp
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2>แก้ไขข้อมูลลูกค้า</h2>
-
-
-
-
             </div>
-
-
 
             <div class="mb-3">
                 <!-- Dropdown for Type -->
                 <label for="type_id" class="form-label">กิจกรรม</label>
-                <select class="form-select" id="type_id" name="type_id" required>
-                    <option value="" disabled>-- เลือกกิจกรรม --</option>
-                    @foreach ($types as $type)
-                        <option value="{{ $type->type_id }}" {{ $customer->type_id == $type->type_id ? 'selected' : '' }}>
-                            {{ $type->type_name }}</option>
-                    @endforeach
-                </select>
+<select class="form-select" id="type_id" name="type_id" >
+    @foreach ($types as $type)
+        @if ($type->type_id == $customer->type_id)
+            <option value="{{ $type->type_id }}" selected>
+                {{ $type->type_name }}
+            </option>
+        @endif
+    @endforeach
+</select>
+
+                
+
 
                 <label for="service_id" class="form-label">บริการ</label>
-                <select class="form-select bg-success" id="service_id" name="service_id" required>
+                <select class="form-select bg-success" id="service_id" name="service_id" required >
                     <option value="" disabled>-- เลือกบริการ --</option>
                     @foreach ($services as $service)
                         <option value="{{ $service->service_id }}"
@@ -217,7 +216,7 @@
                                 </div>
                                 <div>
                                     <label for="quantity" class="form-label">จำนวน</label>
-                                    <input type="number" name="quantity[]" class="form-control"
+                                    <input type="number" name="quantity[]" class="form-control" id="quantity"
                                         placeholder="ระบุจำนวน">
                                 </div>
                                 <button type="button" class="btn btn-success add-product mt-4">+</button>
@@ -293,58 +292,64 @@
 @endsection
 
 @section('script')
+
+<script>
+    
+</script>
     <script>
-    $(document).ready(function() {
-    // กำหนดค่าเริ่มต้นเมื่อโหลดหน้า
-    var serviceId = $('#service_id').val();
-    // สมมติว่ามีตัวแปรที่เก็บค่า product_id ที่เลือกไว้ก่อนหน้า
-    var selectedProductId = "{{ $customer->product_id ?? '' }}";  // ปรับตามโครงสร้างข้อมูลของคุณ
-    
-    if (serviceId) {
-        loadProducts(serviceId, selectedProductId);
-    }
-    
-    // เมื่อเปลี่ยนค่า service_id
-    $('#service_id').change(function() {
-        var serviceId = $(this).val();
-        loadProducts(serviceId, selectedProductId);
-    });
-    
-    function loadProducts(serviceId, selectedProductId) {
-        $.ajax({
-            url: '/getProduct',
-            type: 'GET',
-            data: {
-                service_id: serviceId
-            },
-            success: function(data) {
-                $('#product_id').empty();
-                $('#product_id').append(
-                    '<option value="" disabled>-- เลือก Product --</option>'
-                );
-                
-                // เพิ่ม options สำหรับ product
-                $.each(data, function(index, product) {
-                    // ตรวจสอบว่าเป็น product ที่เคยเลือกไว้หรือไม่
-                    var selected = (product.product_id == selectedProductId) ? 'selected' : '';
-                    
-                    $('#product_id').append('<option value="' + product.product_id + '" ' + selected + '>' +
-                        product.product_name + '</option>');
+        $(document).ready(function() {
+            // กำหนดค่าเริ่มต้นเมื่อโหลดหน้า
+            var serviceId = $('#service_id').val();
+            // สมมติว่ามีตัวแปรที่เก็บค่า product_id ที่เลือกไว้ก่อนหน้า
+            var selectedProductId = "{{ $customer->product_id ?? '' }}"; // ปรับตามโครงสร้างข้อมูลของคุณ
+
+            if (serviceId) {
+                loadProducts(serviceId, selectedProductId);
+            }
+
+            // เมื่อเปลี่ยนค่า service_id
+            $('#service_id').change(function() {
+                var serviceId = $(this).val();
+                loadProducts(serviceId, selectedProductId);
+            });
+
+            function loadProducts(serviceId, selectedProductId) {
+                $.ajax({
+                    url: '/getProduct',
+                    type: 'GET',
+                    data: {
+                        service_id: serviceId
+                    },
+                    success: function(data) {
+                        $('#product_id').empty();
+                        $('#product_id').append(
+                            '<option value="" disabled>-- เลือก Product --</option>'
+                        );
+
+                        // เพิ่ม options สำหรับ product
+                        $.each(data, function(index, product) {
+                            // ตรวจสอบว่าเป็น product ที่เคยเลือกไว้หรือไม่
+                            var selected = (product.product_id == selectedProductId) ?
+                                'selected' : '';
+
+                            $('#product_id').append('<option value="' + product.product_id +
+                                '" ' + selected + '>' +
+                                product.product_name + '</option>');
+                        });
+
+                        // ถ้าไม่มีข้อมูลที่เลือกไว้ก่อนหน้า ให้เลือกตัวแรก
+                        if (data.length > 0 && !selectedProductId) {
+                            // เลือกตัวแรกเป็นค่าเริ่มต้น (ถ้าต้องการ)
+                            // $('#product_id').val(data[0].product_id);
+                        }
+                    },
+                    error: function() {
+                        console.log('Error fetching products');
+                        alert('เกิดข้อผิดพลาดในการดึงข้อมูล Product');
+                    }
                 });
-                
-                // ถ้าไม่มีข้อมูลที่เลือกไว้ก่อนหน้า ให้เลือกตัวแรก
-                if (data.length > 0 && !selectedProductId) {
-                    // เลือกตัวแรกเป็นค่าเริ่มต้น (ถ้าต้องการ)
-                    // $('#product_id').val(data[0].product_id);
-                }
-            },
-            error: function() {
-                console.log('Error fetching products');
-                alert('เกิดข้อผิดพลาดในการดึงข้อมูล Product');
             }
         });
-    }
-});
     </script>
     <script>
         $(document).ready(function() {
@@ -355,10 +360,17 @@
             // เรียกใช้ AJAX ทันที
             loadServices(typeId, currentServiceId);
 
-            // ยังคงมี event listener สำหรับการเปลี่ยนค่าในภายหลัง
+            // Event listener สำหรับการเปลี่ยนค่า type_id
             $('#type_id').change(function() {
                 var typeId = $(this).val();
+
                 loadServices(typeId, currentServiceId);
+                // ✅ รีเซ็ตค่า service_id และเคลียร์ตัวเลือก
+                $('#service_id').empty().append(
+                    '<option value="" disabled selected>-- เลือกบริการ --</option>');
+                // ✅ รีเซ็ตค่า quantity (ทุก input ที่มี name="quantity[]")
+                $('input[name="quantity[]"]').val('');
+
             });
 
             // แยกโค้ด AJAX เป็นฟังก์ชันเพื่อลดการเขียนซ้ำ
@@ -371,14 +383,12 @@
                     },
                     success: function(data) {
                         $('#service_id').empty();
-                        $('#service_id').append('<option value="" disabled>-- เลือกบริการ --</option>');
 
-                        // วนลูปเพิ่มข้อมูลทั้งหมดจากฐานข้อมูล
+
+                        // วนลูปเพิ่มข้อมูลจากฐานข้อมูล
                         $.each(data, function(index, service) {
-                            // ตรวจสอบว่า service_id ตรงกับค่าที่บันทึกไว้หรือไม่
                             var selectedAttr = (service.service_id == currentServiceId) ?
                                 'selected' : '';
-
                             $('#service_id').append('<option value="' + service.service_id +
                                 '" ' + selectedAttr + '>' +
                                 service.service_name + '</option>');
@@ -390,6 +400,7 @@
                     }
                 });
             }
+
         });
         $(document).ready(function() {
             $('#service_id').change(function() {
@@ -586,14 +597,20 @@
 
 
 
-            // เรียกใช้ฟังก์ชันตอนโหลดหน้า
-            var serviceName = $('#service_id option:selected').text();
-            toggleForms(serviceName);
 
-            // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
+
+            // ✅ เช็คค่า `service_name` ทันทีที่โหลดหน้า
+            var selectedService = $('#service_id').val(); // ได้ค่า service_id ที่ถูกเลือก
+            if (selectedService) {
+                var serviceName = $('#service_id option:selected').text();
+                toggleForms(serviceName);
+            }
+
+            // ✅ เช็คค่าใหม่เมื่อเปลี่ยน `service_id`
             $('#service_id').change(function() {
                 var serviceName = $(this).find('option:selected').text();
                 toggleForms(serviceName);
+                console.log(serviceName)
             });
         });
     </script>

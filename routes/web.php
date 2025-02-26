@@ -381,7 +381,7 @@ Route::put('/servicecenteractivityputedit/{id}', [ProvinceController::class, 'up
 
 //ลูกค้า
 Route::get('/customer_list', [CustomerController::class, 'CustomerList'])->name('customer_list');
-Route::get('/customer_create_view', [CustomerController::class, 'CustomerCreate'])->name('customer_create');
+Route::get('/customer_create_view/{type_id}', [CustomerController::class, 'CustomerCreate'])->name('customer_create');
 Route::post('/customer_insert', [CustomerController::class, 'CustomerInsert'])->name('customer_insert');
 Route::delete('/customer_delete/{cus_id}', [CustomerController::class, 'CustomerDelete'])->name('customer_delete');
 Route::get('/customer_edit/{cus_id}', [CustomerController::class, 'CustomerEdit'])->name('customer_edit');
