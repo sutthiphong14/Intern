@@ -1155,7 +1155,9 @@ class ActivityController extends Controller
     {
         // กรองข้อมูล Customer ตาม type_service และ type_id
         $dataQuery = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])
-            ->where('type_id', $type_id); // เพิ่มเงื่อนไขตาม type_id
+    ->where('type_id', $type_id) // กรองข้อมูลตาม type_id
+    ->orderBy('cus_id', 'desc'); // เรียงลำดับตาม cus_id จากมากไปน้อย
+
 
         $dataIct = IctSolution::where('type_id', $type_id)->get();
 
@@ -1225,14 +1227,17 @@ class ActivityController extends Controller
         ));
     }
 
-    public function TopUp_list()
+    public function TopUp_list($type_id)
     {
         $provinces = ProvinceActivity::all();
         $centers = ServiceCenterActivity::all();
-        $types = TypeActivity::all();
-        $TopUp = TopUp::with(['province', 'center'])->get();
+        $types = TypeActivity::where('type_id',$type_id)->get();
+        $TopUp = TopUp::with(['province', 'center'])->where('type_id',$type_id)->get();
+        
+        
         return view('events.top_up', compact('TopUp', 'provinces', 'centers', 'types'));
     }
+    
 
     public function searchTopUp(Request $request)
     {
@@ -1241,9 +1246,10 @@ class ActivityController extends Controller
         $phone = $request->input('phone');
         $service = $request->input('service');
         $province_id = $request->get('province_id');
+        $typeCheck = $request->input('type_id');
 
         // เริ่มต้น query สำหรับการค้นหา
-        $query = TopUp::query();
+        $query = TopUp::where('type_id',$typeCheck);
 
         // ตรวจสอบว่า date ไม่ว่าง และกรองข้อมูลตามวันที่
         if ($date) {

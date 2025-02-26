@@ -8,16 +8,18 @@
         <div class="d-flex justify-content-between">
             <div class="row mb-3">
 
-                <div class="col-auto"> <a href="{{ route('customer_create',$type_id) }}" class="btn btn-primary">เพิ่มข้อมูลลูกค้า</a>
+                <div class="col-auto"> <a href="{{ route('customer_create', $type_id) }}"
+                        class="btn btn-primary">เพิ่มข้อมูลลูกค้า</a>
                 </div>
-                <a href="{{route('top_up_list')}}" class="btn btn-warning col-auto">เติมเงินรายปี</a>
+                <a href="{{ route('top_up_list', $type_id) }}" class="btn btn-warning col-auto">เติมเงินรายปี</a>
 
             </div>
 
 
             <div class="d-flex">
                 <div class="mb-3">
-                    <input type="hidden" id="type_id" value="{{ $data->isNotEmpty() && isset($data->first()->type) ? $data->first()->type->type_id : '' }}">
+                    <input type="hidden" id="type_id"
+                        value="{{ $data->isNotEmpty() && isset($data->first()->type) ? $data->first()->type->type_id : '' }}">
 
 
                     <!-- ช่องกรอกวันที่ -->
@@ -44,6 +46,7 @@
 
                     <!-- ช่องเลือกประเภทบริการ -->
                     <select class="form-select" id="type_service" name="type_service">
+                        <option value="">ทั้งหมด</option>
 
                         @foreach ($serviceTypes as $serviceType)
                             <option value="{{ $serviceType->service_name }}">{{ $serviceType->service_name }}</option>
@@ -54,21 +57,13 @@
             </div>
         </div>
 
-
-
-
-
-
-
         <table class="table table-bordered">
             <thead id="table-heard">
                 <tr class="bg-dark text-light">
-                    <th>#</th>
+              
                     <th>ชื่อ-นามสกุล</th>
-                    <th>เลขบัตรประชาชน</th>
-                    <th>โปรโมชั่น</th>
-                    <th>ความเร็ว</th>
-                    <th>ราคา</th>
+                    <th>บริการ</th>
+                   
                     <th>(จังหวัด/ศูนย์บริการ)</th>
 
 
@@ -79,7 +74,7 @@
                 @if ($data->count() > 0)
                     @foreach ($data as $customer)
                         <tr>
-                            <td>{{ $loop->iteration }}</td> <!-- ใช้ $loop->iteration สำหรับลำดับแถว -->
+                           
                             <td>{{ $customer->cus_fullname }}</td>
                             {{-- <td>{{ $customer->id_card }}</td>
                             <td>
@@ -92,9 +87,7 @@
                             <td>{{ $customer->cus_address }}</td> --}}
 
                             <td>{{ $customer->service->service_name ?? '-' }}</td>
-                            <td>{{ $customer->promotion->promotion_name ?? '-' }}</td>
-                            <td>{{ $customer->speed->speed_name ?? '-' }}</td> <!-- ดึงชื่อจากสัมพันธ์ speed -->
-                            <td>{{ $customer->price->price_name ?? '-' }}</td> <!-- ดึงชื่อจากสัมพันธ์ price -->
+                           
 
                             <td>
                                 {{ $customer->province->province_name ?? '-' }} /
@@ -155,8 +148,8 @@
                                 <p><span class="fw-bold text-dark">รหัสบัตรประชาชน:</span> {{ $customer->id_card }}</p>
                             @else
                                 <p><span class="fw-bold text-dark">ประเภทลูกค้า:</span>
-                                    <p>{{ $dataIct->where('cus_id', $customer->cus_id)->first() ? $dataIct->where('cus_id', $customer->cus_id)->first()->customer_type : 'ไม่มีข้อมูล' }}</p>
-
+                                <p>{{ $dataIct->where('cus_id', $customer->cus_id)->first() ? $dataIct->where('cus_id', $customer->cus_id)->first()->customer_type : 'ไม่มีข้อมูล' }}
+                                </p>
                             @endif
                             <p><span class="fw-bold text-dark">ที่อยู่:</span> {{ $customer->cus_address }}</p>
                             <p><span class="fw-bold text-dark">กิจกรรม:</span>
@@ -237,44 +230,47 @@
                                 </p>
 
                                 @if ($dataIct->isNotEmpty() && $dataIct->where('cus_id', $customer->cus_id)->first()->quote)
-                                @php
-                                    $quotePath = asset('storage/' . $dataIct->where('cus_id', $customer->cus_id)->first()->quote);
-                                    $fileExtension = pathinfo($dataIct->where('cus_id', $customer->cus_id)->first()->quote, PATHINFO_EXTENSION);
-                                @endphp
-                            
-                                <div class="d-flex">
-                                    <p><span class="fw-bold text-dark">ใบเสนอราคา:</span></p>
-                            
-                                    @if (in_array(strtolower($fileExtension), ['png', 'jpg', 'jpeg', 'gif']))
-                                        <!-- แสดงรูปภาพ -->
-                                        <br>
-                                        <img src="{{ $quotePath }}" alt="Customer Quote"
-                                            style="width: 100%; max-width: 100px;" class="mt-3">
-                                    @elseif (strtolower($fileExtension) === 'pdf')
-                                    
-                                        <!-- แสดงลิงก์สำหรับไฟล์ PDF -->
-                                        <p >
-                                            <a href="{{ $quotePath }}" target="_blank" >
-                                               <span class="btn-sm btn-info">คลิกเพื่อดู</span>
-                                            </a>
-                                        </p>
-                                         
-                                    @endif
-                            
-                                    <!-- ปุ่มดาวน์โหลด -->
-                             
-                                    <a href="{{ $quotePath }}" class="btn btn-success mb-3 btn-sm " download>
-                                        <i class="fas fa-download"></i>
-                                    </a>
-                                </div>
-                            @else
-                                <p><strong>ใบเสนอราคา:</strong> ไม่มีใบเสนอราคา</p>
-                            @endif
-                            <p><span class="fw-bold text-dark">หมายเหตุ</span> {{ $customer->other ?? 'ไม่ระบุ' }}</p>
+                                    @php
+                                        $quotePath = asset(
+                                            'storage/' . $dataIct->where('cus_id', $customer->cus_id)->first()->quote,
+                                        );
+                                        $fileExtension = pathinfo(
+                                            $dataIct->where('cus_id', $customer->cus_id)->first()->quote,
+                                            PATHINFO_EXTENSION,
+                                        );
+                                    @endphp
 
-                            
+                                    <div class="d-flex">
+                                        <p><span class="fw-bold text-dark">ใบเสนอราคา:</span></p>
 
-                            <p><span class="fw-bold text-dark">ข้อมูลสินค้า</span></p>
+                                        @if (in_array(strtolower($fileExtension), ['png', 'jpg', 'jpeg', 'gif']))
+                                            <!-- แสดงรูปภาพ -->
+                                            <br>
+                                            <img src="{{ $quotePath }}" alt="Customer Quote"
+                                                style="width: 100%; max-width: 100px;" class="mt-3">
+                                        @elseif (strtolower($fileExtension) === 'pdf')
+                                            <!-- แสดงลิงก์สำหรับไฟล์ PDF -->
+                                            <p>
+                                                <a href="{{ $quotePath }}" target="_blank">
+                                                    <span class="btn-sm btn-info">คลิกเพื่อดู</span>
+                                                </a>
+                                            </p>
+                                        @endif
+
+                                        <!-- ปุ่มดาวน์โหลด -->
+
+                                        <a href="{{ $quotePath }}" class="btn btn-success mb-3 btn-sm " download>
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    </div>
+                                @else
+                                    <p><strong>ใบเสนอราคา:</strong> ไม่มีใบเสนอราคา</p>
+                                @endif
+                                <p><span class="fw-bold text-dark">หมายเหตุ</span> {{ $customer->other ?? 'ไม่ระบุ' }}</p>
+
+
+
+                                <p><span class="fw-bold text-dark">ข้อมูลสินค้า</span></p>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr class="text-center  bg-dark">
@@ -284,16 +280,18 @@
                                     </thead>
                                     <tbody>
                                         @if ($dataIct->where('cus_id', $customer->cus_id)->isNotEmpty())
-                                        @foreach ($dataIct->where('cus_id', $customer->cus_id)->first()->products as $product)
-                                            <tr class="text-center">
-                                                <td>{{ $product->product_name ?? 'ไม่มีสินค้า' }}</td>
-                                                <td>{{ $product->pivot->quantity ?? '-' }}</td>
+                                            @foreach ($dataIct->where('cus_id', $customer->cus_id)->first()->products as $product)
+                                                <tr class="text-center">
+                                                    <td>{{ $product->product_name ?? 'ไม่มีสินค้า' }}</td>
+                                                    <td>{{ $product->pivot->quantity ?? '-' }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="2">ไม่มีข้อมูลสินค้า</td>
                                             </tr>
-                                        @endforeach
-                                    @else
-                                        <tr><td colspan="2">ไม่มีข้อมูลสินค้า</td></tr>
-                                    @endif
-                                    
+                                        @endif
+
                                     </tbody>
                                 </table>
                             @endif
@@ -440,7 +438,7 @@
                                 customerTableH.innerHTML = `
       
             <tr class="bg-dark text-light">
-                <th>#</th>
+       
                 <th>ชื่อ-นามสกุล</th>
                 <th>เลขบัตรประชาชน</th>
                 <th>โปรโมชั่น</th>
@@ -453,7 +451,7 @@
     `;
                                 customerTable.innerHTML += `
                                 <tr>
-                                    <td>${index + 1}</td>
+                        
                                     <td>${customer.cus_fullname}</td>
                                     <td>${customer.id_card}</td>
                                     <td>${customer.promotion?.promotion_name || 'N/A'}</td>
@@ -501,7 +499,7 @@
 
                                 customerTableH.innerHTML = `
                              <tr class="bg-dark text-light">
-                              <th>#</th>
+                          
                                  <th>ชื่อ-นามสกุล</th>
                                 <th>ประเภทลูกค้า</th>
                                 <th>รายได้</th>
@@ -515,7 +513,7 @@
 
                                 customerTable.innerHTML += `
                                 <tr>
-                                    <td>${index + 1}</td>
+                                 
                                     <td>${customer.cus_fullname}</td>
                                       <td>${ictData ? ictData.customer_type : 'N/A'}</td> <!-- แสดงประเภทจาก ict -->
                 <td>${ictData ? ictData.income : 'N/A'}</td> <!-- แสดงรายได้จาก ict -->
@@ -543,14 +541,59 @@
                             `;
                             });
 
-                            // เพิ่มการแสดงผลสำหรับประเภท ICT
-                            // คุณสามารถจัดการเฉพาะข้อมูลที่เป็นประเภท ICT ตามที่ต้องการ
+                            
                         } else {
+                            let customerTableH = document.getElementById('table-heard');
+                            customerTableH.innerHTML = `
+      
+      <tr class="bg-dark text-light">
+       
+          <th>ชื่อ-นามสกุล</th>
+          <th>บริการ</th>
+         
+          <th>(จังหวัด/ศูนย์บริการ)</th>
+          <th>เครื่องมือ</th>
+      </tr>
+
+`;
                             customerTable.innerHTML = `
-                            <tr>
-                                <td colspan="11" class="text-center">ไม่มีข้อมูลลูกค้า</td>
-                            </tr>
-                        `;
+        @foreach ($data as $customer)
+            <tr>
+               
+                <td>{{ $customer->cus_fullname }}</td>
+                <td>{{ $customer->service->service_name ?? '-' }}</td>
+                
+                <td>
+                    {{ $customer->province->province_name ?? '-' }} /
+                    {{ $customer->center->center_name ?? '-' }}
+                </td>
+                <td colspan="2">
+                    <div class="dropdown-menu-start">
+                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="{{ route('customer_edit', $customer->cus_id) }}"
+                               class="btn btn-warning btn-sm">Edit</a>
+                            <form id="deleteForm{{ $customer->cus_id }}"
+                                  action="{{ route('customer_delete', $customer->cus_id) }}" method="POST"
+                                  style="display: inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="confirmDelete({{ $customer->cus_id }})">Delete</button>
+                            </form>
+                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#customerModal{{ $customer->cus_id }}">
+                                View
+                            </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        @endforeach
+    `;
                         }
                     } else {
                         customerTable.innerHTML = `
@@ -563,9 +606,6 @@
                 .catch(error => console.error('Error:', error));
         }
 
-        // เรียกใช้ฟังก์ชันการค้นหาทันทีเมื่อหน้าโหลด
-        document.addEventListener('DOMContentLoaded', function() {
-            searchCustomers(); // เรียกใช้ฟังก์ชันนี้หลังจากหน้าโหลดเสร็จ
-        });
+       
     </script>
 @endsection

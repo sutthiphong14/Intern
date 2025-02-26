@@ -203,6 +203,7 @@ class CustomerController extends Controller
                 'created_at' => $date
             ]);
         } elseif (strpos(strtolower($service_name), 'ict') !== false) {
+            $type_id = $request->input('type_id');
             // ตัวแปรสำหรับไฟล์ quote
             $filePath = null;
             if ($request->hasFile('quote')) {
@@ -545,7 +546,7 @@ class CustomerController extends Controller
             'type_id' => $type_id
         ]);
 
-        return redirect()->route('top_up_list')->with('success', 'เพิ่มข้อมูลการเติมเงินสำเร็จ');
+        return redirect()->route('top_up_list', ['type_id' => $type_id])->with('success', 'เพิ่มข้อมูลการเติมเงินสำเร็จ');
     }
 
     public function TopUpDelete($topUp_id)
@@ -585,7 +586,8 @@ class CustomerController extends Controller
 
 
     public function TopUpUpdate(Request $request, $id)
-    {
+    {$type_id = $request->type_id2;
+        
         $request->validate([
             'phone' => 'string|max:255',
             'amount' => 'required|numeric',
@@ -595,14 +597,14 @@ class CustomerController extends Controller
 
         $topUp = TopUp::where('topUp_id', $id);
         $topUp->update([
-            'type_id' => $request->type_id,
+            'type_id' => $request->type_id2,
             'phone' => $request->phone,
             'amount' => $request->amount,
             'province_id' => $request->province_id,
             'center_id' => $request->center_id,
         ]);
 
-        return redirect()->route('top_up_list')->with('success', 'TopUp updated successfully!');
+        return redirect()->route('top_up_list', ['type_id' => $type_id])->with('success', 'TopUp updated successfully!');
     }
 
 
@@ -662,7 +664,10 @@ class CustomerController extends Controller
         $province_id = $request->get('province_id');
 
         // เริ่มต้น Query และกรองตาม type_id ทันที
-        $query = Customer::query()->where('type_id', $type_id);
+        $query = Customer::query()
+        ->where('type_id', $type_id) // กรองข้อมูลตาม type_id
+        ->orderBy('cus_id', 'desc'); // เรียงลำดับตาม cus_id จากมากไปน้อย
+    
 
         // ค้นหาตามวันที่
         if ($date) {
