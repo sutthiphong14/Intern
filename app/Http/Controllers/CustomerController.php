@@ -255,6 +255,21 @@ class CustomerController extends Controller
                 Storage::disk('public')->delete($customer->cus_photo);
             }
 
+            // Check if there's an ICT solution record
+            $ictSolution = IctSolution::where('cus_id', $cus_id)->first();
+            if ($ictSolution) {
+                // Delete the quote file if it exists
+                if ($ictSolution->quote && Storage::disk('public')->exists($ictSolution->quote)) {
+                    Storage::disk('public')->delete($ictSolution->quote);
+                }
+
+                // Detach related products
+                $ictSolution->products()->detach();
+
+                // Delete the ICT solution record
+                $ictSolution->delete();
+            }
+
             // Delete the customer using the correct key (cus_id)
             Customer::where('cus_id', $cus_id)->delete();
 
@@ -263,6 +278,7 @@ class CustomerController extends Controller
             return redirect()->back()->with('error', 'ไม่พบข้อมูลลูกค้า');
         }
     }
+
 
     public function CustomerEdit($cus_id)
     {
@@ -299,11 +315,11 @@ class CustomerController extends Controller
     {
         // Find customer by id
         $customer = Customer::where('cus_id', $cus_id)->firstOrFail();
-
+    
         if (!$customer) {
             return redirect()->route('type_list')->with('error', 'ไม่พบข้อมูลลูกค้า');
         }
-
+    
         // รับค่าจากฟอร์ม
         $cus_fullname = $request->input('cus_fullname');
         $id_card = $request->input('id_card');
@@ -315,13 +331,16 @@ class CustomerController extends Controller
         $price_id = $request->input('price_id');
         $province_id = $request->input('province_id');
         $center_id = $request->input('center_id');
-
-
-
         $other = $request->input('other');
-
+    
         // ตรวจสอบว่ามีไฟล์รูปภาพอัปโหลดไหม
         if ($request->hasFile('cus_photo')) {
+            // ลบรูปภาพเก่าก่อน (ถ้ามี)
+            if ($customer->cus_photo && Storage::disk('public')->exists($customer->cus_photo)) {
+                Storage::disk('public')->delete($customer->cus_photo);
+            }
+            
+            // อัปโหลดรูปภาพใหม่
             $file = $request->file('cus_photo');
             $filename = time() . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('customer_images', $filename, 'public');
@@ -329,12 +348,12 @@ class CustomerController extends Controller
         } else {
             $cus_photo = $customer->cus_photo; // ใช้ค่าที่มีอยู่เดิมหากไม่มีการอัปโหลดรูปใหม่
         }
-
+    
         // ดึงชื่อบริการจาก service_id
         $service_name = ServeActivity::where('service_id', $service_id)->value('service_name');
         $fttx_cus_id = Fttxbroadband::where('cus_id', $cus_id)->value('cus_id');
         $simmy_cus_id = Simmy::where('cus_id', $cus_id)->value('cus_id');
-
+    
         if (strpos(strtolower($service_name), 'fttx') !== false) {
             // กรณีเป็น fttx_broadband
             $new = $request->input('new');
@@ -369,16 +388,31 @@ class CustomerController extends Controller
                     'created_at' => $date
                 ]);
             }
-
+    
             // ลบข้อมูลใน Simmy หากเปลี่ยนจาก sim my
             Simmy::where('cus_id', $cus_id)->delete();
-            IctSolution::where('cus_id', $cus_id)->delete();
+            
+            // ลบข้อมูล IctSolution รวมถึงไฟล์ที่เกี่ยวข้อง
+            $ictSolution = IctSolution::where('cus_id', $cus_id)->first();
+            if ($ictSolution) {
+                // ลบไฟล์ quote เก่า (ถ้ามี)
+                if ($ictSolution->quote && Storage::disk('public')->exists($ictSolution->quote)) {
+                    Storage::disk('public')->delete($ictSolution->quote);
+                }
+                
+                // ตัดความสัมพันธ์กับ products
+                $ictSolution->products()->detach();
+                
+                // ลบข้อมูล IctSolution
+                $ictSolution->delete();
+            }
+            
         } elseif (strpos(strtolower($service_name), 'sim') !== false) {
             // กรณีเป็น sim my
             $cus_new = $request->input('cus_new');
             $price_id = $request->input('price_id');
             $date = $request->input('date');
-
+    
             if ($simmy_cus_id == null) {
                 Simmy::create([
                     'cus_id' => $cus_id,
@@ -408,30 +442,55 @@ class CustomerController extends Controller
                     'province_id' => $province_id,
                     'type_id' => $type_id,
                     'created_at' => $date
-
-
                 ]);
             }
-
+    
             // ลบข้อมูลใน Fttxbroadband หากเปลี่ยนจาก fttx_broadband
             Fttxbroadband::where('cus_id', $cus_id)->delete();
-            IctSolution::where('cus_id', $cus_id)->delete();
+            
+            // ลบข้อมูล IctSolution รวมถึงไฟล์ที่เกี่ยวข้อง
+            $ictSolution = IctSolution::where('cus_id', $cus_id)->first();
+            if ($ictSolution) {
+                // ลบไฟล์ quote เก่า (ถ้ามี)
+                if ($ictSolution->quote && Storage::disk('public')->exists($ictSolution->quote)) {
+                    Storage::disk('public')->delete($ictSolution->quote);
+                }
+                
+                // ตัดความสัมพันธ์กับ products
+                $ictSolution->products()->detach();
+                
+                // ลบข้อมูล IctSolution
+                $ictSolution->delete();
+            }
+            
         } else {
             // อัปเดตข้อมูลใน ict_solution
             $ict_solution = IctSolution::where('cus_id', $cus_id)->first();
             $date = $request->input('date');
-
+    
             if ($ict_solution) {
+                // ตรวจสอบว่ามีการอัปโหลดไฟล์ quote ใหม่หรือไม่
+                if ($request->hasFile('quote')) {
+                    // ลบไฟล์ quote เก่า (ถ้ามี)
+                    if ($ict_solution->quote && Storage::disk('public')->exists($ict_solution->quote)) {
+                        Storage::disk('public')->delete($ict_solution->quote);
+                    }
+                    
+                    // อัปโหลดไฟล์ใหม่
+                    $quote_path = $request->file('quote')->store('quotes', 'public');
+                } else {
+                    $quote_path = $ict_solution->quote;
+                }
+                
                 // อัปเดตข้อมูลใน pivot table
                 if ($request->has('product_id')) {
                     $product_ids = $request->input('product_id');
                     $quantities = $request->input('quantity');
                     $dates = $request->input('date');
-
-
+    
                     // สร้าง array ที่จะ sync
                     $pivot_data = [];
-
+    
                     foreach ($product_ids as $index => $product_id) {
                         $quantity = $quantities[$index] ?? 0; // ป้องกัน error ถ้า index ไม่ตรงกัน
                         $date = $dates ?? now();
@@ -440,40 +499,44 @@ class CustomerController extends Controller
                             'created_at' => $date
                         ];
                     }
-
+    
                     // ใช้ sync เพื่ออัปเดต pivot table
                     $ict_solution->products()->sync($pivot_data);
                 }
-
-
+    
                 // อัปเดตฟิลด์รายได้
                 IctSolution::where('cus_id', $cus_id)->update([
                     'income' => $request->input('income'),
                     'customer_type' => $request->input('customer_type'),
-                    'quote' => $request->hasFile('quote') ? $request->file('quote')->store('quotes', 'public') : $ict_solution->quote,
+                    'quote' => $quote_path,
                     'center_id' => $center_id,
                     'province_id' => $province_id,
                     'type_id' => $type_id,
                     'created_at' => $date
-
-
                 ]);
             } else {
                 $date = Carbon::parse($date)->toDateTimeString(); // แปลงให้เป็น datetime ที่ถูกต้อง
+                
+                // เตรียมข้อมูล quote
+                $quote_path = null;
+                if ($request->hasFile('quote')) {
+                    $quote_path = $request->file('quote')->store('quotes', 'public');
+                }
+                
                 // ✅ สร้าง IctSolution และเก็บค่าในตัวแปร
                 $ict_solution_new = IctSolution::create([
                     'cus_id' => $cus_id,
                     'income' => $request->input('income'),
                     'customer_type' => $request->input('customer_type'),
-                    'quote' => $request->hasFile('quote') ? $request->file('quote')->store('quotes', 'public') : null,
+                    'quote' => $quote_path,
                     'center_id' => $center_id,
                     'province_id' => $province_id,
                     'type_id' => $type_id,
-
                 ]);
+                
                 // ✅ บังคับให้สร้าง created_at ด้วย forceFill()
                 $ict_solution_new->forceFill(['created_at' => $date])->save();
-
+    
                 // ✅ อัปเดตข้อมูล Customer
                 Customer::where('cus_id', $cus_id)->update([
                     'id_card' => null,
@@ -482,33 +545,33 @@ class CustomerController extends Controller
                     'speed_id' => null,
                     'price_id' => null,
                 ]);
-
+    
                 // ✅ เพิ่ม Products ที่เกี่ยวข้องกับ ICT Solution
                 $product_ids = $request->input('product_id', []);
                 $quantities = $request->input('quantity', []);
-
+    
                 if (!empty($product_ids) && !empty($quantities)) {
                     $pivot_data = [];
-
+    
                     foreach ($product_ids as $index => $product_id) {
                         $quantity = $quantities[$index] ?? 0;
-
+    
                         $pivot_data[$product_id] = [
                             'quantity' => $quantity,
                             'created_at' => $date
                         ];
                     }
-
+    
                     // ✅ ใช้ attach เพื่อเพิ่มข้อมูลลง pivot table
                     $ict_solution_new->products()->attach($pivot_data);
                 }
             }
-
+    
             // ลบข้อมูลทั้ง Fttxbroadband และ Simmy หากเปลี่ยนบริการ
             Fttxbroadband::where('cus_id', $cus_id)->delete();
             Simmy::where('cus_id', $cus_id)->delete();
         }
-
+    
         // อัปเดตข้อมูล
         $updated_at = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
         $updateData = [
@@ -519,18 +582,20 @@ class CustomerController extends Controller
             'province_id' => $province_id,
             'center_id' => $center_id,
             'other' => $other,
+            'cus_photo' => $cus_photo,
             'created_at' => $date,
             'updated_at' => $updated_at,
         ];
-
+    
         $updateResult = Customer::where('cus_id', $cus_id)->update($updateData);
-
+    
         if ($updateResult) {
             return redirect()->route('event_customer', ['type_id' => $type_id])->with('success', 'อัปเดตข้อมูลลูกค้าเรียบร้อยแล้ว');
         } else {
             return redirect()->route('event_customer', ['type_id' => $type_id])->with('error', 'การอัปเดตล้มเหลว');
         }
     }
+
 
     public function insertTopup(Request $request)
     {

@@ -1,5 +1,42 @@
 @extends('admins.index')
 @section('css')
+<style>
+    .dynamic-text {
+        min-height: 300px;
+        height: 290px;
+        max-height: 300px;
+        max-width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(30px, 7vw, 80px);
+        font-weight: bold;
+        color: rgb(255, 194, 13);
+        border-radius: 10px;
+    }
+</style>
+
+<style>
+    .dynamic-text {
+        min-height: 300px;
+        height: 290px;
+        max-height: 300px;
+        max-width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(30px, 7vw, 80px);
+        font-weight: bold;
+        color: rgb(255, 194, 13);
+        border-radius: 10px;
+    }
+</style>
+
+
+
+<script>
+  
+</script>
 @endsection
 @section('content')
     <h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
@@ -62,8 +99,9 @@
                         </button>
                     </div>
                     <div class="card-body collapse show" id="chart2">
-                        <canvas id="myChart2"
-                            style="min-height: 300px; height: 290px; max-height: 300px; max-width: 100%;"></canvas>
+                        <!-- <canvas id="myChart2"
+                                style="min-height: 300px; height: 290px; max-height: 300px; max-width: 100%;"></canvas> -->
+                                <div class="dynamic-text" id="animatedNumber">0 ฿</div>
                     </div>
                 </div>
             </div>
@@ -223,9 +261,9 @@
             // ข้อมูลที่ดึงมาจาก PHP
             var sumFttxNew = {{ isset($sumFttxNew) && isset($sumFttxNewOver33) ? $sumFttxNew + $sumFttxNewOver33 : 0 }};
             var sumSelfInstall =
-                        {{ isset($sumSelfInstall) && isset($sumSelfInstallOver33) ? $sumSelfInstall + $sumSelfInstallOver33 : 0 }};
+                            {{ isset($sumSelfInstall) && isset($sumSelfInstallOver33) ? $sumSelfInstall + $sumSelfInstallOver33 : 0 }};
             var sumHireInstall =
-                        {{ isset($sumHireInstall) && isset($sumHireInstallOver33) ? $sumHireInstall + $sumHireInstallOver33 : 0 }};
+                            {{ isset($sumHireInstall) && isset($sumHireInstallOver33) ? $sumHireInstall + $sumHireInstallOver33 : 0 }};
             var sumAdjust = {{ isset($adjust12) && isset($adjustover12) ? $adjust12 + $adjustover12 : 0 }};
 
             // ตรวจสอบค่า adjust ว่ามีค่าเท่ากับ 0 หรือไม่
@@ -511,80 +549,127 @@
 
 
         <script>
-            document.getElementById("chartFilter").addEventListener("change", function () {
-                updateChart(this.value);
-            });
-
-            function updateChart(filter) {
-                var newFttxNew, newSelfInstall, newHireInstall, adjust, newIctCount, newIctIncome, newSumNew, newSumMove,
-                    newSumCount, newSumPrice;
-
-                if (filter === "tp1") {
-                    newFttxNew = {{ $sumFttxNew }};
-                    newSelfInstall = {{ $sumSelfInstall }};
-                    newHireInstall = {{ $sumHireInstall }};
-                    adjust = {{ $adjust12 }};
-                    newIctCount = {{ $IctCount }};
-                    newIctIncome = {{ $IctIncome }};
-                    newSumNew = {{ $sumNew }};
-                    newSumMove = {{ $sumMove }};
-                    newSumCount = {{ $sumCount }};
-                    newSumPrice = {{ $sumPrice }};
-                } else if (filter === "tp2") {
-                    newFttxNew = {{ $sumFttxNewOver33 }};
-                    newSelfInstall = {{ $sumSelfInstallOver33 }};
-                    newHireInstall = {{ $sumHireInstallOver33 }};
-                    adjust = {{ $adjustover12 }};
-                    newIctCount = {{ $IctCountOver33 }};
-                    newIctIncome = {{ $IctIncomeOver33 }};
-                    newSumNew = {{ $sumNewOver33 }};
-                    newSumMove = {{ $sumMoveOver33 }};
-                    newSumCount = {{ $sumCountOver33 }};
-                    newSumPrice = {{ $sumPriceOver33 }};
-                } else {
-                    newFttxNew = {{ $sumFttxNew + $sumFttxNewOver33 }};
-                    newSelfInstall = {{ $sumSelfInstall + $sumSelfInstallOver33 }};
-                    newHireInstall = {{ $sumHireInstall + $sumHireInstallOver33 }};
-                    adjust = {{ $adjust12 + $adjustover12 }};
-                    newIctCount = {{ $IctCount + $IctCountOver33 }};
-                    newIctIncome = {{ $IctIncome + $IctIncomeOver33 }};
-                    newSumNew = {{ $sumNew + $sumNewOver33 }};
-                    newSumMove = {{ $sumMove + $sumMoveOver33 }};
-                    newSumCount = {{ $sumCount + $sumCountOver33 }};
-                    newSumPrice = {{ $sumPrice + $sumPriceOver33 }};
-
-                }
-
-                myChart.data.datasets[0].data = [newFttxNew];
-                myChart.data.datasets[1].data = [newSelfInstall];
-                myChart.data.datasets[2].data = [newHireInstall];
-                myChart.data.datasets[3].data = [adjust];
-                myChart.update(); // อัปเดตกราฟ
-
-
-                // อัปเดตข้อมูลใน datasets2
-                myChart2.data.datasets[0].data = [newIctIncome]; // อัปเดตข้อมูลรายได้
-                ictCount = newIctCount; // อัปเดตค่า ictCount
-                ictIncome = newIctIncome; // อัปเดตค่า ictIncome
-                // อัปเดตกราฟ
-                myChart2.update();
-
-                // อัปเดตข้อมูลใน datasets3
-                myChart3.data.datasets[0].data = [newSumNew]; // ลูกค้าใหม่
-                myChart3.data.datasets[1].data = [newSumMove]; // ลูกค้า(ย้ายค่าย)
-
-
-
-                // อัปเดต sumTotal สำหรับ Tooltip
-                sumNew = newSumNew;
-                sumMove = newSumMove;
-                sumCount = newSumCount;
-                sumPrice = newSumPrice;
-                // อัปเดตกราฟ
-                myChart3.update();
-
-                myChart4.data.datasets[0].data = [newSumCount]; // เติมเงินรายปี
-                myChart4.update();
+            document.addEventListener("DOMContentLoaded", function () {
+    // Function to get the correct target value based on filter
+    function getTargetValue(filter) {
+        if (filter === "total") {
+            return {{ $IctIncome + $IctIncomeOver33 }};
+        } else if (filter === "tp1") {
+            return {{ $IctIncome }};
+        } else if (filter === "tp2") {
+            return {{ $IctIncomeOver33 }};
+        }
+        return {{ $IctIncome + $IctIncomeOver33 }};
+    }
+    
+    // Get the initial selected filter value
+    let currentFilter = document.getElementById("chartFilter").value;
+    let targetValue = getTargetValue(currentFilter);
+    let element = document.getElementById("animatedNumber");
+    
+    // Animation function
+    function setupAnimation(newTargetValue) {
+        let duration = 2000; // ระยะเวลา animation (2 วินาที)
+        let frameRate = 60; // จำนวนเฟรมต่อวินาที
+        let totalFrames = (duration / 1000) * frameRate;
+        let count = 0;
+        let step = newTargetValue / totalFrames;
+        
+        function animateNumber() {
+            count += step;
+            if (count >= newTargetValue) {
+                element.textContent = `${newTargetValue.toLocaleString()}฿`; // แสดงค่าขั้นสุดท้าย
+            } else {
+                element.textContent = `${Math.floor(count).toLocaleString()}฿`; // อัปเดตค่าตัวเลข
+                requestAnimationFrame(animateNumber);
             }
+        }
+        
+        // Start the animation
+        animateNumber();
+    }
+    
+    // Run the initial animation
+    setupAnimation(targetValue);
+    
+    // Event listener for the chart filter
+    document.getElementById("chartFilter").addEventListener("change", function () {
+        // Update filter value and start new animation
+        currentFilter = this.value;
+        let newTargetValue = getTargetValue(currentFilter);
+        setupAnimation(newTargetValue);
+        
+        // Update the chart data
+        updateChart(currentFilter);
+    });
+    
+    // Your existing updateChart function
+    function updateChart(filter) {
+        var newFttxNew, newSelfInstall, newHireInstall, adjust, newIctCount, newIctIncome, newSumNew, newSumMove,
+            newSumCount, newSumPrice;
+
+        if (filter === "tp1") {
+            newFttxNew = {{ $sumFttxNew }};
+            newSelfInstall = {{ $sumSelfInstall }};
+            newHireInstall = {{ $sumHireInstall }};
+            adjust = {{ $adjust12 }};
+            newIctCount = {{ $IctCount }};
+            newIctIncome = {{ $IctIncome }};
+            newSumNew = {{ $sumNew }};
+            newSumMove = {{ $sumMove }};
+            newSumCount = {{ $sumCount }};
+            newSumPrice = {{ $sumPrice }};
+        } else if (filter === "tp2") {
+            newFttxNew = {{ $sumFttxNewOver33 }};
+            newSelfInstall = {{ $sumSelfInstallOver33 }};
+            newHireInstall = {{ $sumHireInstallOver33 }};
+            adjust = {{ $adjustover12 }};
+            newIctCount = {{ $IctCountOver33 }};
+            newIctIncome = {{ $IctIncomeOver33 }};
+            newSumNew = {{ $sumNewOver33 }};
+            newSumMove = {{ $sumMoveOver33 }};
+            newSumCount = {{ $sumCountOver33 }};
+            newSumPrice = {{ $sumPriceOver33 }};
+        } else {
+            newFttxNew = {{ $sumFttxNew + $sumFttxNewOver33 }};
+            newSelfInstall = {{ $sumSelfInstall + $sumSelfInstallOver33 }};
+            newHireInstall = {{ $sumHireInstall + $sumHireInstallOver33 }};
+            adjust = {{ $adjust12 + $adjustover12 }};
+            newIctCount = {{ $IctCount + $IctCountOver33 }};
+            newIctIncome = {{ $IctIncome + $IctIncomeOver33 }};
+            newSumNew = {{ $sumNew + $sumNewOver33 }};
+            newSumMove = {{ $sumMove + $sumMoveOver33 }};
+            newSumCount = {{ $sumCount + $sumCountOver33 }};
+            newSumPrice = {{ $sumPrice + $sumPriceOver33 }};
+        }
+
+        myChart.data.datasets[0].data = [newFttxNew];
+        myChart.data.datasets[1].data = [newSelfInstall];
+        myChart.data.datasets[2].data = [newHireInstall];
+        myChart.data.datasets[3].data = [adjust];
+        myChart.update(); // อัปเดตกราฟ
+
+        // อัปเดตข้อมูลใน datasets2
+        myChart2.data.datasets[0].data = [newIctIncome]; // อัปเดตข้อมูลรายได้
+        ictCount = newIctCount; // อัปเดตค่า ictCount
+        ictIncome = newIctIncome; // อัปเดตค่า ictIncome
+        myChart2.update();
+
+        // อัปเดตข้อมูลใน datasets3
+        myChart3.data.datasets[0].data = [newSumNew]; // ลูกค้าใหม่
+        myChart3.data.datasets[1].data = [newSumMove]; // ลูกค้า(ย้ายค่าย)
+
+        // อัปเดต sumTotal สำหรับ Tooltip
+        sumNew = newSumNew;
+        sumMove = newSumMove;
+        sumCount = newSumCount;
+        sumPrice = newSumPrice;
+        myChart3.update();
+
+        myChart4.data.datasets[0].data = [newSumCount]; // เติมเงินรายปี
+        myChart4.update();
+    }
+});
+            
         </script>
     @endsection
