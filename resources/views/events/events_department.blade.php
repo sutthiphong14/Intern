@@ -131,8 +131,9 @@
                         </button>
                     </div>
                     <div class="card-body collapse show" id="chart4">
-                        <canvas id="myChart4"
-                            style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                        <!-- <canvas id="myChart4"
+                            style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas> -->
+                            <div class="dynamic-text" id="animatedNumber2">0 ฿</div>
                     </div>
                 </div>
             </div>
@@ -550,8 +551,11 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-    // Function to get the correct target value based on filter
-    function getTargetValue(filter) {
+    // Get the initial selected filter value
+    let currentFilter = document.getElementById("chartFilter").value;
+    
+    // Function to get the income target values based on filter
+    function getIncomeTargetValue(filter) {
         if (filter === "total") {
             return {{ $IctIncome + $IctIncomeOver33 }};
         } else if (filter === "tp1") {
@@ -562,23 +566,32 @@
         return {{ $IctIncome + $IctIncomeOver33 }};
     }
     
-    // Get the initial selected filter value
-    let currentFilter = document.getElementById("chartFilter").value;
-    let targetValue = getTargetValue(currentFilter);
-    let element = document.getElementById("animatedNumber");
+    // Function to get the price target values based on filter
+    function getPriceTargetValue(filter) {
+        if (filter === "total") {
+            return {{ $sumPrice + $sumPriceOver33 }};
+        } else if (filter === "tp1") {
+            return {{ $sumPrice }};
+        } else if (filter === "tp2") {
+            return {{ $sumPriceOver33 }};
+        }
+        return {{ $sumPrice + $sumPriceOver33 }};
+    }
     
-    // Animation function
-    function setupAnimation(newTargetValue) {
-        let duration = 2000; // ระยะเวลา animation (2 วินาที)
+    // Generic animation function that can be reused for different elements
+    function animateNumberTo(elementId, targetValue, duration = 2000) {
+        let element = document.getElementById(elementId);
+        if (!element) return; // Safety check
+        
         let frameRate = 60; // จำนวนเฟรมต่อวินาที
         let totalFrames = (duration / 1000) * frameRate;
         let count = 0;
-        let step = newTargetValue / totalFrames;
+        let step = targetValue / totalFrames;
         
         function animateNumber() {
             count += step;
-            if (count >= newTargetValue) {
-                element.textContent = `${newTargetValue.toLocaleString()}฿`; // แสดงค่าขั้นสุดท้าย
+            if (count >= targetValue) {
+                element.textContent = `${targetValue.toLocaleString()}฿`; // แสดงค่าขั้นสุดท้าย
             } else {
                 element.textContent = `${Math.floor(count).toLocaleString()}฿`; // อัปเดตค่าตัวเลข
                 requestAnimationFrame(animateNumber);
@@ -589,15 +602,18 @@
         animateNumber();
     }
     
-    // Run the initial animation
-    setupAnimation(targetValue);
+    // Run the initial animations
+    animateNumberTo("animatedNumber", getIncomeTargetValue(currentFilter));
+    animateNumberTo("animatedNumber2", getPriceTargetValue(currentFilter));
     
     // Event listener for the chart filter
     document.getElementById("chartFilter").addEventListener("change", function () {
-        // Update filter value and start new animation
+        // Update filter value
         currentFilter = this.value;
-        let newTargetValue = getTargetValue(currentFilter);
-        setupAnimation(newTargetValue);
+        
+        // Update both animations
+        animateNumberTo("animatedNumber", getIncomeTargetValue(currentFilter));
+        animateNumberTo("animatedNumber2", getPriceTargetValue(currentFilter));
         
         // Update the chart data
         updateChart(currentFilter);
@@ -670,6 +686,5 @@
         myChart4.update();
     }
 });
-            
         </script>
     @endsection
