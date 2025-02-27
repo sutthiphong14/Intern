@@ -32,7 +32,7 @@
 
                 <div class="mb-2">
                     <!-- ช่องเลือกจังหวัด -->
-                    <select class="form-select bg-warning" id="province_search" name="province_search">
+                    <select class="form-select" id="province_search" name="province_search">
                         <option value="" disabled selected>เลือกจังหวัด</option>
                         @foreach ($provinces as $province)
                             <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
@@ -555,45 +555,34 @@
           <th>เครื่องมือ</th>
       </tr>
 
-`;
-                            customerTable.innerHTML = `
-        @foreach ($data as $customer)
-            <tr>
-               
-                <td>{{ $customer->cus_fullname }}</td>
-                <td>{{ $customer->service->service_name ?? '-' }}</td>
-                
-                <td>
-                    {{ $customer->province->province_name ?? '-' }} /
-                    {{ $customer->center->center_name ?? '-' }}
-                </td>
-                <td colspan="2">
-                    <div class="dropdown-menu-start">
-                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                        </button>
-                        <div class="dropdown-menu">
-                            <a href="{{ route('customer_edit', $customer->cus_id) }}"
-                               class="btn btn-warning btn-sm">Edit</a>
-                            <form id="deleteForm{{ $customer->cus_id }}"
-                                  action="{{ route('customer_delete', $customer->cus_id) }}" method="POST"
-                                  style="display: inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="confirmDelete({{ $customer->cus_id }})">Delete</button>
-                            </form>
-                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#customerModal{{ $customer->cus_id }}">
-                                View
-                            </button>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        @endforeach
-    `;
+`;// ด้วยโค้ดที่วนลูปข้อมูลที่ได้จาก API แทน
+data.forEach(customer => {
+  customerTable.innerHTML += `
+    <tr>
+      <td>${customer.cus_fullname}</td>
+      <td>${customer.service?.service_name || '-'}</td>
+      <td>${customer.province?.province_name || '-'} / ${customer.center?.center_name || '-'}</td>
+      <td colspan="2">
+        <div class="dropdown-menu-start">
+          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+            <i class="bx bx-dots-vertical-rounded"></i>
+          </button>
+          <div class="dropdown-menu">
+            <a href="/customer_edit/${customer.cus_id}" class="btn btn-warning btn-sm">Edit</a>
+            <form id="deleteForm${customer.cus_id}" action="/customer_delete/${customer.cus_id}" method="POST" style="display: inline-block;">
+              @csrf
+              @method('DELETE')
+              <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(${customer.cus_id})">Delete</button>
+            </form>
+            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#customerModal${customer.cus_id}">
+              View
+            </button>
+          </div>
+        </div>
+      </td>
+    </tr>
+  `;
+});
                         }
                     } else {
                         customerTable.innerHTML = `
