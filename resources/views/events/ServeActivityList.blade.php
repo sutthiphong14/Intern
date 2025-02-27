@@ -7,7 +7,7 @@
             <h2>จัดการบริการ </h2>
             <p>กิจกรรม {{ $typeName }}</p>
         </div>
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#serviceModal">เพิ่มบริการ</button>
+        {{-- <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#serviceModal">เพิ่มบริการ</button> --}}
         <a href="{{ route('type_list') }}" class="btn btn-secondary mb-3">Back</a>
         <table class="table table-bordered ">
             <thead>

@@ -60,8 +60,7 @@
                     <!-- ID Card -->
                     <label for="id_card" class="form-label">หมายเลขบัตรประจำตัวประชาชน</label>
                     <input type="text" class="form-control" id="id_card" name="id_card" value="{{ old('id_card') }}"
-                        required oninput="validateIdCard()">
-                    <p id="error-id_card" style="color:red"></p>
+                         oninput="validateIdCard()">
 
 
                     <!-- Photo -->
@@ -89,10 +88,8 @@
                 <!-- Address -->
                 <label for="cus_address" class="form-label">ที่อยู่</label>
                 <textarea class="form-control" id="cus_address" name="cus_address" rows="4"
-                    required>{{ old('cus_address') }}</textarea>
-                @error('cus_address')
-                    <p style="color:red">{{ $message }}</p>
-                @enderror
+                    >{{ old('cus_address') }}</textarea>
+      
 
                 <div id="groupNet">
                     <!-- Promotion -->
@@ -166,6 +163,7 @@
                     <select class="form-select bg-warning" id="new" name="new" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
                         <option value="1" class="bg-secondary"> ลูกค้าใหม่ </option>
+                        <option value="2" class="bg-secondary"> ลูกค้าย้ายค่าย </option>
                         <option value="0" class="bg-secondary"> ปรับโปรโมชั่น </option>
                     </select>
                     <label for="installation_type" class="form-label">งานติดตั้ง</label>

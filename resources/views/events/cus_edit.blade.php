@@ -26,21 +26,21 @@
             <div class="mb-3">
                 <!-- Dropdown for Type -->
                 <label for="type_id" class="form-label">กิจกรรม</label>
-<select class="form-select" id="type_id" name="type_id" >
-    @foreach ($types as $type)
-        @if ($type->type_id == $customer->type_id)
-            <option value="{{ $type->type_id }}" selected>
-                {{ $type->type_name }}
-            </option>
-        @endif
-    @endforeach
-</select>
+                <select class="form-select" id="type_id" name="type_id">
+                    @foreach ($types as $type)
+                        @if ($type->type_id == $customer->type_id)
+                            <option value="{{ $type->type_id }}" selected>
+                                {{ $type->type_name }}
+                            </option>
+                        @endif
+                    @endforeach
+                </select>
 
-                
+
 
 
                 <label for="service_id" class="form-label">บริการ</label>
-                <select class="form-select bg-success" id="service_id" name="service_id" required >
+                <select class="form-select bg-success" id="service_id" name="service_id" required>
                     <option value="" disabled>-- เลือกบริการ --</option>
                     @foreach ($services as $service)
                         <option value="{{ $service->service_id }}"
@@ -63,8 +63,7 @@
                     <!-- ID Card -->
                     <label for="id_card" class="form-label">หมายเลขบัตรประจำตัวประชาชน</label>
                     <input type="text" class="form-control" id="id_card" name="id_card"
-                        value="{{ $customer->id_card }}" oninput="validateIdCard()" required>
-                    <p id="error-id_card" style="color:red"></p>
+                        value="{{ $customer->id_card }}" oninput="validateIdCard()">
 
 
                     <div>
@@ -74,7 +73,6 @@
                     <label for="cus_photo" class="form-label">รูปภาพ</label>
                     <input type="file" class="form-control" id="cus_photo" name="cus_photo"
                         value="{{ $customer->cus_photo }}">
-                    <p id="error-cus_photo" style="color:red"></p>
 
                 </div>
 
@@ -114,7 +112,7 @@
                 </div>
 
                 <label for="cus_address" class="form-label">ที่อยู่</label>
-                <textarea class="form-control" id="cus_address" name="cus_address" rows="4" required>{{ $customer->cus_address }}</textarea>
+                <textarea class="form-control" id="cus_address" name="cus_address" rows="4" >{{ $customer->cus_address }}</textarea>
 
 
                 <div id="groupNet">
@@ -194,7 +192,7 @@
                                     </div>
                                     <div>
                                         <label for="quantity" class="form-label">จำนวน</label>
-                                        <input type="number" name="quantity[]" class="form-control"
+                                        <input type="number" id='quantity_id' name="quantity[]" class="form-control"
                                             placeholder="ระบุจำนวน" required value="{{ $productData->pivot->quantity }}">
                                     </div>
                                     <button type="button" class="btn btn-success add-product mt-4">+</button>
@@ -241,6 +239,9 @@
                         <option value="1" class="bg-secondary"
                             {{ isset($fttxBroadband) && $fttxBroadband->new == 1 ? 'selected' : '' }}>
                             ลูกค้าใหม่</option>
+                        <option value="2" class="bg-secondary"
+                            {{ isset($fttxBroadband) && $fttxBroadband->new == 2 ? 'selected' : '' }}>
+                            ลูกค้าย้ายค่าย</option>
                         <option value="0" class="bg-secondary"
                             {{ isset($fttxBroadband) && $fttxBroadband->new == 0 ? 'selected' : '' }}>
                             ปรับโปรโมชั่น</option>
@@ -292,10 +293,7 @@
 @endsection
 
 @section('script')
-
-<script>
-    
-</script>
+    <script></script>
     <script>
         $(document).ready(function() {
             // กำหนดค่าเริ่มต้นเมื่อโหลดหน้า
@@ -573,7 +571,7 @@
                     $('#fttx_broadband, #sim_my, #groupNet, #groupNet1').hide();
 
                     // เปิด required สำหรับฟิลด์ income
-                    $('#income').prop('required', true);
+                    $('#income, #customer_type, #product_id, #quantity_id').prop('required', true);
                     // เปลี่ยน label เป็น "ชื่อ/ชื่อหน่วยงาน"
                     $('#fullname_label').text('ชื่อ/ชื่อหน่วยงาน');
 

@@ -1,5 +1,17 @@
 @extends('admins.index')
 @section('css')
+<style>
+    /* ขยายขนาด tooltip */
+    .tooltip-inner {
+        max-width: 300px; /* กำหนดขนาดสูงสุดของ tooltip */
+        font-size: 1.2rem; /* ปรับขนาดตัวอักษร */
+        padding: 15px; /* ปรับ padding ของ tooltip */
+   
+        border-radius: 5px; /* มุมโค้งมน */
+    }
+
+ 
+</style>
 @endsection
 
 
@@ -35,7 +47,7 @@
                         <input type="text" id="searchInput" class="form-control" placeholder="ค้นหาชื่อลูกค้า">
                     </div>
 
-                    <!-- <div class="d-flex align-items-center gap-2">
+                   <div class="d-flex align-items-center gap-2">
                         <input type="hidden" id="type_id"
                             value="{{ $data->isNotEmpty() && isset($data->first()->type) ? $data->first()->type->type_id : '' }}">
                         <div class="form-group me-3">
@@ -44,7 +56,7 @@
                             <input type="date" id="createdDate" class="form-control" placeholder="ค้นหาตามวันที่">
                         </div>
 
-                    </div> -->
+                    </div> 
 
 
 
@@ -181,13 +193,13 @@
                                         strpos(strtolower($customer->service->service_name), 'fttx') !== false ||
                                         strpos(strtolower($customer->service->service_name), 'sim') !== false
                                     )
-                                                            <p><span class="fw-bold text-dark">รหัสบัตรประชาชน:</span> {{ $customer->id_card }}</p>
+                                                            <p><span class="fw-bold text-dark">รหัสบัตรประชาชน:</span> {{ $customer->id_card ?? 'ไม่ระบุ' }}</p>
                                     @else
                                         <p><span class="fw-bold text-dark">ประเภทลูกค้า:</span>
                                         <p>{{ $dataIct->where('cus_id', $customer->cus_id)->first() ? $dataIct->where('cus_id', $customer->cus_id)->first()->customer_type : 'ไม่มีข้อมูล' }}
                                         </p>
                                     @endif
-                                    <p><span class="fw-bold text-dark">ที่อยู่:</span> {{ $customer->cus_address }}</p>
+                                    <p><span class="fw-bold text-dark">ที่อยู่:</span> {{ $customer->cus_address ?? 'ไม่ระบุ' }}</p>
                                     <p><span class="fw-bold text-dark">กิจกรรม:</span>
                                         {{ $customer->type->type_name ?? 'ไม่ระบุ' }}
                                     </p>
@@ -195,9 +207,9 @@
                                         {{ $customer->service->service_name ?? 'ไม่ระบุ' }}
                                         <a class="btn btn-warning btn-sm text-dark" data-bs-toggle="tooltip"
                                             data-bs-placement="right" data-bs-html="true" data-bs-original-title="
-                                                                                                                    <div class='text-start py-3' style='padding: 10px; background-color: #f9f9f9; border-radius: 5px;'>
+                                                                                                                    <div class='text-start py-3' style=' background-color: #f9f9f9; border-radius: 5px;'>
                                                                                                                         <strong>ข้อมูลบริการของลูกค้า</strong><br>
-                                                                                                                        <span>----------------------------</span>
+                                                                                                                        <span>------------------------------</span>
                                                                                                                         <strong class='text-warning'>บริการ:   </strong> {{ $customer->service->service_name }}<br>
                                                                                                                         @php
                                                                                                                             $fttxData = \App\Models\Fttxbroadband::where(
@@ -212,7 +224,12 @@
 
                                                                                                                         @endphp
                                                                                                                 @if ($fttxData && str_contains(strtolower($customer->service->service_name), 'fttx'))
-                                                                                                                    <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $fttxData->new == 1 ? 'ลูกค้าใหม่' : 'ปรับโปรโมชั่น' }}<br>
+                                                                                                                   <strong class='text-warning d-inline'>ประเภทลูกค้า: </strong> 
+                                                                                                                             <span class='text-sm d-inline'>   {{ 
+                                                                                                                                    $fttxData->new == 1 ? 'ลูกค้าใหม่' : 
+                                                                                                                                    ($fttxData->new == 2 ? 'ลูกค้าย้ายค่าย' : 'ปรับโปรโมชั่น') 
+                                                                                                                                                                                        }}</span><br>
+
                                                                                                                                                                 <strong class='text-warning'>งานติดตั้ง:   </strong> {{ $fttxData->installation_type == 1 ? 'ติดตั้งเอง' : 'จ้างผู้รับเหมา' }}
                                                                                                                 @elseif ($simmyData && str_contains(strtolower($customer->service->service_name), 'sim'))
                                                                                                                     <strong class='text-warning'>ประเภทลูกค้า:   </strong> {{ $simmyData->cus_new == 1 ? 'ลูกค้าใหม่' : 'ลูกค้า(ย้ายค่าย)' }}<br>
@@ -254,7 +271,7 @@
                                                                         style="width: 100%; max-width: 100px;" class="mt-3">
                                                                 </div>
                                                             @else
-                                                                <p><strong>รูปถ่าย:</strong> ไม่มีรูปถ่าย</p>
+                                                                <p><span class="fw-bold text-dark">รูปถ่าย:</span> ไม่มีรูปถ่าย</p>
                                                             @endif
                                     @endif
 

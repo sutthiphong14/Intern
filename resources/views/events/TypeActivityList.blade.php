@@ -34,7 +34,7 @@
                             <tr class="bg-dark text-center align-center">
                                 <th rowspan="2">ข้อมูล สถิติ</th>
                                 <th rowspan="2">ชื่อกิจกรรม</th>
-                                <th colspan="4">FTTX</th>
+                                <th colspan="5">FTTX</th>
                                 <th colspan="4">SIM my</th>
                                 <th colspan="2">Ict Solution</th>
                                 <th rowspan="2">ข้อมูลลูกค้า</th>
@@ -45,6 +45,7 @@
                                 <th>ติดตั้งเอง</th>
                                 <th>จ้างผู้รับเหมา</th>
                                 <th>ปรับโปรโมชั่น</th>
+                                <th>ลูกค้าย้ายค่าย</th>
                                 <th>ลูกค้าใหม่</th>
                                 <th>ลูกค้า (ย้ายค่าย)</th>
                                 <th>จำนวน (ราย)</th>
@@ -72,6 +73,7 @@
                                                                             <td>{{ $data['selfInstall'] ?? 0 }}</td>
                                                                             <td>{{ $data['hireInstall'] ?? 0 }}</td>
                                                                             <td>{{ $data['adjust'] ?? 0 }}</td>
+                                                                            <td>{{ $data['fttxmove'] ?? 0 }}</td>
                                                                             <td>{{ $data['new'] ?? 0 }}</td>
                                                                             <td>{{ $data['move'] ?? 0 }}</td>
                                                                             <td>{{ $data['count'] ?? 0 }}</td>

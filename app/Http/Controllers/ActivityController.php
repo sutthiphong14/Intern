@@ -54,6 +54,15 @@ class ActivityController extends Controller
                 });
             });
 
+        $fttxmove = Fttxbroadband::where('new', 2)
+            ->get()
+            ->groupBy('type_id') // จัดกลุ่มตาม type_id
+            ->map(function ($items) {
+                return $items->groupBy('province_id')->map(function ($provinceItems) {
+                    return $provinceItems->count('new'); // นับค่าที่ซ้ำกันในแต่ละ province_id
+                });
+            });
+
 
         // ดึงข้อมูล Fttxbroadband ที่ติดตั้งเอง
         $selfInstall = Fttxbroadband::where('installation_type', 1)->where('new', 1)
@@ -136,6 +145,7 @@ class ActivityController extends Controller
                 'selfInstall' => 0,
                 'hireInstall' => 0,
                 'adjust' => 0,
+                'fttxmove' => 0,
                 'new' => 0,
                 'move' => 0,
                 'count' => 0,
@@ -157,6 +167,9 @@ class ActivityController extends Controller
                 }
                 if (isset($adjust[$type->type_id][$province->province_id])) {
                     $sumByType[$type->type_id]['adjust'] += $adjust[$type->type_id][$province->province_id];
+                }
+                if (isset($fttxmove[$type->type_id][$province->province_id])) {
+                    $sumByType[$type->type_id]['fttxmove'] += $fttxmove[$type->type_id][$province->province_id];
                 }
                 if (isset($Simmy_new[$type->type_id][$province->province_id])) {
                     $sumByType[$type->type_id]['new'] += $Simmy_new[$type->type_id][$province->province_id];
@@ -180,15 +193,15 @@ class ActivityController extends Controller
         }
         $data = $typeActivities->count();
         $typeIds = collect($typeActivities)->pluck('type_id')->toArray();  // ดึงแค่ type_id
-        
+
         $maxTypeId = !empty($typeIds) ? max($typeIds) : null;  // ตรวจสอบก่อนใช้ max()
-        
-       
-        
+
+
+
 
 
         $typeNames = [];
-        $fttxNewData = $selfInstallData = $hireInstallData = $adjustData = [];
+        $fttxNewData = $selfInstallData = $hireInstallData = $adjustData = $moveData = [];
 
 
         foreach ($sumByType as $typeId => $data) {
@@ -199,11 +212,13 @@ class ActivityController extends Controller
             $selfInstall = $data['selfInstall'] ?? 0;
             $hireInstall = $data['hireInstall'] ?? 0;
             $adjust = $data['adjust'] ?? 0;
+            $fttxmove = $data['fttxmove'] ?? 0;
 
             $fttxNewData[] = $selfInstall + $hireInstall;
             $selfInstallData[] = $selfInstall;
             $hireInstallData[] = $hireInstall;
             $adjustData[] = $adjust;
+            $moveData[] = $fttxmove;
         }
 
 
@@ -212,7 +227,7 @@ class ActivityController extends Controller
 
 
 
-        return view('events.TypeActivityList', compact('data', 'typeActivities', 'sumByType', 'maxTypeId', 'typeNames', 'fttxNewData', 'selfInstallData', 'hireInstallData', 'adjustData'));
+        return view('events.TypeActivityList', compact('data', 'typeActivities', 'sumByType', 'maxTypeId', 'typeNames', 'fttxNewData', 'selfInstallData', 'hireInstallData', 'adjustData', 'moveData'));
     }
 
     public function TypeInsert(Request $request)
@@ -220,13 +235,13 @@ class ActivityController extends Controller
         $request->validate([
             'type_name' => 'required|string|max:255',
         ]);
-    
+
         try {
             // บันทึกข้อมูลลงใน type_activity
             $newRecord = Typeactivity::create([
                 'type_name' => $request->type_name
             ]);
-    
+
             // บันทึกข้อมูลลงใน serve_activity โดยใช้ id ของ type_activity
             ServeActivity::create([
                 'service_name' => 'Fttx Broadband',
@@ -247,22 +262,22 @@ class ActivityController extends Controller
                 'service_name' => 'ICT solution',
                 'type_id' => $newRecord->id  // ใช้ $newRecord->id ไม่ใช่ $newRecord->type_id
             ]);
-    
+
             // ส่งข้อมูลสำเร็จกลับไป
             return response()->json([
-                'success' => true, 
-                'message' => 'เพิ่มกิจกรรมสำเร็จ', 
+                'success' => true,
+                'message' => 'เพิ่มกิจกรรมสำเร็จ',
                 'id' => $newRecord->id
             ]);
         } catch (\Exception $e) {
             // กรณีเกิดข้อผิดพลาด
             return response()->json([
-                'success' => false, 
+                'success' => false,
                 'message' => $e->getMessage()
             ]);
         }
     }
-    
+
 
 
 
@@ -302,14 +317,14 @@ class ActivityController extends Controller
     //บริการ
     public function ListService($type_id)
     {
-        
-            $data = ServeActivity::where('type_id', $type_id)->get();
-            $typeName = TypeActivity::where('type_id', $type_id)->pluck('type_name')->first();
-           
-            
-      
 
-        return view("events.ServeActivityList", compact('data','typeName','type_id'));
+        $data = ServeActivity::where('type_id', $type_id)->get();
+        $typeName = TypeActivity::where('type_id', $type_id)->pluck('type_name')->first();
+
+
+
+
+        return view("events.ServeActivityList", compact('data', 'typeName', 'type_id'));
     }
 
     public function ServiceInsert(Request $request)
@@ -353,7 +368,6 @@ class ActivityController extends Controller
         }
 
         return redirect()->back()->with('success', 'อัพเดทบริการสำเร็จ!');
-
     }
 
 
@@ -364,8 +378,8 @@ class ActivityController extends Controller
         $data = PromotionActivity::where('service_id', $service_id)->get();
         $typeId = ServeActivity::where('service_id', $service_id)->pluck('type_id')->first();
 
-        
-        return view('events.promotionActivityList', compact('data', 'service_id','typeId'));
+
+        return view('events.promotionActivityList', compact('data', 'service_id', 'typeId'));
     }
 
 
@@ -518,12 +532,12 @@ class ActivityController extends Controller
 
     public function ListProduct($type_id)
     {
-        $data = IctProduct::where('type_id',$type_id)->get();
-        return view('events.product_list', compact('data','type_id'));
+        $data = IctProduct::where('type_id', $type_id)->get();
+        return view('events.product_list', compact('data', 'type_id'));
     }
 
 
-    public function ProductInsert(Request $request ,$type_id)
+    public function ProductInsert(Request $request, $type_id)
     {
         $request->validate([
             'product_name' => 'required|string|max:255',
@@ -539,7 +553,6 @@ class ActivityController extends Controller
         return redirect()->back()
             ->with('success', 'เพิ่มโปรโมชั่นสำเร็จ')
             ->with('data', $data);
-
     }
 
     public function ProductDelete($product_id)
@@ -712,6 +725,13 @@ class ActivityController extends Controller
             ->get()
             ->groupBy('province_id');
 
+        // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
+        $moveData = Fttxbroadband::where('type_id', $type_id)
+            ->select('province_id', 'new', 'installation_type')->where('new', 2)
+            ->get()
+            ->groupBy('province_id');
+
+
 
         $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
         $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
@@ -719,6 +739,9 @@ class ActivityController extends Controller
         $adjust = $adjustData->map(fn($items) => $items->where('new', 0)->count())->toArray();
         $adjust12 = $adjustData->flatMap(fn($collection) => $collection->filter(fn($item) => $item->province_id < 13))->count();
         $adjustover12 = $adjustData->flatMap(fn($collection) => $collection->filter(fn($item) => $item->province_id > 12))->count();
+        $move = $moveData->map(fn($items) => $items->where('new', 2)->count())->toArray();
+        $move12 = $moveData->flatMap(fn($collection) => $collection->filter(fn($item) => $item->province_id < 13))->count();
+        $moveover12 = $moveData->flatMap(fn($collection) => $collection->filter(fn($item) => $item->province_id > 12))->count();
 
 
 
@@ -823,7 +846,10 @@ class ActivityController extends Controller
             'IctIncomeOver33',
             'adjust',
             'adjust12',
-            'adjustover12'
+            'adjustover12',
+            'move',
+            'move12',
+            'moveover12'
 
 
         ));
@@ -850,6 +876,12 @@ class ActivityController extends Controller
             ->get()
             ->groupBy('province_id');
 
+        // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
+        $moveData = Fttxbroadband::where('type_id', $type_id)
+            ->select('province_id', 'new', 'installation_type')->where('new', 2)
+            ->get()
+            ->groupBy('province_id');
+
         $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
         $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
         $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
@@ -862,6 +894,16 @@ class ActivityController extends Controller
         $adjustover12 = $adjustData->flatMap(fn($collection) => $collection->filter(fn($item) => $item->province_id > 12))
             ->groupBy('province_id')
             ->map(fn($items) => $items->count());
+
+        $move = $moveData->map(fn($items) => $items->where('new', 2)->count())->toArray();
+        $move12 = $moveData
+            ->flatMap(fn($collection) => $collection->filter(fn($item) => $item->province_id < 13))
+            ->groupBy('province_id')
+            ->map(fn($items) => $items->count());
+        $moveover12 = $moveData->flatMap(fn($collection) => $collection->filter(fn($item) => $item->province_id > 12))
+            ->groupBy('province_id')
+            ->map(fn($items) => $items->count());
+
 
         // โหลดข้อมูล Simmy เฉพาะ type_id
         $simmyData = Simmy::where('type_id', $type_id)
@@ -899,6 +941,7 @@ class ActivityController extends Controller
         $sumNewOver33 = $sumMoveOver33 = $sumCountOver33 = $sumPriceOver33 = 0;
         $IctCountOver33 = $IctIncomeOver33 = 0;
         $sumAdjust = $sumAdjustOver33 = 0;
+        $sumMovefttx = $sumMovefttxOver33 = 0;
 
         foreach ($provinces as $province) {
             $provinceId = $province->province_id;
@@ -916,6 +959,7 @@ class ActivityController extends Controller
                 $IctCount += $Ict_count[$provinceId] ?? 0;
                 $IctIncome += $Ict_income[$provinceId] ?? 0;
                 $sumAdjust +=  $adjust12[$provinceId] ?? 0;
+                $sumMovefttx +=  $move12[$provinceId] ?? 0;
             } else {
                 $sumFttxNewOver33 += $fttxNew[$provinceId] ?? 0;
                 $sumSelfInstallOver33 += $selfInstall[$provinceId] ?? 0;
@@ -929,6 +973,7 @@ class ActivityController extends Controller
                 $IctCountOver33 += $Ict_count[$provinceId] ?? 0;
                 $IctIncomeOver33 += $Ict_income[$provinceId] ?? 0;
                 $sumAdjustOver33 +=  $adjustover12[$provinceId] ?? 0;
+                $sumMovefttxOver33 +=  $moveover12[$provinceId] ?? 0;
             }
         }
 
@@ -982,8 +1027,14 @@ class ActivityController extends Controller
             'adjust',
             'adjust12',
             'adjustover12',
+            'move',
+            'move12',
+            'moveover12',
             'sumAdjust',
-            'sumAdjustOver33'
+            'sumAdjustOver33',
+            'sumMovefttx',
+            'sumMovefttxOver33'
+
 
         ));
     }
@@ -1002,18 +1053,27 @@ class ActivityController extends Controller
             ->groupBy('center_id');
 
         // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
-        $adjustData = Fttxbroadband::where('province_id', $province_id)->where('type_id',$type_id)
+        $adjustData = Fttxbroadband::where('province_id', $province_id)->where('type_id', $type_id)
             ->select('province_id', 'center_id', 'new', 'installation_type') // ✅ เพิ่ม center_id
             ->where('new', 0)
             ->get()
             ->groupBy('center_id');
 
+        // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
+        $moveData = Fttxbroadband::where('province_id', $province_id)->where('type_id', $type_id)
+            ->select('province_id', 'center_id', 'new', 'installation_type') // ✅ เพิ่ม center_id
+            ->where('new', 2)
+            ->get()
+            ->groupBy('center_id');
+
+
         $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
         $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
         $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
         $adjust = $adjustData->map(fn($items) => $items->count());
-      
-     
+        $move = $moveData->map(fn($items) => $items->count());
+
+
 
 
 
@@ -1051,12 +1111,15 @@ class ActivityController extends Controller
         $sumNew = $sumMove = $sumCount = $sumPrice = 0;
         $IctCount = $IctIncome = 0;
         $sumAdjust = 0;
+        $sumMovefttx = 0;
 
 
         $sumFttxNewOver33 = $sumSelfInstallOver33 = $sumHireInstallOver33 = 0;
         $sumNewOver33 = $sumMoveOver33 = $sumCountOver33 = $sumPriceOver33 = 0;
         $IctCountOver33 = $IctIncomeOver33 = 0;
         $sumAdjustOver33 = 0;
+        $sumMovefttxOver33 = 0;
+
 
 
         foreach ($centers as $center) {
@@ -1067,6 +1130,7 @@ class ActivityController extends Controller
                 $sumSelfInstall += $selfInstall[$centerId] ?? 0;
                 $sumHireInstall += $HireInstall[$centerId] ?? 0;
                 $sumAdjust += $adjust[$centerId] ?? 0;
+                $sumMovefttx += $move[$centerId] ?? 0;
 
                 $sumNew += $Simmy_new[$centerId] ?? 0;
                 $sumMove += $Simmy_move[$centerId] ?? 0;
@@ -1080,6 +1144,7 @@ class ActivityController extends Controller
                 $sumSelfInstallOver33 += $selfInstall[$centerId] ?? 0;
                 $sumHireInstallOver33 += $HireInstall[$centerId] ?? 0;
                 $sumAdjustOver33 += $adjust[$centerId] ?? 0;
+                $sumMovefttxOver33 += $move[$centerId] ?? 0;
 
                 $sumNewOver33 += $Simmy_new[$centerId] ?? 0;
                 $sumMoveOver33 += $Simmy_move[$centerId] ?? 0;
@@ -1145,7 +1210,10 @@ class ActivityController extends Controller
             'adjust',
             'sumAdjust',
             'sumAdjustOver33',
-            
+            'move',
+            'sumMovefttx',
+            'sumMovefttxOver33',
+
 
 
         ));
@@ -1155,8 +1223,8 @@ class ActivityController extends Controller
     {
         // กรองข้อมูล Customer ตาม type_service และ type_id
         $dataQuery = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])
-    ->where('type_id', $type_id) // กรองข้อมูลตาม type_id
-    ->orderBy('cus_id', 'desc'); // เรียงลำดับตาม cus_id จากมากไปน้อย
+            ->where('type_id', $type_id) // กรองข้อมูลตาม type_id
+            ->orderBy('cus_id', 'desc'); // เรียงลำดับตาม cus_id จากมากไปน้อย
 
 
         $dataIct = IctSolution::where('type_id', $type_id)->get();
@@ -1206,7 +1274,7 @@ class ActivityController extends Controller
         $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
 
         // ดึงข้อมูลประเภทบริการ
-        $serviceTypes = ServeActivity::where('type_id',$type_id)->get();
+        $serviceTypes = ServeActivity::where('type_id', $type_id)->get();
 
         return view('events.events_customer_list', compact(
             'serviceTypes',
@@ -1231,13 +1299,13 @@ class ActivityController extends Controller
     {
         $provinces = ProvinceActivity::all();
         $centers = ServiceCenterActivity::all();
-        $types = TypeActivity::where('type_id',$type_id)->get();
-        $TopUp = TopUp::with(['province', 'center'])->where('type_id',$type_id)->get();
-        
-        
+        $types = TypeActivity::where('type_id', $type_id)->get();
+        $TopUp = TopUp::with(['province', 'center'])->where('type_id', $type_id)->get();
+
+
         return view('events.top_up', compact('TopUp', 'provinces', 'centers', 'types'));
     }
-    
+
 
     public function searchTopUp(Request $request)
     {
@@ -1249,7 +1317,7 @@ class ActivityController extends Controller
         $typeCheck = $request->input('type_id');
 
         // เริ่มต้น query สำหรับการค้นหา
-        $query = TopUp::where('type_id',$typeCheck);
+        $query = TopUp::where('type_id', $typeCheck);
 
         // ตรวจสอบว่า date ไม่ว่าง และกรองข้อมูลตามวันที่
         if ($date) {

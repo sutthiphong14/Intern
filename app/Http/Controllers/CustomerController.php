@@ -17,7 +17,8 @@ use App\Models\TopUp;
 use App\Models\TypeActivity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Storage;
+use Illuminate\Support\Facades\Storage ;
+
 
 class CustomerController extends Controller
 {
@@ -128,24 +129,6 @@ class CustomerController extends Controller
 
     public function CustomerInsert(Request $request)
     {
-        // Validate the incoming request
-        $request->validate([
-            'cus_fullname' => 'required|string',
-
-            'cus_address' => 'required|string',
-            'type_id' => 'required',
-            'service_id' => 'required',
-            'province_id' => 'required',
-            'center_id' => 'required',
-        ], [
-            'cus_fullname.required' => 'กรุณากรอกชื่อนามสกุล',
-            'cus_address.required' => 'กรุณากรอกที่อยู่',
-            'type_id.required' => 'กรุณาเลือกกิจกรรม',
-            'service_id.required' => 'กรุณาเลือกบริการ',
-            'province_id.required' => 'กรุณาเลือกจังหวัด',
-            'center_id.required' => 'กรุณาเลือกศูนย์บริการ',
-        ]);
-
         // Prepare data for insertion
         $data = $request->only(['cus_fullname', 'id_card', 'cus_address', 'center_id', 'type_id', 'service_id', 'province_id', 'promotion_id', 'speed_id', 'price_id', 'other']);
         $data['created_at'] = $request->input('date') ? Carbon::parse($request->input('date')) : Carbon::now(); // ถ้า date ในฟอร์มมีค่าให้ใช้ ถ้าไม่มีใช้เวลาปัจจุบัน

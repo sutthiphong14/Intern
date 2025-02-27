@@ -2,25 +2,25 @@
 @section('css')
 @endsection
 @section('content')
-<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
-        <a href="{{ route('home') }}" class="">
-            หน้าแรก
-        </a>
-        /
-        <a href="{{ route('type_list') }}" class="">
-        ข้อมูลกิจกรรม
-        </a>
-        /
-        <a href="javascript:history.back()" class="">
-        กิจกรรม {{ $types->type_name }}
-        </a>
-        /
-    </span> ศูนย์ @if ($province_id == 1)
-                        ตป.1
-                    @else
-                        ตป.2
-                    @endif
-</h4>
+    <h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
+            <a href="{{ route('home') }}" class="">
+                หน้าแรก
+            </a>
+            /
+            <a href="{{ route('type_list') }}" class="">
+                ข้อมูลกิจกรรม
+            </a>
+            /
+            <a href="javascript:history.back()" class="">
+                กิจกรรม {{ $types->type_name }}
+            </a>
+            /
+        </span> ศูนย์ @if ($province_id == 1)
+            ตป.1
+        @else
+            ตป.2
+        @endif
+    </h4>
 
     <div class="content-wrapper mb-5">
 
@@ -112,7 +112,7 @@
             </div>
         </div>
 
-        
+
         <div class="card mt-4">
             <div class="d-flex justify-content-between align-items-center gap-2">
                 <h3 class="card-header text-dark">สรุปผลการดำเนินงานกิจกรรมการตลาด event1</h3>
@@ -130,429 +130,453 @@
                     </div>
                 </div>
             </div>
-        <div class="card-body ">
-        <div class="table-responsive ">
+            <div class="card-body ">
+                <div class="table-responsive ">
 
-            <table class="table table-bordered ">
-                <thead>
-                    <tr class="bg-dark text-center align-center">
-                        <th rowspan="4">ดูข้อมูล</th>
-                        <th rowspan="4">จังหวัด</th>
-                        <th colspan="4">FTTX</th>
-                        <th colspan="4">SIM my</th>
-                        <th colspan="2">Ict Solution</th>
+                    <table class="table table-bordered ">
+                        <thead>
+                            <tr class="bg-dark text-center align-center">
+                                <th rowspan="4">ดูข้อมูล</th>
+                                <th rowspan="4">จังหวัด</th>
+                                <th colspan="5">FTTX</th>
+                                <th colspan="4">SIM my</th>
+                                <th colspan="2">Ict Solution</th>
 
-                    </tr>
-                    <tr class="bg-dark text-center">
-
-                        <th rowspan="4">new</th>
-                        <th rowspan="4">ติดตั้งเอง</th>
-                        <th rowspan="4">จ้างผู้รับเหมา</th>
-                        <th rowspan="4">ปรับโปรโมชั่น</th>
-
-                    </tr>
-                    <tr class="bg-dark text-center">
-                        <th rowspan="2">ลูกค้าใหม่</th>
-                        <th rowspan="2">ลูกค้า (ย้ายค่าย)</th>
-                        <th colspan="2">เติมเงินรายปี</th>
-                        <th rowspan="2">จำนวน
-                            (ราย)</th>
-                        <th rowspan="2">รายได้</th>
-
-                    </tr>
-                    <tr class="bg-dark text-center ">
-                        <th>จำนวน
-                            (ราย)</th>
-                        <th>ยอดเงิน</th>
-                    </tr>
-
-                </thead>
-                <tbody class="text-center">
-                    @foreach ($provinces as $province)
-                        {{-- Province ID <= 33 --}} @if ($province->province_id <= 12) <tr>
-                            <td>
-                                <a href="{{ route('event_center', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
-                                    class="btn btn-warning">
-                                    <i class="fas fa-search"></i>
-                                </a>
-                            </td>
-                            <td>{{ $province->province_name }}</td>
-                            <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $adjust12[$province->province_id] ?? 0}}</td>
-                            <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
-                            <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
                             </tr>
-                        @endif
-                            {{-- แสดงผลรวมตรงกลางเมื่อเปลี่ยนกลุ่ม --}}
-                            @if ($province->province_id == 12)
-                                <tr class="bg-dark">
-                                    <td colspan="2">รวม ตป.1</td>
-                                    <td>{{ $sumFttxNew }}</td>
-                                    <td>{{ $sumSelfInstall }}</td>
-                                    <td>{{ $sumHireInstall }}</td>
-                                    <td>{{ $sumAdjust }}</td>
+                            <tr class="bg-dark text-center">
+
+                                <th rowspan="4">new</th>
+                                <th rowspan="4">ติดตั้งเอง</th>
+                                <th rowspan="4">จ้างผู้รับเหมา</th>
+                                <th rowspan="4">ปรับโปรโมชั่น</th>
+                                <th rowspan="4">ลูกค้าย้ายค่าย</th>
+
+                            </tr>
+                            <tr class="bg-dark text-center">
+                                <th rowspan="2">ลูกค้าใหม่</th>
+                                <th rowspan="2">ลูกค้า (ย้ายค่าย)</th>
+                                <th colspan="2">เติมเงินรายปี</th>
+                                <th rowspan="2">จำนวน
+                                    (ราย)</th>
+                                <th rowspan="2">รายได้</th>
+
+                            </tr>
+                            <tr class="bg-dark text-center ">
+                                <th>จำนวน
+                                    (ราย)</th>
+                                <th>ยอดเงิน</th>
+                            </tr>
+
+                        </thead>
+                        <tbody class="text-center">
+                            @foreach ($provinces as $province)
+                                {{-- Province ID <= 33 --}} @if ($province->province_id <= 12)
+                                    <tr>
+                                        <td>
+                                            <a href="{{ route('event_center', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
+                                                class="btn btn-warning">
+                                                <i class="fas fa-search"></i>
+                                            </a>
+                                        </td>
+                                        <td>{{ $province->province_name }}</td>
+                                        <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $adjust12[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $move12[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
+                                    </tr>
+                                @endif
+                                {{-- แสดงผลรวมตรงกลางเมื่อเปลี่ยนกลุ่ม --}}
+                                @if ($province->province_id == 12)
+                                    <tr class="bg-dark">
+                                        <td colspan="2">รวม ตป.1</td>
+                                        <td>{{ $sumFttxNew }}</td>
+                                        <td>{{ $sumSelfInstall }}</td>
+                                        <td>{{ $sumHireInstall }}</td>
+                                        <td>{{ $sumAdjust }}</td>
+                                        <td>{{ $sumMovefttx }}</td>
 
 
-                                    <td>{{ $sumNew }}</td>
-                                    <td>{{ $sumMove }}</td>
-                                    <td>{{ $sumCount }}</td>
-                                    <td>{{ $sumPrice }}</td>
-                                    <td>{{ $IctCount }}</td>
-                                    <td>{{ $IctIncome }}</td>
-                                </tr>
-                            @endif
-                            {{-- Province ID > 33 --}}
+                                        <td>{{ $sumNew }}</td>
+                                        <td>{{ $sumMove }}</td>
+                                        <td>{{ $sumCount }}</td>
+                                        <td>{{ $sumPrice }}</td>
+                                        <td>{{ $IctCount }}</td>
+                                        <td>{{ $IctIncome }}</td>
+                                    </tr>
+                                @endif
+                                {{-- Province ID > 33 --}}
+                                @if ($province->province_id > 12)
+                                    <tr>
+                                        <td>
+                                            <a href="{{ route('event_center', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
+                                                class="btn btn-warning">
+                                                <i class="fas fa-search"></i>
+                                            </a>
+                                        </td>
+                                        <td>{{ $province->province_name }}</td>
+                                        <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $adjustover12[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $moveover12[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
+                                        <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
+                                    </tr>
+                                @endif
+                            @endforeach
                             @if ($province->province_id > 12)
-                                <tr>
-                                    <td>
-                                        <a href="{{ route('event_center', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
-                                            class="btn btn-warning">
-                                            <i class="fas fa-search"></i>
-                                        </a>
-                                    </td>
-                                    <td>{{ $province->province_name }}</td>
-                                    <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
-                                    <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
-                                    <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
-                                    <td>{{ $adjustover12[$province->province_id] ?? 0}}</td>
-                                    <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
-                                    <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
-                                    <td>{{ $Simmy_count[$province->province_id] ?? 0 }}</td>
-                                    <td>{{ $Simmy_price[$province->province_id] ?? 0 }}</td>
-                                    <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
-                                    <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
+                                {{-- แสดงผลรวมสำหรับ province_id > 33 --}}
+                                <tr class="bg-dark">
+                                    <td colspan="2">รวม ตป.2</td>
+                                    <td>{{ $sumFttxNewOver33 }}</td>
+                                    <td>{{ $sumSelfInstallOver33 }}</td>
+                                    <td>{{ $sumHireInstallOver33 }}</td>
+                                    <td>{{ $sumAdjustOver33 }}</td>
+                                    <td>{{ $sumMovefttxOver33 }}</td>
+                                    <td>{{ $sumNewOver33 }}</td>
+                                    <td>{{ $sumMoveOver33 }}</td>
+                                    <td>{{ $sumCountOver33 }}</td>
+                                    <td>{{ $sumPriceOver33 }}</td>
+                                    <td>{{ $IctCountOver33 }}</td>
+                                    <td>{{ $IctIncomeOver33 }}</td>
+
                                 </tr>
                             @endif
-                    @endforeach
-                        @if ($province->province_id > 12)
-                            {{-- แสดงผลรวมสำหรับ province_id > 33 --}}
-                            <tr class="bg-dark">
-                                <td colspan="2">รวม ตป.2</td>
-                                <td>{{ $sumFttxNewOver33 }}</td>
-                                <td>{{ $sumSelfInstallOver33 }}</td>
-                                <td>{{ $sumHireInstallOver33 }}</td>
-                                <td>{{ $sumAdjustOver33 }}</td>
-                                <td>{{ $sumNewOver33 }}</td>
-                                <td>{{ $sumMoveOver33 }}</td>
-                                <td>{{ $sumCountOver33 }}</td>
-                                <td>{{ $sumPriceOver33 }}</td>
-                                <td>{{ $IctCountOver33 }}</td>
-                                <td>{{ $IctIncomeOver33 }}</td>
-
-                            </tr>
-                        @endif
 
 
-                </tbody>
+                        </tbody>
 
 
 
-            </table>
+                    </table>
+                </div>
+
+            </div>
         </div>
-        
-    </div>
-    </div>
+    @endsection
 
-@endsection
+    @section('script')
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-@section('script')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // ดึงข้อมูลเฉพาะ province_id <= 12
+            var provinceNames = [];
+            var fttxNewData = [];
+            var selfInstallData = [];
+            var hireInstallData = [];
+            var adJust = [];
+            var sumMovefttx = [];
 
-    <script>
-        // ดึงข้อมูลเฉพาะ province_id <= 12
-        var provinceNames = [];
-        var fttxNewData = [];
-        var selfInstallData = [];
-        var hireInstallData = [];
-        var adJust = [];
+            @foreach ($provinces as $province)
+                @if ($province->province_id <= 12)
+                    provinceNames.push("{{ $province->province_name }}");
+                    fttxNewData.push({{ $fttxNew[$province->province_id] ?? 0 }});
+                    selfInstallData.push({{ $selfInstall[$province->province_id] ?? 0 }});
+                    hireInstallData.push({{ $HireInstall[$province->province_id] ?? 0 }});
+                    adJust.push({{ $adjust12[$province->province_id] ?? 0 }});
+                    sumMovefttx.push({{ $move12[$province->province_id] ?? 0 }});
+                @else
+                    provinceNames.push("{{ $province->province_name }}");
+                    fttxNewData.push({{ $fttxNew[$province->province_id] ?? 0 }});
+                    selfInstallData.push({{ $selfInstall[$province->province_id] ?? 0 }});
+                    hireInstallData.push({{ $HireInstall[$province->province_id] ?? 0 }});
+                    adJust.push({{ $adjustover12[$province->province_id] ?? 0 }});
+                    sumMovefttx.push({{ $moveover12[$province->province_id] ?? 0 }});
+                @endif
+            @endforeach
 
-        @foreach ($provinces as $province)
-            @if ($province->province_id <= 12)
-                provinceNames.push("{{ $province->province_name }}");
-                fttxNewData.push({{ $fttxNew[$province->province_id] ?? 0 }});
-                selfInstallData.push({{ $selfInstall[$province->province_id] ?? 0 }});
-                hireInstallData.push({{ $HireInstall[$province->province_id] ?? 0 }});
-                adJust.push({{ $adjust12[$province->province_id] ?? 0 }});
-            @else
-                provinceNames.push("{{ $province->province_name }}");
-                fttxNewData.push({{ $fttxNew[$province->province_id] ?? 0 }});
-                selfInstallData.push({{ $selfInstall[$province->province_id] ?? 0 }});
-                hireInstallData.push({{ $HireInstall[$province->province_id] ?? 0 }});
-                adJust.push({{ $adjustover12[$province->province_id] ?? 0 }});
-            @endif
-        @endforeach
+            var ctx = document.getElementById('myChart').getContext('2d');
 
-        var ctx = document.getElementById('myChart').getContext('2d');
+            var datasets = [{
+                    label: 'New',
+                    data: fttxNewData,
+                    backgroundColor: 'rgba(1, 15, 11, 0.8)',
+                    borderColor: 'rgba(1, 15, 11, 0.8)',
+                    borderWidth: 2
+                },
+                {
+                    label: 'ติดตั้งเอง',
+                    data: selfInstallData,
+                    backgroundColor: 'rgba(2, 178, 125, 1)',
+                    borderColor: 'rgba(2, 178, 150, 0.8)',
+                    borderWidth: 2
+                },
+                {
+                    label: 'จ้างผู้รับเหมา',
+                    data: hireInstallData,
+                    backgroundColor: 'rgba(54, 250, 110, 0.8)',
+                    borderColor: 'rgba(54, 250, 110, 1)',
+                    borderWidth: 2
+                }
+            ];
 
-        var datasets = [
-            {
-                label: 'New',
-                data: fttxNewData,
-                backgroundColor: 'rgba(1, 15, 11, 0.8)',
-                borderColor: 'rgba(1, 15, 11, 0.8)',
-                borderWidth: 2
-            },
-            {
-                label: 'ติดตั้งเอง',
-                data: selfInstallData,
-                backgroundColor: 'rgba(2, 178, 125, 1)',
-                borderColor: 'rgba(2, 178, 150, 0.8)',
-                borderWidth: 2
-            },
-            {
-                label: 'จ้างผู้รับเหมา',
-                data: hireInstallData,
-                backgroundColor: 'rgba(54, 250, 110, 0.8)',
-                borderColor: 'rgba(54, 250, 110, 1)',
-                borderWidth: 2
+            // ถ้ามีค่าปรับโปรโมชั่น ให้เพิ่มเป็นแท่งแยก
+            if (adJust.length > 0) {
+                datasets.push({
+                    label: 'ปรับโปรโมชั่น',
+                    backgroundColor: 'rgba(204, 204, 204, 0.8)', // สีเทา
+                    borderColor: 'rgba(204, 220, 220, 1)',
+                    borderWidth: 1,
+                    data: adJust
+                });
             }
-        ];
 
-        // ถ้ามีค่าปรับโปรโมชั่น ให้เพิ่มเป็นแท่งแยก
-        if (adJust.length > 0) {
-            datasets.push({
-                label: 'ปรับโปรโมชั่น',
-                backgroundColor: 'rgba(204, 204, 204, 0.8)', // สีเทา
-                borderColor: 'rgba(204, 220, 220, 1)',
-                borderWidth: 1,
-                data: adJust
+            // ถ้ามีค่าปรับโปรโมชั่น ให้เพิ่มเป็นแท่งแยก
+            if (sumMovefttx.length > 0) {
+                datasets.push({
+                    label: 'ลูกค้าย้ายค่าย',
+                    backgroundColor: 'rgba(235, 117, 13, 0.8)',
+                    borderColor: 'rgba(235, 117, 13, 1)',
+                    borderWidth: 1,
+                    data: adJust
+                });
+            }
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: provinceNames,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            stacked: false // ❌ ปิด stacked เพื่อแยกแท่ง
+                        },
+                        y: {
+                            beginAtZero: true,
+                            stacked: false, // ❌ ปิด stacked เพื่อแยกแท่ง
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return value.toFixed(0);
+                                }
+                            }
+                        }
+                    },
+                    barPercentage: 1, // ✅ ปรับให้แท่งไม่กว้างเกินไป
+                    categoryPercentage: 0.8 // ✅ กำหนดระยะห่างของแต่ละแท่ง
+                }
             });
-        }
+        </script>
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: provinceNames,
-                datasets: datasets
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        stacked: false // ❌ ปิด stacked เพื่อแยกแท่ง
+        <script>
+            var provinceNames = [];
+            var ictCount = [];
+            var ictIncome = [];
+
+            // ข้อมูลจาก PHP
+            @foreach ($provinces as $province)
+                @if ($province->province_id <= 12)
+                    provinceNames.push("{{ $province->province_name }}");
+                    ictCount.push({{ $Ict_count[$province->province_id] ?? 0 }});
+                    ictIncome.push({{ $Ict_income[$province->province_id] ?? 0 }});
+                @else
+                    provinceNames.push("{{ $province->province_name }}");
+                    ictCount.push({{ $Ict_count[$province->province_id] ?? 0 }});
+                    ictIncome.push({{ $Ict_income[$province->province_id] ?? 0 }});
+                @endif
+            @endforeach
+
+            // สร้างกราฟที่ 2
+            var ctx2 = document.getElementById('myChart2').getContext('2d');
+
+            var myChart2 = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: provinceNames, // ป้ายชื่อที่แสดงในกราฟ
+                    datasets: [{
+                        label: 'รายได้',
+                        backgroundColor: 'rgba(236, 229, 21, 0.8)', // สีเหลือง
+                        borderColor: 'rgba(236, 229, 80, 1)',
+                        borderWidth: 5,
+                        data: ictIncome, // แสดงรายได้
+                        stack: 'stack2' // stack อยู่ในกลุ่ม 'stack2'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    maxBarThickness: 90,
+                    scales: {
+                        x: {
+                            stacked: true, // stack ข้อมูลให้แสดงในแท่งเดียว
+                            maxBarThickness: 20 // กำหนดขนาดแท่ง
+                        },
+                        y: {
+                            beginAtZero: true, // เริ่มจาก 0 ที่แกน Y
+                            stacked: true, // stack ข้อมูล
+                            ticks: {
+                                stepSize: 1000,
+                                callback: function(value) {
+                                    return value.toFixed(2); // แสดงค่าทศนิยม 0 ตำแหน่ง
+                                }
+                            }
+                        }
                     },
-                    y: {
-                        beginAtZero: true,
-                        stacked: false, // ❌ ปิด stacked เพื่อแยกแท่ง
-                        ticks: {
-                            stepSize: 1,
-                            callback: function (value) {
-                                return value.toFixed(0);
+                    plugins: {
+                        legend: {
+                            position: 'top' // ตำแหน่ง legend
+                        },
+                        tooltip: {
+                            enabled: true, // เปิด tooltip
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    // ดึงค่า ictCount และ ictIncome ตาม index ของ tooltip
+                                    var ictCountValue = ictCount[tooltipItem.dataIndex];
+                                    var ictIncomeValue = ictIncome[tooltipItem.dataIndex];
+
+                                    // แสดงข้อมูลใน tooltip
+                                    return [
+                                        'จำนวน : ' + ictCountValue + ' ราย',
+                                        'รายได้ : ' + ictIncomeValue + ' บาท'
+                                    ];
+                                }
                             }
                         }
                     }
-                },
-                barPercentage: 1, // ✅ ปรับให้แท่งไม่กว้างเกินไป
-                categoryPercentage: 0.8 // ✅ กำหนดระยะห่างของแต่ละแท่ง
-            }
-        });
+                }
+            });
+        </script>
 
-    </script>
+        <script>
+            var provinceNames = [];
+            var Simmy_count = [];
+            var Simmy_move = [];
+            var Simmy_new = [];
+            var Simmy_price = [];
 
-    <script>
-        var provinceNames = [];
-        var ictCount = [];
-        var ictIncome = [];
-
-        // ข้อมูลจาก PHP
-        @foreach ($provinces as $province)
-            @if ($province->province_id <= 12)
+            // ข้อมูลจาก PHP
+            @foreach ($provinces as $province)
                 provinceNames.push("{{ $province->province_name }}");
-                ictCount.push({{ $Ict_count[$province->province_id] ?? 0 }});
-                ictIncome.push({{ $Ict_income[$province->province_id] ?? 0 }});
-            @else
-                provinceNames.push("{{ $province->province_name }}");
-                ictCount.push({{ $Ict_count[$province->province_id] ?? 0 }});
-                ictIncome.push({{ $Ict_income[$province->province_id] ?? 0 }});
-            @endif
-        @endforeach
+                Simmy_count.push({{ $Simmy_count[$province->province_id] ?? 0 }});
+                Simmy_move.push({{ $Simmy_move[$province->province_id] ?? 0 }});
+                Simmy_new.push({{ $Simmy_new[$province->province_id] ?? 0 }});
+                Simmy_price.push({{ $Simmy_price[$province->province_id] ?? 0 }});
+            @endforeach
 
-        // สร้างกราฟที่ 2
-        var ctx2 = document.getElementById('myChart2').getContext('2d');
+            // 🎯 กราฟ 1: ลูกค้าใหม่ และย้ายค่าย
+            var ctx3 = document.getElementById('myChart3').getContext('2d');
 
-        var myChart2 = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: provinceNames, // ป้ายชื่อที่แสดงในกราฟ
-                datasets: [{
-                    label: 'รายได้',
-                    backgroundColor: 'rgba(236, 229, 21, 0.8)', // สีเหลือง
-                    borderColor: 'rgba(236, 229, 80, 1)',
-                    borderWidth: 5,
-                    data: ictIncome, // แสดงรายได้
-                    stack: 'stack2' // stack อยู่ในกลุ่ม 'stack2'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                maxBarThickness: 90,
-                scales: {
-                    x: {
-                        stacked: true, // stack ข้อมูลให้แสดงในแท่งเดียว
-                        maxBarThickness: 20 // กำหนดขนาดแท่ง
-                    },
-                    y: {
-                        beginAtZero: true, // เริ่มจาก 0 ที่แกน Y
-                        stacked: true, // stack ข้อมูล
-                        ticks: {
-                            stepSize: 1000,
-                            callback: function (value) {
-                                return value.toFixed(2); // แสดงค่าทศนิยม 0 ตำแหน่ง
+            var myChart3 = new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: provinceNames,
+                    datasets: [{
+                            label: 'ลูกค้าใหม่',
+                            backgroundColor: 'rgba(32, 118, 200, 0.8)', // สีฟ้า
+                            borderColor: 'rgba(2, 178, 200, 1)',
+                            borderWidth: 3,
+                            data: Simmy_new
+                        },
+                        {
+                            label: 'ลูกค้า(ย้ายค่าย)',
+                            backgroundColor: 'rgba(32, 232, 93, 0.8)', // สีเขียว
+                            borderColor: 'rgba(54, 250, 110, 1)',
+                            borderWidth: 3,
+                            data: Simmy_move
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    maxBarThickness: 90,
+                    scales: {
+                        x: {
+                            stacked: false
+                        },
+                        y: {
+                            beginAtZero: true,
+                            stacked: false,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return value.toFixed(0); // แสดงค่าทศนิยม 0 ตำแหน่ง
+                                }
                             }
                         }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        position: 'top' // ตำแหน่ง legend
                     },
-                    tooltip: {
-                        enabled: true, // เปิด tooltip
-                        callbacks: {
-                            label: function (tooltipItem) {
-                                // ดึงค่า ictCount และ ictIncome ตาม index ของ tooltip
-                                var ictCountValue = ictCount[tooltipItem.dataIndex];
-                                var ictIncomeValue = ictIncome[tooltipItem.dataIndex];
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
 
-                                // แสดงข้อมูลใน tooltip
-                                return [
-                                    'จำนวน : ' + ictCountValue + ' ราย',
-                                    'รายได้ : ' + ictIncomeValue + ' บาท'
-                                ];
+            // 🎯 กราฟ 2: เติมเงินรายปี
+            var ctx4 = document.getElementById('myChart4').getContext('2d');
+
+            var myChart4 = new Chart(ctx4, {
+                type: 'bar',
+                data: {
+                    labels: provinceNames,
+                    datasets: [
+
+                        {
+                            label: 'เติมเงินรายปี (ยอดเงิน)',
+                            backgroundColor: 'rgba(244, 29, 255, 0.8)', // สีแดง
+                            borderColor: 'rgba(244, 29, 255, 1)',
+                            borderWidth: 3,
+                            data: Simmy_price
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    maxBarThickness: 90,
+                    scales: {
+                        x: {
+                            stacked: false
+                        },
+                        y: {
+                            beginAtZero: true,
+                            stacked: false,
+                            ticks: {
+
+                                callback: function(value) {
+                                    return value.toFixed(2); // แสดงค่าทศนิยม 0 ตำแหน่ง
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            enabled: true,
+                            callbacks: {
+                                label: function(tooltipItem) {
+
+                                    var Simmy_countValue = Simmy_count[tooltipItem.dataIndex]; // ดึงค่า Simmy_count
+                                    var Simmy_priceValue = Simmy_price[tooltipItem.dataIndex]; // ดึงค่า Simmy_price
+
+                                    // แสดงข้อมูลใน tooltip เฉพาะสำหรับ "จำนวน"
+                                    return ['เติมเงินรายปี',
+                                        'จำนวน : ' + Simmy_countValue + ' ราย',
+                                        'ยอดเงิน : ' + Simmy_priceValue + ' บาท'
+                                    ];
+
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
-    </script>
-
-    <script>
-        var provinceNames = [];
-        var Simmy_count = [];
-        var Simmy_move = [];
-        var Simmy_new = [];
-        var Simmy_price = [];
-
-        // ข้อมูลจาก PHP
-        @foreach ($provinces as $province)
-            provinceNames.push("{{ $province->province_name }}");
-            Simmy_count.push({{ $Simmy_count[$province->province_id] ?? 0 }});
-            Simmy_move.push({{ $Simmy_move[$province->province_id] ?? 0 }});
-            Simmy_new.push({{ $Simmy_new[$province->province_id] ?? 0 }});
-            Simmy_price.push({{ $Simmy_price[$province->province_id] ?? 0 }});
-        @endforeach
-
-        // 🎯 กราฟ 1: ลูกค้าใหม่ และย้ายค่าย
-        var ctx3 = document.getElementById('myChart3').getContext('2d');
-
-        var myChart3 = new Chart(ctx3, {
-            type: 'bar',
-            data: {
-                labels: provinceNames,
-                datasets: [
-                    {
-                        label: 'ลูกค้าใหม่',
-                        backgroundColor: 'rgba(32, 118, 200, 0.8)', // สีฟ้า
-                        borderColor: 'rgba(2, 178, 200, 1)',
-                        borderWidth: 3,
-                        data: Simmy_new
-                    },
-                    {
-                        label: 'ลูกค้า(ย้ายค่าย)',
-                        backgroundColor: 'rgba(32, 232, 93, 0.8)', // สีเขียว
-                        borderColor: 'rgba(54, 250, 110, 1)',
-                        borderWidth: 3,
-                        data: Simmy_move
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                maxBarThickness: 90,
-                scales: {
-                    x: { stacked: false },
-                    y: {
-                        beginAtZero: true, stacked: false,
-                        ticks: {
-                            stepSize: 1,
-                            callback: function (value) {
-                                return value.toFixed(0); // แสดงค่าทศนิยม 0 ตำแหน่ง
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: { position: 'top' }
-                }
-            }
-        });
-
-        // 🎯 กราฟ 2: เติมเงินรายปี
-        var ctx4 = document.getElementById('myChart4').getContext('2d');
-
-        var myChart4 = new Chart(ctx4, {
-            type: 'bar',
-            data: {
-                labels: provinceNames,
-                datasets: [
-
-                    {
-                        label: 'เติมเงินรายปี (ยอดเงิน)',
-                        backgroundColor: 'rgba(244, 29, 255, 0.8)', // สีแดง
-                        borderColor: 'rgba(244, 29, 255, 1)',
-                        borderWidth: 3,
-                        data: Simmy_price
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                maxBarThickness: 90,
-                scales: {
-                    x: { stacked: false },
-                    y: {
-                        beginAtZero: true, stacked: false,
-                        ticks: {
-
-                            callback: function (value) {
-                                return value.toFixed(2); // แสดงค่าทศนิยม 0 ตำแหน่ง
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: { position: 'top' },
-                    tooltip: {
-                        enabled: true,
-                        callbacks: {
-                            label: function (tooltipItem) {
-
-                                var Simmy_countValue = Simmy_count[tooltipItem.dataIndex]; // ดึงค่า Simmy_count
-                                var Simmy_priceValue = Simmy_price[tooltipItem.dataIndex]; // ดึงค่า Simmy_price
-
-                                // แสดงข้อมูลใน tooltip เฉพาะสำหรับ "จำนวน"
-                                return ['เติมเงินรายปี',
-                                    'จำนวน : ' + Simmy_countValue + ' ราย',
-                                    'ยอดเงิน : ' + Simmy_priceValue + ' บาท'
-                                ];
-
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-    </script>
-
-@endsection
+            });
+        </script>
+    @endsection

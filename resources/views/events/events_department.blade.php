@@ -167,7 +167,7 @@
                             <tr class="bg-dark text-center align-center">
                                 <th rowspan="4">ดูข้อมูล</th>
                                 <th rowspan="4">ส่วนงาน</th>
-                                <th colspan="4">FTTX</th>
+                                <th colspan="5">FTTX</th>
                                 <th colspan="4">SIM my</th>
                                 <th colspan="2">Ict Solution</th>
 
@@ -178,6 +178,7 @@
                                 <th rowspan="4">ติดตั้งเอง</th>
                                 <th rowspan="4">จ้างผู้รับเหมา</th>
                                 <th rowspan="4">ปรับโปรโมชั่น</th>
+                                <th rowspan="4">ลูกค้าย้ายค่าย</th>
 
                             </tr>
                             <tr class="bg-dark text-center">
@@ -207,6 +208,7 @@
                                 <td>{{ $sumSelfInstall }}</td>
                                 <td>{{ $sumHireInstall }}</td>
                                 <td>{{ $adjust12 }}</td>
+                                <td>{{ $move12 }}</td>
 
                                 <td>{{ $sumNew }}</td>
                                 <td>{{ $sumMove }}</td>
@@ -225,6 +227,7 @@
                                 <td>{{ $sumSelfInstallOver33 }}</td>
                                 <td>{{ $sumHireInstallOver33 }}</td>
                                 <td>{{ $adjustover12 }}</td>
+                                <td>{{ $moveover12 }}</td>
 
                                 <td>{{ $sumNewOver33 }}</td>
                                 <td>{{ $sumMoveOver33 }}</td>
@@ -240,6 +243,7 @@
                                 <td>{{ $sumSelfInstall + $sumSelfInstallOver33 }}</td>
                                 <td>{{ $sumHireInstall + $sumHireInstallOver33 }}</td>
                                 <td>{{ $adjust12 + $adjustover12 }}</td>
+                                <td>{{ $move12 + $moveover12 }}</td>
                                 <td>{{ $sumNew + $sumNewOver33 }}</td>
                                 <td>{{ $sumMove + $sumMoveOver33 }}</td>
                                 <td>{{ $sumCount + $sumCountOver33 }}</td>
@@ -259,98 +263,88 @@
         <!-- ChartJS -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-            // ข้อมูลที่ดึงมาจาก PHP
             var sumFttxNew = {{ isset($sumFttxNew) && isset($sumFttxNewOver33) ? $sumFttxNew + $sumFttxNewOver33 : 0 }};
-            var sumSelfInstall =
-                            {{ isset($sumSelfInstall) && isset($sumSelfInstallOver33) ? $sumSelfInstall + $sumSelfInstallOver33 : 0 }};
-            var sumHireInstall =
-                            {{ isset($sumHireInstall) && isset($sumHireInstallOver33) ? $sumHireInstall + $sumHireInstallOver33 : 0 }};
+            var sumSelfInstall = {{ isset($sumSelfInstall) && isset($sumSelfInstallOver33) ? $sumSelfInstall + $sumSelfInstallOver33 : 0 }};
+            var sumHireInstall = {{ isset($sumHireInstall) && isset($sumHireInstallOver33) ? $sumHireInstall + $sumHireInstallOver33 : 0 }};
             var sumAdjust = {{ isset($adjust12) && isset($adjustover12) ? $adjust12 + $adjustover12 : 0 }};
-
-            // ตรวจสอบค่า adjust ว่ามีค่าเท่ากับ 0 หรือไม่
-            var adjust = {{ count($adjust) }};
-            if (adjust === 0) {
-                adjust = null; // ถ้า adjust เป็น 0 จะไม่แสดง
-            }
-
-
-
+            var sumMove = {{ isset($move12) && isset($moveover12) ? $move12 + $moveover12 : 0 }};
+        
             var selectedTypeName = "{{ isset($types->type_name) ? $types->type_name : 'Unknown' }}";
-
-            // สร้าง datasets สำหรับกราฟ
-            var datasets = [{
-                label: 'New',
-                backgroundColor: 'rgba(1, 15, 11, 0.8)', // สีน้ำเงิน
-                borderColor: 'rgba(1, 15, 11, 1)',
-                borderWidth: 1,
-                data: [sumFttxNew],
-
-            },
-            {
-
-                label: 'ติดตั้งเอง',
-                backgroundColor: 'rgba(2, 178, 125, 1)', // สีเขียว
-                borderColor: 'rgba(2, 178, 150, 0.8)',
-                borderWidth: 1,
-                data: [sumSelfInstall],
-
-            },
-            {
-                label: 'จ้างผู้รับเหมา',
-                backgroundColor: 'rgba(54, 250, 110, 0.8)',
-                borderColor: 'rgba(54, 250, 110, 1)',
-                borderWidth: 1,
-                data: [sumHireInstall],
-
-            }
-            ];
-
-            // ถ้ามีค่า adjust ให้เพิ่มเป็นแท่งแยก
-            if (sumAdjust !== null) {
-                datasets.push({
+        
+            var datasets = [
+                {
+                    label: 'New',
+                    backgroundColor: 'rgba(1, 15, 11, 0.8)', 
+                    borderColor: 'rgba(1, 15, 11, 1)',
+                    borderWidth: 1,
+                    data: [sumFttxNew],
+                },
+                {
+                    label: 'ติดตั้งเอง',
+                    backgroundColor: 'rgba(2, 178, 125, 1)',
+                    borderColor: 'rgba(2, 178, 150, 0.8)',
+                    borderWidth: 1,
+                    data: [sumSelfInstall],
+                },
+                {
+                    label: 'จ้างผู้รับเหมา',
+                    backgroundColor: 'rgba(54, 250, 110, 0.8)',
+                    borderColor: 'rgba(54, 250, 110, 1)',
+                    borderWidth: 1,
+                    data: [sumHireInstall],
+                },
+                {
                     label: 'ปรับโปรโมชั่น',
-                    backgroundColor: 'rgba(204, 204, 204, 0.8)', // สีเทา
+                    backgroundColor: 'rgba(204, 204, 204, 0.8)',
                     borderColor: 'rgba(204, 220, 220, 1)',
                     borderWidth: 1,
-                    data: [sumAdjust],
-                    stack: 'stack2' // ให้ adjust อยู่คนละกลุ่ม
-                });
-            }
-
-            // สร้างกราฟด้วย Chart.js
+                    data: [sumAdjust], 
+                },
+                {
+                    label: 'ลูกค้าย้ายค่าย',
+                    backgroundColor: 'rgba(235, 117, 13, 0.8)',
+                    borderColor: 'rgba(235, 117, 13, 1)',
+                    borderWidth: 1,
+                    data: [sumMove], 
+                }
+            ];
+        
+            // ✅ ลบ dataset ที่มีค่า 0 ออก
+            var filteredDatasets = datasets.filter(dataset => dataset.data[0] > 0);
+        
             var ctx = document.getElementById('myChart').getContext('2d');
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: [selectedTypeName],
-                    datasets: datasets // ใช้ datasets ที่กำหนดไว้
+                    datasets: filteredDatasets  // ✅ ใช้ datasets ที่ไม่มีค่าศูนย์
                 },
                 options: {
                     responsive: true,
                     maxBarThickness: 90,
                     scales: {
                         y: {
-                            beginAtZero: true, // เริ่มต้นแกน Y จากศูนย์
-
+                            beginAtZero: true,
                             ticks: {
-                                stepSize: 1, // กำหนดขนาดแต่ละขั้นที่แกน Y
-                                callback: function (value) {
-                                    return value.toFixed(0); // แสดงค่าของ Y ในรูปแบบทศนิยม 1 ตำแหน่ง
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return value.toFixed(0);
                                 }
                             }
                         },
                         x: {
-                            stacked: false,
+                            stacked: false, // ✅ ให้แท่งกราฟแยกกัน
                         }
                     },
                     plugins: {
                         legend: {
-                            position: 'top', // ตั้งตำแหน่ง legend
+                            position: 'top',
                         }
                     }
                 }
             });
         </script>
+        
 
 
 
