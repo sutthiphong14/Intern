@@ -190,14 +190,14 @@
                                                     <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
 
                                                     <td class="" style="background-color: {{ $section['sum_installation_percentage_within_3_days'] > 85
-                                            ? 'rgba(68, 180, 40, 1)'
+                                            ? 'rgba(46, 105, 0, 1)'
                                             : ($section['sum_installation_percentage_within_3_days'] > 83
-                                                ? 'rgb(113, 221, 55,1)'
+                                                ? 'rgba(116, 228, 29, 1)'
                                                 : ($section['sum_installation_percentage_within_3_days'] > 80
-                                                    ? 'rgba(255, 196, 0,1)'
+                                                    ? 'rgba(255, 245, 0, 1)'
                                                     : ($section['sum_installation_percentage_within_3_days'] > 77
-                                                        ? 'rgba(253, 126, 20, 1)'
-                                                        : 'rgba(255, 62, 29, 1)'))) }}; color: white;">
+                                                        ? 'rgba(247, 75, 28, 1)'
+                                                        : 'rgba(255, 0, 0, 1)'))) }}; color: white;">
                                                         {{ $section['sum_installation_percentage_within_3_days'] }}%
                                                     </td>
 
@@ -405,19 +405,19 @@
         } else {
             // เงื่อนไขกำหนดสีพื้นหลังและเส้นขอบตามค่าเปอร์เซ็นต์
             const backgroundColors = dataArray.map(value =>
-                value > 85 ? 'rgba(68, 180, 40, 0.7)' :
-                    value > 83 ? 'rgba(113, 221, 55, 0.7)' :
-                        value > 80 ? 'rgba(255, 196, 0,0.7)' :
-                            value > 77 ? 'rgba(253, 126, 20, 0.7)' :
-                                'rgb(255, 0, 0,0.7)'
+            value > 85 ? 'rgba(46, 105, 0, 1)' :
+                    value > 83 ? 'rgba(116, 228, 29, 1)' :
+                        value > 80 ? 'rgba(255, 245, 0, 1)' :
+                            value > 77 ? 'rgba(247, 75, 28, 1)' :
+                                'rgba(255, 0, 0, 1)'
             );
 
             const borderColors = dataArray.map(value =>
-                value > 85 ? 'rgba(79, 193, 51, 1)' :
-                    value > 83 ? 'rgba(113, 221, 55, 1)' :
-                        value > 80 ? 'rgba(255, 196, 0,1)' :
-                            value > 77 ? 'rgb(253, 126, 20, 1)' :
-                                'rgb(255, 38, 0)'
+            value > 85 ? 'rgba(46, 105, 0, 0.8)' :
+                    value > 83 ? 'rgba(116, 228, 29, 0.8)' :
+                        value > 80 ? 'rgba(255, 245, 0, 0.8)' :
+                            value > 77 ? 'rgba(247, 75, 28, 0.8)' :
+                                'rgba(255, 0, 0, 0.8)'
             );
 
             const ctx = document.getElementById('myChart');
