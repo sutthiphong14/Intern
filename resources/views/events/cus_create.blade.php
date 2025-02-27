@@ -487,7 +487,7 @@
                     $('#fttx_broadband, #sim_my, #groupNet, #groupNet1').hide();
 
                     // เปิด required สำหรับฟิลด์ income
-                    $('#income').prop('required', true);
+                    $('#income, #customer_type, #product_id, #quantity_id').prop('required', true);
                     // เปลี่ยน label เป็น "ชื่อ/ชื่อหน่วยงาน"
                     $('#fullname_label').text('ชื่อ/ชื่อหน่วยงาน');
 
