@@ -50,7 +50,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0">Fttxbroadband</h3>
+                        <h3 class="mb-0"><i class="fas fa-wifi"></i> Fttxbroadband</h3>
                         <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart1">
                             <i class="fas fa-chevron-down"></i>
                         </button>
@@ -67,7 +67,7 @@
             <div class="col-md-12 mt-4">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0">ICT solution</h3>
+                        <h3 class="mb-0"><i class="fas fa-chart-line"></i> ICT solution</h3>
                         <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart2">
                             <i class="fas fa-chevron-down"></i>
                         </button>
@@ -83,7 +83,7 @@
             <div class="col-md-12 mt-4">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0">SIM my</h3>
+                        <h3 class="mb-0"><i class="fas fa-sim-card"></i> SIM My</h3>
                         <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart3">
                             <i class="fas fa-chevron-down"></i>
                         </button>
@@ -99,7 +99,7 @@
             <div class="col-md-12 mt-4">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0">เติมเงินรายปี</h3>
+                        <h3 class="mb-0"><i class="fas fa-money-check-alt"></i> เติมเงินรายปี</h3>
                         <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart4">
                             <i class="fas fa-chevron-down"></i>
                         </button>
@@ -262,98 +262,130 @@
 @endsection
 
 @section('script')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-    <script>
-        // ดึงข้อมูลเฉพาะ province_id <= 12
-        var provinceNames = [];
-        var fttxNewData = [];
-        var selfInstallData = [];
-        var hireInstallData = [];
-        var adJust = [];
+<script>
+    Chart.register(ChartDataLabels); // เปิดใช้งาน plugin datalabels
 
-        @foreach ($provinces as $province)
-            @if ($province->province_id <= 12)
-                provinceNames.push("{{ $province->province_name }}");
-                fttxNewData.push({{ $fttxNew[$province->province_id] ?? 0 }});
-                selfInstallData.push({{ $selfInstall[$province->province_id] ?? 0 }});
-                hireInstallData.push({{ $HireInstall[$province->province_id] ?? 0 }});
-                adJust.push({{ $adjust12[$province->province_id] ?? 0 }});
-            @else
-                provinceNames.push("{{ $province->province_name }}");
-                fttxNewData.push({{ $fttxNew[$province->province_id] ?? 0 }});
-                selfInstallData.push({{ $selfInstall[$province->province_id] ?? 0 }});
-                hireInstallData.push({{ $HireInstall[$province->province_id] ?? 0 }});
-                adJust.push({{ $adjustover12[$province->province_id] ?? 0 }});
-            @endif
-        @endforeach
+    var provinceNames = [];
+    var fttxNewData = [];
+    var selfInstallData = [];
+    var hireInstallData = [];
+    var adJust = [];
 
-        var ctx = document.getElementById('myChart').getContext('2d');
+    @foreach ($provinces as $province)
+        @if ($province->province_id <= 12)
+            provinceNames.push("{{ $province->province_name }}");
+            fttxNewData.push({{ $fttxNew[$province->province_id] ?? 0 }});
+            selfInstallData.push({{ $selfInstall[$province->province_id] ?? 0 }});
+            hireInstallData.push({{ $HireInstall[$province->province_id] ?? 0 }});
+            adJust.push({{ $adjust12[$province->province_id] ?? 0 }});
+        @else
+            provinceNames.push("{{ $province->province_name }}");
+            fttxNewData.push({{ $fttxNew[$province->province_id] ?? 0 }});
+            selfInstallData.push({{ $selfInstall[$province->province_id] ?? 0 }});
+            hireInstallData.push({{ $HireInstall[$province->province_id] ?? 0 }});
+            adJust.push({{ $adjustover12[$province->province_id] ?? 0 }});
+        @endif
+    @endforeach
 
-        var datasets = [
-            {
-                label: 'New',
-                data: fttxNewData,
-                backgroundColor: 'rgba(1, 15, 11, 0.8)',
-                borderColor: 'rgba(1, 15, 11, 0.8)',
-                borderWidth: 2
-            },
-            {
-                label: 'ติดตั้งเอง',
-                data: selfInstallData,
-                backgroundColor: 'rgba(2, 178, 125, 1)',
-                borderColor: 'rgba(2, 178, 150, 0.8)',
-                borderWidth: 2
-            },
-            {
-                label: 'จ้างผู้รับเหมา',
-                data: hireInstallData,
-                backgroundColor: 'rgba(54, 250, 110, 0.8)',
-                borderColor: 'rgba(54, 250, 110, 1)',
-                borderWidth: 2
-            }
-        ];
+    var ctx = document.getElementById('myChart').getContext('2d');
 
-        // ถ้ามีค่าปรับโปรโมชั่น ให้เพิ่มเป็นแท่งแยก
-        if (adJust.length > 0) {
-            datasets.push({
-                label: 'ปรับโปรโมชั่น',
-                backgroundColor: 'rgba(204, 204, 204, 0.8)', // สีเทา
-                borderColor: 'rgba(204, 220, 220, 1)',
-                borderWidth: 1,
-                data: adJust
-            });
+    var datasets = [
+        {
+            label: 'New',
+            data: fttxNewData,
+            backgroundColor: 'rgba(1, 15, 11, 0.8)',
+            borderColor: 'rgba(1, 15, 11, 0.8)',
+            borderWidth: 2
+        },
+        {
+            label: 'ติดตั้งเอง',
+            data: selfInstallData,
+            backgroundColor: 'rgba(2, 178, 125, 1)',
+            borderColor: 'rgba(2, 178, 150, 0.8)',
+            borderWidth: 2
+        },
+        {
+            label: 'จ้างผู้รับเหมา',
+            data: hireInstallData,
+            backgroundColor: 'rgba(54, 250, 110, 0.8)',
+            borderColor: 'rgba(54, 250, 110, 1)',
+            borderWidth: 2
         }
+    ];
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: provinceNames,
-                datasets: datasets
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        stacked: false // ❌ ปิด stacked เพื่อแยกแท่ง
-                    },
-                    y: {
-                        beginAtZero: true,
-                        stacked: false, // ❌ ปิด stacked เพื่อแยกแท่ง
-                        ticks: {
-                            stepSize: 1,
-                            callback: function (value) {
-                                return value.toFixed(0);
-                            }
-                        }
+    if (adJust.length > 0) {
+        datasets.push({
+            label: 'ปรับโปรโมชั่น',
+            backgroundColor: 'rgba(204, 204, 204, 0.8)',
+            borderColor: 'rgba(204, 220, 220, 1)',
+            borderWidth: 1,
+            data: adJust
+        });
+    }
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: provinceNames,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: false,
+                    ticks: {
+                        padding: 10 // ✅ เพิ่ม padding ให้ Label แกน X
                     }
                 },
-                barPercentage: 1, // ✅ ปรับให้แท่งไม่กว้างเกินไป
-                categoryPercentage: 0.8 // ✅ กำหนดระยะห่างของแต่ละแท่ง
+                y: {
+                    beginAtZero: true,
+                    stacked: false,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function (value) {
+                            return value.toFixed(0);
+                        }
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    bottom: 20 // ✅ เพิ่ม margin ด้านล่างป้องกัน Label ถูกบัง
+                }
+            },
+            barPercentage: 1,
+            categoryPercentage: 0.8,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'start', // ✅ เปลี่ยนจาก 'top' เป็น 'start' ให้ห่างจาก Label X
+                    offset: 5, // ✅ เพิ่มระยะห่างของตัวเลขจากแท่งกราฟ
+                    formatter: function (value) {
+                        return value.toFixed(0);
+                    },
+                    font: {
+                        weight: 'bold',
+                        size: 12
+                    },
+                    color: '#000000',
+                    backgroundColor: 'rgba(255, 255, 255, 0.7)', // ✅ เพิ่มพื้นหลังขาวให้ตัวเลขอ่านง่าย
+                    borderRadius: 3,
+                    padding: 3
+                }
             }
-        });
+        }
+    });
 
-    </script>
+</script>
+
+
 
     <script>
         var provinceNames = [];

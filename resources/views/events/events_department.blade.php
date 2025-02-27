@@ -1,22 +1,14 @@
 @extends('admins.index')
 @section('css')
-<style>
-    .dynamic-text {
-        min-height: 300px;
-        height: 290px;
-        max-height: 300px;
-        max-width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: clamp(30px, 7vw, 80px);
-        font-weight: bold;
-        color: rgb(255, 194, 13);
-        border-radius: 10px;
-    }
-</style>
+
 
 <style>
+    @keyframes colorChange {
+        0% { color: red; }        /* เริ่มต้นสีแดง */
+        50% { color: yellow; }    /* ตรงกลางเป็นสีเหลือง */
+        100% { color: #28a745; }    /* สิ้นสุดเป็นสีเขียว */
+    }
+
     .dynamic-text {
         min-height: 300px;
         height: 290px;
@@ -27,8 +19,8 @@
         justify-content: center;
         font-size: clamp(30px, 7vw, 80px);
         font-weight: bold;
-        color: rgb(255, 194, 13);
         border-radius: 10px;
+        animation: colorChange 2s linear forwards; /* ใช้ Animation */
     }
 </style>
 
@@ -77,8 +69,8 @@
             <div class="col-md-7">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0">Fttxbroadband</h3>
-                        <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart1">
+                        <h3 class="mb-0 text-warning "><i class="fas fa-wifi"></i> Fttxbroadband</h3>
+                        <button class="btn btn-sm" data-bs-toggle="collapse" data-bs-target="#chart1">
                             <i class="fas fa-chevron-down"></i>
                         </button>
                     </div>
@@ -93,8 +85,8 @@
             <div class="col-md-5">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0">ICT solution</h3>
-                        <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart2">
+                        <h3 class="mb-0 text-warning"><i class="fas fa-chart-line"></i> ICT solution</h3>
+                        <button class="btn btn-sm" data-bs-toggle="collapse" data-bs-target="#chart2">
                             <i class="fas fa-chevron-down"></i>
                         </button>
                     </div>
@@ -110,8 +102,8 @@
             <div class="col-md-7 mt-4">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0">SIM my</h3>
-                        <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart3">
+                        <h3 class="mb-0 text-warning"><i class="fas fa-sim-card"></i> SIM My </h3>
+                        <button class="btn btn-sm" data-bs-toggle="collapse" data-bs-target="#chart3">
                             <i class="fas fa-chevron-down"></i>
                         </button>
                     </div>
@@ -125,8 +117,8 @@
             <div class="col-md-5 mt-4">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0">เติมเงินรายปี</h3>
-                        <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart4">
+                        <h3 class="mb-0 text-warning"><i class="fas fa-money-check-alt"></i> เติมเงินรายปี</h3>
+                        <button class="btn btn-sm" data-bs-toggle="collapse" data-bs-target="#chart4">
                             <i class="fas fa-chevron-down"></i>
                         </button>
                     </div>
@@ -258,99 +250,116 @@
     @section('script')
         <!-- ChartJS -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            // ข้อมูลที่ดึงมาจาก PHP
-            var sumFttxNew = {{ isset($sumFttxNew) && isset($sumFttxNewOver33) ? $sumFttxNew + $sumFttxNewOver33 : 0 }};
-            var sumSelfInstall =
-                            {{ isset($sumSelfInstall) && isset($sumSelfInstallOver33) ? $sumSelfInstall + $sumSelfInstallOver33 : 0 }};
-            var sumHireInstall =
-                            {{ isset($sumHireInstall) && isset($sumHireInstallOver33) ? $sumHireInstall + $sumHireInstallOver33 : 0 }};
-            var sumAdjust = {{ isset($adjust12) && isset($adjustover12) ? $adjust12 + $adjustover12 : 0 }};
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-            // ตรวจสอบค่า adjust ว่ามีค่าเท่ากับ 0 หรือไม่
-            var adjust = {{ count($adjust) }};
-            if (adjust === 0) {
-                adjust = null; // ถ้า adjust เป็น 0 จะไม่แสดง
-            }
+<script>
+    Chart.register(ChartDataLabels); // เปิดใช้งาน datalabels plugin
 
+    var sumFttxNew = {{ isset($sumFttxNew) && isset($sumFttxNewOver33) ? $sumFttxNew + $sumFttxNewOver33 : 0 }};
+    var sumSelfInstall = {{ isset($sumSelfInstall) && isset($sumSelfInstallOver33) ? $sumSelfInstall + $sumSelfInstallOver33 : 0 }};
+    var sumHireInstall = {{ isset($sumHireInstall) && isset($sumHireInstallOver33) ? $sumHireInstall + $sumHireInstallOver33 : 0 }};
+    var sumAdjust = {{ isset($adjust12) && isset($adjustover12) ? $adjust12 + $adjustover12 : 0 }};
 
+    var adjust = {{ count($adjust) }};
+    if (adjust === 0) {
+        adjust = null; 
+    }
 
-            var selectedTypeName = "{{ isset($types->type_name) ? $types->type_name : 'Unknown' }}";
+    var selectedTypeName = "{{ isset($types->type_name) ? $types->type_name : 'Unknown' }}";
 
-            // สร้าง datasets สำหรับกราฟ
-            var datasets = [{
-                label: 'New',
-                backgroundColor: 'rgba(1, 15, 11, 0.8)', // สีน้ำเงิน
-                borderColor: 'rgba(1, 15, 11, 1)',
-                borderWidth: 1,
-                data: [sumFttxNew],
+    var datasets = [
+        {
+            label: 'New',
+            backgroundColor: 'rgba(1, 15, 11, 0.8)',
+            borderColor: 'rgba(1, 15, 11, 1)',
+            borderWidth: 1,
+            data: [sumFttxNew],
+        },
+        {
+            label: 'ติดตั้งเอง',
+            backgroundColor: 'rgba(2, 178, 125, 1)',
+            borderColor: 'rgba(2, 178, 150, 0.8)',
+            borderWidth: 1,
+            data: [sumSelfInstall],
+        },
+        {
+            label: 'จ้างผู้รับเหมา',
+            backgroundColor: 'rgba(54, 250, 110, 0.8)',
+            borderColor: 'rgba(54, 250, 110, 1)',
+            borderWidth: 1,
+            data: [sumHireInstall],
+        }
+    ];
 
-            },
-            {
+    if (sumAdjust !== null) {
+        datasets.push({
+            label: 'ปรับโปรโมชั่น',
+            backgroundColor: 'rgba(204, 204, 204, 0.8)',
+            borderColor: 'rgba(204, 220, 220, 1)',
+            borderWidth: 1,
+            data: [sumAdjust],
+            stack: 'stack2'
+        });
+    }
 
-                label: 'ติดตั้งเอง',
-                backgroundColor: 'rgba(2, 178, 125, 1)', // สีเขียว
-                borderColor: 'rgba(2, 178, 150, 0.8)',
-                borderWidth: 1,
-                data: [sumSelfInstall],
-
-            },
-            {
-                label: 'จ้างผู้รับเหมา',
-                backgroundColor: 'rgba(54, 250, 110, 0.8)',
-                borderColor: 'rgba(54, 250, 110, 1)',
-                borderWidth: 1,
-                data: [sumHireInstall],
-
-            }
-            ];
-
-            // ถ้ามีค่า adjust ให้เพิ่มเป็นแท่งแยก
-            if (sumAdjust !== null) {
-                datasets.push({
-                    label: 'ปรับโปรโมชั่น',
-                    backgroundColor: 'rgba(204, 204, 204, 0.8)', // สีเทา
-                    borderColor: 'rgba(204, 220, 220, 1)',
-                    borderWidth: 1,
-                    data: [sumAdjust],
-                    stack: 'stack2' // ให้ adjust อยู่คนละกลุ่ม
-                });
-            }
-
-            // สร้างกราฟด้วย Chart.js
-            var ctx = document.getElementById('myChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [selectedTypeName],
-                    datasets: datasets // ใช้ datasets ที่กำหนดไว้
-                },
-                options: {
-                    responsive: true,
-                    maxBarThickness: 90,
-                    scales: {
-                        y: {
-                            beginAtZero: true, // เริ่มต้นแกน Y จากศูนย์
-
-                            ticks: {
-                                stepSize: 1, // กำหนดขนาดแต่ละขั้นที่แกน Y
-                                callback: function (value) {
-                                    return value.toFixed(0); // แสดงค่าของ Y ในรูปแบบทศนิยม 1 ตำแหน่ง
-                                }
-                            }
-                        },
-                        x: {
-                            stacked: false,
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top', // ตั้งตำแหน่ง legend
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [selectedTypeName],
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maxBarThickness: 60, // ✅ จำกัดความกว้างแท่ง
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function (value) {
+                            return value.toFixed(0);
                         }
                     }
+                },
+                x: {
+                    stacked: false,
+                    ticks: {
+                        padding: 10 // ✅ เพิ่ม padding ให้ Label X
+                    }
                 }
-            });
-        </script>
+            },
+            layout: {
+                padding: {
+                    bottom: 20 // ✅ เพิ่มที่ว่างให้ Label X
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'start', // ✅ ให้ตัวเลขอยู่บนสุด แต่ไม่บัง Label
+                    offset: 5, // ✅ ให้ตัวเลขไม่ติดแท่งเกินไป
+                    formatter: function (value) {
+                        return value.toFixed(0);
+                    },
+                    font: {
+                        weight: 'bold',
+                        size: 12
+                    },
+                    color: '#000',
+                    backgroundColor: 'rgba(255,255,255,0.7)', // ✅ เพิ่มพื้นหลังให้ตัวเลขอ่านง่าย
+                    borderRadius: 3,
+                    padding: 3
+                }
+            }
+        }
+    });
+</script>
+
+
 
 
 
@@ -583,7 +592,7 @@
         let element = document.getElementById(elementId);
         if (!element) return; // Safety check
         
-        let frameRate = 60; // จำนวนเฟรมต่อวินาที
+        let frameRate = 20; // จำนวนเฟรมต่อวินาที
         let totalFrames = (duration / 1000) * frameRate;
         let count = 0;
         let step = targetValue / totalFrames;

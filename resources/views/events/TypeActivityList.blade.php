@@ -1,7 +1,27 @@
 @extends('admins.index')
 @section('css')
+<style>
+  /* กำหนดความสูงของ modal ให้เล็กลง */
+  #addTypeModal .modal-dialog {
+        max-width: 400px;
+        /* ปรับความกว้างของ modal */
+        height: auto;
+        /* ความสูงปรับตามเนื้อหา */
+    }
+
+    #addTypeModal .modal-content {
+        height: auto;
+        /* ความสูงของ content ปรับตามเนื้อหาภายใน */
+    }
+
+</style>
+
 @endsection
 @section('content')
+
+
+
+
 
     <h4 class="fw-bold py-2 mb-3">
         <a href="{{ route('home') }}">หน้าแรก</a> / ข้อมูลกิจกรรม
