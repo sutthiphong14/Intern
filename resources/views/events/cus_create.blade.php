@@ -195,7 +195,7 @@
                 <textarea class="form-control" id="other" name="other" rows="4">{{ old('other') }}</textarea>
             </div>
             <div class="card-footer align-items-center text-center">
-            <a href="{{ route('customer_list') }}" class="btn btn-secondary">Back</a>
+            <a href="{{ route('event_customer',$type_id) }}" class="btn btn-secondary">Back</a>
             <button type="submit" class="btn btn-success" id="save-button">Save</button>
             
             </div>

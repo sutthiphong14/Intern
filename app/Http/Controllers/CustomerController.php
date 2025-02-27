@@ -121,7 +121,7 @@ class CustomerController extends Controller
         $products = IctProduct::all();
 
 
-        return view('events.cus_create', compact('types', 'services', 'promotion', 'provinces', 'speeds', 'prices', 'centers', 'products'));
+        return view('events.cus_create', compact('type_id','types', 'services', 'promotion', 'provinces', 'speeds', 'prices', 'centers', 'products'));
     }
 
 
