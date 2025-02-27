@@ -17,6 +17,7 @@ use App\Models\TopUp;
 use App\Models\TypeActivity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Storage;
 
 class CustomerController extends Controller
 {
@@ -246,19 +247,20 @@ class CustomerController extends Controller
     public function CustomerDelete($cus_id)
     {
         // Find customer by id
-        $customer = Customer::where('cus_id', $cus_id);
-
+        $customer = Customer::where('cus_id', $cus_id)->first();
 
         if ($customer) {
-            // Delete data from related table (if any)
-            Customer::where('cus_id', $cus_id)->delete();
+            // Delete customer photo from storage if exists
+            if ($customer->cus_photo && Storage::disk('public')->exists($customer->cus_photo)) {
+                Storage::disk('public')->delete($customer->cus_photo);
+            }
 
-            // Delete the customer
-            $customer->delete();
+            // Delete the customer using the correct key (cus_id)
+            Customer::where('cus_id', $cus_id)->delete();
 
             return redirect()->back()->with('success', 'ลบข้อมูลสำเร็จ');
         } else {
-            return redirect()->back()->with('error', 'Customer not found');
+            return redirect()->back()->with('error', 'ไม่พบข้อมูลลูกค้า');
         }
     }
 
