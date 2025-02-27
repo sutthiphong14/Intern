@@ -14,11 +14,24 @@
         /* ความสูงของ content ปรับตามเนื้อหาภายใน */
     }
 
+    /* กำหนดความสูงของ modal ให้เล็กลง */
+  #editTypeModal .modal-dialog {
+        max-width: 400px;
+        /* ปรับความกว้างของ modal */
+        height: auto;
+        /* ความสูงปรับตามเนื้อหา */
+    }
+
+    #editTypeModal .modal-content {
+        height: auto;
+        /* ความสูงของ content ปรับตามเนื้อหาภายใน */
+    }editTypeModal
+
 </style>
+
 
 @endsection
 @section('content')
-
 
 
 

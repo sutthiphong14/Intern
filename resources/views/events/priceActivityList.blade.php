@@ -2,11 +2,50 @@
 @section('css')
 @endsection
 @section('content')
-    <div class="container">
-        <h2>จัดการราคา</h2>
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#PriceModal">เพิ่มราคา</button>
-        <a href="{{ route('speed_list', ['service_id' => $service_id, 'promotion_id' => $promotion_id]) }}" class="btn btn-secondary mb-3">Back</a>
-        <table class="table table-bordered">
+<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
+        <a href="{{ route('home') }}" class="">
+            หน้าแรก
+        </a>
+        /
+        <a href="{{ route('type_list') }}" class="">
+        ข้อมูลกิจกรรม
+        </a>
+        /
+        <a href="javascript:history.back(-3)" class="">
+        ข้อมูลพื้นฐานบริการ
+        </a>
+        /
+        <a href="javascript:history.back(-2)" class="">
+        ข้อมูลพื้นฐานโปรโมชัน
+        </a>
+        /
+        <a href="javascript:history.back()" class="">
+        ข้อมูลพื้นฐานความเร็ว
+        </a>
+        /
+        </span>
+        ข้อมูลพื้นฐานราคา
+</h4>
+<div class="content-wrapper">
+<div class="card">
+
+<div class="d-flex justify-content-between align-items-center gap-2">
+                <h3 class="card-header text-dark">ข้อมูลพื้นฐานราคา</h3>
+                <div class="d-flex align-items-center gap-2">
+
+                    <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-success " data-bs-toggle="modal" data-bs-target="#PriceModal">เพิ่มราคา</button>
+                        <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal"
+                            data-bs-target="#modalScrollable">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+            <div class="table-responsive">
+        <table class="table table-bordered text-center">
             <thead>
                 <tr class="bg-dark text-light">
                     <th>ราคา</th>
@@ -98,9 +137,9 @@
                 </div>
             </div>
         </div>
-
-
-
+        </div>
+    </div>
+    </div>
     </div>
 @endsection
 

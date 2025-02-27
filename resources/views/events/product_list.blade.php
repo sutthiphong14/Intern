@@ -1,16 +1,63 @@
 @extends('admins.index')
 @section('css')
+<style>
+  /* กำหนดความสูงของ modal ให้เล็กลง */
+  #ProductModal .modal-dialog {
+        max-width: 400px;
+        /* ปรับความกว้างของ modal */
+        height: auto;
+        /* ความสูงปรับตามเนื้อหา */
+    }
+
+    #ProductModal .modal-content {
+        height: auto;
+        /* ความสูงของ content ปรับตามเนื้อหาภายใน */
+    }
+
+    
+</style>
 @endsection
 @section('content')
-    <div class="container">
-        <h2>จัดการProduct</h2>
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#ProductModal">เพิ่มProduct</button>
-        <a href="{{ route('service_list',$type_id) }}" class="btn btn-secondary mb-3">Back</a>
+<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
+        <a href="{{ route('home') }}" class="">
+            หน้าแรก
+        </a>
+        /
+        <a href="{{ route('type_list') }}" class="">
+        ข้อมูลกิจกรรม
+        </a>
+        /
+        <a href="javascript:history.back()" class="">
+        ข้อมูลพื้นฐานบริการ
+        </a>
+        /
+        </span>
+        ข้อมูลพื้นฐาน Product
+</h4>
 
-        <table class="table table-bordered">
+
+
+<div class="content-wrapper">
+<div class="card">
+        <div class="d-flex justify-content-between align-items-center gap-2">
+                <h3 class="card-header text-dark">ข้อมูลพื้นฐาน Product</h3>
+                <div class="d-flex align-items-center gap-2">
+
+                    <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ProductModal">เพิ่มProduct</button>
+                        <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal"
+                            data-bs-target="#modalScrollable">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+            <div class="table-responsive ">
+        <table class="table table-bordered text-center">
             <thead>
                 <tr class="bg-dark text-light">
-                    <th>ชื่อProduct</th>
+                    <th>ชื่อ Product</th>
                     <th>รายละเอียด</th>
                     <th>เครื่องมือ</th>
                 </tr>
@@ -109,12 +156,10 @@
                 </div>
             </div>
         </div>
+        </div>
+        </div>
 
-
-
-
-
-
+    </div>
     </div>
 @endsection
 

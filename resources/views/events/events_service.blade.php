@@ -1,6 +1,23 @@
 @extends('admins.index')
 @section('css')
+<style>
+  /* กำหนดความสูงของ modal ให้เล็กลง */
+  #ProductModal .modal-dialog {
+        max-width: 400px;
+        /* ปรับความกว้างของ modal */
+        height: auto;
+        /* ความสูงปรับตามเนื้อหา */
+    }
+
+    #ProductModal .modal-content {
+        height: auto;
+        /* ความสูงของ content ปรับตามเนื้อหาภายใน */
+    }
+
+    
+</style>
 @endsection
+
 @section('content')
 <h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
         <a href="{{ route('home') }}" class="">
