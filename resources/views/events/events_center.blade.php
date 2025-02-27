@@ -2,12 +2,38 @@
 @section('css')
 @endsection
 @section('content')
-    <div class="container">
-        <div class="mt-5 d-flex">
-            <h3>สรุปผลการดำเนินงานกิจกรรมการตลาด {{ $types->type_name }} </h3>
-            <h3 class="text-warning">จังหวัด{{ $provinces->province_name }}</h3>
 
+<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
+        <a href="{{ route('home') }}" class="">
+            หน้าแรก
+        </a>
+        /
+        <a href="{{ route('type_list') }}" class="">
+        ข้อมูลกิจกรรม
+        </a>
+        /
+        <a href="javascript:history.back(-2)" class="">
+        จัดการกิจกรรม {{ $types->type_name }}
+        </a>
+        /
+        <a href="javascript:history.back()" class="">
+        ศูยน์บริการ
+        </a>
+        /
+    </span> จังหวัด {{ $provinces->province_name }}
+</h4>
+
+<div class="content-wrapper mb-5">
+<div class="card ">
+        <div class="d-flex">
+        <div class="d-flex justify-content-between align-items-center gap-2">
+                <h3 class="card-header text-dark">สรุปผลการดำเนินงานกิจกรรมการตลาด {{ $types->type_name }} จังหวัด{{ $provinces->province_name }}</h3>
+                <div class="d-flex align-items-center gap-2">
+                </div>
+            </div>
         </div>
+        <div class="card-body ">
+        <div class="table-responsive ">
         <table class="table table-bordered ">
             <thead>
                 <tr class="bg-dark text-center align-center">
@@ -76,7 +102,7 @@
                     </tr>
                    
                 @endforeach
-                <tr class="bg-warning">
+                <tr class="bg-dark">
 
                     <td colspan="1">รวม</td>
                     <td>{{ $sumFttxNew + $sumFttxNewOver33 }}</td>
@@ -95,6 +121,9 @@
 
 
         </table>
+        </div>
+        </div>
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

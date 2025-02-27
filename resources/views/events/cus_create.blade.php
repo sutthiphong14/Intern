@@ -3,38 +3,44 @@
 @endsection
 
 @section('content')
-    <div class="container">
 
+<h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
+            <a href="{{ route('home') }}" class="">
+                หน้าแรก
+            </a>
+            /
+            <a href="{{ route('type_list') }}" class="">
+                ข้อมูลกิจกรรม
+            </a>
+            /
+            <a href="javascript:history.back()" class="">
+            ข้อมูลลูกค้า
+            </a>
+            /
+        </span> ข้อมูลลูกค้า
+    </h4>
+
+    <div class="card mb-4">
+        <h4 class="card-header">เพิ่มลูกค้า</h4>
+        <hr class="my-0" />
         <form action="{{ route('customer_insert') }}" method="POST" enctype="multipart/form-data">
             @csrf
-           
-
-            <h2 class="m-0">เพิ่มลูกค้า</h2>
-            <div class="mt-3">
-
-                <!-- Type -->
-                <label for="type_id" class="form-label text-danger">กิจกรรม</label>
-                <select class="form-select" id="type_id" name="type_id" required>
-                    @foreach ($types as $type)
-                        <option value="{{ $type->type_id }}">{{ $type->type_name }}</option>
-                    @endforeach
-                </select>
-                @error('type_id')
-                    <small style="color:red">{{ $message }}</small>
-                @enderror
+            <div class="card-body">
+                <label for="type_id" class="form-label">กิจกรรม</label>
+                <input type="text" class="form-control" id="type_id_display"
+                    value="{{ $types->pluck('type_name')->implode(', ') }}" readonly>
+                <input type="hidden" id="type_id" name="type_id" value="{{ $types->pluck('type_id')->implode(', ') }}">
 
                 <label for="service_id" class="form-label">บริการ</label>
-                <select class="form-select  bg-success" id="service_id" name="service_id" required>
+                <select class="form-select  " id="service_id" name="service_id" required>
                     <option value="" selected disabled>กรุณาเลือกบริการ</option>
-                   
+
                 </select>
                 <!-- เพิ่มข้อความคำแนะนำ หรือข้อผิดพลาดได้ -->
                 @error('service_id')
                     <div class="text-danger mt-2">{{ $message }}</div>
                 @enderror
-            </div>
-
-
+            
 
             @error('service_id')
                 <small style="color:red">{{ $message }}</small>
@@ -60,7 +66,7 @@
 
                     <!-- Photo -->
                     <label for="cus_photo" class="form-label">รูปภาพ</label>
-                    <input type="file" class="form-control" id="cus_photo" name="cus_photo" required>
+                    <input type="file" class="form-control" id="cus_photo" name="cus_photo">
                 </div>
 
                 {{-- ict_solution --}}
@@ -82,7 +88,8 @@
 
                 <!-- Address -->
                 <label for="cus_address" class="form-label">ที่อยู่</label>
-                <textarea class="form-control" id="cus_address" name="cus_address" rows="4" required>{{ old('cus_address') }}</textarea>
+                <textarea class="form-control" id="cus_address" name="cus_address" rows="4"
+                    required>{{ old('cus_address') }}</textarea>
                 @error('cus_address')
                     <p style="color:red">{{ $message }}</p>
                 @enderror
@@ -137,7 +144,7 @@
                                 <label for="product_id" class="form-label">Product</label>
                                 <select class="form-select" id="product_id" name="product_id[]" required>
                                     <option value="" disabled selected>-- เลือกProduct --</option>
-                                   
+
                                 </select>
                             </div>
                             <div>
@@ -181,29 +188,35 @@
 
                 <!-- Date Form -->
                 <div id="date" class="mt-3">
-                    <label for="date" class="form-label">วัน/เดือน/ปี</label>
-                    <input type="date" id="date" name="date" class="form-label" required
-                        value="<?= date('Y-m-d') ?>">
+                    <label for="date" class="form-label">วัน/เดือน/ปี (กรอกช่องนี้เฉพาะกรณีลงข้อมูลย้อนหลัง)</label>
+                    <input type="date" id="date" name="date" class="form-label" required value="<?= date('Y-m-d') ?>">
                 </div>
 
                 <!-- Other -->
                 <label for="other" class="form-label">หมายเหตุ</label>
                 <textarea class="form-control" id="other" name="other" rows="4">{{ old('other') }}</textarea>
             </div>
-            <button type="submit" class="btn btn-success" id="save-button">Save</button>
+            <div class="card-footer align-items-center text-center">
             <a href="{{ route('customer_list') }}" class="btn btn-secondary">Back</a>
+            <button type="submit" class="btn btn-success" id="save-button">Save</button>
+            
+            </div>
         </form>
     </div>
+    </div>
+
+
+
 @endsection
 
 
 
 @section('script')
 
-<script>
-     $('#service_id').change(function() {
+    <script>
+        $('#service_id').change(function () {
             var serviceId = $(this).val();
-           
+
             $.ajax({
                 url: '/getProduct',
                 type: 'GET',
@@ -211,86 +224,86 @@
                     service_id: serviceId
                 },
 
-             
-                success: function(data) {
+
+                success: function (data) {
                     $('#product_id').empty();
                     $('#product_id').append(
                         '<option value="" disabled selected>-- เลือกProduct --</option>'
                     );
 
                     // เพิ่ม options สำหรับบริการ
-                    $.each(data, function(index, products) {
+                    $.each(data, function (index, products) {
                         $('#product_id').append('<option value="' + products.product_id + '">' +
                             products.product_name + '</option>');
                     });
                 },
-                error: function() {
+                error: function () {
                     console.log('Error fetching services');
                     alert('เกิดข้อผิดพลาดในการดึงข้อมูลบริการ');
                 }
             });
         });
-</script>
+    </script>
     <script>
         document.getElementById("date").valueAsDate = new Date();
     </script>
 
     <script>
-  $(document).ready(function() {
-    // ฟังก์ชันเพื่อดึงข้อมูลบริการจาก type_id
-    function loadServices(typeId) {
-        $.ajax({
-            url: '/getService', // URL สำหรับดึงข้อมูลบริการ
-            type: 'GET',
-            data: {
-                type_id: typeId
-            },
-            success: function(data) {
-                $('#service_id').empty(); // เคลียร์ตัวเลือกเก่าใน #service_id
-                $('#service_id').append('<option value="" disabled selected>-- เลือกบริการ --</option>');
+        $(document).ready(function () {
+            // ฟังก์ชันเพื่อดึงข้อมูลบริการจาก type_id
+            function loadServices(typeId) {
+                $.ajax({
+                    url: '/getService', // URL สำหรับดึงข้อมูลบริการ
+                    type: 'GET',
+                    data: {
+                        type_id: typeId
+                    },
+                    success: function (data) {
+                        $('#service_id').empty(); // เคลียร์ตัวเลือกเก่าใน #service_id
+                        $('#service_id').append('<option value="" disabled selected>-- เลือกบริการ --</option>');
 
-                // แยกบริการที่มีคำว่า "ร่วม" ออกมา
-                var servicesWithR = data.filter(function(service) {
-                    return service.service_name.includes('ร่วม');
+                        // แยกบริการที่มีคำว่า "ร่วม" ออกมา
+                        var servicesWithR = data.filter(function (service) {
+                            return service.service_name.includes('ร่วม');
+                        });
+
+                        var servicesWithoutR = data.filter(function (service) {
+                            return !service.service_name.includes('ร่วม');
+                        });
+
+                        // รวมบริการที่มีคำว่า "ร่วม" ขึ้นมาก่อน
+                        var allServices = servicesWithR.concat(servicesWithoutR);
+
+                        // เพิ่ม options สำหรับบริการ
+                        $.each(allServices, function (index, service) {
+                            $('#service_id').append('<option value="' + service.service_id + '">' +
+                                service.service_name + '</option>');
+                        });
+                    },
+                    error: function () {
+                        console.log('Error fetching services');
+                        alert('เกิดข้อผิดพลาดในการดึงข้อมูลบริการ');
+                    }
                 });
-
-                var servicesWithoutR = data.filter(function(service) {
-                    return !service.service_name.includes('ร่วม');
-                });
-
-                // รวมบริการที่มีคำว่า "ร่วม" ขึ้นมาก่อน
-                var allServices = servicesWithR.concat(servicesWithoutR);
-
-                // เพิ่ม options สำหรับบริการ
-                $.each(allServices, function(index, service) {
-                    $('#service_id').append('<option value="' + service.service_id + '">' +
-                        service.service_name + '</option>');
-                });
-            },
-            error: function() {
-                console.log('Error fetching services');
-                alert('เกิดข้อผิดพลาดในการดึงข้อมูลบริการ');
             }
+
+            // ดึงค่า type_id จาก select เมื่อโหลดหน้า
+            var currentTypeId = $('#type_id').val(); // ค่า type_id ปัจจุบัน
+            if (currentTypeId) {
+                loadServices(currentTypeId); // เรียกใช้ฟังก์ชันเพื่อดึงบริการ
+            }
+
+            // เมื่อมีการเปลี่ยนแปลงค่าใน #type_id
+            $('#type_id').change(function () {
+                var typeId = $(this).val(); // ดึงค่า type_id ที่เลือก
+                loadServices(typeId); // ดึงข้อมูลบริการใหม่
+            });
         });
-    }
-
-    // ดึงค่า type_id จาก select เมื่อโหลดหน้า
-    var currentTypeId = $('#type_id').val(); // ค่า type_id ปัจจุบัน
-    if (currentTypeId) {
-        loadServices(currentTypeId); // เรียกใช้ฟังก์ชันเพื่อดึงบริการ
-    }
-
-    // เมื่อมีการเปลี่ยนแปลงค่าใน #type_id
-    $('#type_id').change(function() {
-        var typeId = $(this).val(); // ดึงค่า type_id ที่เลือก
-        loadServices(typeId); // ดึงข้อมูลบริการใหม่
-    });
-});
 
 
 
-        $(document).ready(function() {
-            $('#service_id').change(function() {
+        $(document).ready(function () {
+            $('#service_id').change(function () {
                 var serviceId = $(this).val(); // เก็บค่า service_id ที่เลือก
 
                 // ส่งค่าไปเซิร์ฟเวอร์เพื่อตรวจสอบโปรโมชั่น
@@ -300,18 +313,18 @@
                     data: {
                         service_id: serviceId
                     },
-                    success: function(data) {
+                    success: function (data) {
                         $('#promotion_id').empty(); // ล้างตัวเลือกเก่าออก
                         $('#promotion_id').append(
                             '<option value="" disabled selected>-- เลือกโปรโมชั่น --</option>'
                         );
-                        $.each(data, function(index, promotion) {
+                        $.each(data, function (index, promotion) {
                             $('#promotion_id').append('<option value="' + promotion
                                 .promotion_id + '">' + promotion.promotion_name +
                                 '</option>');
                         });
                     },
-                    error: function() {
+                    error: function () {
                         console.log('Error fetching promotions');
                     }
                 });
@@ -320,7 +333,7 @@
             // การดึงข้อมูลอื่นๆ (เช่น Speed, Price) ก็สามารถทำคล้ายๆ กันได้
         });
 
-        $('#promotion_id').change(function() {
+        $('#promotion_id').change(function () {
             var promotionId = $(this).val();
 
             $.ajax({
@@ -329,23 +342,23 @@
                 data: {
                     promotion_id: promotionId
                 },
-                success: function(data) {
+                success: function (data) {
                     $('#speed_id').empty();
                     $('#speed_id').append(
                         '<option value="" disabled selected>-- เลือกความเร็ว --</option>');
-                    $.each(data, function(index, speed) {
+                    $.each(data, function (index, speed) {
                         $('#speed_id').append('<option value="' + speed.speed_id + '">' + speed
                             .speed_name + '</option>');
                     });
                 },
-                error: function() {
+                error: function () {
                     console.log('Error fetching speeds');
                 }
             });
         });
 
 
-        $('#speed_id').change(function() {
+        $('#speed_id').change(function () {
             var speedId = $(this).val();
 
             $.ajax({
@@ -354,23 +367,23 @@
                 data: {
                     speed_id: speedId
                 },
-                success: function(data) {
+                success: function (data) {
                     $('#price_id').empty();
                     $('#price_id').append(
                         '<option value="" disabled selected>-- เลือกราคา --</option>');
-                    $.each(data, function(index, price) {
+                    $.each(data, function (index, price) {
                         $('#price_id').append('<option value="' + price.price_id + '">' + price
                             .price_name + '</option>');
                     });
                 },
-                error: function() {
+                error: function () {
                     console.log('Error fetching prices');
                 }
             });
         });
 
 
-        $('#province_id').change(function() {
+        $('#province_id').change(function () {
             var provinceId = $(this).val();
 
             $.ajax({
@@ -379,16 +392,16 @@
                 data: {
                     province_id: provinceId
                 },
-                success: function(data) {
+                success: function (data) {
                     $('#center_id').empty();
                     $('#center_id').append(
                         '<option value="" disabled selected>-- เลือกศูนย์บริการ --</option>');
-                    $.each(data, function(index, center) {
+                    $.each(data, function (index, center) {
                         $('#center_id').append('<option value="' + center.center_id + '">' +
                             center.center_name + '</option>');
                     });
                 },
-                error: function() {
+                error: function () {
                     console.log('Error fetching centers');
                 }
             });
@@ -396,7 +409,7 @@
     </script>
 
     <script>
-        document.getElementById("quote").addEventListener("change", function() {
+        document.getElementById("quote").addEventListener("change", function () {
             var file = this.files[0];
             var errorMessage = document.getElementById("file-error");
             var saveButton = document.getElementById("save-button");
@@ -439,7 +452,7 @@
 
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             function toggleForms(serviceName) {
                 if (serviceName.toLowerCase().includes('fttx')) {
                     $('#fttx_broadband,#groupNet, #groupNet1').show();
@@ -507,7 +520,7 @@
             toggleForms(serviceName);
 
             // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
-            $('#service_id').change(function() {
+            $('#service_id').change(function () {
                 var serviceName = $(this).find('option:selected').text();
                 toggleForms(serviceName);
             });
@@ -515,10 +528,10 @@
     </script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const container = document.getElementById("product-container");
 
-            document.addEventListener("click", function(event) {
+            document.addEventListener("click", function (event) {
                 if (event.target.classList.contains("add-product")) {
                     const newRow = event.target.closest(".product-row").cloneNode(true);
                     newRow.querySelector("select").value = "";
@@ -537,9 +550,9 @@
     </script>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // เมื่อมีการพิมพ์ในช่อง cus_fullname
-            $('#cus_fullname').on('input', function() {
+            $('#cus_fullname').on('input', function () {
                 var selectedService = $('#service_id').val(); // ดึงค่าของ service_id
                 if (!selectedService) { // ถ้ายังไม่ได้เลือกบริการ
                     $('#service-alert').show(); // แสดงข้อความแจ้งเตือน
@@ -550,7 +563,7 @@
             });
 
             // เมื่อมีการเปลี่ยนค่าใน select (service_id)
-            $('#service_id').on('change', function() {
+            $('#service_id').on('change', function () {
                 $('#service-alert').hide(); // ซ่อนข้อความแจ้งเตือนเมื่อเลือกบริการ
             });
         });

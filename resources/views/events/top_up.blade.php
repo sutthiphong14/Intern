@@ -30,10 +30,11 @@
 
                 <input type="hidden" name="type_idcheck" id="type_idcheck" value="{{ $types->first()->type_id }}">
 
-                <div class="mt-2">
+                <div class="mb-3">
+                    <span class="text-danger">* เลือกจังหวัด</span>
                     <!-- ช่องเลือกจังหวัด -->
-                    <select class="form-select bg-warning" id="province_search" name="province_search">
-                        <option value="" disabled selected>เลือกจังหวัด</option>
+                    <select class="form-select" id="province_search" name="province_search" >
+                        <option value=""  >ทั้งหมด</option>
                         @foreach ($provinces as $province)
                             <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
                         @endforeach
@@ -242,7 +243,7 @@
     <script>
         $(document).ready(function() {
             $('#province_search').select2({
-                placeholder: "เลือกจังหวัด",
+                placeholder: "ทั้งหมด",
                 allowClear: true
             });
 

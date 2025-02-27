@@ -190,13 +190,13 @@
       <div class="dropdown">
       <a class="nav-link-main dropdown-toggle hide-arrow" href="javascript:void(0);" id="userDropdown"
         data-bs-toggle="dropdown" aria-expanded="false">
-        @if (Auth::user()->profile_image )
-      <img src="{{ Auth::user()->profile_image }}" alt="User Avatar" class="user-profile-image">
-    @else
-    <img src="{{ asset('dist/img/defult_profile.jpg') }}" alt="Default Profile Image"
-    class="user-profile-image">
-    
-  @endif
+        @if (Auth::user()->profile_image)
+                            <img src="{{ asset(Auth::user()->profile_image) }}" alt="User Avatar"
+                                class="user-profile-image">
+                        @else
+                            <img src="{{ asset('dist/img/defult_profile.jpg') }}" alt="Default Profile Image"
+                                class="user-profile-image">
+                        @endif
         <span class="text-dark"> &nbsp{{ Auth::user()->name }}</span>
       </a>
       <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="userDropdown">
