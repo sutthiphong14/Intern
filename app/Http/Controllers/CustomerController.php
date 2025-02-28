@@ -707,7 +707,6 @@ class CustomerController extends Controller
 
     public function searchCustomers(Request $request)
     {
-        $date = $request->get('date');
         $name = $request->get('name');
         $service = $request->get('service');
         $type_id = $request->get('type_id');
@@ -720,9 +719,6 @@ class CustomerController extends Controller
     
 
         // ค้นหาตามวันที่
-        if ($date) {
-            $query->whereDate('created_at', $date);
-        }
 
         // กรองตาม province_id
         if ($province_id) {

@@ -50,12 +50,7 @@
                    <div class="d-flex align-items-center gap-2">
                         <input type="hidden" id="type_id"
                             value="{{ $data->isNotEmpty() && isset($data->first()->type) ? $data->first()->type->type_id : '' }}">
-                        <div class="form-group me-3">
-
-                            <span><i class="fa-solid fa-calendar-days"></i></span>
-                            <input type="date" id="createdDate" class="form-control" placeholder="ค้นหาตามวันที่">
-                        </div>
-
+                       
                     </div> 
 
 
@@ -318,7 +313,7 @@
                                                                         </a>
                                                                     </div>
                                                     @else
-                                                        <p><strong>ใบเสนอราคา:</strong> ไม่มีใบเสนอราคา</p>
+                                                        <p><span class="fw-bold text-dark">ใบเสนอราคา:</span> ไม่มีใบเสนอราคา</p>
                                                     @endif
                                                     <p><span class="fw-bold text-dark">หมายเหตุ</span> {{ $customer->other ?? 'ไม่ระบุ' }}</p>
 
@@ -463,13 +458,12 @@
     </script>
 
     <script>
-        document.getElementById('createdDate').addEventListener('input', searchCustomers);
         document.getElementById('searchInput').addEventListener('input', searchCustomers);
         document.getElementById('type_service').addEventListener('change', searchCustomers);
         document.getElementById('province_search').addEventListener('change', searchCustomers);
 
         function searchCustomers() {
-            let date = document.getElementById('createdDate').value;
+           
             let searchName = document.getElementById('searchInput').value;
             let typeService = document.getElementById('type_service').value;
             let provinceId = document.getElementById('province_search').value;
@@ -477,7 +471,7 @@
 
             // ส่งค่าผ่าน URL Params ไปยัง Backend
             let url =
-                `/customers/search?date=${date}&name=${searchName}&service=${typeService}&type_id=${typeId}&province_id=${provinceId}`;
+                `/customers/search?name=${searchName}&service=${typeService}&type_id=${typeId}&province_id=${provinceId}`;
 
             fetch(url)
                 .then(response => response.json())
