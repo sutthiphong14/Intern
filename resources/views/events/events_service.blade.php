@@ -2,7 +2,7 @@
 @section('css')
 <style>
   /* กำหนดความสูงของ modal ให้เล็กลง */
-  #ProductModal .modal-dialog {
+    #ProductModal .modal-dialog {
         max-width: 400px;
         /* ปรับความกว้างของ modal */
         height: auto;
