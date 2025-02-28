@@ -339,7 +339,7 @@
                     backgroundColor: 'rgba(235, 117, 13, 0.8)',
                     borderColor: 'rgba(235, 117, 13, 1)',
                     borderWidth: 1,
-                    data: adJust
+                    data: sumMovefttx
                 });
             }
 
