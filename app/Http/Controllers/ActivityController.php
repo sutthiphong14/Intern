@@ -65,7 +65,7 @@ class ActivityController extends Controller
 
 
         // ดึงข้อมูล Fttxbroadband ที่ติดตั้งเอง
-        $selfInstall = Fttxbroadband::where('installation_type', 1)->where('new', 1)
+        $selfInstall = Fttxbroadband::where('installation_type', 1)->whereIn('new', [1, 2]) // ✅ ใช้ whereIn() แทน
             ->get()
             ->groupBy('type_id')
             ->map(function ($items) {
@@ -75,7 +75,7 @@ class ActivityController extends Controller
             });
 
         // ดึงข้อมูล Fttxbroadband ที่จ้างผู้รับเหมา
-        $HireInstall = Fttxbroadband::where('installation_type', 0)->where('new', 1)
+        $HireInstall = Fttxbroadband::where('installation_type', 0)->whereIn('new', [1, 2])
             ->get()
             ->groupBy('type_id')
             ->map(function ($items) {
@@ -715,7 +715,7 @@ class ActivityController extends Controller
 
         // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
         $fttxData = Fttxbroadband::where('type_id', $type_id)
-            ->select('province_id', 'new', 'installation_type')->where('new', 1)
+            ->select('province_id', 'new', 'installation_type')->whereIn('new', [1, 2]) // ✅ ใช้ whereIn() แทน
             ->get()
             ->groupBy('province_id');
 
@@ -730,10 +730,10 @@ class ActivityController extends Controller
             ->select('province_id', 'new', 'installation_type')->where('new', 2)
             ->get()
             ->groupBy('province_id');
+          
 
 
-
-        $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
+        $fttxNew = $fttxData->map(fn($items) => $items->whereIn('new', [1, 2])->count());
         $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
         $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
         $adjust = $adjustData->map(fn($items) => $items->where('new', 0)->count())->toArray();
@@ -866,7 +866,7 @@ class ActivityController extends Controller
 
         // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
         $fttxData = Fttxbroadband::where('type_id', $type_id)
-            ->select('province_id', 'new', 'installation_type')->where('new', 1)
+            ->select('province_id', 'new', 'installation_type')->whereIn('new', [1, 2]) // ✅ ใช้ whereIn() แทน
             ->get()
             ->groupBy('province_id');
 
@@ -882,7 +882,7 @@ class ActivityController extends Controller
             ->get()
             ->groupBy('province_id');
 
-        $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
+        $fttxNew = $fttxData->map(fn($items) => $items->whereIn('new', [1, 2])->count());
         $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
         $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
 
@@ -1048,7 +1048,7 @@ class ActivityController extends Controller
 
         // โหลดข้อมูล Fttxbroadband เฉพาะ province_id ที่ส่งมา
         $fttxData = Fttxbroadband::where('province_id', $province_id)->where('type_id', $type_id)
-            ->select('province_id', 'new', 'installation_type', 'center_id')->where('new', 1)
+            ->select('province_id', 'new', 'installation_type', 'center_id')->whereIn('new', [1, 2])
             ->get()
             ->groupBy('center_id');
 
@@ -1067,7 +1067,7 @@ class ActivityController extends Controller
             ->groupBy('center_id');
 
 
-        $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
+        $fttxNew = $fttxData->map(fn($items) => $items->whereIn('new', [1, 2])->count());
         $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
         $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
         $adjust = $adjustData->map(fn($items) => $items->count());
