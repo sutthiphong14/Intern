@@ -1,5 +1,17 @@
 @extends('admins.index')
 @section('css')
+<style>
+    /* ขยายขนาด tooltip */
+    .tooltip-inner {
+        max-width: 300px; /* กำหนดขนาดสูงสุดของ tooltip */
+        font-size: 1.2rem; /* ปรับขนาดตัวอักษร */
+        padding: 15px; /* ปรับ padding ของ tooltip */
+   
+        border-radius: 5px; /* มุมโค้งมน */
+    }
+
+ 
+</style>
 @endsection
 
 @section('content')
@@ -34,12 +46,12 @@
                             <p><span class="fw-bold text-dark">ชื่อ-นามสกุล:</span> {{ $customer->cus_fullname }}</p>
                             @if (strpos(strtolower($customer->service->service_name), 'fttx_broadband') !== false ||
                                     strpos(strtolower($customer->service->service_name), 'sim my') !== false)
-                                <p><span class="fw-bold text-dark">รหัสบัตรประชาชน:</span> {{ $customer->id_card }}</p>
+                                <p><span class="fw-bold text-dark">รหัสบัตรประชาชน:</span> {{ $customer->id_card ?? 'ไม่ระบุ'}}</p>
                             @else
                                 <p><span class="fw-bold text-dark">ประเภทลูกค้า:</span>
                                     {{ $dataIct->where('cus_id', $customer->cus_id)->first()->customer_type }}</p>
                             @endif
-                            <p><span class="fw-bold text-dark">ที่อยู่:</span> {{ $customer->cus_address }}</p>
+                            <p><span class="fw-bold text-dark">ที่อยู่:</span> {{ $customer->cus_address ?? 'ไม่ระบุ' }}</p>
                             <p><span class="fw-bold text-dark">กิจกรรม:</span>
                                 {{ $customer->type->type_name ?? 'ไม่ระบุ' }}
                             </p>
@@ -50,7 +62,7 @@
                                     data-bs-original-title="
                                   <div class='text-start py-3' style='padding: 10px; background-color: #f9f9f9; border-radius: 5px;'>
                                       <strong>ข้อมูลบริการของลูกค้า</strong><br>
-                                      <span>----------------------------</span>
+                                      <span>-----------------------------------</span>
                                       <strong class='text-warning'>บริการ:   </strong> {{ $customer->service->service_name }}<br>
                                       @php
                                           $fttxData = \App\Models\Fttxbroadband::where(
@@ -152,7 +164,7 @@
                                         </a>
                                     </div>
                                 @else
-                                    <p><strong>ใบเสนอราคา:</strong> ไม่มีใบเสนอราคา</p>
+                                <p><span class="fw-bold text-dark">ใบเสนอราคา:</strong> ไม่มีใบเสนอราคา</p>
                                 @endif
                                 <p><span class="fw-bold text-dark">หมายเหตุ</span> {{ $customer->other ?? 'ไม่ระบุ' }}</p>
 

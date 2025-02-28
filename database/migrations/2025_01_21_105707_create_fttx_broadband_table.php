@@ -10,7 +10,7 @@ class CreateFttxBroadbandTable extends Migration
     {
         Schema::create('fttx_broadband', function (Blueprint $table) {
             $table->id('fttx_id');  // รหัสหลัก (Primary Key)
-            $table->boolean('new');  // ฟิลด์ลูกค้าใหม่
+            $table->tinyInteger('new')->default(1);  // ฟิลด์ลูกค้าใหม่ (0 = ปรับโปรโมชั่น, 1 = ลูกค้าใหม่, 2 = ลูกค้าย้ายค่าย)
             // ฟิลด์เดียวแทน ติดตั้งเอง หรือ จ้างผู้รับเหมา
             $table->boolean('installation_type');
             // Foreign Key to customers table

@@ -38,7 +38,7 @@
             <thead>
                 <tr class="bg-dark text-center align-center">
                     <th rowspan="4">ศูยน์บริกาาร</th>
-                    <th colspan="4">FTTX</th>
+                    <th colspan="5">FTTX</th>
                     <th colspan="4">SIM my</th>
                     <th colspan="2">Ict Solution</th>
 
@@ -49,6 +49,7 @@
                     <th rowspan="4">ติดตั้งเอง</th>
                     <th rowspan="4">จ้างผู้รับเหมา</th>
                     <th rowspan="4">ปรับโปรโมชั่น</th>
+                    <th rowspan="4">ลูกค้าย้ายค่าย</th>
 
                 </tr>
                 <tr class="bg-dark text-center">
@@ -78,6 +79,7 @@
                         <td>{{ $selfInstall[$center->center_id] ?? 0 }}</td>
                         <td>{{ $HireInstall[$center->center_id] ?? 0 }}</td>
                         <td>{{ $adjust[$center->center_id] ?? 0 }}</td>
+                        <td>{{ $move[$center->center_id] ?? 0 }}</td>
 
                         <td>{{ $Simmy_new[$center->center_id] ?? 0 }}</td>
                         <td>{{ $Simmy_move[$center->center_id] ?? 0 }}</td>
@@ -109,6 +111,7 @@
                     <td>{{ $sumSelfInstall + $sumSelfInstallOver33 }}</td>
                     <td>{{ $sumHireInstall + $sumHireInstallOver33 }}</td>
                     <td>{{ $sumAdjust + $sumAdjustOver33 }}</td>
+                    <td>{{ $sumMovefttx + $sumMovefttxOver33 }}</td>
                     <td>{{ $sumNew + $sumNewOver33 }}</td>
                     <td>{{ $sumMove + $sumMoveOver33 }}</td>
                     <td>{{ $sumCount + $sumCountOver33 }}</td>

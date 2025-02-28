@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('cus_fullname');
             $table->string('id_card', 13)->nullable();
             $table->string('cus_photo')->nullable();
-            $table->text('cus_address');
+            $table->text('cus_address')->nullable();
             $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('type_id')->on('type_activity')->onDelete('cascade');
             $table->unsignedBigInteger('service_id');
