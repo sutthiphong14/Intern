@@ -21,17 +21,25 @@
     </h4>
 
     <div class="card mb-4">
-        <h4 class="card-header">เพิ่มลูกค้า</h4>
+    <div class="d-flex justify-content-between align-items-center gap-2">
+                <h3 class="card-header text-dark">แบบฟอร์มข้อมูลลูกค้า</h3>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="form-group me-4">
+
+                    <a href="{{ route('top_up_list', $type_id) }}" class="btn btn-warning col-auto">เติมเงินรายปี</a>
+                    </div>
+                </div>
+            </div>
         <hr class="my-0" />
         <form action="{{ route('customer_insert') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="card-body">
-                <label for="type_id" class="form-label">กิจกรรม</label>
+                <label for="type_id" class="form-label">กิจกรรม <span style="color: red;">*</span> </label>
                 <input type="text" class="form-control" id="type_id_display"
                     value="{{ $types->pluck('type_name')->implode(', ') }}" readonly>
                 <input type="hidden" id="type_id" name="type_id" value="{{ $types->pluck('type_id')->implode(', ') }}">
 
-                <label for="service_id" class="form-label">บริการ</label>
+                <label for="service_id" class="form-label mt-3">บริการ <span style="color: red;">*</span></label>
                 <select class="form-select  " id="service_id" name="service_id" required>
                     <option value="" selected disabled>กรุณาเลือกบริการ</option>
 
@@ -49,7 +57,7 @@
             <div class="mb-3">
                 <!-- Fullname -->
                 <p id="service-alert" class="text-danger bg-light" style="display: none;">กรุณาเลือกบริการก่อน</p>
-                <label for="cus_fullname" class="form-label mt-3" id="fullname_label">ชื่อ นามสกุล</label>
+                <label for="cus_fullname" class="form-label mt-3" id="fullname_label">ชื่อ นามสกุล <span style="color: red;">*</span></label>
                 @error('cus_fullname')
                     <p style="color:red">{{ $message }}</p>
                 @enderror
@@ -58,7 +66,7 @@
 
                 <div id="groupNet1">
                     <!-- ID Card -->
-                    <label for="id_card" class="form-label">หมายเลขบัตรประจำตัวประชาชน</label>
+                    <label for="id_card" class="form-label">หมายเลขบัตรประจำตัวประชาชน <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="id_card" name="id_card" value="{{ old('id_card') }}"
                          oninput="validateIdCard()">
 
@@ -70,7 +78,7 @@
 
                 {{-- ict_solution --}}
                 <div id="ict_solution1">
-                    <label for="customer_type" class="form-label">ประเภทลูกค้า</label>
+                    <label for="customer_type" class="form-label">ประเภทลูกค้า <span style="color: red;">*</span></label>
                     <select class="form-control" id="customer_type" name="customer_type" required>
                         <option value="" disabled selected>-- เลือกหน่วยงาน --</option>
                         <option value="หน่วยงานรัฐบาล">หน่วยงานรัฐบาล</option>
@@ -93,27 +101,27 @@
 
                 <div id="groupNet">
                     <!-- Promotion -->
-                    <label for="promotion_id" class="form-label">โปรโมชั่น</label>
+                    <label for="promotion_id" class="form-label">โปรโมชั่น <span style="color: red;">*</span></label>
                     <select class="form-select" id="promotion_id" name="promotion_id" required>
                         <option value="" disabled selected>-- เลือกโปรโมชั่น --</option>
                     </select>
 
 
                     <!-- Speed -->
-                    <label for="speed_id" class="form-label">ความเร็ว</label>
+                    <label for="speed_id" class="form-label">ความเร็ว <span style="color: red;">*</span></label>
                     <select class="form-select" id="speed_id" name="speed_id" required>
                         <option value="" disabled selected>-- เลือกความเร็ว --</option>
                     </select>
 
                     <!-- Price -->
-                    <label for="price_id" class="form-label">ราคา</label>
+                    <label for="price_id" class="form-label">ราคา <span style="color: red;">*</span></label>
                     <select class="form-select" id="price_id" name="price_id" required>
                         <option value="" disabled selected>-- เลือกราคา --</option>
                     </select>
 
                 </div>
                 <!-- Province -->
-                <label for="province_id" class="form-label">จังหวัด</label>
+                <label for="province_id" class="form-label">จังหวัด <span style="color: red;">*</span></label>
                 <select class="form-select" id="province_id" name="province_id" required>
                     <option value="" disabled selected>-- เลือกจังหวัด --</option>
                     @foreach ($provinces as $province)
@@ -125,7 +133,7 @@
                 @enderror
 
                 <!-- Center -->
-                <label for="center_id" class="form-label">ศูนย์บริการ</label>
+                <label for="center_id" class="form-label">ศูนย์บริการ <span style="color: red;">*</span></label>
                 <select class="form-select" id="center_id" name="center_id" required>
                     <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
                 </select>
@@ -138,14 +146,14 @@
                     <div id="product-container">
                         <div class="d-flex product-row">
                             <div>
-                                <label for="product_id" class="form-label">Product</label>
+                                <label for="product_id" class="form-label">Product <span style="color: red;">*</span></label>
                                 <select class="form-select" id="product_id" name="product_id[]" required>
                                     <option value="" disabled selected>-- เลือกProduct --</option>
 
                                 </select>
                             </div>
                             <div>
-                                <label for="quantity" class="form-label">จำนวน</label>
+                                <label for="quantity" class="form-label">จำนวน <span style="color: red;">*</span></label>
                                 <input type="number" id="quantity_id" name="quantity[]" class="form-control"
                                     placeholder="ระบุจำนวน" required>
                             </div>
@@ -153,34 +161,34 @@
                         </div>
                     </div>
 
-                    <label for="income" class="form-label">รายได้ต่อเดือน</label>
-                    <input type="number" id="income" name='income' class="form-control bg-warning" required>
+                    <label for="income" class="form-label">รายได้ต่อเดือน <span style="color: red;">*</span></label>
+                    <input type="number" id="income" name='income' class="form-control " required>
                 </div>
 
                 <!-- fttx_broadband form-->
                 <div id="fttx_broadband">
-                    <label for="new" class="form-label">ประเภทลูกค้า</label>
-                    <select class="form-select bg-warning" id="new" name="new" required>
+                    <label for="new" class="form-label">ประเภทลูกค้า <span style="color: red;">*</span></label>
+                    <select class="form-select " id="new" name="new" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
-                        <option value="1" class="bg-secondary"> ลูกค้าใหม่ </option>
-                        <option value="2" class="bg-secondary"> ลูกค้าย้ายค่าย </option>
-                        <option value="0" class="bg-secondary"> ปรับโปรโมชั่น </option>
+                        <option value="1" class=""> ลูกค้าใหม่ </option>
+                        <option value="2" class=""> ลูกค้าย้ายค่าย </option>
+                        <option value="0" class=""> ปรับโปรโมชั่น </option>
                     </select>
-                    <label for="installation_type" class="form-label">งานติดตั้ง</label>
-                    <select class="form-select bg-warning" id="installation_type" name="installation_type" required>
+                    <label for="installation_type" class="form-label">งานติดตั้ง <span style="color: red;">*</span></label>
+                    <select class="form-select " id="installation_type" name="installation_type" required>
                         <option value="" disabled selected>-- เลือกวิธีการติดตั้ง --</option>
-                        <option value="1" class="bg-secondary"> ติดตั้งเอง </option>
-                        <option value="0" class="bg-secondary"> จ้างผู้รับเหมา </option>
+                        <option value="1" class=""> ติดตั้งเอง </option>
+                        <option value="0" class=""> จ้างผู้รับเหมา </option>
                     </select>
                 </div>
 
                 <!-- sim_my form-->
                 <div id="sim_my">
-                    <label for="cus_new" class="form-label">ประเภทลูกค้า</label>
-                    <select class="form-select bg-warning" id="cus_new" name="cus_new" required>
+                    <label for="cus_new" class="form-label">ประเภทลูกค้า <span style="color: red;">*</span></label>
+                    <select class="form-select " id="cus_new" name="cus_new" required>
                         <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
-                        <option value="1" class="bg-secondary"> ลูกค้าใหม่ </option>
-                        <option value="0" class="bg-secondary"> ลูกค้า(ย้ายค่าย) </option>
+                        <option value="1" class=""> ลูกค้าใหม่ </option>
+                        <option value="0" class=""> ลูกค้า(ย้ายค่าย) </option>
                     </select>
                 </div>
 

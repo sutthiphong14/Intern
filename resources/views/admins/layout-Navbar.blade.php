@@ -572,7 +572,7 @@
         </div>
         @endif
 
-        @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) || (Auth::user()->permission['form_event'] ?? false || (Auth::user()->permission['view_customer'] ?? false)))
+        @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) || (Auth::user()->permission['form_event'] ?? false) || (Auth::user()->permission['view_customer'] ?? false))
         <h4><i class="fas fa-calendar-alt"></i> จัดการกิจกรรม</h4>
         <hr>
         <div class="row">

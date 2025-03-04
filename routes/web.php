@@ -113,7 +113,7 @@ Route::get('/profile', [UserController::class, 'showProfile'])
 
 
 
-
+Route::middleware(['auth', 'check.permission:managenews_feeds,adminper_mission,'])->group(function () {
 Route::get('/updatenewsfeed', function () {
     return view('newsfeed.updatenewsfeed');
 });
@@ -153,7 +153,7 @@ Route::middleware(['auth', 'check.permission:managenews_feeds'])->group(function
 });
 Route::get('/news/search', [AdminController::class, 'search'])->name('news.search');
 Route::delete('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');
-
+});
 
 
 
@@ -358,7 +358,7 @@ Route::post('/requests/createUser/{id}', [RequestsController::class, 'createUser
 
 
 
-
+Route::middleware(['auth', 'check.permission:manage_banner,manage_imageevent,adminper_mission,'])->group(function () {
 Route::get('/edit_banner', function () {
     return view('manage_images.edit_banner');
 })->name('edit_banner');
@@ -371,6 +371,22 @@ Route::delete('/slideshow/{id}', [SlideshowController::class, 'destroy'])->name(
 Route::delete('/edit_banner/{id}', [SlideshowController::class, 'destroy'])->name('edit_banner.destroy');
 Route::delete('/slideshow/{id}', [SlideshowController::class, 'destroy'])->name('slideshow.destroy');
 
+Route::get('/events', [EventController::class, 'showListView'])->name('events.list');
+Route::post('/events', [EventController::class, 'store'])->name('events.store');
+Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
+Route::post('/events/update-status', [EventController::class, 'updateStatus'])->name('events.updateStatus');
+Route::put('/events/{id}', [EventController::class, 'update'])->name('events.update');
+Route::get('/manage_album_event/{event_id}', [EventController::class, 'manageAlbumEvent'])->name('manage_album_event');
+Route::post('/events/{event_id}/upload-image', [EventController::class, 'uploadImage'])->name('upload_image_event');
+Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::class, 'deleteImage'])
+    ->name('delete.image');
+Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::class, 'deleteImage']);
+Route::get('/download-zip/{event_id}', [EventController::class, 'downloadZip'])->name('events.downloadZip');
+Route::get('/api/centers/{province_id}', function($province_id) {
+    $centers = ServiceCenterActivity::where('province_id', $province_id)->get();
+    return response()->json(['centers' => $centers]);
+});
+});
 
 
 
@@ -444,21 +460,7 @@ Route::get('/getPrices', [CustomerController::class, 'getPrices']);
 Route::get('/getCenters', [CustomerController::class, 'getCenters']);
 
 
-Route::get('/events', [EventController::class, 'showListView'])->name('events.list');
-Route::post('/events', [EventController::class, 'store'])->name('events.store');
-Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
-Route::post('/events/update-status', [EventController::class, 'updateStatus'])->name('events.updateStatus');
-Route::put('/events/{id}', [EventController::class, 'update'])->name('events.update');
-Route::get('/manage_album_event/{event_id}', [EventController::class, 'manageAlbumEvent'])->name('manage_album_event');
-Route::post('/events/{event_id}/upload-image', [EventController::class, 'uploadImage'])->name('upload_image_event');
-Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::class, 'deleteImage'])
-    ->name('delete.image');
-Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::class, 'deleteImage']);
-Route::get('/download-zip/{event_id}', [EventController::class, 'downloadZip'])->name('events.downloadZip');
-Route::get('/api/centers/{province_id}', function($province_id) {
-    $centers = ServiceCenterActivity::where('province_id', $province_id)->get();
-    return response()->json(['centers' => $centers]);
-});
+
 Route::get('/customers/search', [CustomerController::class, 'searchCustomers'])->name('customer_search');
 Route::post('/topUp_insert', [CustomerController::class,'insertTopup'])->name('topUp_insert');
 Route::delete('/topUp_delete/{topUp_id}', [CustomerController::class, 'TopUpDelete'])->name('topUp_delete');

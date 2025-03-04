@@ -10,6 +10,17 @@
         border-radius: 5px; /* มุมโค้งมน */
     }
 
+    /* กำหนดความสูงของ modal ให้เล็กลง */
+    .modal-dialog {
+    max-width: 500px; /* กำหนดความกว้างตามต้องการ */
+    height: auto;
+}
+
+.modal-content {
+    height: auto;
+}
+
+
  
 </style>
 @endsection
@@ -34,38 +45,15 @@
             <div class="d-flex align-items-center gap-2">
 
                 <div class="d-flex align-items-center gap-2">
-                    <div>
-                        <!-- ช่องเลือกจังหวัด -->
-                        <select class="form-select" id="province_search" name="province_search">
-                            <option value="" disabled selected>เลือกจังหวัด</option>
-                            @foreach ($provinces as $province)
-                                <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <input type="text" id="searchInput" class="form-control" placeholder="ค้นหาชื่อลูกค้า">
-                    </div>
+                <form id="searchForm">
 
-                   <div class="d-flex align-items-center gap-2">
-                        <input type="hidden" id="type_id"
-                            value="{{ $data->isNotEmpty() && isset($data->first()->type) ? $data->first()->type->type_id : '' }}">
-                       
-                    </div> 
+        <!-- ค้นหาตามชื่อ -->
 
+            <input type="text" id="searchInput" name="name" class="form-control" placeholder="ค้นหาชื่อลูกค้า" width = '100px'>
 
+</form>
+                    
 
-
-                    <div>
-                        <!-- ช่องเลือกประเภทบริการ -->
-                        <select class="form-select" id="type_service" name="type_service">
-                            <option value="">ทั้งหมด</option>
-
-                            @foreach ($serviceTypes as $serviceType)
-                                <option value="{{ $serviceType->service_name }}">{{ $serviceType->service_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
 
                     @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) || (Auth::user()->permission['form_event'] ?? false ))
                     <div class="col-auto"> <a href="{{ route('customer_create', $type_id) }}"
@@ -90,6 +78,7 @@
             <table class="table table-bordered text-center">
                 <thead id="table-heard">
                     <tr class="bg-dark text-light">
+                    
                     <th>ตรวจสอบ</th>
 
                         <th>ชื่อ-นามสกุล</th>
@@ -97,7 +86,7 @@
 
                         <th>(จังหวัด/ศูนย์บริการ)</th>
 
-                        @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) )
+                        @if((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false)  )
                         <th>เครื่องมือ</th>
                         @endif
                     </tr>
@@ -175,15 +164,15 @@
 
             <!-- Modal view -->
             @foreach ($data as $customer)
-                    <div class="modal fade" id="customerModal{{ $customer->cus_id }}" tabindex="-1"
-                        aria-labelledby="customerModalLabel{{ $customer->cus_id }}" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="customerModalLabel{{ $customer->cus_id }}">รายละเอียดลูกค้า</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
+            <div class="modal fade" id="customerModal{{ $customer->cus_id }}" tabindex="-1"
+    aria-labelledby="customerModalLabel{{ $customer->cus_id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="customerModalLabel{{ $customer->cus_id }}">รายละเอียดลูกค้า</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
         
                                     <p><span class="fw-bold text-dark">ชื่อ-นามสกุล:</span> {{ $customer->cus_fullname }}</p>
                                     @if (
@@ -365,60 +354,61 @@
         </div>
         </div>
         </div>
-        <div class="d-flex justify-content-center align-items-center me-4">
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    {{-- ลิงก์หน้าแรกสุด --}}
-                    @if ($users->onFirstPage())
-                        <li class="page-item disabled">
-                            <span class="page-link"><i class="tf-icon bx bx-chevrons-left"></i></span>
-                        </li>
-                        <li class="page-item disabled">
-                            <span class="page-link"><i class="tf-icon bx bx-chevron-left"></i></span>
-                        </li>
-                    @else
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $users->appends(request()->query())->url(1) }}">
-                                <i class="tf-icon bx bx-chevrons-left"></i>
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $users->appends(request()->query())->previousPageUrl() }}">
-                                <i class="tf-icon bx bx-chevron-left"></i>
-                            </a>
-                        </li>
-                    @endif
+    <div class="d-flex justify-content-center align-items-center me-4">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {{-- ลิงก์หน้าแรกสุด --}}
+            @if ($data->onFirstPage())
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="tf-icon bx bx-chevrons-left"></i></span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="tf-icon bx bx-chevron-left"></i></span>
+                </li>
+            @else
+                <li class="page-item">
+                    <a class="page-link" href="{{ $data->appends(request()->query())->url(1) }}">
+                        <i class="tf-icon bx bx-chevrons-left"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="{{ $data->appends(request()->query())->previousPageUrl() }}">
+                        <i class="tf-icon bx bx-chevron-left"></i>
+                    </a>
+                </li>
+            @endif
 
-                    {{-- หมายเลขหน้า --}}
-                    @foreach ($users->appends(request()->query())->getUrlRange(1, $users->lastPage()) as $page => $url)
-                        <li class="page-item {{ $page == $users->currentPage() ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                        </li>
-                    @endforeach
+            {{-- หมายเลขหน้า --}}
+            @foreach (range(1, $data->lastPage()) as $page)
+                <li class="page-item {{ $page == $data->currentPage() ? 'active' : '' }}">
+                    <a class="page-link" href="{{ $data->appends(request()->query())->url($page) }}">{{ $page }}</a>
+                </li>
+            @endforeach
 
-                    {{-- ลิงก์หน้าถัดไป --}}
-                    @if ($users->hasMorePages())
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $users->appends(request()->query())->nextPageUrl() }}">
-                                <i class="tf-icon bx bx-chevron-right"></i>
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $users->appends(request()->query())->url($users->lastPage()) }}">
-                                <i class="tf-icon bx bx-chevrons-right"></i>
-                            </a>
-                        </li>
-                    @else
-                        <li class="page-item disabled">
-                            <span class="page-link"><i class="tf-icon bx bx-chevron-right"></i></span>
-                        </li>
-                        <li class="page-item disabled">
-                            <span class="page-link"><i class="tf-icon bx bx-chevrons-right"></i></span>
-                        </li>
-                    @endif
-                </ul>
-            </nav>
-        </div>
+            {{-- ลิงก์หน้าถัดไป --}}
+            @if ($data->hasMorePages())
+                <li class="page-item">
+                    <a class="page-link" href="{{ $data->appends(request()->query())->nextPageUrl() }}">
+                        <i class="tf-icon bx bx-chevron-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="{{ $data->appends(request()->query())->url($data->lastPage()) }}">
+                        <i class="tf-icon bx bx-chevrons-right"></i>
+                    </a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="tf-icon bx bx-chevron-right"></i></span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="tf-icon bx bx-chevrons-right"></i></span>
+                </li>
+            @endif
+        </ul>
+    </nav>
+</div>
+
     </div>
 
 
@@ -493,214 +483,28 @@
         }
     </script>
 
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
-
-    <script>
-        $(document).ready(function () {
-            $('#province_search').select2({
-                placeholder: "เลือกจังหวัด",
-                allowClear: true
-            });
-
-            // ใช้ jQuery ดักจับค่า Select2 ที่เปลี่ยนแปลง
-            $('#province_search').on('change', function () {
-                searchCustomers();
-            });
-        });
-    </script>
-
     <script>
         document.getElementById('searchInput').addEventListener('input', searchCustomers);
-        document.getElementById('type_service').addEventListener('change', searchCustomers);
-        document.getElementById('province_search').addEventListener('change', searchCustomers);
+document.getElementById('type_service').addEventListener('change', searchCustomers);
+document.getElementById('province_search').addEventListener('change', searchCustomers);
 
-        function searchCustomers() {
-           
-            let searchName = document.getElementById('searchInput').value;
-            let typeService = document.getElementById('type_service').value;
-            let provinceId = document.getElementById('province_search').value;
-            let typeId = document.getElementById('type_id').value; // เก็บค่า type_id
+function searchCustomers() {
+    let searchName = document.getElementById('searchInput').value;
+    let typeService = document.getElementById('type_service').value;
+    let provinceId = document.getElementById('province_search').value;
 
-            // ส่งค่าผ่าน URL Params ไปยัง Backend
-            let url =
-                `/customers/search?name=${searchName}&service=${typeService}&type_id=${typeId}&province_id=${provinceId}`;
+    let url = `/customers/search?name=${searchName}&service=${typeService}&province_id=${provinceId}`;
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    let customerTable = document.getElementById('customerTable');
-                    customerTable.innerHTML = ' '; // ลบข้อมูลเดิมในตาราง
+    console.log("🔎 กำลังค้นหา: ", url); // Debug URL
 
-
-                    // ตรวจสอบว่า typeService เป็น 'fttx' หรือ 'simmy' หรือ 'ict'
-                    if (data.length > 0) {
-                        // ตรวจสอบ typeService ที่ไม่สนใจตัวพิมพ์ใหญ่/เล็ก และช่องว่าง
-                        if ((typeService.trim().toLowerCase().includes('fttx') || typeService.trim().toLowerCase()
-                            .includes('sim my'))) {
-                            data.forEach((customer, index) => {
-                                let customerTableH = document.getElementById('table-heard');
-                                customerTableH.innerHTML = `
-
-                                            <tr class="bg-dark text-light">
-                                                <th>ตรวจสอบ</th>
-
-                                                <th>ชื่อ-นามสกุล</th>
-                                                <th>เลขบัตรประชาชน</th>
-                                                <th>โปรโมชั่น</th>
-                                                <th>ความเร็ว</th>
-                                                <th>ราคา</th>
-                                                <th>(จังหวัด/ศูนย์บริการ)</th>
-                                                <th>เครื่องมือ</th>
-                                            </tr>
-
-                                    `;
-                                customerTable.innerHTML += `
-                                                                <tr>
-                                                                    <td><button type="button" class = "btn bg-warning" data-bs-toggle="modal" data-bs-target="#customerModal${customer.cus_id}">
-                                                                                    <i class="fas fa-search"></i>
-                                                                                </button></td>
-                                                                    <td>${customer.cus_fullname}</td>
-                                                                    <td>${customer.id_card}</td>
-                                                                    <td>${customer.promotion?.promotion_name || 'N/A'}</td>
-                                                                    <td>${customer.speed?.speed_name || 'N/A'}</td>
-                                                                    <td>${customer.price?.price_name || 'N/A'}</td>
-                                                                    <td>${customer.province?.province_name || 'N/A'} / ${customer.center?.center_name || 'N/A'}</td>
-                                                                    <td>
-                                                                        <div class="dropdown-menu-start">
-                                                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                                                                data-bs-toggle="dropdown">
-                                                                                <i class="bx bx-dots-vertical-rounded"></i>
-                                                                            </button>
-                                                                            <div class="dropdown-menu">
-                                                                                <a href="/customer_edit/${customer.cus_id}" class="btn btn-warning btn-sm">Edit</a>
-                                                                                <form id="deleteForm${customer.cus_id}" action="/customer_delete/${customer.cus_id}" method="POST" style="display: inline-block;">
-                                                                                    @csrf
-                                                                                    @method('DELETE')
-                                                                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(${customer.cus_id})">Delete</button>
-                                                                                </form>
-
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            `;
-                            });
-                        }
-                        // กรณีที่ typeService เป็น 'ict'
-                        else if (typeService.trim().toLowerCase().includes('ict')) {
-                            let customerTable = document.getElementById('customerTable');
-                            let customerTableH = document.getElementById('table-heard');
-                            customerTable.innerHTML = ''; // ลบข้อมูลเดิมในตาราง
-                            customerTableH.innerHTML = '';
-                            let dataIct = @json($dataIct); // ข้อมูล IctSolution
-                            // จับคู่ข้อมูลจาก data และ dataIct
-
-
-
-
-                            data.forEach((customer, index) => {
-                                let customerTableH = document.getElementById('table-heard');
-                                let ictData = dataIct.find(ict => ict.cus_id === customer.cus_id);
-
-                                customerTableH.innerHTML = `
-                                                             <tr class="bg-dark text-light">
-
-                                                                 <th>ชื่อ-นามสกุล</th>
-                                                                <th>ประเภทลูกค้า</th>
-                                                                <th>รายได้</th>
-                                                                 <th>(จังหวัด/ศูนย์บริการ)</th>
-                                                                 <th>เครื่องมือ</th>
-                                                                 </tr>
-                                                                    `;
-                                // ค้นหาข้อมูล ICT ที่ตรงกับ customer
-
-
-
-                                customerTable.innerHTML += `
-                                                                <tr>
-
-                                                                    <td>${customer.cus_fullname}</td>
-                                                                      <td>${ictData ? ictData.customer_type : 'N/A'}</td> <!-- แสดงประเภทจาก ict -->
-                                                <td>${ictData ? ictData.income : 'N/A'}</td> <!-- แสดงรายได้จาก ict -->
-                                                                    <td>${customer.province?.province_name || 'N/A'} / ${customer.center?.center_name || 'N/A'}</td>
-                                                                    <td>
-                                                                        <div class="dropdown-menu-start">
-                                                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                                                                data-bs-toggle="dropdown">
-                                                                                <i class="bx bx-dots-vertical-rounded"></i>
-                                                                            </button>
-                                                                            <div class="dropdown-menu">
-                                                                                <a href="/customer_edit/${customer.cus_id}" class="btn btn-warning btn-sm">Edit</a>
-                                                                                <form id="deleteForm${customer.cus_id}" action="/customer_delete/${customer.cus_id}" method="POST" style="display: inline-block;">
-                                                                                    @csrf
-                                                                                    @method('DELETE')
-                                                                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(${customer.cus_id})">Delete</button>
-                                                                                </form>
-                                                                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#customerModal${customer.cus_id}">
-                                                                                    View
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            `;
-                            });
-
-
-                        } else {
-                            let customerTableH = document.getElementById('table-heard');
-                            customerTableH.innerHTML = `
-
-                                      <tr class="bg-dark text-light">
-
-                                          <th>ชื่อ-นามสกุล</th>
-                                          <th>บริการ</th>
-
-                                          <th>(จังหวัด/ศูนย์บริการ)</th>
-                                          <th>เครื่องมือ</th>
-                                      </tr>
-
-                                `;
-                            data.forEach(customer => {
-                                customerTable.innerHTML += `
-                                    <tr>
-                                      <td>${customer.cus_fullname}</td>
-                                      <td>${customer.service?.service_name || '-'}</td>
-                                      <td>${customer.province?.province_name || '-'} / ${customer.center?.center_name || '-'}</td>
-                                      <td colspan="2">
-                                        <div class="dropdown-menu-start">
-                                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded"></i>
-                                          </button>
-                                          <div class="dropdown-menu">
-                                            <a href="/customer_edit/${customer.cus_id}" class="btn btn-warning btn-sm">Edit</a>
-                                            <form id="deleteForm${customer.cus_id}" action="/customer_delete/${customer.cus_id}" method="POST" style="display: inline-block;">
-                                              @csrf
-                                              @method('DELETE')
-                                              <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(${customer.cus_id})">Delete</button>
-                                            </form>
-                                          </div>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  `;
-                            });
-                        }
-                    } else {
-                        customerTable.innerHTML = `
-                                                        <tr>
-                                                            <td colspan="11" class="text-center">ไม่มีข้อมูลลูกค้า</td>
-                                                        </tr>
-                                                    `;
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('customerTableContainer').innerHTML = html;
+        })
+        .catch(error => console.error("❌ Error:", error));
+}
     </script>
+
+    
 @endsection

@@ -41,12 +41,12 @@
     </li>
     
     <li class="menu-header small text-uppercase">
-      <span class="menu-header-text text-dark">แบบฟอร์ม</span>
+      <span class="menu-header-text text-dark">ข่าวสาร</span>
     </li>
-    <li class="menu-item ">
-      <a href="{{ route('viewInstallFTTx') }}" class="menu-link">
-        <i class=" menu-icon fas fa-file-alt"></i>
-        <div> แบบฟอร์มเก็บข้อมูลลูกค้า</div>
+    <li class="menu-item {{ Route::is('newsfeed') ? 'active' : '' }}">
+      <a href="{{ route('newsfeed') }}" class="menu-link">
+        <i class=" menu-icon fas fa-newspaper"></i>
+        <div> รายการข่าวสาร</div>
       </a>
     </li>
     
