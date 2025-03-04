@@ -52,7 +52,7 @@
                 </form>
 
                 <!-- ปุ่ม Import -->
-                @if (Auth::user()->permission['view_fttx'] ?? false)
+                @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_dashboard'] ?? false))
                     <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow btn-fixed-size">
                         <i class="fas fa-file-import"></i> Import
                     </a>
@@ -189,7 +189,7 @@
                                                     <td>{{ $section['sum_total_average_time_per_circuit_days'] }}</td>
                                                     <td>{{ $section['sum_num_of_circuits_installed_within_3_days'] }}</td>
 
-                                                    <td class="" style="background-color: {{ $section['sum_installation_percentage_within_3_days'] > 85
+                                                    <td class="" style="background-color: {{ $section['sum_installation_percentage_within_3_days'] > 85 
                                             ? 'rgba(46, 105, 0, 1)'
                                             : ($section['sum_installation_percentage_within_3_days'] > 83
                                                 ? 'rgba(116, 228, 29, 1)'
@@ -197,9 +197,12 @@
                                                     ? 'rgba(255, 245, 0, 1)'
                                                     : ($section['sum_installation_percentage_within_3_days'] > 77
                                                         ? 'rgba(247, 75, 28, 1)'
-                                                        : 'rgba(255, 0, 0, 1)'))) }}; color: white;">
-                                                        {{ $section['sum_installation_percentage_within_3_days'] }}%
-                                                    </td>
+                                                        : 'rgba(255, 0, 0, 1)'))) }};
+                                            color: {{ $section['sum_installation_percentage_within_3_days'] > 80 && $section['sum_installation_percentage_within_3_days'] <= 83 
+                                                    ? 'black' : 'white' }};">
+    {{ $section['sum_installation_percentage_within_3_days'] }}%
+</td>
+
 
 
 

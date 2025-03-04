@@ -78,7 +78,7 @@ class UserController extends Controller
             'center_id' => $request->has('center_id') && is_numeric($request->center_id) ? $request->center_id : null,
             'permission' => $permissions, // ใช้ permission ที่รับมาจากฟอร์ม
         ]);
-
+        
         // ส่งกลับไปยังหน้า user list พร้อมข้อความสำเร็จ
         return redirect()->route('users.list')->with('success', 'เพิ่มผู้ใช้สำเร็จ!');
     }

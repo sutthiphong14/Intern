@@ -44,11 +44,14 @@
             <div class="d-flex justify-content-between align-items-center gap-2">
                 <h3 class="card-header text-dark">ข้อมูลกิจกรรม</h3>
                 <div class="d-flex align-items-center gap-2">
-
+                    
                     <div class="d-flex align-items-center gap-2">
+                    @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false))
                         <button type="button" class="btn btn-success" data-bs-toggle="modal"
                             data-bs-target="#addTypeModal">เพิ่มกิจกรรม
                         </button>
+                    @endif
+                        
 
                         <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal"
                             data-bs-target="#modalScrollable">
@@ -65,13 +68,19 @@
                     <table class="table table-bordered mb-4">
                         <thead>
                             <tr class="bg-dark text-center align-center">
+                            @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) || (Auth::user()->permission['view_fttx'] ?? false ))
                                 <th rowspan="2">ข้อมูล สถิติ</th>
+                            @endif
                                 <th rowspan="2">ชื่อกิจกรรม</th>
                                 <th colspan="5">FTTX</th>
                                 <th colspan="4">SIM my</th>
                                 <th colspan="2">Ict Solution</th>
+                                @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) || (Auth::user()->permission['form_event'] ?? false ) || (Auth::user()->permission['view_customer'] ?? false))
                                 <th rowspan="2">ข้อมูลลูกค้า</th>
+                                @endif
+                                @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false))
                                 <th rowspan="2">เครื่องมือ</th>
+                                @endif
                             </tr>
                             <tr class="bg-dark text-center">
                                 <th>new</th>
@@ -96,11 +105,12 @@
                                                                     @endphp
                                                                     @foreach ($activities as $row)
                                                                         <tr>
-                                                                        <td>
+                                                                        @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) || (Auth::user()->permission['view_fttx'] ?? false ))                                                                        <td>
                                                                         <a href="{{ route('event_department', $typeId) }}" class="btn btn-warning" target="_blank" rel="noopener noreferrer">
                                                                             <i class="fas fa-search"></i>
                                                                         </a>
                                                                     </td>
+                                                                    @endif
                                                                             <td>{{ $row->type_name }}</td>
                                                                             <td>{{ ($data['selfInstall'] ?? 0) + ($data['hireInstall'] ?? 0) }}</td>
                                                                             <td>{{ $data['selfInstall'] ?? 0 }}</td>
@@ -113,12 +123,14 @@
                                                                             <td>{{ $data['price'] ?? 0 }}</td>
                                                                             <td>{{ $data['ictCount'] ?? 0 }}</td>
                                                                             <td>{{ $data['ictIncome'] ?? 0 }}</td>
-
+                                                                            @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) || (Auth::user()->permission['form_event'] ?? false ) || (Auth::user()->permission['view_customer'] ?? false))
                                                                             <td>
                                                                                 <a href="{{ route('event_customer', $row->type_id) }}"
                                                                                     class="btn btn-success "><i class="fas fa-search"></i></a>
                                                                             </td>
+                                                                            @endif
                                                                             
+                                                                            @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false))
                                                                             <td>
          <div class="dropdown-menu-start">
         <button type="button" class="btn btn-light btn-sm p-1 dropdown-toggle hide-arrow"
@@ -152,6 +164,7 @@
         </ul>
     </div>
 </td>
+@endif
 
                                                                         </tr>
                                                                     @endforeach

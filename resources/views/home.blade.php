@@ -560,30 +560,32 @@
   </style>
 
 
-  <script>
-    // SweetAlert function for unauthorized access
-    function showUnauthorizedAlert() {
-    Swal.fire({
-      icon: 'warning',
-      title: 'ไม่มีสิทธิเข้าถึง',
-      text: 'กรุณาเข้าสู่ระบบเพื่อใช้งานฟังก์ชันนี้',
-      confirmButtonText: 'ตกลง',
-    });
-    }
-  </script>
-  <!-- เพิ่ม SweetAlert2 CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ <!-- เพิ่ม SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <script>
+<script>
     document.addEventListener("DOMContentLoaded", function () {
-    @if(session('success'))
-    Swal.fire({
-      title: "สำเร็จ!",
-      text: "{{ session('success') }}",
-      icon: "success",
-      confirmButtonText: "ตกลง"
+        // เช็คว่ามี session success หรือ error หรือไม่
+        @if(session('success'))
+            Swal.fire({
+                title: "สำเร็จ!",
+                text: "{{ session('success') }}",
+                icon: "success",
+                confirmButtonText: "ตกลง"
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: "error",
+                title: "แจ้งเตือน",
+                text: "{{ session('error') }}",
+                confirmButtonText: "ตกลง"
+            });
+        @endif
     });
-  @endif
-    });
-  </script>
+</script>
+
+
+  
 @endsection

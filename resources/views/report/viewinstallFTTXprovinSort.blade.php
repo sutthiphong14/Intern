@@ -128,12 +128,11 @@
 
 
                 <!-- ปุ่ม Import -->
-                @if (Auth::user()->permission['manage_dashboard'] ?? false)
+                @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_dashboard'] ?? false))
                     <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow" style="width: 150px;">
                         <i class="fas fa-file-import"></i> Import
                     </a>
                 @endif
-
 
                 <!-- ฟอร์ม Export -->
                 <button type="button" class="btn bg-dark btn-fixed-size" data-toggle="modal" data-target="#exportModal">
@@ -209,7 +208,7 @@
 
 
                 <!-- ปุ่ม Import -->
-                @if (Auth::user()->permission['manage_dashboard'] ?? false)
+                @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_dashboard'] ?? false))
                     <a href="{{ route('importdata') }}" class="btn-fixed-size btn bg-yellow" style="width: 150px;">
                         <i class="fas fa-file-import"></i> Import
                     </a>
@@ -309,17 +308,20 @@
                                 <td>{{ $item->sum_total_average_time_per_circuit_days }}</td>
                                 <td>{{ $item->sum_num_of_circuits_installed_within_3_days }}</td>
                                 <td class=""
-                                    style="background-color: {{ $item['sum_installation_percentage_within_3_days'] > 85
-                                        ? 'rgba(46, 105, 0, 1)'
-                                        : ($item['sum_installation_percentage_within_3_days'] > 83
-                                            ? 'rgba(116, 228, 29, 1)'
-                                            : ($item['sum_installation_percentage_within_3_days'] > 80
-                                                ? 'rgba(255, 245, 0, 1)'
-                                                : ($item['sum_installation_percentage_within_3_days'] > 77
-                                                    ? 'rgba(247, 75, 28, 1)'
-                                                    : 'rgba(255, 0, 0, 1)'))) }}; color: white;">
-                                    {{ $item['sum_installation_percentage_within_3_days'] }}%
-                                </td>
+    style="background-color: {{ $item['sum_installation_percentage_within_3_days'] > 85
+        ? 'rgba(46, 105, 0, 1)'
+        : ($item['sum_installation_percentage_within_3_days'] > 83
+            ? 'rgba(116, 228, 29, 1)'
+            : ($item['sum_installation_percentage_within_3_days'] > 80
+                ? 'rgba(255, 245, 0, 1)'
+                : ($item['sum_installation_percentage_within_3_days'] > 77
+                    ? 'rgba(247, 75, 28, 1)'
+                    : 'rgba(255, 0, 0, 1)'))) }};
+           color: {{ $item['sum_installation_percentage_within_3_days'] > 80 && $item['sum_installation_percentage_within_3_days'] <= 83 
+                ? 'black' : 'white' }};">
+    {{ $item['sum_installation_percentage_within_3_days'] }}%
+</td>
+
                             </tr>
                         @endforeach
 

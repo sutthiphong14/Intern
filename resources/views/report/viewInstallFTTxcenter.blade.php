@@ -244,14 +244,15 @@
                                             <td>{{ $item->total_average_time_per_circuit_days }}</td>
                                             <td>{{ $item->num_of_circuits_installed_within_3_days }}</td>
                                             <td class="" style="background-color: 
-                                            {{$item['installation_percentage_within_3_days'] > 85 ? 'rgba(46, 105, 0, 1)' :
-                                ($item['installation_percentage_within_3_days'] > 83 ? 'rgba(116, 228, 29, 1)' :
-                                    ($item['installation_percentage_within_3_days'] > 80 ? 'rgba(255, 245, 0, 1)' :
-                                        ($item['installation_percentage_within_3_days'] > 77 ? 'rgba(247, 75, 28, 1)' :
-                                            'rgba(255, 0, 0, 1)')))
-                            }}; color: white;">
-                                                        {{ $item['installation_percentage_within_3_days'] }}%
-                                                    </td>
+    {{$item['installation_percentage_within_3_days'] > 85 ? 'rgba(46, 105, 0, 1)' :
+    ($item['installation_percentage_within_3_days'] > 83 ? 'rgba(116, 228, 29, 1)' :
+        ($item['installation_percentage_within_3_days'] > 80 ? 'rgba(255, 245, 0, 1)' :
+            ($item['installation_percentage_within_3_days'] > 77 ? 'rgba(247, 75, 28, 1)' :
+                'rgba(255, 0, 0, 1)')))}};
+    color: {{ $item['installation_percentage_within_3_days'] > 80 && $item['installation_percentage_within_3_days'] <= 83 ? 'black' : 'white' }};">
+    {{ $item['installation_percentage_within_3_days'] }}%
+</td>
+
                                     @endforeach
 
 

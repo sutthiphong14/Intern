@@ -362,11 +362,27 @@
           </div>
           <div class="col">
             <h5 class="mb-1">ติดตั้งภายใน 3 วัน</h5>
-            <h6 class="text-muted mb-0">ข้อมูลการติดตั้ง fttx ภายใน 3 วัน</h6>
+            <h6 class="text-muted mb-0">Dashboard ข้อมูลการติดตั้ง fttx ภายใน 3 วัน</h6>
           </div>
           </div>
         </a>
         </div>
+
+        <div class="col-3 mb-4">
+            <a href="{{ route('type_list') }}" class="text-decoration-none">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <div class="app-icon bg-cyan d-flex justify-content-center align-items-center">
+                    <i class="fas fa-calendar-plus"></i>
+                  </div>
+                </div>
+                <div class="col">
+                  <h5 class="mb-1">กิจกรรม</h5>
+                  <h6 class="text-muted mb-0">Dashboard ข้อมูลสถิติของกิจกรรมต่างๆ  </h6>
+                </div>
+              </div>
+            </a>
+          </div>
 
         <div class="col-3 mb-4">
         <a href="{{ route('user-logs') }}" class="text-decoration-none">
@@ -556,6 +572,7 @@
         </div>
         @endif
 
+        @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) || (Auth::user()->permission['form_event'] ?? false || (Auth::user()->permission['view_customer'] ?? false)))
         <h4><i class="fas fa-calendar-alt"></i> จัดการกิจกรรม</h4>
         <hr>
         <div class="row">
@@ -569,14 +586,15 @@
                   </div>
                 </div>
                 <div class="col">
-                  <h5 class="mb-1">จัดการกิจกรรม</h5>
-                  <h6 class="text-muted mb-0">เพิ่ม ลบ แก้ไข หมวดหมู่กิจกรรม</h6>
+                  <h5 class="mb-1">ข้อมูลกิจกรรม</h5>
+                  <h6 class="text-muted mb-0">ข้อมูล กิจกรรม ลูกค้า แบบฟอร์ม สถิติ</h6>
                 </div>
               </div>
             </a>
           </div>
 
          
+          @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false))
 
           <div class="col-3 mb-4">
             <a href="{{ route('provinceactivityList') }}" class="text-decoration-none">
@@ -594,10 +612,6 @@
             </a>
           </div>
 
-         
-
-          
-
           <div class="col-3 mb-4">
             <a href="{{ route('user-logs') }}" class="text-decoration-none">
               <div class="row align-items-center">
@@ -613,8 +627,10 @@
               </div>
             </a>
           </div>
+          @endif
 
         </div>
+        @endif
 
       </div>
 

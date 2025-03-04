@@ -231,6 +231,7 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 
 /* ************************************************************report************************************************************ */
+Route::middleware(['auth', 'check.permission:manage_dashboard,view_fttx,adminper_mission'])->group(function () {
 Route::get('/listreport', function () {
     return view('report.listreport');
 });
@@ -259,17 +260,11 @@ Route::get('/viewInstallFTTxcenter/{section}/{year}/{month}', [ReportController:
 
 Route::get('/viewInstallFTTxcenter/{center}/{year}/{month}', [ReportController::class, 'viewInstallData']);
 
-Route::get('/ExportInstallFttxcenter', [ReportController::class, 'exportData'])->name('exportInstallFTTxcenter');;
+Route::get('/ExportInstallFttxcenter', [ReportController::class, 'exportData'])->name('exportInstallFTTxcenter');
 Route::delete('/delete/{year},{month}', [ReportController::class, 'delete_data'])->name('delete_data');
 
-Route::get('/importdata', function () {
-    return view('report.importdata');
-})->name('importdata');
 
 
-
-Route::post('/importdata', [ReportController::class, 'import']);
-Route::post('/importdata2', [ReportController::class, 'importFile'])->name('importdata2');
 
 Route::get('/api/existing-months', [ReportController::class, 'getExistingMonths'])->name('api.existing.months');
 
@@ -289,6 +284,20 @@ Route::get('/viewreport3', [ReportController::class, 'viewreport3'])->name('view
 Route::get('/incomecurrent', function () {
     return view('report.incomecurrent');
 });
+
+});
+
+
+Route::middleware(['auth', 'check.permission:manage_dashboard'])->group(function () {
+Route::get('/importdata', function () {
+    return view('report.importdata');
+})->name('importdata');
+
+Route::post('/importdata', [ReportController::class, 'import']);
+Route::post('/importdata2', [ReportController::class, 'importFile'])->name('importdata2');
+});
+
+
 
 
 Route::middleware(['auth', 'check.permission:manage_dashboard_permission'])->group(function () {
@@ -366,13 +375,12 @@ Route::delete('/slideshow/{id}', [SlideshowController::class, 'destroy'])->name(
 
 
 //ส่วนกิจกรรม
-Route::middleware(['auth', 'check.permission:manage_formevent,form_event,adminper_mission'])->group(function () {
+Route::middleware(['auth', 'check.permission:manage_formevent,form_event,adminper_mission,view_fttx,view_customer'])->group(function () {
 
 Route::get('/typeactivity_list', [ActivityController::class, 'ListType'])->name('type_list');
 Route::post('/typeactivity_insert', [ActivityController::class, 'TypeInsert'])->name('type_insert');
 Route::delete('/typeactivity_delete/{type_id}', [ActivityController::class, 'TypeDelete'])->name('type_delete');
 Route::put('/typeactivity_update/{type_id}', [ActivityController::class, 'Typeupdate'])->name('type_update');
-
 
 //ส่วนที่ใช้ส่วนบริการ
 Route::get('/severactivity_list/{type_id}', [ActivityController::class, 'ListService'])->name('service_list');

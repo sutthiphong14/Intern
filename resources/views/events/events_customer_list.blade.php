@@ -30,7 +30,7 @@
 
     <div class="card">
         <div class="d-flex justify-content-between align-items-center gap-2">
-            <h3 class="card-header text-dark">ข้อมูลลูกค้ากิจกรรม </h3>
+            <h3 class="card-header text-dark">ข้อมูลลูกค้ากิจกรรม {{ $types->first()->type_name ?? '-' }}</h3>
             <div class="d-flex align-items-center gap-2">
 
                 <div class="d-flex align-items-center gap-2">
@@ -67,11 +67,12 @@
                         </select>
                     </div>
 
-
+                    @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) || (Auth::user()->permission['form_event'] ?? false ))
                     <div class="col-auto"> <a href="{{ route('customer_create', $type_id) }}"
                             class="btn btn-success">เพิ่มข้อมูลลูกค้า</a>
                     </div>
                     <a href="{{ route('top_up_list', $type_id) }}" class="btn btn-warning col-auto">เติมเงินรายปี</a>
+                    @endif
 
                     <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal"
                         data-bs-target="#modalScrollable">
@@ -89,21 +90,26 @@
             <table class="table table-bordered text-center">
                 <thead id="table-heard">
                     <tr class="bg-dark text-light">
+                    <th>ตรวจสอบ</th>
 
                         <th>ชื่อ-นามสกุล</th>
                         <th>บริการ</th>
 
                         <th>(จังหวัด/ศูนย์บริการ)</th>
 
-
+                        @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) )
                         <th>เครื่องมือ</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody id="customerTable">
                     @if ($data->count() > 0)
                         @foreach ($data as $customer)
                             <tr>
-
+                                <td><button type="button" class="btn bg-warning" data-bs-toggle="modal"
+                                                    data-bs-target="#customerModal{{ $customer->cus_id }}">
+                                                    <i class="fas fa-search"></i>
+                                                </button></td>
                                 <td>{{ $customer->cus_fullname }}</td>
                                 {{-- <td>{{ $customer->id_card }}</td>
                                 <td>
@@ -123,6 +129,7 @@
                                     {{ $customer->province->province_name ?? '-' }} /
                                     {{ $customer->center->center_name ?? '-' }}
                                 </td>
+                                @if ((Auth::user()->permission['adminper_mission'] ?? false) || (Auth::user()->permission['manage_formevent'] ?? false) )
                                 <td colspan="2">
                                     <div class="dropdown-menu-start">
                                         <button type="button" class="btn btn-light btn-sm p-1 dropdown-toggle hide-arrow"
@@ -130,12 +137,6 @@
                                             <i class="bx bx-dots-vertical-rounded fs-5"></i>
                                         </button>
                                         <ul class="dropdown-menu shadow border-0 rounded">
-                                        <li>
-                                                <button type="button" class="dropdown-item text-dark" data-bs-toggle="modal"
-                                                    data-bs-target="#customerModal{{ $customer->cus_id }}">
-                                                    <i class="bx bx-show"></i> View
-                                                </button>
-                                            </li>
                                             <li>
                                                 <a href="{{ route('customer_edit', $customer->cus_id) }}"
                                                     class="dropdown-item text-dark">
@@ -158,6 +159,7 @@
                                         </ul>
                                     </div>
                                 </td>
+                                @endif
 
                             </tr>
                         @endforeach
@@ -182,7 +184,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-
+        
                                     <p><span class="fw-bold text-dark">ชื่อ-นามสกุล:</span> {{ $customer->cus_fullname }}</p>
                                     @if (
                                         strpos(strtolower($customer->service->service_name), 'fttx') !== false ||
@@ -361,9 +363,63 @@
 
 
         </div>
+        </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center me-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {{-- ลิงก์หน้าแรกสุด --}}
+                    @if ($users->onFirstPage())
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="tf-icon bx bx-chevrons-left"></i></span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="tf-icon bx bx-chevron-left"></i></span>
+                        </li>
+                    @else
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $users->appends(request()->query())->url(1) }}">
+                                <i class="tf-icon bx bx-chevrons-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $users->appends(request()->query())->previousPageUrl() }}">
+                                <i class="tf-icon bx bx-chevron-left"></i>
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- หมายเลขหน้า --}}
+                    @foreach ($users->appends(request()->query())->getUrlRange(1, $users->lastPage()) as $page => $url)
+                        <li class="page-item {{ $page == $users->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        </li>
+                    @endforeach
+
+                    {{-- ลิงก์หน้าถัดไป --}}
+                    @if ($users->hasMorePages())
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $users->appends(request()->query())->nextPageUrl() }}">
+                                <i class="tf-icon bx bx-chevron-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $users->appends(request()->query())->url($users->lastPage()) }}">
+                                <i class="tf-icon bx bx-chevrons-right"></i>
+                            </a>
+                        </li>
+                    @else
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="tf-icon bx bx-chevron-right"></i></span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="tf-icon bx bx-chevrons-right"></i></span>
+                        </li>
+                    @endif
+                </ul>
+            </nav>
+        </div>
     </div>
-    </div>
-                    </div>
 
 
 @endsection
@@ -490,6 +546,7 @@
                                 customerTableH.innerHTML = `
 
                                             <tr class="bg-dark text-light">
+                                                <th>ตรวจสอบ</th>
 
                                                 <th>ชื่อ-นามสกุล</th>
                                                 <th>เลขบัตรประชาชน</th>
@@ -503,7 +560,9 @@
                                     `;
                                 customerTable.innerHTML += `
                                                                 <tr>
-
+                                                                    <td><button type="button" class = "btn bg-warning" data-bs-toggle="modal" data-bs-target="#customerModal${customer.cus_id}">
+                                                                                    <i class="fas fa-search"></i>
+                                                                                </button></td>
                                                                     <td>${customer.cus_fullname}</td>
                                                                     <td>${customer.id_card}</td>
                                                                     <td>${customer.promotion?.promotion_name || 'N/A'}</td>
@@ -523,9 +582,7 @@
                                                                                     @method('DELETE')
                                                                                     <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(${customer.cus_id})">Delete</button>
                                                                                 </form>
-                                                                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#customerModal${customer.cus_id}">
-                                                                                    View
-                                                                                </button>
+
                                                                             </div>
                                                                         </div>
                                                                     </td>
@@ -626,9 +683,6 @@
                                               @method('DELETE')
                                               <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(${customer.cus_id})">Delete</button>
                                             </form>
-                                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#customerModal${customer.cus_id}">
-                                              View
-                                            </button>
                                           </div>
                                         </div>
                                       </td>
