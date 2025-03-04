@@ -30,7 +30,7 @@
 
     <div class="card">
         <div class="d-flex justify-content-between align-items-center gap-2">
-            <h3 class="card-header text-dark">ข้อมูลลูกค้ากิจกรรม event1</h3>
+            <h3 class="card-header text-dark">ข้อมูลลูกค้ากิจกรรม </h3>
             <div class="d-flex align-items-center gap-2">
 
                 <div class="d-flex align-items-center gap-2">

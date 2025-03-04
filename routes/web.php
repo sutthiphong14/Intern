@@ -83,26 +83,6 @@ Route::get('/users/search', [UserController::class, 'search'])->name('users.sear
 Route::get('/getCenters/{province_id}', [UserController::class, 'getCenters'])->name('getCenters');
 Route::get('/get-centers', [UserController::class, 'getCentersByProvince'])->name('getCentersByProvince');
 
-//************************* */
-
-Route::get('/updatenewsfeed', function () {
-    return view('newsfeed.updatenewsfeed');
-});
-
-
-
-Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
-
-Route::get('/insertnewsfeed', function () {
-    return view('newsfeed.insertnewsfeed');
-})->name('insertnewsfeed');
-
-Route::get('/newsfeed', function () {
-    return view('newsfeed.newsfeed');
-});
-
-Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
-
 // ต้องล็อกอินก่อนถึงเข้าถึงโปรไฟล์ได้
 
 Route::middleware(['auth'])->group(function () {
@@ -119,8 +99,36 @@ Route::middleware(['auth'])->group(function () {
     
 });
 
+Route::post('/profile/update-image', [UserController::class, 'updateProfileImage'])
+    ->name('profile.update-image')
+    ->middleware('auth');
+
+Route::get('/profile', [UserController::class, 'showProfile'])
+    ->name('profile')
+    ->middleware('auth'); // 
+
+//************************* */
 
 
+
+
+
+
+Route::get('/updatenewsfeed', function () {
+    return view('newsfeed.updatenewsfeed');
+});
+
+Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
+
+Route::get('/insertnewsfeed', function () {
+    return view('newsfeed.insertnewsfeed');
+})->name('insertnewsfeed');
+
+Route::get('/newsfeed', function () {
+    return view('newsfeed.newsfeed');
+});
+
+Route::get('/newsfeed',[AdminController::class , 'newsfeed'])->name('newsfeed');
 
 Route::get('/download/{id}', [AdminController::class, 'downloadFile'])->name('admin.download');
 
@@ -138,7 +146,13 @@ Route::get('/search', [AdminController::class, 'search'])->name('search');
 Route::get('/newsfeed/edit/{id}', [AdminController::class, 'editnews'])->name('editnews');
 Route::put('/newsfeed/update/{id}', [AdminController::class, 'updatenews'])->name('updatenews');
 
-
+Route::post('/news/status/{id}', [AdminController::class, 'changenews']);
+Route::middleware(['auth', 'check.permission:managenews_feeds'])->group(function () {
+    Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
+    // Other news-related routes
+});
+Route::get('/news/search', [AdminController::class, 'search'])->name('news.search');
+Route::delete('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');
 
 
 
@@ -214,7 +228,7 @@ Auth::routes();
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-Route::post('/news/status/{id}', [AdminController::class, 'changenews']);
+
 
 /* ************************************************************report************************************************************ */
 Route::get('/listreport', function () {
@@ -268,6 +282,7 @@ Route::get('/api/existing-months2', [ReportController::class, 'getExistingMonths
 Route::get('/export/view2', [ReportController::class, 'exportview2'])->name('export2'); // แสดงหน้าเว็บ
 
 Route::get('/data/export2', [ReportController::class, 'export2']); // Export Excel
+Route::get('/viewreport3', [ReportController::class, 'viewreport3'])->name('viewreport3');
 
 
 
@@ -286,10 +301,7 @@ Route::middleware(['auth', 'check.permission:manage_dashboard_permission'])->gro
     // Other report-related routes
 });
 
-Route::middleware(['auth', 'check.permission:managenews_feeds'])->group(function () {
-    Route::get('/listnewsfeed', [AdminController::class, 'listnewsfeed'])->name('listnewsfeed');
-    // Other news-related routes
-});
+
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -300,17 +312,11 @@ Route::get('/viewreport3', function () {
     return view('report.viewreport3');
 });
 
-Route::get('/viewreport3', [ReportController::class, 'viewreport3'])->name('viewreport3');
 
 
 
-Route::post('/profile/update-image', [UserController::class, 'updateProfileImage'])
-    ->name('profile.update-image')
-    ->middleware('auth');
 
-Route::get('/profile', [UserController::class, 'showProfile'])
-    ->name('profile')
-    ->middleware('auth'); // Pastikan hanya pengguna yang login yang dapat mengaksesRoute::prefix('categories')->group(function () {
+
 Route::get('/listcategories', [CategoryController::class, 'listcategories'])->name('categories.listcategories');
 Route::get('/create', [CategoryController::class, 'create'])->name('categories.create');
 Route::post('/store', [CategoryController::class, 'store'])->name('categories.store');
@@ -319,6 +325,8 @@ Route::put('/update/{category}', [CategoryController::class, 'update'])->name('c
 Route::get('/delete/{category}', [CategoryController::class, 'destroy'])->name('categories.delete');
 Route::get('/search', [CategoryController::class, 'search'])->name('categories.search');
 Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->name('categories.delete');
+
+
 
 Route::get('/requests/create', [RequestsController::class, 'create'])->name('insertRequests');
 Route::post('/requests', [RequestsController::class, 'store'])->name('requests.store');
@@ -340,8 +348,7 @@ Route::post('/requests/createUser/{id}', [RequestsController::class, 'createUser
 
 
 
-Route::get('/news/search', [AdminController::class, 'search'])->name('news.search');
-Route::delete('/deletenews/{id}', [AdminController::class, 'deletenews'])->name('deletenews');
+
 
 Route::get('/edit_banner', function () {
     return view('manage_images.edit_banner');
@@ -350,7 +357,6 @@ Route::get('/edit_banner', function () {
 Route::get('/edit_banner', [SlideshowController::class, 'showBanners'])->name('edit_banner');
 Route::post('/slideshow', [SlideshowController::class, 'store'])->name('slideshows.store');
 Route::put('/slideshow/{id}', [SlideshowController::class, 'update'])->name('slideshow.update');
-
 Route::get('/slideshow/{id}/edit', [SlideshowController::class, 'edit'])->name('slideshow.edit');
 Route::delete('/slideshow/{id}', [SlideshowController::class, 'destroy'])->name('slideshow.destroy');
 Route::delete('/edit_banner/{id}', [SlideshowController::class, 'destroy'])->name('edit_banner.destroy');
@@ -360,6 +366,8 @@ Route::delete('/slideshow/{id}', [SlideshowController::class, 'destroy'])->name(
 
 
 //ส่วนกิจกรรม
+Route::middleware(['auth', 'check.permission:manage_formevent,form_event,adminper_mission'])->group(function () {
+
 Route::get('/typeactivity_list', [ActivityController::class, 'ListType'])->name('type_list');
 Route::post('/typeactivity_insert', [ActivityController::class, 'TypeInsert'])->name('type_insert');
 Route::delete('/typeactivity_delete/{type_id}', [ActivityController::class, 'TypeDelete'])->name('type_delete');
@@ -427,40 +435,27 @@ Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);
 Route::get('/getPrices', [CustomerController::class, 'getPrices']);
 Route::get('/getCenters', [CustomerController::class, 'getCenters']);
 
+
 Route::get('/events', [EventController::class, 'showListView'])->name('events.list');
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
 Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
 Route::post('/events/update-status', [EventController::class, 'updateStatus'])->name('events.updateStatus');
 Route::put('/events/{id}', [EventController::class, 'update'])->name('events.update');
-
 Route::get('/manage_album_event/{event_id}', [EventController::class, 'manageAlbumEvent'])->name('manage_album_event');
 Route::post('/events/{event_id}/upload-image', [EventController::class, 'uploadImage'])->name('upload_image_event');
-
 Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::class, 'deleteImage'])
     ->name('delete.image');
-
-
 Route::delete('/events/{event_id}/delete-image/{image_id}', [EventController::class, 'deleteImage']);
 Route::get('/download-zip/{event_id}', [EventController::class, 'downloadZip'])->name('events.downloadZip');
-
 Route::get('/api/centers/{province_id}', function($province_id) {
     $centers = ServiceCenterActivity::where('province_id', $province_id)->get();
     return response()->json(['centers' => $centers]);
-
-
-
 });
-
 Route::get('/customers/search', [CustomerController::class, 'searchCustomers'])->name('customer_search');
-
-
-
 Route::post('/topUp_insert', [CustomerController::class,'insertTopup'])->name('topUp_insert');
 Route::delete('/topUp_delete/{topUp_id}', [CustomerController::class, 'TopUpDelete'])->name('topUp_delete');
 Route::put('/topUp_update/{id}', [CustomerController::class, 'TopUpUpdate'])->name('topUp_update');
 Route::get('/getTopUpDetails/{topUpId}', [CustomerController::class, 'getTopUpDetails'])->name('getTopUpDetails');
-
-
 Route::get('/Event_deparment/{type_id}', [ActivityController::class, 'EventDepartment'])->name('event_department');
 Route::get('/Event_services/{province_id},{type_id}', [ActivityController::class, 'Eventservices'])->name('event_services');
 Route::get('/Event_center/{province_id},{type_id}', [ActivityController::class, 'Eventcenter'])->name('event_center');
@@ -469,3 +464,4 @@ Route::get('/topup_list/{type_id}', [ActivityController::class, 'TopUp_list'])->
 Route::get('/topups/search', [ActivityController::class, 'searchTopUp'])->name('top_up_search');
 Route::get('/get_product/{center_id}/{type_id}', [ActivityController::class, 'getProductCenter'])->name('getproduct_center');
 Route::get('/detail/{center_id}', [ActivityController::class, 'getCustomerDetail'])->name('detail_cus');
+});

@@ -251,91 +251,108 @@
 
 @endsection
 
-    @section('script')
+@section('script')
         <!-- ChartJS -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            var sumFttxNew = {{ isset($sumFttxNew) && isset($sumFttxNewOver33) ? $sumFttxNew + $sumFttxNewOver33 : 0 }};
-            var sumSelfInstall = {{ isset($sumSelfInstall) && isset($sumSelfInstallOver33) ? $sumSelfInstall + $sumSelfInstallOver33 : 0 }};
-            var sumHireInstall = {{ isset($sumHireInstall) && isset($sumHireInstallOver33) ? $sumHireInstall + $sumHireInstallOver33 : 0 }};
-            var sumAdjust = {{ isset($adjust12) && isset($adjustover12) ? $adjust12 + $adjustover12 : 0 }};
-            var sumMove = {{ isset($move12) && isset($moveover12) ? $move12 + $moveover12 : 0 }};
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
         
-            var selectedTypeName = "{{ isset($types->type_name) ? $types->type_name : 'Unknown' }}";
-        
-            var datasets = [
-                {
-                    label: 'New',
-                    backgroundColor: 'rgba(1, 15, 11, 0.8)', 
-                    borderColor: 'rgba(1, 15, 11, 1)',
-                    borderWidth: 1,
-                    data: [sumFttxNew],
-                },
-                {
-                    label: 'ติดตั้งเอง',
-                    backgroundColor: 'rgba(2, 178, 125, 1)',
-                    borderColor: 'rgba(2, 178, 150, 0.8)',
-                    borderWidth: 1,
-                    data: [sumSelfInstall],
-                },
-                {
-                    label: 'จ้างผู้รับเหมา',
-                    backgroundColor: 'rgba(54, 250, 110, 0.8)',
-                    borderColor: 'rgba(54, 250, 110, 1)',
-                    borderWidth: 1,
-                    data: [sumHireInstall],
-                },
-                {
-                    label: 'ปรับโปรโมชั่น',
-                    backgroundColor: 'rgba(204, 204, 204, 0.8)',
-                    borderColor: 'rgba(204, 220, 220, 1)',
-                    borderWidth: 1,
-                    data: [sumAdjust], 
-                },
-                {
-                    label: 'ลูกค้าย้ายค่าย',
-                    backgroundColor: 'rgba(235, 117, 13, 0.8)',
-                    borderColor: 'rgba(235, 117, 13, 1)',
-                    borderWidth: 1,
-                    data: [sumMove], 
-                }
-            ];
-        
-            // ✅ ลบ dataset ที่มีค่า 0 ออก
-            var filteredDatasets = datasets.filter(dataset => dataset.data[0] > 0);
-        
-            var ctx = document.getElementById('myChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [selectedTypeName],
-                    datasets: filteredDatasets  // ✅ ใช้ datasets ที่ไม่มีค่าศูนย์
-                },
-                options: {
-                    responsive: true,
-                    maxBarThickness: 90,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1,
-                                callback: function(value) {
-                                    return value.toFixed(0);
-                                }
-                            }
-                        },
-                        x: {
-                            stacked: false, // ✅ ให้แท่งกราฟแยกกัน
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
+<script>
+    var sumFttxNew = {{ isset($sumFttxNew) && isset($sumFttxNewOver33) ? $sumFttxNew + $sumFttxNewOver33 : 0 }};
+    var sumSelfInstall = {{ isset($sumSelfInstall) && isset($sumSelfInstallOver33) ? $sumSelfInstall + $sumSelfInstallOver33 : 0 }};
+    var sumHireInstall = {{ isset($sumHireInstall) && isset($sumHireInstallOver33) ? $sumHireInstall + $sumHireInstallOver33 : 0 }};
+    var sumAdjust = {{ isset($adjust12) && isset($adjustover12) ? $adjust12 + $adjustover12 : 0 }};
+    var sumMove = {{ isset($move12) && isset($moveover12) ? $move12 + $moveover12 : 0 }};
+
+    var selectedTypeName = "{{ isset($types->type_name) ? $types->type_name : 'Unknown' }}";
+
+    var datasets = [
+        {
+            label: 'New',
+            backgroundColor: 'rgba(20, 56, 94, 0.9)', 
+            borderColor: 'rgba(20, 56, 94, 1)',
+            borderWidth: 1,
+            data: [sumFttxNew],
+        },
+        {
+            label: 'ติดตั้งเอง',
+            backgroundColor: 'rgba(68, 131, 108, 0.9)',
+            borderColor: 'rgba(68, 131, 108, 1)',
+            borderWidth: 1,
+            data: [sumSelfInstall],
+        },
+        {
+            label: 'จ้างผู้รับเหมา',
+            backgroundColor: 'rgba(166, 198, 126, 0.9)',
+            borderColor: 'rgba(166, 198, 126, 1)',
+            borderWidth: 1,
+            data: [sumHireInstall],
+        },
+        {
+            label: 'ปรับโปรโมชั่น',
+            backgroundColor: 'rgba(249, 232, 151, 0.9)',
+            borderColor: 'rgba(249, 232, 151, 1)',
+            borderWidth: 1,
+            data: [sumAdjust], 
+        },
+        {
+            label: 'ลูกค้าย้ายค่าย',
+            backgroundColor: 'rgba(231, 183, 136, 0.9)',
+            borderColor: 'rgba(231, 183, 136, 1)',
+            borderWidth: 1,
+            data: [sumMove], 
+        }
+    ];
+
+    // ✅ ลบ dataset ที่มีค่า 0 ออก
+    var filteredDatasets = datasets.filter(dataset => dataset.data[0] > 0);
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [selectedTypeName],
+            datasets: filteredDatasets  // ✅ ใช้ datasets ที่ไม่มีค่าศูนย์
+        },
+        options: {
+            responsive: true,
+            maxBarThickness: 90,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            return value.toFixed(0);
                         }
                     }
+                },
+                x: {
+                    stacked: false, // ✅ ให้แท่งกราฟแยกกัน
                 }
-            });
-        </script>
+            },
+            plugins: {
+    legend: {
+        position: 'top',
+    },
+    datalabels: { // ✅ แสดงตัวเลขในแท่งกราฟ
+        anchor: 'center',  // ✅ ให้อยู่กลางแท่ง
+        align: 'center',   // ✅ จัดตรงกลางแท่ง
+        formatter: function(value, context) {
+            return value.toLocaleString(); // แสดงตัวเลขแบบมี comma
+        },
+        color: '#fff', // ✅ เปลี่ยนเป็นสีขาว เพื่อให้มองเห็นในแท่งสีเข้ม
+        font: {
+            weight: 'bold',
+            size: 16
+        }
+    }
+}
+
+        },
+        plugins: [ChartDataLabels] // ✅ เปิดใช้งาน plugin
+    });
+</script>
+
         
 
 
@@ -351,7 +368,7 @@
 
                 {
                     label: 'รายได้',
-                    backgroundColor: 'rgba(236, 229, 21, 0.8)', // สีเหลือง
+                    backgroundColor: 'rgba(236, 229, 21, 0.7)', // สีเหลือง
                     borderColor: 'rgba(236, 229, 80, 1)',
                     borderWidth: 1,
                     data: [ictIncome],
@@ -425,54 +442,68 @@
             // สร้าง datasets สำหรับ myChart3 (ตัดเติมเงินรายปีออก)
             var datasets3 = [{
                 label: 'ลูกค้าใหม่',
-                backgroundColor: 'rgba(32, 118, 200, 0.8)', // สีฟ้า
-                borderColor: 'rgba(2, 178, 200, 1)',
+                backgroundColor: 'rgba(67, 31, 61, 0.8)', // สีฟ้า
+                borderColor: 'rgba(67, 31, 61, 1)',
                 borderWidth: 1,
                 data: [sumNew]
             },
             {
                 label: 'ลูกค้า(ย้ายค่าย)',
-                backgroundColor: 'rgba(32, 232, 93, 0.8)', // สีเขียว
-                borderColor: 'rgba(54, 250, 110, 1)',
+                backgroundColor: 'rgba(63, 61, 89, 0.8)', // สีเขียว
+                borderColor: 'rgba(63, 61, 89, 1)',
                 borderWidth: 1,
                 data: [sumMove]
             }
             ];
 
             // สร้างกราฟที่ 3 (ลูกค้าใหม่ + ย้ายค่าย)
-            var ctx3 = document.getElementById('myChart3').getContext('2d');
-            var myChart3 = new Chart(ctx3, {
-                type: 'bar',
-                data: {
-                    labels: [selectedTypeName], // ป้ายชื่อแกน X
-                    datasets: datasets3
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    maxBarThickness: 90,
-                    scales: {
-                        x: {
-                            maxBarThickness: 20
-                        },
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1,
-                                callback: value => value.toFixed(0)
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        },
-                        tooltip: {
-                            enabled: true
-                        }
-                    }
+var ctx3 = document.getElementById('myChart3').getContext('2d');
+var myChart3 = new Chart(ctx3, {
+    type: 'bar',
+    data: {
+        labels: [selectedTypeName], // ป้ายชื่อแกน X
+        datasets: datasets3
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        maxBarThickness: 90,
+        scales: {
+            x: {
+                maxBarThickness: 20
+            },
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1,
+                    callback: value => value.toFixed(0)
                 }
-            });
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            tooltip: {
+                enabled: true
+            },
+            datalabels: { // ✅ แสดงตัวเลขภายในแท่งกราฟ
+                anchor: 'center',  // ✅ วางเลขกลางแท่ง
+                align: 'center',   // ✅ จัดให้ตรงกลางแท่ง
+                formatter: function(value) {
+                    return value.toLocaleString(); // ✅ ใส่ comma ให้ตัวเลข
+                },
+                color: '#fff', // ✅ เปลี่ยนเป็นสีขาว (หรือใช้ '#000' ถ้าแท่งสีอ่อน)
+                font: {
+                    weight: 'bold',
+                    size: 14
+                }
+            }
+        }
+    },
+    plugins: [ChartDataLabels] // ✅ เปิดใช้งาน Plugin
+});
+
 
             // สร้าง datasets สำหรับ myChart4 (เฉพาะเติมเงินรายปี)
             var datasets4 = [

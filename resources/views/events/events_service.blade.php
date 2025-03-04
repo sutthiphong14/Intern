@@ -285,6 +285,7 @@
 
     @section('script')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
         <script>
             // ดึงข้อมูลเฉพาะ province_id <= 12
@@ -318,23 +319,23 @@
             var datasets = [{
                     label: 'New',
                     data: fttxNewData,
-                    backgroundColor: 'rgba(1, 15, 11, 0.8)',
-                    borderColor: 'rgba(1, 15, 11, 0.8)',
-                    borderWidth: 2
+                    backgroundColor: 'rgba(20, 56, 94, 0.9)', 
+                    borderColor: 'rgba(20, 56, 94, 1)',
+                    borderWidth: 1
                 },
                 {
                     label: 'ติดตั้งเอง',
                     data: selfInstallData,
-                    backgroundColor: 'rgba(2, 178, 125, 1)',
-                    borderColor: 'rgba(2, 178, 150, 0.8)',
-                    borderWidth: 2
+                    backgroundColor: 'rgba(68, 131, 108, 0.9)',
+                    borderColor: 'rgba(68, 131, 108, 1)',
+                    borderWidth: 1
                 },
                 {
                     label: 'จ้างผู้รับเหมา',
                     data: hireInstallData,
-                    backgroundColor: 'rgba(54, 250, 110, 0.8)',
-                    borderColor: 'rgba(54, 250, 110, 1)',
-                    borderWidth: 2
+                    backgroundColor: 'rgba(249, 232, 151, 0.9)',
+                    borderColor: 'rgba(249, 232, 151, 1)',
+                    borderWidth: 1
                 }
             ];
 
@@ -342,8 +343,8 @@
             if (adJust.length > 0) {
                 datasets.push({
                     label: 'ปรับโปรโมชั่น',
-                    backgroundColor: 'rgba(204, 204, 204, 0.8)', // สีเทา
-                    borderColor: 'rgba(204, 220, 220, 1)',
+                    backgroundColor: 'rgba(231, 183, 136, 0.9)',
+                    borderColor: 'rgba(231, 183, 136, 1)',
                     borderWidth: 1,
                     data: adJust
                 });
@@ -360,33 +361,56 @@
                 });
             }
 
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: provinceNames,
-                    datasets: datasets
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            stacked: false // ❌ ปิด stacked เพื่อแยกแท่ง
-                        },
-                        y: {
-                            beginAtZero: true,
-                            stacked: false, // ❌ ปิด stacked เพื่อแยกแท่ง
-                            ticks: {
-                                stepSize: 1,
-                                callback: function(value) {
-                                    return value.toFixed(0);
-                                }
-                            }
-                        }
-                    },
-                    barPercentage: 1, // ✅ ปรับให้แท่งไม่กว้างเกินไป
-                    categoryPercentage: 0.8 // ✅ กำหนดระยะห่างของแต่ละแท่ง
+            // ✅ โหลด Plugin ก่อนใช้
+Chart.register(ChartDataLabels);
+
+// ✅ สร้างกราฟ
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: provinceNames,
+        datasets: datasets
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                stacked: false // ❌ ปิด stacked เพื่อแยกแท่ง
+            },
+            y: {
+                beginAtZero: true,
+                stacked: false, // ❌ ปิด stacked เพื่อแยกแท่ง
+                ticks: {
+                    stepSize: 1,
+                    callback: function(value) {
+                        return value.toFixed(0);
+                    }
                 }
-            });
+            }
+        },
+        barPercentage: 1, // ✅ ปรับให้แท่งไม่กว้างเกินไป
+        categoryPercentage: 0.8, // ✅ กำหนดระยะห่างของแต่ละแท่ง
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            datalabels: { // ✅ เพิ่มตัวเลขในแท่งกราฟ
+                anchor: 'center',  // ✅ วางเลขกลางแท่ง
+                align: 'center',   // ✅ จัดให้ตรงกลางแท่ง
+                formatter: function(value) {
+                    return value.toLocaleString(); // ✅ ใส่ comma ให้ตัวเลข
+                },
+                color: '#fff', // ✅ สีขาว (ถ้าแท่งสีอ่อน ให้ใช้ '#000')
+                font: {
+                    weight: 'bold',
+                    size: 10
+                }
+            }
+        }
+    },
+    plugins: [ChartDataLabels] // ✅ เปิดใช้งาน Plugin
+});
+
         </script>
 
         <script>
@@ -407,65 +431,82 @@
                 @endif
             @endforeach
 
-            // สร้างกราฟที่ 2
-            var ctx2 = document.getElementById('myChart2').getContext('2d');
+           // ✅ โหลด Plugin ก่อนใช้
+Chart.register(ChartDataLabels);
 
-            var myChart2 = new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: provinceNames, // ป้ายชื่อที่แสดงในกราฟ
-                    datasets: [{
-                        label: 'รายได้',
-                        backgroundColor: 'rgba(236, 229, 21, 0.8)', // สีเหลือง
-                        borderColor: 'rgba(236, 229, 80, 1)',
-                        borderWidth: 5,
-                        data: ictIncome, // แสดงรายได้
-                        stack: 'stack2' // stack อยู่ในกลุ่ม 'stack2'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    maxBarThickness: 90,
-                    scales: {
-                        x: {
-                            stacked: true, // stack ข้อมูลให้แสดงในแท่งเดียว
-                            maxBarThickness: 20 // กำหนดขนาดแท่ง
-                        },
-                        y: {
-                            beginAtZero: true, // เริ่มจาก 0 ที่แกน Y
-                            stacked: true, // stack ข้อมูล
-                            ticks: {
-                                stepSize: 1000,
-                                callback: function(value) {
-                                    return value.toFixed(2); // แสดงค่าทศนิยม 0 ตำแหน่ง
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top' // ตำแหน่ง legend
-                        },
-                        tooltip: {
-                            enabled: true, // เปิด tooltip
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    // ดึงค่า ictCount และ ictIncome ตาม index ของ tooltip
-                                    var ictCountValue = ictCount[tooltipItem.dataIndex];
-                                    var ictIncomeValue = ictIncome[tooltipItem.dataIndex];
+// ✅ สร้างกราฟที่ 2
+var ctx2 = document.getElementById('myChart2').getContext('2d');
 
-                                    // แสดงข้อมูลใน tooltip
-                                    return [
-                                        'จำนวน : ' + ictCountValue + ' ราย',
-                                        'รายได้ : ' + ictIncomeValue + ' บาท'
-                                    ];
-                                }
-                            }
-                        }
+var myChart2 = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: provinceNames, // ป้ายชื่อที่แสดงในกราฟ
+        datasets: [{
+            label: 'รายได้',
+            backgroundColor: 'rgba(167, 85, 33, 0.8)', // สีเหลือง
+            borderColor: 'rgba(167, 85, 33, 1)',
+            borderWidth: 1,
+            data: ictIncome, // แสดงรายได้
+            stack: 'stack2' // stack อยู่ในกลุ่ม 'stack2'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        maxBarThickness: 90,
+        scales: {
+            x: {
+                stacked: true, // stack ข้อมูลให้แสดงในแท่งเดียว
+                maxBarThickness: 20 // กำหนดขนาดแท่ง
+            },
+            y: {
+                beginAtZero: true, // เริ่มจาก 0 ที่แกน Y
+                stacked: true, // stack ข้อมูล
+                ticks: {
+                    stepSize: 1000,
+                    callback: function(value) {
+                        return value.toFixed(2); // แสดงค่าทศนิยม 2 ตำแหน่ง
                     }
                 }
-            });
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'top' // ตำแหน่ง legend
+            },
+            tooltip: {
+                enabled: true, // เปิด tooltip
+                callbacks: {
+                    label: function(tooltipItem) {
+                        // ดึงค่า ictCount และ ictIncome ตาม index ของ tooltip
+                        var ictCountValue = ictCount[tooltipItem.dataIndex];
+                        var ictIncomeValue = ictIncome[tooltipItem.dataIndex];
+
+                        // แสดงข้อมูลใน tooltip
+                        return [
+                            'จำนวน : ' + ictCountValue + ' ราย',
+                            'รายได้ : ' + ictIncomeValue.toLocaleString() + ' บาท'
+                        ];
+                    }
+                }
+            },
+            datalabels: { // ✅ เพิ่มตัวเลขในแท่งกราฟ
+                anchor: 'center',  // ✅ วางเลขกลางแท่ง
+                align: 'center',   // ✅ จัดให้ตรงกลางแท่ง
+                formatter: function(value) {
+                    return value.toLocaleString(); // ✅ ใส่ comma ให้ตัวเลข
+                },
+                color: '#fff', // ✅ สีขาว (ถ้าแท่งสีอ่อน ให้ใช้ '#000')
+                font: {
+                    weight: 'bold',
+                    size: 14
+                }
+            }
+        }
+    },
+    plugins: [ChartDataLabels] // ✅ เปิดใช้งาน Plugin
+});
+
         </script>
 
         <script>
@@ -493,16 +534,16 @@
                     labels: provinceNames,
                     datasets: [{
                             label: 'ลูกค้าใหม่',
-                            backgroundColor: 'rgba(32, 118, 200, 0.8)', // สีฟ้า
-                            borderColor: 'rgba(2, 178, 200, 1)',
-                            borderWidth: 3,
+                            backgroundColor: 'rgba(67, 31, 61, 0.8)', // สีฟ้า
+                borderColor: 'rgba(67, 31, 61, 1)',
+                            borderWidth: 1,
                             data: Simmy_new
                         },
                         {
                             label: 'ลูกค้า(ย้ายค่าย)',
-                            backgroundColor: 'rgba(32, 232, 93, 0.8)', // สีเขียว
-                            borderColor: 'rgba(54, 250, 110, 1)',
-                            borderWidth: 3,
+                            backgroundColor: 'rgba(63, 61, 89, 0.8)', // สีเขียว
+                borderColor: 'rgba(63, 61, 89, 1)',
+                            borderWidth: 1,
                             data: Simmy_move
                         }
                     ]
@@ -527,73 +568,111 @@
                         }
                     },
                     plugins: {
-                        legend: {
-                            position: 'top'
-                        }
+            legend: {
+                position: 'top' // ตำแหน่ง legend
+            },
+            tooltip: {
+                enabled: true, // เปิด tooltip
+                callbacks: {
+                    label: function(tooltipItem) {
+                        // ดึงค่า ictCount และ ictIncome ตาม index ของ tooltip
+                        var ictCountValue = ictCount[tooltipItem.dataIndex];
+                        var ictIncomeValue = ictIncome[tooltipItem.dataIndex];
+
+                        // แสดงข้อมูลใน tooltip
+                        return [
+                            'จำนวน : ' + ictCountValue + ' ราย',
+                            'รายได้ : ' + ictIncomeValue.toLocaleString() + ' บาท'
+                        ];
                     }
                 }
-            });
-
-            // 🎯 กราฟ 2: เติมเงินรายปี
-            var ctx4 = document.getElementById('myChart4').getContext('2d');
-
-            var myChart4 = new Chart(ctx4, {
-                type: 'bar',
-                data: {
-                    labels: provinceNames,
-                    datasets: [
-
-                        {
-                            label: 'เติมเงินรายปี (ยอดเงิน)',
-                            backgroundColor: 'rgba(244, 29, 255, 0.8)', // สีแดง
-                            borderColor: 'rgba(244, 29, 255, 1)',
-                            borderWidth: 3,
-                            data: Simmy_price
-                        }
-                    ]
+            },
+            datalabels: { // ✅ เพิ่มตัวเลขในแท่งกราฟ
+                anchor: 'center',  // ✅ วางเลขกลางแท่ง
+                align: 'center',   // ✅ จัดให้ตรงกลางแท่ง
+                formatter: function(value) {
+                    return value.toLocaleString(); // ✅ ใส่ comma ให้ตัวเลข
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    maxBarThickness: 90,
-                    scales: {
-                        x: {
-                            stacked: false
-                        },
-                        y: {
-                            beginAtZero: true,
-                            stacked: false,
-                            ticks: {
-
-                                callback: function(value) {
-                                    return value.toFixed(2); // แสดงค่าทศนิยม 0 ตำแหน่ง
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        },
-                        tooltip: {
-                            enabled: true,
-                            callbacks: {
-                                label: function(tooltipItem) {
-
-                                    var Simmy_countValue = Simmy_count[tooltipItem.dataIndex]; // ดึงค่า Simmy_count
-                                    var Simmy_priceValue = Simmy_price[tooltipItem.dataIndex]; // ดึงค่า Simmy_price
-
-                                    // แสดงข้อมูลใน tooltip เฉพาะสำหรับ "จำนวน"
-                                    return ['เติมเงินรายปี',
-                                        'จำนวน : ' + Simmy_countValue + ' ราย',
-                                        'ยอดเงิน : ' + Simmy_priceValue + ' บาท'
-                                    ];
-
-                                }
-                            }
-                        }
-                    }
+                color: '#fff', // ✅ สีขาว (ถ้าแท่งสีอ่อน ให้ใช้ '#000')
+                font: {
+                    weight: 'bold',
+                    size: 14
+                }
+            }
+        }
                 }
             });
+
+
+Chart.register(ChartDataLabels);
+
+var ctx4 = document.getElementById('myChart4').getContext('2d');
+
+var myChart4 = new Chart(ctx4, {
+    type: 'bar',
+    data: {
+        labels: provinceNames,
+        datasets: [{
+            label: 'เติมเงินรายปี (ยอดเงิน)',
+            backgroundColor: 'rgba(118, 215, 215, 0.9)', // ✅ แก้สีให้ถูกต้อง (0.8)
+            borderColor: 'rgba(118, 215, 215, 1)',
+            borderWidth: 1,
+            data: Simmy_price
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        maxBarThickness: 90,
+        scales: {
+            x: {
+                stacked: false
+            },
+            y: {
+                beginAtZero: true,
+                stacked: false,
+                ticks: {
+                    callback: function(value) {
+                        return value.toFixed(2); // ✅ แสดงทศนิยม 2 ตำแหน่ง
+                    }
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            tooltip: {
+                enabled: true,
+                callbacks: {
+                    label: function(tooltipItem) {
+                        var Simmy_countValue = Simmy_count[tooltipItem.dataIndex]; // ดึงค่า Simmy_count
+                        var Simmy_priceValue = Simmy_price[tooltipItem.dataIndex]; // ดึงค่า Simmy_price
+
+                        return [
+                            'เติมเงินรายปี',
+                            'จำนวน : ' + Simmy_countValue.toLocaleString() + ' ราย',
+                            'ยอดเงิน : ' + Simmy_priceValue.toLocaleString() + ' บาท'
+                        ];
+                    }
+                }
+            },
+            datalabels: { // ✅ เพิ่มตัวเลขในแท่งกราฟ
+                anchor: 'center',  // ✅ วางเลขกลางแท่ง
+                align: 'center',   // ✅ จัดให้ตรงกลางแท่ง
+                formatter: function(value) {
+                    return value.toLocaleString(); // ✅ ใส่ comma ให้ตัวเลข
+                },
+                color: '#fff', // ✅ สีขาว (ถ้าแท่งสีอ่อน ให้ใช้ '#000')
+                font: {
+                    weight: 'bold',
+                    size: 14
+                }
+            }
+        }
+    },
+    plugins: [ChartDataLabels] // ✅ เปิดใช้งาน Plugin
+});
+
         </script>
     @endsection
