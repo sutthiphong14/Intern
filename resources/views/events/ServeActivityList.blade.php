@@ -54,8 +54,7 @@
                                                 <a href="{{ route('promotion_list', $row->service_id) }}"
                                                     class="btn btn-info btn-sm">จัดการข้อมูลโปรโมชั่น</a>
                                             @else
-                                                <a href="{{ route('product_list', $type_id) }}" class="btn btn-info btn-sm">จัดการข้อมูล
-                                                    product</a>
+                                            <a href="{{ route('ict_service_list', [$type_id, $row->service_id]) }}" class="btn btn-info btn-sm">จัดการหมวดหมู่บริการ</a>
                                             @endif
                                             <!-- <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#editServiceModal"

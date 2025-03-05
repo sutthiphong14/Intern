@@ -14,7 +14,7 @@
         /* ความสูงของ content ปรับตามเนื้อหาภายใน */
     }
 
-    
+
 </style>
 @endsection
 @section('content')
@@ -27,9 +27,13 @@
         ข้อมูลกิจกรรม
         </a>
         /
-        <a href="javascript:history.back()" class="">
-        ข้อมูลพื้นฐานบริการ
+        <a href="javascript:history.back(-2)" class="">
+            ข้อมูลพื้นฐานบริการ
         </a>
+        /
+        <a href="javascript:history.back()" class="">
+            หมวดหมู่บริการICT solution
+            </a>
         /
         </span>
         ข้อมูลพื้นฐาน Product
@@ -72,17 +76,17 @@
 
                                 <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#editProductModal"
-                                    data-url="{{ route('product_update', $row->product_id) }}"
+                                    data-url="{{ route('product_update',[$row->product_id,$type_id, $ict_service_id]) }}"
                                     data-id="{{ $row->product_id }}" data-name="{{ $row->product_name }}" data-description="{{ $row->description }}">
                                     แก้ไข
                                 </button>
 
-                                <form action="{{ route('product_delete', $row->product_id) }}" method="POST"
+                                  <form action="{{ route('product_delete', [$row->product_id,$type_id, $ict_service_id]) }}" method="POST"
                                     style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" class="btn btn-danger btn-sm delete-button"
-                                        data-url="{{ route('product_delete', $row->product_id) }}"
+                                         data-url="{{ route('product_delete', [$row->product_id,$type_id, $ict_service_id]) }}"
                                         onclick="showDeleteConfirm(event)">
                                         ลบ
                                     </button>
@@ -102,7 +106,7 @@
         <!-- Modal สำหรับเพิ่ม -->
         <div class="modal fade" id="ProductModal" tabindex="-1" aria-labelledby="ProductModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <form id="productForm" action="{{ route('product_insert',$type_id) }}" method="POST">
+                <form id="productForm" action="{{ route('product_insert',[$type_id, $ict_service_id]) }}" method="POST">
                     @csrf
                     <div class="modal-content">
                         <div class="modal-header">

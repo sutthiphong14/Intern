@@ -15,7 +15,8 @@ class IctProduct extends Model
         'product_id',
         'product_name',
         'description',
-        'type_id'
+        'type_id',
+        'ict_service_id'
 
     ];
     public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล

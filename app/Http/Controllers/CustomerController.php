@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Fttxbroadband;
 use App\Models\IctProduct;
+use App\Models\IctService;
 use App\Models\IctSolution;
 use App\Models\PriceActivity;
 use App\Models\PromotionActivity;
@@ -666,12 +667,19 @@ class CustomerController extends Controller
         return response()->json($services);  // ส่งข้อมูลกลับในรูปแบบ JSON
     }
 
-
-    public function getProduct(Request $request)
+    public function getIctService(Request $request)
     {
         $serviceId = $request->input('service_id');
         $typeId = ServeActivity::where('service_id', $serviceId)->pluck('type_id')->first();
-        $products = IctProduct::where('type_id', $typeId)->get();
+        $ict_service = IctService::where('type_id', $typeId)->get();
+        return response()->json($ict_service);  // ส่งข้อมูลกลับในรูปแบบ JSON
+    }
+
+
+    public function getProduct(Request $request)
+    {
+        $ICTserviceId = $request->input('ict_service_id');
+        $products = IctProduct::where('ict_service_id', $ICTserviceId)->get();
         return response()->json($products);  // ส่งข้อมูลกลับในรูปแบบ JSON
     }
 

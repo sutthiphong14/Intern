@@ -422,11 +422,19 @@ Route::post('/price_insert/{service_id}/{promotion_id}/{speed_id}', [ActivityCon
 Route::delete('/price_delete/{service_id}/{promotion_id}/{speed_id}/{price_id}', [ActivityController::class, 'PriceDelete'])->name('price_delete');
 Route::put('/price_update/{service_id}/{promotion_id}/{speed_id}/{price_id}', [ActivityController::class, 'PriceUpdate'])->name('price_update');
 
+//ส่วนบริการICT
+Route::get('/ict/service_list,{type_id}/{service_id}', [ActivityController::class, 'ListServiceICT'])->name('ict_service_list');
+Route::post('/ict/service_insert,{type_id}/{service_id}', [ActivityController::class, 'ICTServiceInsert'])->name('ict_service_insert');
+Route::delete('/ict/service_delete,/{ict_service_id}/{type_id}/{service_id}', [ActivityController::class, 'ICTServiceDelete'])->name('ict_service_delete');
+Route::put('/ict/service_update/{ict_service_id}/{type_id}/{service_id}', [ActivityController::class, 'ICTServiceupdate'])->name('ict_service_update');
+
 //ส่วนproduct
-Route::get('/product_list,{type_id}', [ActivityController::class, 'ListProduct'])->name('product_list');
-Route::post('/product_insert,{type_id}', [ActivityController::class, 'ProductInsert'])->name('product_insert');
-Route::delete('/product_delete/{product_id}', [ActivityController::class, 'ProductDelete'])->name('product_delete');
-Route::put('/product_update/{product_id}', [ActivityController::class, 'Productupdate'])->name('product_update');
+Route::get('/product_list,{type_id}/{ict_service_id}', [ActivityController::class, 'ListProduct'])->name('product_list');
+Route::post('/product_insert,{type_id}/{ict_service_id}', [ActivityController::class, 'ProductInsert'])->name('product_insert');
+Route::delete('/product_delete/{product_id}/{type_id}/{ict_service_id}', [ActivityController::class, 'ProductDelete'])->name('product_delete');
+Route::put('/product_update/{product_id}/{type_id}/{ict_service_id}', [ActivityController::class, 'Productupdate'])->name('product_update');
+
+
 
 //จังหวัด
 Route::get('/provinceactivityList', [ProvinceController::class, 'indexprovince'])->name('provinceactivityList');
@@ -453,6 +461,7 @@ Route::get('/sim_my', [ActivityController::class, 'Sim_my'])->name('sim_my');
 Route::get('/activity_list', [ActivityController::class, 'activity_list'])->name('activity_list');
 
 Route::get('/getService', [CustomerController::class, 'getService']);
+Route::get('/getIct_service', [CustomerController::class, 'getIctService']);
 Route::get('/getProduct', [CustomerController::class, 'getProduct']);
 Route::get('/getPromotions', [CustomerController::class, 'getPromotions']);
 Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Fttxbroadband;
 use App\Models\IctProduct;
+use App\Models\IctService;
 use App\Models\IctSolution;
 use App\Models\Simmy;
 use App\Models\TopUp;
@@ -528,16 +529,77 @@ class ActivityController extends Controller
             ->with('success', 'อัปเดตราคาสำเร็จ');
     }
 
+        //บริการ ict 
+        public function ListServiceICT($type_id,$service_id)
+        {
+            $data = IctService::where('type_id', $type_id)->get();
+            return view('events.ict_service_list', compact('data', 'type_id','service_id'));
+        }
+    
+        public function ICTServiceInsert(Request $request, $type_id, $service_id)
+        {
+            $request->validate([
+                'service_name' => 'required|string|max:255',
+    
+            ]);
+    
+            IctService::create([
+                'service_name' => $request->service_name,
+                'description' => $request->description,
+                'service_id'=>$service_id,
+                'type_id' => $type_id
+                
+    
+            ]);
+            $data = IctService::all();
+            return redirect()->back()
+                ->with('success', 'เพิ่มบริการสำเร็จ')
+                ->with('data', $data);
+        }
+    
+        
+    
+        public function ICTServiceDelete($ict_service_id, $type_id, $service_id)
+        {
+            // ลบบริการตาม ict_service_id
+            IctService::where('ict_service_id', $ict_service_id)->delete();
+        
+            // ดึงข้อมูลทั้งหมดของบริการ
+            $data = IctService::all();
+        
+            // ส่งพารามิเตอร์ type_id, service_id และ data ไปยัง view
+            return redirect()->route('ict_service_list', [$type_id, $service_id])
+                ->with('success', 'ลบบริการสำเร็จ')
+                ->with('data', $data);
+        }
+    
+        public function ICTServiceupdate(Request $request, $ict_service_id,$type_id, $service_id)
+        {
+            $request->validate([
+                'service_name' => 'required|string|max:255',
+    
+            ]);
+    
+            IctService::where('ict_service_id', $ict_service_id)->update([
+                'service_name' => $request->service_name,
+                'description' => $request->description
+            ]);
+            $data = IctService::all();
+            return redirect()->route('ict_service_list', [$type_id, $service_id])
+            ->with('success', 'อัปเดตบริการสำเร็จ')
+            ->with('data', $data);
+        }
+
     //โปรดัก
 
-    public function ListProduct($type_id)
+    public function ListProduct($type_id, $ict_service_id)
     {
-        $data = IctProduct::where('type_id', $type_id)->get();
-        return view('events.product_list', compact('data', 'type_id'));
+        $data = IctProduct::where('ict_service_id', $ict_service_id)->get();
+        return view('events.product_list', compact('data', 'type_id', 'ict_service_id'));
     }
 
 
-    public function ProductInsert(Request $request, $type_id)
+    public function ProductInsert(Request $request, $type_id, $ict_service_id)
     {
         $request->validate([
             'product_name' => 'required|string|max:255',
@@ -547,23 +609,25 @@ class ActivityController extends Controller
         IctProduct::create([
             'product_name' => $request->product_name,
             'description' => $request->description,
-            'type_id' => $type_id
+            'type_id' => $type_id,
+            'ict_service_id' => $ict_service_id
         ]);
         $data = IctProduct::all();
         return redirect()->back()
-            ->with('success', 'เพิ่มโปรโมชั่นสำเร็จ')
+            ->with('success', 'เพิ่ม product สำเร็จ')
             ->with('data', $data);
     }
 
-    public function ProductDelete($product_id)
+    public function ProductDelete($product_id, $type_id, $ict_service_id)
     {
         IctProduct::where('product_id', $product_id)->delete();
         $data = IctProduct::all();
-        return redirect()->route('product_list', compact('data'))
-            ->with('success', 'ลบโปรโมชั่นสำเร็จ');
+        return redirect()->route('product_list', [$type_id, $ict_service_id])
+            ->with('success', 'ลบ product สำเร็จ')
+            ->with('data', $data);
     }
 
-    public function ProductUpdate(Request $request, $product_id)
+    public function ProductUpdate(Request $request, $product_id, $type_id, $ict_service_id)
     {
         $request->validate([
             'product_name' => 'required|string|max:255',
@@ -575,8 +639,10 @@ class ActivityController extends Controller
             'description' => $request->description
         ]);
         $data = IctProduct::all();
-        return redirect()->route('product_list', compact('data'))
-            ->with('success', 'อัปเดตโปรโมชั่นสำเร็จ');
+        return redirect()->route('product_list', [$type_id, $ict_service_id])
+        ->with('success', 'อัพเดท product สำเร็จ')
+        ->with('data', $data);
+
     }
 
     //fttx_broadband
