@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ict_products', function (Blueprint $table) {
-            $table->id('product_id'); // Primary Key
-            $table->string('product_name'); // ชื่อสินค้า
-            $table->text('description')->nullable(); // รายละเอียดสินค้า
+        Schema::create('ict_services', function (Blueprint $table) {
+            $table->id('ict_service_id');
+            $table->string('service_name');
+            $table->text('description')->nullable();
+            $table->unsignedBigInteger('service_id');
+            $table->foreign('service_id')->references('service_id')->on('serve_activity')->onDelete('cascade');
             $table->unsignedBigInteger('type_id'); 
-            $table->unsignedBigInteger('ict_service_id');
-            $table->foreign('ict_service_id')->references('ict_service_id')->on('ict_services')->onDelete('cascade');
             $table->timestamps();
             $table->foreign('type_id')->references('type_id')->on('type_activity')->onDelete('cascade');
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ict_products');
+        Schema::dropIfExists('ict_services');
     }
 };

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Fttxbroadband;
 use App\Models\IctProduct;
+use App\Models\IctService;
 use App\Models\IctSolution;
 use App\Models\PriceActivity;
 use App\Models\PromotionActivity;
@@ -118,10 +119,11 @@ class CustomerController extends Controller
         $speeds = SpeedActivity::all(); // ดึงข้อมูลความเร็ว
         $prices = PriceActivity::all(); // ดึงข้อมูลราคา
         $centers = ServiceCenterActivity::all(); // ดึงข้อมูลศูนย์บริการ
+        $ict_service = IctService::all();
         $products = IctProduct::all();
 
 
-        return view('events.cus_create', compact('type_id','types', 'services', 'promotion', 'provinces', 'speeds', 'prices', 'centers', 'products'));
+        return view('events.cus_create', compact('type_id','types', 'services', 'promotion', 'provinces', 'speeds', 'prices', 'centers', 'products', 'ict_service'));
     }
 
 
@@ -665,13 +667,21 @@ class CustomerController extends Controller
         $services = ServeActivity::where('type_id', $typeId)->get();
         return response()->json($services);  // ส่งข้อมูลกลับในรูปแบบ JSON
     }
+    
+
+    public function getIctService(Request $request)
+    {
+        $serviceId = $request->input('service_id');
+        $typeId = ServeActivity::where('service_id', $serviceId)->pluck('type_id')->first();
+        $ict_service = IctService::where('type_id', $typeId)->get();
+        return response()->json($ict_service);  // ส่งข้อมูลกลับในรูปแบบ JSON
+    }
 
 
     public function getProduct(Request $request)
     {
-        $serviceId = $request->input('service_id');
-        $typeId = ServeActivity::where('service_id', $serviceId)->pluck('type_id')->first();
-        $products = IctProduct::where('type_id', $typeId)->get();
+        $ICTserviceId = $request->input('ict_service_id');
+        $products = IctProduct::where('ict_service_id', $ICTserviceId)->get();
         return response()->json($products);  // ส่งข้อมูลกลับในรูปแบบ JSON
     }
 

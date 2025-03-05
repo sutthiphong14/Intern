@@ -5,7 +5,7 @@
     <div class="container">
         <h2>จัดการProduct</h2>
         <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#ProductModal">เพิ่มProduct</button>
-        <a href="{{ route('service_list',$type_id) }}" class="btn btn-secondary mb-3">Back</a>
+        <a href="{{ route('ict_service_list',[ $type_id, $ict_service_id]) }}" class="btn btn-secondary mb-3">Back</a>
 
         <table class="table table-bordered">
             <thead>
@@ -25,17 +25,17 @@
 
                                 <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#editProductModal"
-                                    data-url="{{ route('product_update', $row->product_id) }}"
+                                    data-url="{{ route('product_update',[$row->product_id,$type_id, $ict_service_id]) }}"
                                     data-id="{{ $row->product_id }}" data-name="{{ $row->product_name }}" data-description="{{ $row->description }}">
                                     แก้ไข
                                 </button>
 
-                                <form action="{{ route('product_delete', $row->product_id) }}" method="POST"
+                                <form action="{{ route('product_delete', [$row->product_id,$type_id, $ict_service_id]) }}" method="POST"
                                     style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" class="btn btn-danger btn-sm delete-button"
-                                        data-url="{{ route('product_delete', $row->product_id) }}"
+                                        data-url="{{ route('product_delete', [$row->product_id,$type_id, $ict_service_id]) }}"
                                         onclick="showDeleteConfirm(event)">
                                         ลบ
                                     </button>
@@ -55,7 +55,7 @@
         <!-- Modal สำหรับเพิ่ม -->
         <div class="modal fade" id="ProductModal" tabindex="-1" aria-labelledby="ProductModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <form id="productForm" action="{{ route('product_insert',$type_id) }}" method="POST">
+                <form id="productForm" action="{{ route('product_insert',[$type_id, $ict_service_id]) }}" method="POST">
                     @csrf
                     <div class="modal-content">
                         <div class="modal-header">
