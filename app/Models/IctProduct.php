@@ -25,7 +25,7 @@ class IctProduct extends Model
     public function ictSolutions()
     {
         return $this->belongsToMany(IctSolution::class, 'ict_solution_products', 'product_id', 'ict_id')
-            ->withPivot('quantity')
+            ->withPivot('quantity','price')
             ->withTimestamps();
     }
 

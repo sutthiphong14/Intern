@@ -161,7 +161,7 @@
                                 <th rowspan="4">ส่วนงาน</th>
                                 <th colspan="5">FTTX</th>
                                 <th colspan="4">SIM my</th>
-                                <th colspan="2">Ict Solution</th>
+                                <th colspan="3">Ict Solution</th>
 
                             </tr>
                             <tr class="bg-dark text-center">
@@ -180,12 +180,14 @@
                                 <th rowspan="2">จำนวน
                                     (ราย)</th>
                                 <th rowspan="2">รายได้</th>
+                                <th rowspan="2">ดูข้อูล ICT Solution</th>
 
                             </tr>
                             <tr class="bg-dark text-center ">
                                 <th>จำนวน
                                     (ราย)</th>
                                 <th>ยอดเงิน</th>
+                               
                             </tr>
 
                         </thead>
@@ -208,6 +210,10 @@
                                 <td>{{ $sumPrice }}</td>
                                 <td>{{ $IctCount }}</td>
                                 <td>{{ $IctIncome }}</td>
+                                <td> <a href="{{ route('event_services_ict', ['province_id' => 1, 'type_id' => $types->type_id]) }}"
+                                    class="btn btn-primary">
+                                    <i class="fas fa-search"></i>ตป.1
+                                </a> </td>
                             </tr>
                             <tr>
                                 <td> <a href="{{ route('event_services', ['province_id' => 2, 'type_id' => $types->type_id]) }}"
@@ -227,6 +233,10 @@
                                 <td>{{ $sumPriceOver33 }}</td>
                                 <td>{{ $IctCountOver33 }}</td>
                                 <td>{{ $IctIncomeOver33 }}</td>
+                                <td> <a href="{{ route('event_services_ict', ['province_id' => 2, 'type_id' => $types->type_id]) }}"
+                                    class="btn btn-primary">
+                                    <i class="fas fa-search"></i>ตป.2
+                                </a> </td>
                             </tr>
                             <tr class="bg-dark">
 
@@ -242,6 +252,7 @@
                                 <td>{{ $sumPrice + $sumPriceOver33 }}</td>
                                 <td>{{ $IctCount + $IctCountOver33 }}</td>
                                 <td>{{ $IctIncome + $IctIncomeOver33 }}</td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>

@@ -204,20 +204,24 @@ class CustomerController extends Controller
                 'province_id' => $request->input('province_id'),
                 'quote' => $filePath,
                 'customer_type' => $request->input('customer_type'),
+                'ict_service_id' =>$request->input('ict_service'),
                 'created_at' => $request->input('date')
             ]);
 
             // ✅ เพิ่ม Products ที่เกี่ยวข้องกับ ICT Solution
             $product_ids = $request->input('product_id'); // รับค่า product_id เป็น array
             $quantities = $request->input('quantity'); // รับค่า quantity เป็น array
+            $ICTprices = $request->input('ICTprice'); // รับค่า quantity เป็น array
 
-            if (!empty($product_ids) && !empty($quantities)) {
+            if (!empty($product_ids) && !empty($quantities) && !empty($ICTprices)) {
                 foreach ($product_ids as $index => $product_id) {
                     $product = IctProduct::where('product_id', $product_id);
                     $quantity = $quantities[$index];
+                    $price = $ICTprices[$index]; // ✅ ใช้ค่าตาม index
 
                     $ictSolution->products()->attach($product_id, [
-                        'quantity' => $quantity
+                        'quantity' => $quantity,
+                        'price' => $price
 
                     ]);
                 }
@@ -290,9 +294,10 @@ class CustomerController extends Controller
         $prices = PriceActivity::all(); // ดึงข้อมูลราคา
         $centers = ServiceCenterActivity::all(); // ดึงข้อมูลศูนย์บริการ
         $products = IctProduct::all();
+        $ict_services = IctService::all();
 
 
-        return view('events.cus_edit', compact('products', 'customer', 'types', 'services', 'promotion', 'provinces', 'speed', 'prices', 'centers', 'fttxBroadband', 'sim_my', 'ict_solution', 'productsWithQuantity', 'customerTypeOptions', 'installationOptions'));
+        return view('events.cus_edit', compact('products','ict_services', 'customer', 'types', 'services', 'promotion', 'provinces', 'speed', 'prices', 'centers', 'fttxBroadband', 'sim_my', 'ict_solution', 'productsWithQuantity', 'customerTypeOptions', 'installationOptions'));
     }
 
     public function CustomerUpdate(Request $request, $cus_id)
@@ -470,6 +475,7 @@ class CustomerController extends Controller
                 if ($request->has('product_id')) {
                     $product_ids = $request->input('product_id');
                     $quantities = $request->input('quantity');
+                    $prices = $request->input('ICTprice');
                     $dates = $request->input('date');
     
                     // สร้าง array ที่จะ sync
@@ -477,9 +483,11 @@ class CustomerController extends Controller
     
                     foreach ($product_ids as $index => $product_id) {
                         $quantity = $quantities[$index] ?? 0; // ป้องกัน error ถ้า index ไม่ตรงกัน
+                        $price = $prices[$index] ?? 0; // ป้องกัน error ถ้า index ไม่ตรงกัน
                         $date = $dates ?? now();
                         $pivot_data[$product_id] = [
                             'quantity' => $quantity,
+                            'price' => $price,
                             'created_at' => $date
                         ];
                     }
@@ -492,6 +500,7 @@ class CustomerController extends Controller
                 IctSolution::where('cus_id', $cus_id)->update([
                     'income' => $request->input('income'),
                     'customer_type' => $request->input('customer_type'),
+                    'ict_service_id' => $request->input('ict_service'),
                     'quote' => $quote_path,
                     'center_id' => $center_id,
                     'province_id' => $province_id,
@@ -512,6 +521,7 @@ class CustomerController extends Controller
                     'cus_id' => $cus_id,
                     'income' => $request->input('income'),
                     'customer_type' => $request->input('customer_type'),
+                    'ict_service_id' => $request->input('ict_service'),
                     'quote' => $quote_path,
                     'center_id' => $center_id,
                     'province_id' => $province_id,
@@ -533,15 +543,17 @@ class CustomerController extends Controller
                 // ✅ เพิ่ม Products ที่เกี่ยวข้องกับ ICT Solution
                 $product_ids = $request->input('product_id', []);
                 $quantities = $request->input('quantity', []);
+                $prices = $request->input('ICTprice', []);
     
-                if (!empty($product_ids) && !empty($quantities)) {
+                if (!empty($product_ids) && !empty($quantities)&& !empty($prices)) {
                     $pivot_data = [];
     
                     foreach ($product_ids as $index => $product_id) {
                         $quantity = $quantities[$index] ?? 0;
-    
+                        $price = $prices[$index] ?? 0;
                         $pivot_data[$product_id] = [
                             'quantity' => $quantity,
+                            'price' => $price,
                             'created_at' => $date
                         ];
                     }

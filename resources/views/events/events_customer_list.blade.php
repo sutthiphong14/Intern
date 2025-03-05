@@ -182,7 +182,7 @@
                                                             <p><span class="fw-bold text-dark">รหัสบัตรประชาชน:</span> {{ $customer->id_card ?? 'ไม่ระบุ' }}</p>
                                     @else
                                         <p><span class="fw-bold text-dark">ประเภทลูกค้า:</span>
-                                        <p>{{ $dataIct->where('cus_id', $customer->cus_id)->first() ? $dataIct->where('cus_id', $customer->cus_id)->first()->customer_type : 'ไม่มีข้อมูล' }}
+                                        {{ $dataIct->where('cus_id', $customer->cus_id)->first() ? $dataIct->where('cus_id', $customer->cus_id)->first()->customer_type : 'ไม่มีข้อมูล' }}
                                         </p>
                                     @endif
                                     <p><span class="fw-bold text-dark">ที่อยู่:</span> {{ $customer->cus_address ?? 'ไม่ระบุ' }}</p>
@@ -268,6 +268,7 @@
                                                     <p><span class="fw-bold text-dark">ศูนย์บริการ:</span>
                                                         {{ $customer->center->center_name }}
                                                     </p>
+                                                    
 
                                                     @if ($dataIct->isNotEmpty() && $dataIct->where('cus_id', $customer->cus_id)->first()->quote)
                                                                     @php
@@ -310,22 +311,58 @@
 
 
 
-                                                    <p><span class="fw-bold text-dark">ข้อมูลสินค้า</span></p>
+                                                    
+                                                    @php
+                                                    // ดึงข้อมูล ict_solution ที่ตรงกับ cus_id
+                                                    $ictSolution = $dataIct->where('cus_id', $customer->cus_id)->first();
+                                                
+                                                    // ดึง ict_service_name จาก ict_service_id
+                                                    $serviceName = '';
+                                                    if ($ictSolution) {
+                                                        $service = \App\Models\IctService::find($ictSolution->ict_service_id); // หาบันทึกในตาราง IctService ที่มี ict_service_id
+                                                        $serviceName = $service ? $service->service_name : 'ไม่พบข้อมูลบริการ'; // ถ้าหาเจอให้แสดง service_name
+                                                    }
+                                                @endphp
+                                                <p><span class="fw-bold text-dark">หมวดหมู่บริการ ICT:</span> {{ $serviceName ?? 'ไม่ระบุ' }}</p>
+                                                
+                                                <p><span class="fw-bold text-dark">ข้อมูลสินค้า</span></p>
                                                     <table class="table table-bordered">
                                                         <thead>
                                                             <tr class="text-center  bg-dark">
                                                                 <th>ชื่อสินค้า</th>
                                                                 <th>จำนวน</th>
+                                                                <th>ราคา</th>
+                                                                <th>รวม</th>
                                                             </tr>
                                                         </thead>
+                                                        @php
+                                                             $totalSum = 0;
+                                                        @endphp
                                                         <tbody>
                                                             @if ($dataIct->where('cus_id', $customer->cus_id)->isNotEmpty())
                                                                 @foreach ($dataIct->where('cus_id', $customer->cus_id)->first()->products as $product)
                                                                     <tr class="text-center">
                                                                         <td>{{ $product->product_name ?? 'ไม่มีสินค้า' }}</td>
                                                                         <td>{{ $product->pivot->quantity ?? '-' }}</td>
+                                                                        <td>{{ $product->pivot->price ?? '-' }}</td>
+                                                                        <td>
+                                                                            @php
+                                                                             
+                                                                                $total = ($product->pivot->quantity ?? 0) * ($product->pivot->price ?? 0);
+                                                                                $totalSum += $total;  // เพิ่มผลรวมที่คำนวณในแต่ละรอบ
+                                                                            @endphp
+                                                                            {{ $total }}
+                                                                        </td>
+                                                                        
                                                                     </tr>
+                                                                 
+
                                                                 @endforeach
+                                                                <tr>
+                                                                    <td colspan="3"><strong>รายได้ต่อเดือน</strong></td>
+                                                                    <td>{{ $totalSum }}</td>  <!-- แสดงผลรวมทั้งหมด -->
+                                                                </tr>
+                                                                
                                                             @else
                                                                 <tr>
                                                                     <td colspan="2">ไม่มีข้อมูลสินค้า</td>

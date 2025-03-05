@@ -108,118 +108,119 @@
                                         <input type="number" id="quantity_id" name="quantity[]" class="form-control"
                                             placeholder="ระบุจำนวน" required>
                                     </div>
+                                    <div>
+                                        <label for="quantity" class="form-label">ราคา</label>
+                                        <input type="number" id="ICTprice_id" name="ICTprice[]" class="form-control"
+                                            placeholder="ระบุจำนวน" required>
+                                    </div>
                                     <button type="button" class="btn btn-success add-product mt-4">+</button>
                                 </div>
                             </div>
+                          
+                        </div>
+                        <label for="income" class="form-label">รายได้ต่อเดือน</label>
+                        <input type="number" id="income" name='income' class="form-control bg-warning" required>
                           <!-- Photo -->
-                    <label for="quote" class="form-label">ใบเสนอราคา (รูปภาพ/pdf.)</label>
-                    <input type="file" class="form-control" id="quote" name="quote" required>
-                    <p id="file-error" style="color:red; display:none;">กรุณาเลือกไฟล์ที่ถูกต้อง (รูปภาพหรือ PDF)</p>
+                          <label for="quote" class="form-label">ใบเสนอราคา (รูปภาพ/pdf.)</label>
+                          <input type="file" class="form-control" id="quote" name="quote" required>
+                          <p id="file-error" style="color:red; display:none;">กรุณาเลือกไฟล์ที่ถูกต้อง (รูปภาพหรือ PDF)
+                          </p>
+                    </div>
+
+
+                    <!-- Address -->
+                    <label for="cus_address" class="form-label">ที่อยู่</label>
+                    <textarea class="form-control" id="cus_address" name="cus_address" rows="4">{{ old('cus_address') }}</textarea>
+
+
+                    <div id="groupNet">
+                        <!-- Promotion -->
+                        <label for="promotion_id" class="form-label">โปรโมชั่น <span style="color: red;">*</span></label>
+                        <select class="form-select" id="promotion_id" name="promotion_id" required>
+                            <option value="" disabled selected>-- เลือกโปรโมชั่น --</option>
+                        </select>
+
+
+                        <!-- Speed -->
+                        <label for="speed_id" class="form-label">ความเร็ว <span style="color: red;">*</span></label>
+                        <select class="form-select" id="speed_id" name="speed_id" required>
+                            <option value="" disabled selected>-- เลือกความเร็ว --</option>
+                        </select>
+
+                        <!-- Price -->
+                        <label for="price_id" class="form-label">ราคา <span style="color: red;">*</span></label>
+                        <select class="form-select" id="price_id" name="price_id" required>
+                            <option value="" disabled selected>-- เลือกราคา --</option>
+                        </select>
+
+                    </div>
+                    <!-- Province -->
+                    <label for="province_id" class="form-label">จังหวัด <span style="color: red;">*</span></label>
+                    <select class="form-select" id="province_id" name="province_id" required>
+                        <option value="" disabled selected>-- เลือกจังหวัด --</option>
+                        @foreach ($provinces as $province)
+                            <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
+                        @endforeach
+                    </select>
+                    @error('province_id')
+                        <small style="color:red">{{ $message }}</small>
+                    @enderror
+
+                    <!-- Center -->
+                    <label for="center_id" class="form-label">ศูนย์บริการ <span style="color: red;">*</span></label>
+                    <select class="form-select" id="center_id" name="center_id" required>
+                        <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
+                    </select>
+                    @error('center_id')
+                        <small style="color:red">{{ $message }}</small>
+                    @enderror
+
+
+                    <!-- fttx_broadband form-->
+                    <div id="fttx_broadband">
+                        <label for="new" class="form-label">ประเภทลูกค้า <span style="color: red;">*</span></label>
+                        <select class="form-select " id="new" name="new" required>
+                            <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
+                            <option value="1" class=""> ลูกค้าใหม่ </option>
+                            <option value="2" class=""> ลูกค้าย้ายค่าย </option>
+                            <option value="0" class=""> ปรับโปรโมชั่น </option>
+                        </select>
+                        <label for="installation_type" class="form-label">งานติดตั้ง <span
+                                style="color: red;">*</span></label>
+                        <select class="form-select " id="installation_type" name="installation_type" required>
+                            <option value="" disabled selected>-- เลือกวิธีการติดตั้ง --</option>
+                            <option value="1" class=""> ติดตั้งเอง </option>
+                            <option value="0" class=""> จ้างผู้รับเหมา </option>
+                        </select>
+                    </div>
+
+                    <!-- sim_my form-->
+                    <div id="sim_my">
+                        <label for="cus_new" class="form-label">ประเภทลูกค้า <span style="color: red;">*</span></label>
+                        <select class="form-select " id="cus_new" name="cus_new" required>
+                            <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
+                            <option value="1" class=""> ลูกค้าใหม่ </option>
+                            <option value="0" class=""> ลูกค้า(ย้ายค่าย) </option>
+                        </select>
+                    </div>
+
+                    <!-- Date Form -->
+                    <div id="date" class="mt-3">
+                        <label for="date" class="form-label">วัน/เดือน/ปี
+                            (กรอกช่องนี้เฉพาะกรณีลงข้อมูลย้อนหลัง)</label>
+                        <input type="date" id="date" name="date" class="form-label" required
+                            value="<?= date('Y-m-d') ?>">
+                    </div>
+
+                    <!-- Other -->
+                    <label for="other" class="form-label">หมายเหตุ</label>
+                    <textarea class="form-control" id="other" name="other" rows="4">{{ old('other') }}</textarea>
                 </div>
-                            <label for="income" class="form-label">รายได้ต่อเดือน</label>
-                            <input type="number" id="income" name='income' class="form-control bg-warning" required>
-                        </div>
+                <div class="card-footer align-items-center text-center">
+                    <a href="{{ route('event_customer', $type_id) }}" class="btn btn-secondary">Back</a>
+                    <button type="submit" class="btn btn-success" id="save-button">Save</button>
 
-
-                            <!-- Address -->
-                            <label for="cus_address" class="form-label">ที่อยู่</label>
-                            <textarea class="form-control" id="cus_address" name="cus_address" rows="4">{{ old('cus_address') }}</textarea>
-
-
-                            <div id="groupNet">
-                                <!-- Promotion -->
-                                <label for="promotion_id" class="form-label">โปรโมชั่น <span
-                                        style="color: red;">*</span></label>
-                                <select class="form-select" id="promotion_id" name="promotion_id" required>
-                                    <option value="" disabled selected>-- เลือกโปรโมชั่น --</option>
-                                </select>
-
-
-                                <!-- Speed -->
-                                <label for="speed_id" class="form-label">ความเร็ว <span
-                                        style="color: red;">*</span></label>
-                                <select class="form-select" id="speed_id" name="speed_id" required>
-                                    <option value="" disabled selected>-- เลือกความเร็ว --</option>
-                                </select>
-
-                                <!-- Price -->
-                                <label for="price_id" class="form-label">ราคา <span style="color: red;">*</span></label>
-                                <select class="form-select" id="price_id" name="price_id" required>
-                                    <option value="" disabled selected>-- เลือกราคา --</option>
-                                </select>
-
-                            </div>
-                            <!-- Province -->
-                            <label for="province_id" class="form-label">จังหวัด <span
-                                    style="color: red;">*</span></label>
-                            <select class="form-select" id="province_id" name="province_id" required>
-                                <option value="" disabled selected>-- เลือกจังหวัด --</option>
-                                @foreach ($provinces as $province)
-                                    <option value="{{ $province->province_id }}">{{ $province->province_name }}</option>
-                                @endforeach
-                            </select>
-                            @error('province_id')
-                                <small style="color:red">{{ $message }}</small>
-                            @enderror
-
-                            <!-- Center -->
-                            <label for="center_id" class="form-label">ศูนย์บริการ <span
-                                    style="color: red;">*</span></label>
-                            <select class="form-select" id="center_id" name="center_id" required>
-                                <option value="" disabled selected>-- เลือกศูนย์บริการ --</option>
-                            </select>
-                            @error('center_id')
-                                <small style="color:red">{{ $message }}</small>
-                            @enderror
-
-
-                            <!-- fttx_broadband form-->
-                            <div id="fttx_broadband">
-                                <label for="new" class="form-label">ประเภทลูกค้า <span
-                                        style="color: red;">*</span></label>
-                                <select class="form-select " id="new" name="new" required>
-                                    <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
-                                    <option value="1" class=""> ลูกค้าใหม่ </option>
-                                    <option value="2" class=""> ลูกค้าย้ายค่าย </option>
-                                    <option value="0" class=""> ปรับโปรโมชั่น </option>
-                                </select>
-                                <label for="installation_type" class="form-label">งานติดตั้ง <span
-                                        style="color: red;">*</span></label>
-                                <select class="form-select " id="installation_type" name="installation_type" required>
-                                    <option value="" disabled selected>-- เลือกวิธีการติดตั้ง --</option>
-                                    <option value="1" class=""> ติดตั้งเอง </option>
-                                    <option value="0" class=""> จ้างผู้รับเหมา </option>
-                                </select>
-                            </div>
-
-                            <!-- sim_my form-->
-                            <div id="sim_my">
-                                <label for="cus_new" class="form-label">ประเภทลูกค้า <span
-                                        style="color: red;">*</span></label>
-                                <select class="form-select " id="cus_new" name="cus_new" required>
-                                    <option value="" disabled selected>-- เลือกประเภทลูกค้า --</option>
-                                    <option value="1" class=""> ลูกค้าใหม่ </option>
-                                    <option value="0" class=""> ลูกค้า(ย้ายค่าย) </option>
-                                </select>
-                            </div>
-
-                            <!-- Date Form -->
-                            <div id="date" class="mt-3">
-                                <label for="date" class="form-label">วัน/เดือน/ปี
-                                    (กรอกช่องนี้เฉพาะกรณีลงข้อมูลย้อนหลัง)</label>
-                                <input type="date" id="date" name="date" class="form-label" required
-                                    value="<?= date('Y-m-d') ?>">
-                            </div>
-
-                            <!-- Other -->
-                            <label for="other" class="form-label">หมายเหตุ</label>
-                            <textarea class="form-control" id="other" name="other" rows="4">{{ old('other') }}</textarea>
-                        </div>
-                        <div class="card-footer align-items-center text-center">
-                            <a href="{{ route('event_customer', $type_id) }}" class="btn btn-secondary">Back</a>
-                            <button type="submit" class="btn btn-success" id="save-button">Save</button>
-
-                        </div>
+                </div>
         </form>
     </div>
     </div>
@@ -228,37 +229,146 @@
 
 
 @section('script')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.getElementById("product-container");
+            const incomeInput = document.getElementById("income");
 
-<script>
-    $('#service_id').change(function() {
-        var serviceId = $(this).val();
+            // ฟังก์ชันคำนวณรายได้รวม
+            function calculateTotalIncome() {
+                let totalIncome = 0;
+                const productRows = document.querySelectorAll(".product-row");
+                let canCalculate = true;
 
-        $.ajax({
-            url: '/getIct_service',
-            type: 'GET',
-            data: {
-                service_id: serviceId
-            },
-            success: function(data) {
+                // ลบข้อความแจ้งเตือนที่มีอยู่ก่อนแล้ว
+                document.querySelectorAll('.product-error').forEach(el => el.remove());
 
-                $('#ict_service').empty();
-                $('#ict_service').append(
-                    '<option value="" disabled selected>-- เลือก ICT Solution --</option>');
+                productRows.forEach(row => {
+                    const productSelect = row.querySelector('[name="product_id[]"]');
+                    const priceInput = row.querySelector('[name="ICTprice[]"]');
+                    const quantityInput = row.querySelector('[name="quantity[]"]');
 
+                    // ตรวจสอบว่ามีการเลือกสินค้าแล้วหรือไม่
+                    if (productSelect.value === "") {
+                        canCalculate = false;
 
-                $.each(data, function(index, ict_service) {
-                    $('#ict_service').append('<option value="' + ict_service
-                        .ict_service_id + '">' +
-                        ict_service.service_name + '</option>');
+                        // เพิ่มเส้นขอบสีแดงที่ช่องเลือกสินค้า
+                        productSelect.classList.add('border', 'border-danger');
+
+                        // สร้างข้อความแจ้งเตือนใต้ช่องเลือกสินค้า
+                        const errorMsg = document.createElement('small');
+                        errorMsg.textContent = "กรุณาเลือก Product";
+                        errorMsg.classList.add('text-danger', 'product-error', 'd-block');
+
+                        // ลบข้อความแจ้งเตือนเก่า (ถ้ามี) และเพิ่มข้อความใหม่
+                        const existingError = productSelect.nextElementSibling;
+                        if (existingError && existingError.classList.contains('product-error')) {
+                            existingError.remove();
+                        }
+
+                        // แสดงข้อความแจ้งเตือนหลังช่องเลือกสินค้า
+                        productSelect.after(errorMsg);
+                        productSelect.focus();
+                        return;
+                    }
+
+                    const price = parseFloat(priceInput.value) || 0;
+                    const quantity = parseFloat(quantityInput.value) || 0;
+
+                    totalIncome += price * quantity;
                 });
-            },
-            error: function(xhr, status, error) {
-                console.log("เกิดข้อผิดพลาด:", error); // แสดง error ถ้ามี
-                alert('เกิดข้อผิดพลาดในการดึงข้อมูลบริการ');
+
+                // อัปเดตรายได้ต่อเดือนเฉพาะเมื่อมีการเลือกสินค้าทุกแถว
+                if (canCalculate && productRows.length > 0) {
+                    incomeInput.value = totalIncome;
+                } else {
+                    incomeInput.value = "";
+                }
             }
+
+            // ตรวจจับเหตุการณ์คลิก
+            document.addEventListener("click", function(event) {
+                // เพิ่มแถวสินค้าใหม่
+                if (event.target.classList.contains("add-product")) {
+                    const newRow = event.target.closest(".product-row").cloneNode(true);
+
+                    // รีเซ็ตค่าภายในแถวใหม่
+                    newRow.querySelector("select").value = "";
+                    newRow.querySelector("select").classList.remove('border', 'border-danger');
+                    newRow.querySelectorAll("input").forEach(input => {
+                        input.value = "";
+                    });
+
+                    // ลบข้อความแจ้งเตือนเก่า (ถ้ามี)
+                    const existingError = newRow.querySelector('.product-error');
+                    if (existingError) {
+                        existingError.remove();
+                    }
+                    // เปลี่ยนปุ่ม "+" เป็นปุ่ม "-"
+                    newRow.querySelector(".add-product").classList.replace("btn-success", "btn-danger");
+                    newRow.querySelector(".add-product").textContent = "-";
+                    newRow.querySelector(".add-product").classList.replace("add-product", "remove-product");
+                    container.appendChild(newRow);
+                }
+
+                // ลบแถวสินค้า
+                if (event.target.classList.contains("remove-product")) {
+                    event.target.closest(".product-row").remove();
+                    calculateTotalIncome();
+                }
+            });
+
+            // ตรวจจับเหตุการณ์เมื่อมีการเปลี่ยนแปลงค่าในช่องอินพุต
+            container.addEventListener("input", function(event) {
+                if (event.target.name === "product_id[]") {
+                    // ลบข้อความแจ้งเตือนเมื่อผู้ใช้เลือกสินค้า
+                    const productSelect = event.target;
+                    productSelect.classList.remove('border', 'border-danger');
+                    const existingError = productSelect.nextElementSibling;
+                    if (existingError && existingError.classList.contains('product-error')) {
+                        existingError.remove();
+                    }
+                }
+                // เมื่อมีการเปลี่ยนแปลงข้อมูลสินค้า จำนวน หรือราคา ให้คำนวณใหม่
+                if (event.target.name === "product_id[]" ||
+                    event.target.name === "ICTprice[]" ||
+                    event.target.name === "quantity[]") {
+                    calculateTotalIncome();
+                }
+            });
         });
-    });
-</script>
+    </script>
+
+    <script>
+        $('#service_id').change(function() {
+            var serviceId = $(this).val();
+
+            $.ajax({
+                url: '/getIct_service',
+                type: 'GET',
+                data: {
+                    service_id: serviceId
+                },
+                success: function(data) {
+
+                    $('#ict_service').empty();
+                    $('#ict_service').append(
+                        '<option value="" disabled selected>-- เลือก ICT Solution --</option>');
+
+
+                    $.each(data, function(index, ict_service) {
+                        $('#ict_service').append('<option value="' + ict_service
+                            .ict_service_id + '">' +
+                            ict_service.service_name + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log("เกิดข้อผิดพลาด:", error); // แสดง error ถ้ามี
+                    alert('เกิดข้อผิดพลาดในการดึงข้อมูลบริการ');
+                }
+            });
+        });
+    </script>
 
     <script>
         $('#ict_service').change(function() {
@@ -576,7 +686,7 @@
         });
     </script>
 
-    <script>
+    {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             const container = document.getElementById("product-container");
 
@@ -596,7 +706,7 @@
                 }
             });
         });
-    </script>
+    </script> --}}
 
     <script>
         $(document).ready(function() {

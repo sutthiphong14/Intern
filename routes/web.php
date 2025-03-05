@@ -483,4 +483,8 @@ Route::get('/topup_list/{type_id}', [ActivityController::class, 'TopUp_list'])->
 Route::get('/topups/search', [ActivityController::class, 'searchTopUp'])->name('top_up_search');
 Route::get('/get_product/{center_id}/{type_id}', [ActivityController::class, 'getProductCenter'])->name('getproduct_center');
 Route::get('/detail/{center_id}', [ActivityController::class, 'getCustomerDetail'])->name('detail_cus');
+
+Route::get('/Event_services_ict/{province_id},{type_id}', [ActivityController::class, 'EventservicesICT'])->name('event_services_ict');
+Route::get('/Event_center_ict/{province_id},{type_id}', [ActivityController::class, 'EventcenterICT'])->name('event_center_ict');
+
 });

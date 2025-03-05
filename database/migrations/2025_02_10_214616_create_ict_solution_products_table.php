@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ict_id');
             $table->unsignedBigInteger('product_id');
             $table->integer('quantity')->default(1); // จำนวนสินค้า
-
+            $table->decimal('price', 10, 2); // 10 หลัก และทศนิยม 2 ตำแหน่ง
             // เชื่อม Foreign Key
             $table->foreign('ict_id')->references('ict_id')->on('ict_solution')->onDelete('cascade');
             $table->foreign('product_id')->references('product_id')->on('ict_products')->onDelete('cascade');

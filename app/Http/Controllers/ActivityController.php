@@ -1486,4 +1486,127 @@ class ActivityController extends Controller
 
         return view('events.detail_center',  compact('data', 'dataIct'));
     }
+
+    
+    public function EventservicesICT($province_id, $type_id)
+    {
+        $provinces = ($province_id == 1) ?
+            ProvinceActivity::where('province_id', '<', 13)->get() :
+            ProvinceActivity::where('province_id', '>', 12)->get();
+        $types = TypeActivity::where('type_id', $type_id)->first();
+        // โหลดข้อมูล IctSolution เฉพาะ type_id
+        $ictData = IctSolution::where('type_id', $type_id)
+            ->select('province_id', 'income')
+            ->get()
+            ->groupBy('province_id');
+        $Ict_count = $ictData->map(fn($items) => $items->count());
+        $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
+        $IctCount = $IctIncome = 0;
+        $IctCountOver33 = $IctIncomeOver33 = 0;
+        foreach ($provinces as $province) {
+            $provinceId = $province->province_id;
+            if ($provinceId <= 12) {
+                $IctCount += $Ict_count[$provinceId] ?? 0;
+                $IctIncome += $Ict_income[$provinceId] ?? 0;
+            } else {
+                $IctCountOver33 += $Ict_count[$provinceId] ?? 0;
+                $IctIncomeOver33 += $Ict_income[$provinceId] ?? 0;   
+            }
+        }
+        // คำนวณผลรวมทั้งหมด
+        $total_all = [    
+            'IctCount' => $IctCount + $IctCountOver33,
+            'IctIncome' => $IctIncome + $IctIncomeOver33
+        ];
+        return view('events.events_service_ict', compact(
+            'Ict_count',
+            'Ict_income',
+            'province_id',
+            'types',
+            'provinces',
+            'IctCount',
+            'IctIncome',
+            'IctCountOver33',
+            'IctIncomeOver33'
+        ));
+    }
+
+    public function EventcenterICT($province_id, $type_id)
+    {
+        // ดึงข้อมูล Province และ TypeActivity
+        $centers = ServiceCenterActivity::where('province_id', $province_id)->get();
+        $types = TypeActivity::where('type_id', $type_id)->first();
+        $provinces = ProvinceActivity::where('province_id', $province_id)->first();
+
+       
+        // โหลดข้อมูล IctSolution เฉพาะ province_id
+        $ictData = IctSolution::where('province_id', $province_id)->where('type_id', $type_id)
+            ->select('province_id', 'income', 'center_id')
+            ->get()
+            ->groupBy('center_id');
+
+
+
+        $Ict_count = $ictData->map(fn($items) => $items->count());
+        $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
+
+        // คำนวณค่ารวมสำหรับ ตป.1 และ ตป.2
+       
+        $IctCount = $IctIncome = 0;
+       
+
+
+
+        $IctCountOver33 = $IctIncomeOver33 = 0;
+
+
+
+        foreach ($centers as $center) {
+            $centerId = $center->center_id;
+
+            if ($centerId <= 12) {
+               
+
+                $IctCount += $Ict_count[$centerId] ?? 0;
+                $IctIncome += $Ict_income[$centerId] ?? 0;
+            } else {
+              
+                $IctCountOver33 += $Ict_count[$centerId] ?? 0;
+                $IctIncomeOver33 += $Ict_income[$centerId] ?? 0;
+            }
+        }
+
+        // คำนวณผลรวมทั้งหมด
+        $total_all = [
+        
+            'IctCount' => $IctCount + $IctCountOver33,
+            'IctIncome' => $IctIncome + $IctIncomeOver33
+        ];
+
+
+
+
+
+
+        return view('events.events_center_ict', compact(
+            'types',
+            'provinces',
+            'centers',
+      
+            'Ict_count',
+            'Ict_income',
+            
+            'IctCount',
+            'IctIncome',
+           
+            'IctCountOver33',
+            'IctIncomeOver33',
+            'total_all',
+            'ictData',
+           
+
+
+        ));
+    }
+
 }
