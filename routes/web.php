@@ -439,8 +439,10 @@ Route::get('/province/{id}/service-centers', [ProvinceController::class, 'viewSe
 Route::post('/province/{id}/service-center', [ProvinceController::class, 'storeServiceCenterForProvince'])->name('province.storeServiceCenter');
 Route::delete('/servicecenteractivitydelete/{id}', [ProvinceController::class, 'destroyservicecenter'])->name('servicecenteractivitydelete');
 Route::put('/servicecenteractivityputedit/{id}', [ProvinceController::class, 'updateservicecenter'])->name('servicecenteractivityupdate');
-
+});
 //ลูกค้า
+
+Route::middleware(['auth', 'check.permission:manage_formevent,form_event,adminper_mission'])->group(function () {
 Route::get('/customer_list', [CustomerController::class, 'CustomerList'])->name('customer_list');
 Route::get('/customer_create_view/{type_id}', [CustomerController::class, 'CustomerCreate'])->name('customer_create');
 Route::post('/customer_insert', [CustomerController::class, 'CustomerInsert'])->name('customer_insert');
@@ -458,8 +460,6 @@ Route::get('/getPromotions', [CustomerController::class, 'getPromotions']);
 Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);
 Route::get('/getPrices', [CustomerController::class, 'getPrices']);
 Route::get('/getCenters', [CustomerController::class, 'getCenters']);
-
-
 
 Route::get('/customers/search', [CustomerController::class, 'searchCustomers'])->name('customer_search');
 Route::post('/topUp_insert', [CustomerController::class,'insertTopup'])->name('topUp_insert');
