@@ -23,7 +23,8 @@
             <a href="{{ route('type_list') }}" class="">ข้อมูลกิจกรรม</a> /
             <a href="javascript:history.back()" class="">กิจกรรม {{ $types->type_name }}</a> /
         </span>
-        ศูนย์
+        ICT solution
+        ส่วนงาน
         @if ($province_id == 1)
             ตป.1
         @else

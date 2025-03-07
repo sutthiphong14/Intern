@@ -331,7 +331,7 @@
                                                             <tr class="text-center  bg-dark">
                                                                 <th>ชื่อสินค้า</th>
                                                                 <th>จำนวน</th>
-                                                                <th>ราคา</th>
+                                                                <th>ราคา <br>ต่อหน่วย</th>
                                                                 <th>รวม</th>
                                                             </tr>
                                                         </thead>

@@ -6,10 +6,11 @@
     <span class="text-muted fw-light">
         <a href="{{ route('home') }}" class="">หน้าแรก</a> /
         <a href="{{ route('type_list') }}" class="">ข้อมูลกิจกรรม</a> /
-        <a href="javascript:history.back(-2)" class="">จัดการกิจกรรม {{ $types->type_name }}</a> /
-        <a href="javascript:history.back()" class="">ส่วนงาน</a> /
+        <a href="javascript:history.back(-3)" class="">จัดการกิจกรรม {{ $types->type_name }}</a> /
+        <a href="javascript:history.back(-2)" class="">ส่วน</a> /
+        <a href="javascript:history.back()" class="">จังหวัด</a> /
     </span>
-    จังหวัด {{ $provinces->province_name }}
+    ศูนย์บริการ {{ $centers->center_name }}
 </h4>
 
 <div class="content-wrapper mb-5">
@@ -30,7 +31,7 @@
     </div>
     <div class="card mt-4">
         <div class="d-flex justify-content-between align-items-center gap-2">
-            <h3 class="card-header text-dark">สรุปผลการดำเนินงานกิจกรรมการตลาด {{ $types->type_name }} จังหวัด {{ $provinces->province_name }}</h3>
+            <h3 class="card-header text-dark">สรุปผลการดำเนินงานกิจกรรมการตลาด {{ $types->type_name }}  ศูนย์บริการ  <span class="text-warning"> {{ $centers->center_name }}</span></h3>
         </div>
 
         <div class="card-body">
@@ -39,7 +40,7 @@
                     <thead>
                         <tr class="bg-dark text-center align-center">
                             <th rowspan="2">ดูข้อมูล</th>
-                            <th rowspan="4">ศูนย์บริการ</th>
+                            <th rowspan="4">หมวดหมู่บริการ</th>
                             <th colspan="2">ICT Solution</th>
                         </tr>
                         <tr class="bg-dark text-center">
@@ -48,27 +49,32 @@
                         </tr>
                     </thead>
                     <tbody class="text-center">
-                        @foreach ($centers as $center)
+                        @if ($ict_services->isEmpty())
                             <tr>
-                                <td>
-                                    <!-- ปุ่มหมวดหมู่บริการ ICT และ ลูกค้า -->
-                                    <a href="{{ route('event_serviceDetail_ict', ['center_id' => $center->center_id, 'type_id' => $types->type_id]) }}" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-search"></i> หมวดหมู่บริการ ICT Solution
-                                    </a> 
-                                    
-                                </td>
-            
-                                <td>{{ $center->center_name }}</td>
-                                <td>{{ $Ict_count[$center->center_id] ?? 0 }}</td>
-                                <td>{{ $Ict_income[$center->center_id] ?? 0 }}</td>
+                                <td colspan="4" class="text-center text-danger">ไม่มีข้อมูลบริการ ICT</td>
                             </tr>
-                        @endforeach
-                        <tr class="bg-dark text-light">
-                            <td colspan="2">รวม</td>
-                            <td>{{ $IctCount + $IctCountOver33 }}</td>
-                            <td>{{ $IctIncome + $IctIncomeOver33 }}</td>
-                        </tr>
+                        @else
+                            @foreach ($ict_services as $ict_service)
+                                <tr>
+                                    <td>
+                                        <!-- ปุ่มหมวดหมู่บริการ ICT และ ลูกค้า -->
+                                        <a href="{{ route('event_serviceProduct_ict', ['ict_service_id' => $ict_service->ict_service_id, 'center_id' => $centers->center_id,'type_id' => $types->type_id]) }}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-search"></i> ดูรายละเอียดสินค้า
+                                        </a> 
+                                    </td>
+                                    <td>{{ $ict_service->service_name }}</td>
+                                    <td>{{ $Ict_count[$ict_service->ict_service_id] ?? 0 }}</td>
+                                    <td>{{ $Ict_income[$ict_service->ict_service_id] ?? 0 }}</td>
+                                </tr>
+                            @endforeach
+                            <tr class="bg-dark text-light">
+                                <td colspan="2">รวม</td>
+                                <td>{{ $IctCount }}</td>
+                                <td>{{ $IctIncome }}</td>
+                            </tr>
+                        @endif
                     </tbody>
+                    
                 </table>
             </div>
             
@@ -86,15 +92,15 @@
 
 
     <script>
-        var centerNames = [];
+        var ict_service_name = [];
         var ictCount = [];
         var ictIncome = [];
     
         // ข้อมูลจาก PHP
-        @foreach ($centers as $center)
-            centerNames.push("{{ $center->center_name }}");
-            ictCount.push({{ $Ict_count[$center->center_id] ?? 0 }});
-            ictIncome.push({{ $Ict_income[$center->center_id] ?? 0 }});
+        @foreach ($ict_services as $ict_service)
+        ict_service_name.push("{{ $ict_service->service_name }}");
+            ictCount.push({{ $Ict_count[$ict_service->ict_service_id] ?? 0 }});
+            ictIncome.push({{ $Ict_income[$ict_service->ict_service_id] ?? 0 }});
         @endforeach
     
         // ✅ โหลด Plugin ก่อนใช้
@@ -106,7 +112,7 @@
         var myChart2 = new Chart(ctx2, {
             type: 'bar',
             data: {
-                labels: centerNames, // ป้ายชื่อที่แสดงในกราฟ
+                labels: ict_service_name, // ป้ายชื่อที่แสดงในกราฟ
                 datasets: [{
                     label: 'รายได้',
                     backgroundColor: 'rgba(167, 85, 33, 0.8)', // สีเหลือง
