@@ -1634,7 +1634,97 @@ class ActivityController extends Controller
             'types',
             'ict_services',
             'ictData',
-            'services'
+            'services',
+            'center_id'
         ));
     }
+
+
+    public function EventCustomerICT(Request $request, $center_id, $type_id)
+    {
+        $types = TypeActivity::where('type_id', $type_id)->first();
+        $centers = ServiceCenterActivity::where('center_id', $center_id)->first();
+
+        // ดึงข้อมูลลูกค้า และใช้เงื่อนไขการค้นหา
+        $query = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])
+            ->where('type_id', $type_id)->where('center_id',$center_id);
+
+        // ค้นหาตามชื่อ
+        if ($request->has('name') && !empty($request->name)) {
+            $query->where('cus_fullname', 'like', '%' . $request->name . '%');
+        }
+
+        // ค้นหาตามประเภทบริการ
+        if ($request->has('service') && !empty($request->service)) {
+            $query->whereHas('service', function ($q) use ($request) {
+                $q->where('service_name', 'like', '%' . $request->service . '%');
+            });
+        }
+
+        // ค้นหาตามจังหวัด
+        if ($request->has('province_id') && !empty($request->province_id)) {
+            $query->where('province_id', $request->province_id);
+        }
+
+        // ดึงข้อมูลและแบ่งหน้า
+        $data = $query->orderBy('cus_id', 'desc')->paginate(10);
+
+        // โหลดข้อมูลเพิ่มเติม (ICT, SIM, FTTX)
+        $dataIct = IctSolution::where('type_id', $type_id)->get();
+        $provinces = ProvinceActivity::all();
+        $serviceTypes = ServeActivity::where('type_id', $type_id)->get();
+
+        // ดึงข้อมูลประเภทบริการและจัดกลุ่ม
+        $serviceCategories = Customer::with('service')
+            ->where('type_id', $type_id)
+            ->get()
+            ->groupBy('service.service_name');
+
+        $fttxData = Fttxbroadband::select('province_id', 'new', 'installation_type')
+            ->where('type_id', $type_id)->get()->groupBy('province_id');
+
+        $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
+        $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
+        $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
+
+        $simmyData = Simmy::select('province_id', 'cus_new')
+            ->where('type_id', $type_id)->get()->groupBy('province_id');
+
+        $Simmy_new = $simmyData->map(fn($items) => $items->where('cus_new', 1)->count());
+        $Simmy_move = $simmyData->map(fn($items) => $items->where('cus_new', 0)->count());
+
+        $topUpData = TopUp::select('province_id', 'amount')
+            ->where('type_id', $type_id)->get()->groupBy('province_id');
+
+        $Simmy_count = $topUpData->map(fn($items) => $items->count());
+        $Simmy_price = $topUpData->map(fn($items) => $items->sum('amount'));
+
+        $ictData = IctSolution::select('province_id', 'income')
+            ->where('type_id', $type_id)->get()->groupBy('province_id');
+
+        $Ict_count = $ictData->map(fn($items) => $items->count());
+        $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
+
+        return view('events.events_customer_ict', compact(
+            'serviceTypes',
+            'data',
+            'dataIct',
+            'provinces',
+            'fttxNew',
+            'selfInstall',
+            'HireInstall',
+            'Simmy_new',
+            'Simmy_move',
+            'Simmy_count',
+            'Simmy_price',
+            'Ict_count',
+            'Ict_income',
+            'types',
+            'type_id',
+            'serviceCategories', // เพิ่มตัวแปรที่จัดกลุ่มข้อมูล
+            'centers'
+
+        ));
+    }
+
 }

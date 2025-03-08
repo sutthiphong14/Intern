@@ -52,11 +52,17 @@
                             <tr>
                                 <td>
                                     <!-- ปุ่มหมวดหมู่บริการ ICT และ ลูกค้า -->
-                                    <a href="{{ route('event_serviceDetail_ict', ['center_id' => $center->center_id, 'type_id' => $types->type_id]) }}" class="btn btn-warning btn-sm">
+                                    <a href="{{ route('event_serviceDetail_ict', ['center_id' => $center->center_id, 'type_id' => $types->type_id]) }}" 
+                                       class="btn btn-warning btn-sm">
                                         <i class="fas fa-search"></i> หมวดหมู่บริการ ICT Solution
-                                    </a> 
-                                    
+                                    </a>
+                                
+                                    <a href="{{ route('event_customer_ict',  ['center_id' => $center->center_id, 'type_id' => $types->type_id]) }}" 
+                                       class="btn btn-primary btn-sm">
+                                        <i class="fas fa-search"></i> ดูข้อมูลลูกค้า
+                                    </a>
                                 </td>
+                                
             
                                 <td>{{ $center->center_name }}</td>
                                 <td>{{ $Ict_count[$center->center_id] ?? 0 }}</td>

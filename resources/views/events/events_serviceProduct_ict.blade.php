@@ -40,7 +40,6 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr class="bg-dark text-center align-center">
-                                <th rowspan="2">ดูข้อมูล</th>
                                 <th rowspan="2">หมวดหมู่บริการ</th>
                                 <th rowspan="2">รายการสินค้า</th>
                                 <th rowspan="2">จำนวน</th>
@@ -49,51 +48,43 @@
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            <tr>
-                                @foreach ($ict_services as $ict_service)
-                                    <td>
-                                        <a href="#" class="btn btn-sm btn-warning">
-                                            <i class="fas fa-search"></i> ดูข้อมูลลูกค้า
-                                        </a> 
-                                    </td>
-                                    <td>{{ $ict_service->service_name }}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                @endforeach
-                            </tr>
                             @php
                                 $totalMonthlyIncome = 0;
                             @endphp
-
-                            @foreach ($ictData as $ict)
-                                @foreach ($ict->products as $product)
-                                    @php
-                                        $subtotal = ($product->pivot->quantity ?? 0) * ($product->pivot->price ?? 0);
-                                        $totalMonthlyIncome += $subtotal;
-                                    @endphp
-                                    <tr class="text-center">
-                                        <td></td>
-                                        <td></td>
-                                        <td>{{ $product->product_name ?? 'ไม่มีสินค้า' }}</td>
-                                        <td>{{ $product->pivot->quantity ?? '-' }}</td>
-                                        <td>{{ number_format($product->pivot->price ?? 0, 2) }}</td>
-                                        <td>{{ number_format($subtotal, 2) }}</td>
-                                    </tr>
+                    
+                            @foreach ($ict_services as $ict_service)
+                                <tr class="text-center bg-light">
+                                    <td>{{ $ict_service->service_name }}</td>
+                                    <td></td> {{-- ช่องว่างสำหรับแสดงสินค้า --}}
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                    
+                                @foreach ($ictData as $ict)
+                                    @foreach ($ict->products as $product)
+                                        @php
+                                            $subtotal = ($product->pivot->quantity ?? 0) * ($product->pivot->price ?? 0);
+                                            $totalMonthlyIncome += $subtotal;
+                                        @endphp
+                                        <tr class="text-center">
+                                            <td></td> {{-- ช่องว่างเพื่อให้ตรงกับหมวดหมู่ --}}
+                                            <td>{{ $product->product_name ?? 'ไม่มีสินค้า' }}</td>
+                                            <td>{{ $product->pivot->quantity ?? '-' }}</td>
+                                            <td>{{ number_format($product->pivot->price ?? 0, 2) }}</td>
+                                            <td>{{ number_format($subtotal, 2) }}</td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             @endforeach
-
-
+                    
                             <tr class="bg-dark text-light">
-                                <td colspan="5" class="text-end">รายได้ต่อเดือน</td>
+                                <td colspan="4" class="text-end">รายได้ต่อเดือน</td>
                                 <td>{{ number_format($totalMonthlyIncome, 2) }}</td>
                             </tr>
-
-                           
                         </tbody>
-
                     </table>
+                    
                 </div>
 
             </div>
