@@ -1,8 +1,17 @@
-@extends('admins.index')
-@section('css')
-@endsection
+<!DOCTYPE html>
+<html lang="en">
 
-@section('content')
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Export</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        
+</head>
+
+<body>
     <div class="container">
       
 
@@ -10,43 +19,31 @@
 
 
         <div class="mt-5">
-            <h3>สรุปรายงานผลการดำเนินงานกิจกรรมการตลาด</h3>
+            <h3>สรุปรายงานผลการดำเนินงานกิจกรรมการตลาด {{$types->type_name}}</h3>
         </div>
         <table class="table table-bordered ">
             <thead>
-                <tr class="bg-dark text-center align-center">
-                    <th rowspan="4">ลำดับ</th>
-                    <th rowspan="4">จังหวัด</th>
-                    <th colspan="3">FTTX</th>
-                    <th colspan="4">SIM my</th>
-                    <th colspan="2">Ict Solution</th>
-
-
-
+                <tr class="bg-dark text-white text-center">
+                    <th rowspan="3" class="align-middle">ลำดับ</th>
+                    <th rowspan="3" class="align-middle">จังหวัด</th>
+                    <th colspan="3" class="text-center">FTTX</th>
+                    <th colspan="4" class="text-center">SIM my</th>
+                    <th colspan="2" class="text-center">Ict Solution</th>
                 </tr>
-                <tr class="bg-dark text-center">
-
-                    <th rowspan="4">new</th>
-                    <th rowspan="4">ติดตั้งเอง</th>
-                    <th rowspan="4">จ้างผู้รับเหมา</th>
-
-
+                <tr class="bg-dark text-white text-center">
+                    <th rowspan="2" class="align-middle">new</th>
+                    <th rowspan="2" class="align-middle">ติดตั้งเอง</th>
+                    <th rowspan="2" class="align-middle">จ้างผู้รับเหมา</th>
+                    <th rowspan="2" class="align-middle">ลูกค้าใหม่</th>
+                    <th rowspan="2" class="align-middle">ลูกค้า (ย้ายค่าย)</th>
+                    <th colspan="2" class="text-center">เติมเงินรายปี</th>
+                    <th rowspan="2" class="align-middle">จำนวน (ราย)</th>
+                    <th rowspan="2" class="align-middle">รายได้</th>
                 </tr>
-                <tr class="bg-dark text-center">
-                    <th rowspan="2">ลูกค้าใหม่</th>
-                    <th rowspan="2">ลูกค้า (ย้ายค่าย)</th>
-                    <th colspan="2">เติมเงินรายปี</th>
-                    <th rowspan="2">จำนวน
-                        (ราย)</th>
-                    <th rowspan="2">รายได้</th>
-
+                <tr class="bg-dark text-white text-center">
+                    <th class="text-center">จำนวน (ราย)</th>
+                    <th class="text-center">ยอดเงิน</th>
                 </tr>
-                <tr class="bg-dark text-center ">
-                    <th>จำนวน
-                        (ราย)</th>
-                    <th>ยอดเงิน</th>
-                </tr>
-
             </thead>
             @php
                 $sumFttxNew = $sumSelfInstall = $sumHireInstall = 0; // สำหรับ province_id <= 33
@@ -184,9 +181,4 @@
 
     </div>
 
-@endsection
-
-@section('script')
-
-
-@endsection
+</body>

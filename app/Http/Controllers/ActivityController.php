@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EventExport;
 use App\Models\Customer;
 use App\Models\Fttxbroadband;
 use App\Models\IctProduct;
@@ -18,6 +19,7 @@ use App\Models\SpeedActivity;
 use App\Models\TypeActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Calculation\Web\Service;
 
 class ActivityController extends Controller
@@ -723,7 +725,7 @@ class ActivityController extends Controller
 
         // ดึงข้อมูล Province และ TypeActivity
         $provinces = ProvinceActivity::all();
-        $types = TypeActivity::all();
+        $types = TypeActivity::where('type_id',$type_id)->first();
 
         // โหลดข้อมูล Fttxbroadband ครั้งเดียว
         $fttxData = Fttxbroadband::where('type_id',$type_id)->select('province_id', 'new', 'installation_type')->get()->groupBy('province_id');
@@ -768,6 +770,14 @@ class ActivityController extends Controller
         ));
     }
 
+    public function exportActivityList($type_id)
+    {
+        $type = TypeActivity::where('type_id', $type_id)->first();
+        $typeName = $type ? $type->type_name : 'all';
+        $filename = 'รายงานกิจกรรมการตลาด_' . $typeName . '_' . date('Y-m-d') . '.xlsx';
+        
+        return Excel::download(new EventExport($type_id), $filename);
+    }
     public function EventDepartment($type_id)
     {
 

@@ -141,7 +141,7 @@
 
                     <div class="d-flex align-items-center gap-2">
                         <div class="form-group me-2">
-                            <a href="{{route('activity_list',$types->type_id)}}" class="btn btn-success">Export</a>
+                            <a href="{{route('export_event',$types->type_id)}}" class="btn btn-success">Export</a>
                         </div>
 
                         <button type="button" class="btn btn-dark me-4" data-bs-toggle="modal"
