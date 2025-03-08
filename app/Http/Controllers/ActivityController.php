@@ -712,14 +712,12 @@ class ActivityController extends Controller
         return view('events.sim_my', compact('data', 'provinces', 'Simmy_new', 'Simmy_move', 'Simmy_count', 'Simmy_price'));
     }
 
-    public function activity_list(Request $request)
+    public function activity_list($type_id)
     {
-        $type_service = $request->input('type_service');
-
         // กรองข้อมูล Customer ตาม type_service
         $dataQuery = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center']);
-        if ($type_service !== null) {
-            $dataQuery->whereHas('service', fn($query) => $query->where('service_name', $type_service));
+        if ($type_id !== null) {
+            $dataQuery->whereHas('service', fn($query) => $query->where('service_name', $type_id));
         }
         $data = $dataQuery->get();
 
@@ -728,23 +726,23 @@ class ActivityController extends Controller
         $types = TypeActivity::all();
 
         // โหลดข้อมูล Fttxbroadband ครั้งเดียว
-        $fttxData = Fttxbroadband::select('province_id', 'new', 'installation_type')->get()->groupBy('province_id');
+        $fttxData = Fttxbroadband::where('type_id',$type_id)->select('province_id', 'new', 'installation_type')->get()->groupBy('province_id');
 
         $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
         $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
         $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
 
         // โหลดข้อมูล Simmy และ TopUp ครั้งเดียว
-        $simmyData = Simmy::select('province_id', 'cus_new')->get()->groupBy('province_id');
+        $simmyData = Simmy::where('type_id',$type_id)->select('province_id', 'cus_new')->get()->groupBy('province_id');
         $Simmy_new = $simmyData->map(fn($items) => $items->where('cus_new', 1)->count());
         $Simmy_move = $simmyData->map(fn($items) => $items->where('cus_new', 0)->count());
 
-        $topUpData = TopUp::select('province_id', 'amount')->get()->groupBy('province_id');
+        $topUpData = TopUp::where('type_id',$type_id)->select('province_id', 'amount')->get()->groupBy('province_id');
         $Simmy_count = $topUpData->map(fn($items) => $items->count());
         $Simmy_price = $topUpData->map(fn($items) => $items->sum('amount'));
 
         // โหลดข้อมูล IctSolution ครั้งเดียว
-        $ictData = IctSolution::select('province_id', 'income')->get()->groupBy('province_id');
+        $ictData = IctSolution::where('type_id',$type_id)->select('province_id', 'income')->get()->groupBy('province_id');
         $Ict_count = $ictData->map(fn($items) => $items->count());
         $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
 

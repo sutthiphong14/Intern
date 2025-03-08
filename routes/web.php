@@ -458,7 +458,7 @@ Route::put('/customer_update/{cus_id}', [CustomerController::class, 'CustomerUpd
 
 Route::get('/fttx_broadband', [ActivityController::class, 'Fttxlist'])->name('fttx_broadband');
 Route::get('/sim_my', [ActivityController::class, 'Sim_my'])->name('sim_my');
-Route::get('/activity_list', [ActivityController::class, 'activity_list'])->name('activity_list');
+Route::get('/activity_list/{type_id}', [ActivityController::class, 'activity_list'])->name('activity_list');
 
 Route::get('/getService', [CustomerController::class, 'getService']);
 Route::get('/getIct_service', [CustomerController::class, 'getIctService']);

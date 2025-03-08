@@ -104,12 +104,12 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <label for="quantity" class="form-label">จำนวน</label>
+                                        <label for="quantity_id" class="form-label">จำนวน</label>
                                         <input type="number" id="quantity_id" name="quantity[]" class="form-control"
                                             placeholder="ระบุจำนวน" required>
                                     </div>
                                     <div>
-                                        <label for="quantity" class="form-label">ราคา</label>
+                                        <label for="ICTprice_id" class="form-label">ราคา</label>
                                         <input type="number" id="ICTprice_id" name="ICTprice[]" class="form-control"
                                             placeholder="ระบุจำนวน" required>
                                     </div>
@@ -612,78 +612,70 @@
 
     <script>
         $(document).ready(function() {
-            function toggleForms(serviceName) {
-                if (serviceName.toLowerCase().includes('fttx')) {
-                    $('#fttx_broadband,#groupNet, #groupNet1').show();
-                    $('#sim_my, #ict_solution, #ict_solution1').hide();
+    function toggleForms(serviceName) {
+        if (serviceName.toLowerCase().includes('fttx')) {
+            $('#fttx_broadband, #groupNet, #groupNet1').show();
+            $('#sim_my, #ict_solution, #ict_solution1').hide();
 
-                    // เปิด required สำหรับฟอร์ม fttx_broadband
-                    $('#new, #installation_type').prop('required', true);
-                    // กลับ label เป็น "ชื่อ นามสกุล"
-                    $('#fullname_label').text('ชื่อ นามสกุล');
+            // เปิด required สำหรับฟอร์ม fttx_broadband
+            $('#new, #installation_type').prop('required', true);
+            // กลับ label เป็น "ชื่อ นามสกุล"
+            $('#fullname_label').text('ชื่อ นามสกุล');
 
-                    // ปิด required สำหรับฟอร์มอื่น ๆ
-                    $('#cus_new, #income, #customer_type, #quote, #product_id, #quantity_id ').prop('required',
-                        false);
-                    $('#save-button').prop('disabled', false);
+            // ปิด required สำหรับฟอร์มอื่น ๆ
+            $('#cus_new, #income, #customer_type, #quote, #product_id, #quantity_id, #ict_service, #ICTprice_id').prop('required', false);
+            $('#save-button').prop('disabled', false);
 
+        } else if (serviceName.toLowerCase().includes('sim')) {
+            $('#sim_my, #groupNet, #groupNet1').show();
+            $('#fttx_broadband, #ict_solution, #ict_solution1').hide();
 
-                } else if (serviceName.toLowerCase().includes('sim')) {
-                    $('#sim_my,#groupNet, #groupNet1').show();
-                    $('#fttx_broadband, #ict_solution, #ict_solution1').hide();
+            // เปิด required สำหรับฟอร์ม sim_my
+            $('#cus_new').prop('required', true);
 
-                    // เปิด required สำหรับฟอร์ม sim_my
-                    $('#cus_new').prop('required', true);
+            // กลับ label เป็น "ชื่อ นามสกุล"
+            $('#fullname_label').text('ชื่อ นามสกุล');
 
-                    // กลับ label เป็น "ชื่อ นามสกุล"
-                    $('#fullname_label').text('ชื่อ นามสกุล');
+            // ปิด required สำหรับฟอร์มอื่น ๆ
+            $('#new, #installation_type, #income, #customer_type, #quote, #product_id, #quantity_id, #ict_service, #ICTprice_id').prop('required', false);
+            $('#save-button').prop('disabled', false);
 
-                    // ปิด required สำหรับฟอร์มอื่น ๆ
-                    $('#new, #installation_type, #income, #customer_type, #quote, #product_id, #quantity_id').prop(
-                        'required', false);
-                    $('#save-button').prop('disabled', false);
+        } else if (serviceName.toLowerCase().includes('ict')) {
+            $('#ict_solution, #ict_solution1').show();
+            $('#fttx_broadband, #sim_my, #groupNet, #groupNet1').hide();
 
-                } else if (serviceName.toLowerCase().includes('ict')) {
-                    $('#ict_solution, #ict_solution1').show();
-                    $('#fttx_broadband, #sim_my, #groupNet, #groupNet1').hide();
+            // เปิด required สำหรับฟิลด์ income
+            $('#income, #customer_type, #product_id, #quantity_id, #ict_service, #ICTprice_id, #quote').prop('required', true);
+            // เปลี่ยน label เป็น "ชื่อ/ชื่อหน่วยงาน"
+            $('#fullname_label').text('ชื่อ/ชื่อหน่วยงาน');
 
-                    // เปิด required สำหรับฟิลด์ income
-                    $('#income, #customer_type, #product_id, #quantity_id').prop('required', true);
-                    // เปลี่ยน label เป็น "ชื่อ/ชื่อหน่วยงาน"
-                    $('#fullname_label').text('ชื่อ/ชื่อหน่วยงาน');
+            // ปิด required สำหรับฟอร์มอื่น ๆ
+            $('#new, #installation_type, #cus_new, #promotion_id, #speed_id, #price_id, #id_card, #cus_photo').prop('required', false);
+            $('#save-button').prop('disabled', false);
+        } else {
+            // ซ่อนฟอร์มทั้งหมด
+            $('#fttx_broadband, #sim_my, #ict_solution, #ict_solution1').hide();
 
-                    // ปิด required สำหรับฟอร์มอื่น ๆ
-                    $('#new, #installation_type, #cus_new, #promotion_id, #speed_id, #price_id, #id_card, #cus_photo')
-                        .prop('required',
-                            false);
-                    $('#save-button').prop('disabled', false);
-                } else {
-                    // ซ่อนฟอร์มทั้งหมด
-                    $('#fttx_broadband, #sim_my, #ict_solution, #ict_solution1').hide();
+            // ปิด required สำหรับทุกฟอร์ม
+            $('#new, #installation_type, #cus_new, #income, #customer_type, #quote, #product_id, #quantity_id, #ict_service, #ICTprice_id').prop('required', false);
 
-                    // ปิด required สำหรับทุกฟอร์ม
-                    $('#new, #installation_type, #cus_new, #income, #customer_type, #quote , #product_id, #quantity_id')
-                        .prop('required', false);
+            $('#save-button').prop('disabled', true);
 
-                    $('#save-button').prop('disabled', true);
+            // กลับ label เป็น "ชื่อ นามสกุล"
+            $('#fullname_label').text('ชื่อ นามสกุล');
+        }
+    }
 
-                    // กลับ label เป็น "ชื่อ นามสกุล"
-                    $('#fullname_label').text('ชื่อ นามสกุล');
-                }
-            }
+    // เรียกใช้ฟังก์ชันตอนโหลดหน้า
+    var serviceName = $('#service_id option:selected').text();
+    toggleForms(serviceName);
 
-
-
-            // เรียกใช้ฟังก์ชันตอนโหลดหน้า
-            var serviceName = $('#service_id option:selected').text();
-            toggleForms(serviceName);
-
-            // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
-            $('#service_id').change(function() {
-                var serviceName = $(this).find('option:selected').text();
-                toggleForms(serviceName);
-            });
-        });
+    // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
+    $('#service_id').change(function() {
+        var serviceName = $(this).find('option:selected').text();
+        toggleForms(serviceName);
+    });
+});
     </script>
 
     {{-- <script>
