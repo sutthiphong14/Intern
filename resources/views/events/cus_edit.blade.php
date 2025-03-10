@@ -132,7 +132,7 @@
                                         <div>
                                             <label for="quantity" class="form-label">ราคา</label>
                                             <input type="number" id="ICTprice_id" name="ICTprice[]" class="form-control"
-                                                placeholder="ระบุจำนวน" required value="{{ $productData->pivot->price }}">
+                                                placeholder="ระบุราคา" required value="{{ $productData->pivot->price }}">
                                         </div>
                                         <button type="button" class="btn btn-success add-product mt-4">+</button>
                                         <button type="button" class="btn btn-danger remove-product mt-4">-</button>
@@ -159,7 +159,7 @@
                                     <div>
                                         <label for="quantity" class="form-label">ราคา</label>
                                         <input type="number" id="ICTprice_id" name="ICTprice[]" class="form-control"
-                                            placeholder="ระบุจำนวน" required >
+                                            placeholder="ระบุราคา" required >
                                     </div>
                                     <button type="button" class="btn btn-success add-product mt-4">+</button>
                                     <button type="button" class="btn btn-danger remove-product mt-4">-</button>

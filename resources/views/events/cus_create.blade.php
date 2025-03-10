@@ -122,7 +122,7 @@
                         <input type="number" id="income" name='income' class="form-control bg-warning" required>
                           <!-- Photo -->
                           <label for="quote" class="form-label">ใบเสนอราคา (รูปภาพ/pdf.)</label>
-                          <input type="file" class="form-control" id="quote" name="quote" required>
+                          <input type="file" class="form-control" id="quote" name="quote" >
                           <p id="file-error" style="color:red; display:none;">กรุณาเลือกไฟล์ที่ถูกต้อง (รูปภาพหรือ PDF)
                           </p>
                     </div>
@@ -645,7 +645,7 @@
             $('#fttx_broadband, #sim_my, #groupNet, #groupNet1').hide();
 
             // เปิด required สำหรับฟิลด์ income
-            $('#income, #customer_type, #product_id, #quantity_id, #ict_service, #ICTprice_id, #quote').prop('required', true);
+            $('#income, #customer_type, #product_id, #quantity_id, #ict_service, #ICTprice_id').prop('required', true);
             // เปลี่ยน label เป็น "ชื่อ/ชื่อหน่วยงาน"
             $('#fullname_label').text('ชื่อ/ชื่อหน่วยงาน');
 

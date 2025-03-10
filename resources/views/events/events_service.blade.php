@@ -132,7 +132,7 @@
 
         <div class="card mt-4">
             <div class="d-flex justify-content-between align-items-center gap-2">
-                <h3 class="card-header text-dark">สรุปผลการดำเนินงานกิจกรรมการตลาด event1</h3>
+                <h3 class="card-header text-dark">สรุปผลการดำเนินงานกิจกรรมการตลาด {{ $types->type_name }}</h3>
                 <div class="d-flex align-items-center gap-2">
 
                     <div class="d-flex align-items-center gap-2">
