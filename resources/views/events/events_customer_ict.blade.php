@@ -27,16 +27,15 @@
 
 
 @section('content')
-    <h4 class="fw-bold py-2 mb-3"><span class="text-muted fw-light">
-            <a href="{{ route('home') }}" class="">
-                หน้าแรก
-            </a>
-            /
-            <a href="{{ route('type_list') }}" class="">
-                ข้อมูลกิจกรรม
-            </a>
-            /
-        </span> ข้อมูลลูกค้า
+    <h4 class="fw-bold py-2 mb-3">
+        <span class="text-muted fw-light">
+            <a href="{{ route('home') }}" class="">หน้าแรก</a> /
+            <a href="{{ route('type_list') }}" class="">ข้อมูลกิจกรรม</a> /
+            <a href="javascript:history.back(-3)" class="">จัดการกิจกรรม {{ $types->type_name }}</a> /
+            <a href="javascript:history.back(-2)" class="">ส่วน</a> /
+            <a href="javascript:history.back()" class="">จังหวัด</a> /
+        </span>
+        ลูกค้า ศูนย์บริการ {{ $centers->center_name }}
     </h4>
 
     <div class="card">

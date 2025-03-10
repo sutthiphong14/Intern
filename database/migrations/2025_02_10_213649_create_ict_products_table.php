@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('product_name'); // ชื่อสินค้า
             $table->text('description')->nullable(); // รายละเอียดสินค้า
             $table->unsignedBigInteger('type_id'); // รหัสบริการ (Foreign Key)
-            $table->timestamps();
             $table->foreign('type_id')->references('type_id')->on('type_activity')->onDelete('cascade');
+            $table->unsignedBigInteger('ict_service_id');
+            $table->foreign('ict_service_id')->references('ict_service_id')->on('ict_services')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

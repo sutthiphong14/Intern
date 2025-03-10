@@ -621,7 +621,7 @@
     // ฟังก์ชันลบข้อมูล
     function deleteData(year, month) {
         // ส่งคำขอ DELETE ไปยังเซิร์ฟเวอร์
-        fetch(`/delete/${year},${month}`, {
+        fetch(`/delete/${year}/${month}`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')

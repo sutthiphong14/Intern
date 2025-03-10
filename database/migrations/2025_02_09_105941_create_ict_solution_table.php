@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreign('cus_id')->references('cus_id')->on('customers')->onDelete('cascade');
             $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('type_id')->on('type_activity')->onDelete('cascade');
+            $table->unsignedBigInteger('ict_service_id');
+            $table->foreign('ict_service_id')->references('ict_service_id')->on('ict_services')->onDelete('cascade');
             $table->unsignedBigInteger('province_id');
             $table->foreign('province_id')->references('province_id')->on('province_activity')->onDelete('cascade');
             $table->unsignedBigInteger('center_id');

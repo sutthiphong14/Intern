@@ -261,7 +261,7 @@ Route::get('/viewInstallFTTxcenter/{section}/{year}/{month}', [ReportController:
 Route::get('/viewInstallFTTxcenter/{center}/{year}/{month}', [ReportController::class, 'viewInstallData']);
 
 Route::get('/ExportInstallFttxcenter', [ReportController::class, 'exportData'])->name('exportInstallFTTxcenter');
-Route::delete('/delete/{year},{month}', [ReportController::class, 'delete_data'])->name('delete_data');
+Route::delete('/delete/{year}/{month}', [ReportController::class, 'delete_data'])->name('delete_data');
 
 
 
@@ -422,11 +422,19 @@ Route::post('/price_insert/{service_id}/{promotion_id}/{speed_id}', [ActivityCon
 Route::delete('/price_delete/{service_id}/{promotion_id}/{speed_id}/{price_id}', [ActivityController::class, 'PriceDelete'])->name('price_delete');
 Route::put('/price_update/{service_id}/{promotion_id}/{speed_id}/{price_id}', [ActivityController::class, 'PriceUpdate'])->name('price_update');
 
+//ส่วนบริการICT
+Route::get('/ict/service_list,{type_id}/{service_id}', [ActivityController::class, 'ListServiceICT'])->name('ict_service_list');
+Route::post('/ict/service_insert,{type_id}/{service_id}', [ActivityController::class, 'ICTServiceInsert'])->name('ict_service_insert');
+Route::delete('/ict/service_delete,/{ict_service_id}/{type_id}/{service_id}', [ActivityController::class, 'ICTServiceDelete'])->name('ict_service_delete');
+Route::put('/ict/service_update/{ict_service_id}/{type_id}/{service_id}', [ActivityController::class, 'ICTServiceupdate'])->name('ict_service_update');
+
 //ส่วนproduct
-Route::get('/product_list,{type_id}', [ActivityController::class, 'ListProduct'])->name('product_list');
-Route::post('/product_insert,{type_id}', [ActivityController::class, 'ProductInsert'])->name('product_insert');
-Route::delete('/product_delete/{product_id}', [ActivityController::class, 'ProductDelete'])->name('product_delete');
-Route::put('/product_update/{product_id}', [ActivityController::class, 'Productupdate'])->name('product_update');
+Route::get('/product_list,{type_id}/{ict_service_id}', [ActivityController::class, 'ListProduct'])->name('product_list');
+Route::post('/product_insert,{type_id}/{ict_service_id}', [ActivityController::class, 'ProductInsert'])->name('product_insert');
+Route::delete('/product_delete/{product_id}/{type_id}/{ict_service_id}', [ActivityController::class, 'ProductDelete'])->name('product_delete');
+Route::put('/product_update/{product_id}/{type_id}/{ict_service_id}', [ActivityController::class, 'Productupdate'])->name('product_update');
+
+
 
 //จังหวัด
 Route::get('/provinceactivityList', [ProvinceController::class, 'indexprovince'])->name('provinceactivityList');
@@ -452,9 +460,11 @@ Route::put('/customer_update/{cus_id}', [CustomerController::class, 'CustomerUpd
 
 Route::get('/fttx_broadband', [ActivityController::class, 'Fttxlist'])->name('fttx_broadband');
 Route::get('/sim_my', [ActivityController::class, 'Sim_my'])->name('sim_my');
-Route::get('/activity_list', [ActivityController::class, 'activity_list'])->name('activity_list');
+Route::get('/activity_list/{type_id}', [ActivityController::class, 'activity_list'])->name('activity_list');
+Route::get('/export_events/{type_id}', [ActivityController::class, 'exportActivityList'])->name('export_event');
 
 Route::get('/getService', [CustomerController::class, 'getService']);
+Route::get('/getIct_service', [CustomerController::class, 'getIctService']);
 Route::get('/getProduct', [CustomerController::class, 'getProduct']);
 Route::get('/getPromotions', [CustomerController::class, 'getPromotions']);
 Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);
@@ -474,4 +484,11 @@ Route::get('/topup_list/{type_id}', [ActivityController::class, 'TopUp_list'])->
 Route::get('/topups/search', [ActivityController::class, 'searchTopUp'])->name('top_up_search');
 Route::get('/get_product/{center_id}/{type_id}', [ActivityController::class, 'getProductCenter'])->name('getproduct_center');
 Route::get('/detail/{center_id}', [ActivityController::class, 'getCustomerDetail'])->name('detail_cus');
+
+Route::get('/Event_services_ict/{province_id},{type_id}', [ActivityController::class, 'EventservicesICT'])->name('event_services_ict');
+Route::get('/Event_center_ict/{province_id},{type_id}', [ActivityController::class, 'EventcenterICT'])->name('event_center_ict');
+Route::get('/Event_services_detail_ict/{center_id}/{type_id}', [ActivityController::class, 'EventcenterDetailICT'])->name('event_serviceDetail_ict');
+Route::get('/Event_services_prodcut_ict/{ict_service_id}/{center_id}/{type_id}', [ActivityController::class, 'EventcenterProductICT'])->name('event_serviceProduct_ict');
+Route::get('/Event_customer_ict/{center_id}/{type_id}', [ActivityController::class, 'EventCustomerICT'])->name('event_customer_ict');
+
 });

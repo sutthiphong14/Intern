@@ -91,7 +91,86 @@
                             หน่วยงานทั่วไป</option>
 
                     </select>
+
+                    <label for="ict_service" class="form-label">ประเภท ICT solution</label>
+                    <select class="form-select" id="ict_service" name="ict_service" required>
+                        <option value="" disabled selected>--เลือก ICT solution --</option>
+
+                        @foreach ($ict_services as $ict_service)
+                            <option value="{{ $ict_service->ict_service_id }}"
+                                {{ isset($ict_solution) && $ict_solution->ict_service_id == $ict_service->ict_service_id ? 'selected' : '' }}>
+                                {{ $ict_service->service_name }}
+                            </option>
+                        @endforeach
                     </select>
+
+                    {{-- ict_solution --}}
+                    <div id="ict_solution">
+                        <div id="product-container">
+                            @if ($productsWithQuantity->isNotEmpty())
+                                {{-- กรณีมี Product อยู่แล้ว --}}
+                                @foreach ($productsWithQuantity as $productData)
+                                    <div class="d-flex product-row">
+                                        <div>
+                                            <label for="product_id" class="form-label">Product</label>
+                                            <select class="form-select" id="product_id" name="product_id[]" required>
+                                                <option value="" disabled>-- เลือก Product --</option>
+                                                @foreach ($products as $product)
+                                                    <option value="{{ $product->product_id }}"
+                                                        {{ $productData->product_id == $product->product_id ? 'selected' : '' }}>
+                                                        {{ $product->product_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="quantity" class="form-label">จำนวน</label>
+                                            <input type="number" id='quantity_id' name="quantity[]" class="form-control"
+                                                placeholder="ระบุจำนวน" required
+                                                value="{{ $productData->pivot->quantity }}">
+                                        </div>
+                                        <div>
+                                            <label for="quantity" class="form-label">ราคา</label>
+                                            <input type="number" id="ICTprice_id" name="ICTprice[]" class="form-control"
+                                                placeholder="ระบุราคา" required value="{{ $productData->pivot->price }}">
+                                        </div>
+                                        <button type="button" class="btn btn-success add-product mt-4">+</button>
+                                        <button type="button" class="btn btn-danger remove-product mt-4">-</button>
+                                    </div>
+                                @endforeach
+                            @else
+                                {{-- ถ้าไม่มีข้อมูลให้แสดงฟอร์มเปล่า --}}
+                                <div class="d-flex product-row">
+                                    <div>
+                                        <label for="product_id" class="form-label">Product</label>
+                                        <select class="form-select" id="product_id" name="product_id[]">
+                                            <option value="" disabled selected>-- เลือก Product --</option>
+                                            @foreach ($products as $product)
+                                                <option value="{{ $product->product_id }}">{{ $product->product_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="quantity" class="form-label">จำนวน</label>
+                                        <input type="number" name="quantity[]" class="form-control" id="quantity"
+                                            placeholder="ระบุจำนวน">
+                                    </div>
+                                    <div>
+                                        <label for="quantity" class="form-label">ราคา</label>
+                                        <input type="number" id="ICTprice_id" name="ICTprice[]" class="form-control"
+                                            placeholder="ระบุราคา" required >
+                                    </div>
+                                    <button type="button" class="btn btn-success add-product mt-4">+</button>
+                                    <button type="button" class="btn btn-danger remove-product mt-4">-</button>
+                                </div>
+                            @endif
+                        </div>
+
+                        <label for="income" class="form-label">รายได้ต่อเดือน</label>
+                        <input type="number" id="income" name='income' class="form-control bg-warning" required
+                            value="{{ old('income', $ict_solution->income ?? '') }}">
+                    </div>
 
                     @if ($ict_solution->quote ?? '')
                         <div class="mt-3">
@@ -112,7 +191,7 @@
                 </div>
 
                 <label for="cus_address" class="form-label">ที่อยู่</label>
-                <textarea class="form-control" id="cus_address" name="cus_address" rows="4" >{{ $customer->cus_address }}</textarea>
+                <textarea class="form-control" id="cus_address" name="cus_address" rows="4">{{ $customer->cus_address }}</textarea>
 
 
                 <div id="groupNet">
@@ -170,63 +249,6 @@
                         </option>
                     @endforeach
                 </select>
-
-                {{-- ict_solution --}}
-                <div id="ict_solution">
-                    <div id="product-container">
-                        @if ($productsWithQuantity->isNotEmpty())
-                            {{-- กรณีมี Product อยู่แล้ว --}}
-                            @foreach ($productsWithQuantity as $productData)
-                                <div class="d-flex product-row">
-                                    <div>
-                                        <label for="product_id" class="form-label">Product</label>
-                                        <select class="form-select" id="product_id" name="product_id[]" required>
-                                            <option value="" disabled>-- เลือก Product --</option>
-                                            @foreach ($products as $product)
-                                                <option value="{{ $product->product_id }}"
-                                                    {{ $productData->product_id == $product->product_id ? 'selected' : '' }}>
-                                                    {{ $product->product_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label for="quantity" class="form-label">จำนวน</label>
-                                        <input type="number" id='quantity_id' name="quantity[]" class="form-control"
-                                            placeholder="ระบุจำนวน" required value="{{ $productData->pivot->quantity }}">
-                                    </div>
-                                    <button type="button" class="btn btn-success add-product mt-4">+</button>
-                                    <button type="button" class="btn btn-danger remove-product mt-4">-</button>
-                                </div>
-                            @endforeach
-                        @else
-                            {{-- ถ้าไม่มีข้อมูลให้แสดงฟอร์มเปล่า --}}
-                            <div class="d-flex product-row">
-                                <div>
-                                    <label for="product_id" class="form-label">Product</label>
-                                    <select class="form-select" id="product_id" name="product_id[]">
-                                        <option value="" disabled selected>-- เลือก Product --</option>
-                                        @foreach ($products as $product)
-                                            <option value="{{ $product->product_id }}">{{ $product->product_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="quantity" class="form-label">จำนวน</label>
-                                    <input type="number" name="quantity[]" class="form-control" id="quantity"
-                                        placeholder="ระบุจำนวน">
-                                </div>
-                                <button type="button" class="btn btn-success add-product mt-4">+</button>
-                                <button type="button" class="btn btn-danger remove-product mt-4">-</button>
-                            </div>
-                        @endif
-                    </div>
-
-                    <label for="income" class="form-label">รายได้ต่อเดือน</label>
-                    <input type="number" id="income" name='income' class="form-control bg-warning" required
-                        value="{{ old('income', $ict_solution->income ?? '') }}">
-                </div>
 
 
 
@@ -293,62 +315,186 @@
 @endsection
 
 @section('script')
-    <script></script>
     <script>
-        $(document).ready(function() {
-            // กำหนดค่าเริ่มต้นเมื่อโหลดหน้า
-            var serviceId = $('#service_id').val();
-            // สมมติว่ามีตัวแปรที่เก็บค่า product_id ที่เลือกไว้ก่อนหน้า
-            var selectedProductId = "{{ $customer->product_id ?? '' }}"; // ปรับตามโครงสร้างข้อมูลของคุณ
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.getElementById("product-container");
+            const incomeInput = document.getElementById("income");
 
-            if (serviceId) {
-                loadProducts(serviceId, selectedProductId);
+            // ฟังก์ชันคำนวณรายได้รวม
+            function calculateTotalIncome() {
+                let totalIncome = 0;
+                const productRows = document.querySelectorAll(".product-row");
+                let canCalculate = true;
+
+                // ลบข้อความแจ้งเตือนที่มีอยู่ก่อนแล้ว
+                document.querySelectorAll('.product-error').forEach(el => el.remove());
+
+                productRows.forEach(row => {
+                    const productSelect = row.querySelector('[name="product_id[]"]');
+                    const priceInput = row.querySelector('[name="ICTprice[]"]');
+                    const quantityInput = row.querySelector('[name="quantity[]"]');
+
+                    // ตรวจสอบว่ามีการเลือกสินค้าแล้วหรือไม่
+                    if (productSelect.value === "") {
+                        canCalculate = false;
+
+                        // เพิ่มเส้นขอบสีแดงที่ช่องเลือกสินค้า
+                        productSelect.classList.add('border', 'border-danger');
+
+                        // สร้างข้อความแจ้งเตือนใต้ช่องเลือกสินค้า
+                        const errorMsg = document.createElement('small');
+                        errorMsg.textContent = "กรุณาเลือก Product";
+                        errorMsg.classList.add('text-danger', 'product-error', 'd-block');
+
+                        // ลบข้อความแจ้งเตือนเก่า (ถ้ามี) และเพิ่มข้อความใหม่
+                        const existingError = productSelect.nextElementSibling;
+                        if (existingError && existingError.classList.contains('product-error')) {
+                            existingError.remove();
+                        }
+
+                        // แสดงข้อความแจ้งเตือนหลังช่องเลือกสินค้า
+                        productSelect.after(errorMsg);
+                        productSelect.focus();
+                        return;
+                    }
+
+                    const price = parseFloat(priceInput.value) || 0;
+                    const quantity = parseFloat(quantityInput.value) || 0;
+
+                    totalIncome += price * quantity;
+                });
+
+                // อัปเดตรายได้ต่อเดือนเฉพาะเมื่อมีการเลือกสินค้าทุกแถว
+                if (canCalculate && productRows.length > 0) {
+                    incomeInput.value = totalIncome;
+                } else {
+                    incomeInput.value = "";
+                }
             }
 
-            // เมื่อเปลี่ยนค่า service_id
-            $('#service_id').change(function() {
-                var serviceId = $(this).val();
-                loadProducts(serviceId, selectedProductId);
+            // ตรวจจับเหตุการณ์คลิก
+            document.addEventListener("click", function(event) {
+                // ลบแถวสินค้า
+                if (event.target.classList.contains("remove-product")) {
+                    event.target.closest(".product-row").remove();
+                    calculateTotalIncome(); // คำนวณรายได้ใหม่เมื่อลบแถว
+                }
             });
 
-            function loadProducts(serviceId, selectedProductId) {
-                $.ajax({
-                    url: '/getProduct',
-                    type: 'GET',
-                    data: {
-                        service_id: serviceId
-                    },
-                    success: function(data) {
-                        $('#product_id').empty();
-                        $('#product_id').append(
-                            '<option value="" disabled>-- เลือก Product --</option>'
-                        );
-
-                        // เพิ่ม options สำหรับ product
-                        $.each(data, function(index, product) {
-                            // ตรวจสอบว่าเป็น product ที่เคยเลือกไว้หรือไม่
-                            var selected = (product.product_id == selectedProductId) ?
-                                'selected' : '';
-
-                            $('#product_id').append('<option value="' + product.product_id +
-                                '" ' + selected + '>' +
-                                product.product_name + '</option>');
-                        });
-
-                        // ถ้าไม่มีข้อมูลที่เลือกไว้ก่อนหน้า ให้เลือกตัวแรก
-                        if (data.length > 0 && !selectedProductId) {
-                            // เลือกตัวแรกเป็นค่าเริ่มต้น (ถ้าต้องการ)
-                            // $('#product_id').val(data[0].product_id);
-                        }
-                    },
-                    error: function() {
-                        console.log('Error fetching products');
-                        alert('เกิดข้อผิดพลาดในการดึงข้อมูล Product');
+            // ตรวจจับเหตุการณ์เมื่อมีการเปลี่ยนแปลงค่าในช่องอินพุต
+            container.addEventListener("input", function(event) {
+                if (event.target.name === "product_id[]") {
+                    // ลบข้อความแจ้งเตือนเมื่อผู้ใช้เลือกสินค้า
+                    const productSelect = event.target;
+                    productSelect.classList.remove('border', 'border-danger');
+                    const existingError = productSelect.nextElementSibling;
+                    if (existingError && existingError.classList.contains('product-error')) {
+                        existingError.remove();
                     }
-                });
-            }
+                }
+                // เมื่อมีการเปลี่ยนแปลงข้อมูลสินค้า จำนวน หรือราคา ให้คำนวณใหม่
+                if (event.target.name === "product_id[]" ||
+                    event.target.name === "ICTprice[]" ||
+                    event.target.name === "quantity[]") {
+                    calculateTotalIncome();
+                }
+            });
         });
     </script>
+
+<script>
+    $(document).ready(function() {
+        function loadIctService() {
+            var serviceId = $('#service_id').val();
+
+            var ictServiceSelect = $('#ict_service');
+
+            // ถ้า serviceId ไม่มีค่า (เป็น null หรือว่าง)
+            if (!serviceId) {
+                ictServiceSelect.empty();
+                ictServiceSelect.append('<option value="" disabled selected>-- เลือก ICT Solution --</option>');
+                return; // ออกจากฟังก์ชัน ไม่ต้องเรียก AJAX
+            }
+
+            // ถ้ามีค่า serviceId ให้โหลดข้อมูล
+            $.ajax({
+                url: '/getIct_service',
+                type: 'GET',
+                data: { service_id: serviceId },
+                success: function(data) {
+                    ictServiceSelect.empty();
+                    ictServiceSelect.append('<option value="" disabled selected>-- เลือก ICT Solution --</option>');
+
+                    $.each(data, function(index, ict_service) {
+                        ictServiceSelect.append('<option value="' + ict_service.ict_service_id + '">' + ict_service.service_name + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log("เกิดข้อผิดพลาด:", error);
+                    alert('เกิดข้อผิดพลาดในการดึงข้อมูลบริการ');
+                }
+            });
+        }
+
+        // โหลดข้อมูลเมื่อหน้าเว็บเปิดขึ้นมา
+        loadIctService();
+
+        // โหลดข้อมูลเมื่อมีการเปลี่ยนค่า
+        $('#service_id').change(function() {
+            loadIctService();
+        });
+    });
+</script>
+
+
+
+<script>
+    $(document).ready(function() {
+        function loadProduct() {
+            var ICTserviceId = $('#ict_service').val();
+
+            var firstProductRow = $('#product-container .product-row:first');
+            var firstProductSelect = firstProductRow.find('[name="product_id[]"]');
+
+            // ถ้า ICTserviceId ไม่มีค่า (เป็น null หรือว่าง)
+            if (!ICTserviceId) {
+               
+                firstProductSelect.empty();
+                firstProductSelect.append('<option value="" disabled selected>-- เลือก Product --</option>');
+                return; // ออกจากฟังก์ชัน ไม่ต้องเรียก AJAX
+            }
+
+            // ถ้ามีค่า ICTserviceId ให้โหลดข้อมูล
+            $.ajax({
+                url: '/getProduct',
+                type: 'GET',
+                data: { ict_service_id: ICTserviceId },
+                success: function(data) {
+                    firstProductSelect.empty();
+                    firstProductSelect.append('<option value="" disabled >-- เลือก Product --</option>');
+
+                    $.each(data, function(index, product) {
+                        firstProductSelect.append('<option value="' + product.product_id + '">' + product.product_name + '</option>');
+                    });
+                },
+                error: function() {
+                    console.log('Error fetching products');
+                    alert('เกิดข้อผิดพลาดในการดึงข้อมูลสินค้า');
+                }
+            });
+        }
+
+        // โหลด Product เมื่อหน้าเว็บเปิดขึ้นมา
+        loadProduct();
+
+        // โหลด Product เมื่อมีการเปลี่ยนค่า ICT Service
+        $('#ict_service').change(function() {
+            loadProduct();
+        });
+    });
+</script>
+
+
     <script>
         $(document).ready(function() {
             // ดึงค่า type_id ปัจจุบัน
@@ -542,7 +688,7 @@
         $(document).ready(function() {
             function toggleForms(serviceName) {
                 if (serviceName.toLowerCase().includes('fttx')) {
-                    $('#fttx_broadband,#groupNet, #groupNet1').show();
+                    $('#fttx_broadband, #groupNet, #groupNet1').show();
                     $('#sim_my, #ict_solution, #ict_solution1').hide();
 
                     // เปิด required สำหรับฟอร์ม fttx_broadband
@@ -551,10 +697,12 @@
                     $('#fullname_label').text('ชื่อ นามสกุล');
 
                     // ปิด required สำหรับฟอร์มอื่น ๆ
-                    $('#cus_new, #income, #customer_type, #quote, #product_id, #quantity_id ').prop('required',
-                        false);
+                    $('#cus_new, #income, #customer_type, #quote, #product_id, #quantity_id, #ict_service, #ICTprice_id')
+                        .prop('required', false);
+                    $('#save-button').prop('disabled', false);
+
                 } else if (serviceName.toLowerCase().includes('sim')) {
-                    $('#sim_my,#groupNet, #groupNet1').show();
+                    $('#sim_my, #groupNet, #groupNet1').show();
                     $('#fttx_broadband, #ict_solution, #ict_solution1').hide();
 
                     // เปิด required สำหรับฟอร์ม sim_my
@@ -564,51 +712,47 @@
                     $('#fullname_label').text('ชื่อ นามสกุล');
 
                     // ปิด required สำหรับฟอร์มอื่น ๆ
-                    $('#new, #installation_type, #income, #customer_type, #quote, #product_id, #quantity_id').prop(
-                        'required', false);
+                    $('#new, #installation_type, #income, #customer_type, #quote, #product_id, #quantity_id, #ict_service, #ICTprice_id')
+                        .prop('required', false);
+                    $('#save-button').prop('disabled', false);
+
                 } else if (serviceName.toLowerCase().includes('ict')) {
                     $('#ict_solution, #ict_solution1').show();
                     $('#fttx_broadband, #sim_my, #groupNet, #groupNet1').hide();
 
                     // เปิด required สำหรับฟิลด์ income
-                    $('#income, #customer_type, #product_id, #quantity_id').prop('required', true);
+                    $('#income, #customer_type, #product_id, #quantity_id, #ict_service, #ICTprice_id')
+                        .prop('required', true);
                     // เปลี่ยน label เป็น "ชื่อ/ชื่อหน่วยงาน"
                     $('#fullname_label').text('ชื่อ/ชื่อหน่วยงาน');
 
                     // ปิด required สำหรับฟอร์มอื่น ๆ
                     $('#new, #installation_type, #cus_new, #promotion_id, #speed_id, #price_id, #id_card, #cus_photo')
-                        .prop('required',
-                            false);
+                        .prop('required', false);
+                    $('#save-button').prop('disabled', false);
                 } else {
                     // ซ่อนฟอร์มทั้งหมด
                     $('#fttx_broadband, #sim_my, #ict_solution, #ict_solution1').hide();
 
                     // ปิด required สำหรับทุกฟอร์ม
-                    $('#new, #installation_type, #cus_new, #income, #customer_type, #quote , #product_id, #quantity_id')
+                    $('#new, #installation_type, #cus_new, #income, #customer_type, #quote, #product_id, #quantity_id, #ict_service, #ICTprice_id')
                         .prop('required', false);
 
+                    $('#save-button').prop('disabled', true);
 
                     // กลับ label เป็น "ชื่อ นามสกุล"
                     $('#fullname_label').text('ชื่อ นามสกุล');
                 }
             }
 
+            // เรียกใช้ฟังก์ชันตอนโหลดหน้า
+            var serviceName = $('#service_id option:selected').text();
+            toggleForms(serviceName);
 
-
-
-
-            // ✅ เช็คค่า `service_name` ทันทีที่โหลดหน้า
-            var selectedService = $('#service_id').val(); // ได้ค่า service_id ที่ถูกเลือก
-            if (selectedService) {
-                var serviceName = $('#service_id option:selected').text();
-                toggleForms(serviceName);
-            }
-
-            // ✅ เช็คค่าใหม่เมื่อเปลี่ยน `service_id`
+            // เรียกใช้ฟังก์ชันเมื่อเลือก service_id ใหม่
             $('#service_id').change(function() {
                 var serviceName = $(this).find('option:selected').text();
                 toggleForms(serviceName);
-                console.log(serviceName)
             });
         });
     </script>
@@ -620,9 +764,19 @@
             document.addEventListener("click", function(event) {
                 if (event.target.classList.contains("add-product")) {
                     const newRow = event.target.closest(".product-row").cloneNode(true);
+
+                    // Reset select
                     newRow.querySelector("select").value = "";
-                    newRow.querySelector("input").value = "";
+
+                    // Reset all input fields (quantity and price)
+                    const inputs = newRow.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        input.value = "";
+                    });
+
+                    // Change button text
                     newRow.querySelector(".add-product").textContent = "+";
+
                     container.appendChild(newRow);
                 }
 

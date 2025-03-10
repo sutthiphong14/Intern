@@ -15,7 +15,8 @@ class IctProduct extends Model
         'product_id',
         'product_name',
         'description',
-        'type_id'
+        'type_id',
+        'ict_service_id'
 
     ];
     public $timestamps = true;  // ใช้เวลาในการอัปเดต/สร้างข้อมูล
@@ -24,7 +25,7 @@ class IctProduct extends Model
     public function ictSolutions()
     {
         return $this->belongsToMany(IctSolution::class, 'ict_solution_products', 'product_id', 'ict_id')
-            ->withPivot('quantity')
+            ->withPivot('quantity','price')
             ->withTimestamps();
     }
 
