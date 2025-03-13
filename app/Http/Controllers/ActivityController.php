@@ -725,26 +725,41 @@ class ActivityController extends Controller
 
         // ดึงข้อมูล Province และ TypeActivity
         $provinces = ProvinceActivity::all();
-        $types = TypeActivity::where('type_id',$type_id)->first();
+        $types = TypeActivity::where('type_id', $type_id)->first();
 
         // โหลดข้อมูล Fttxbroadband ครั้งเดียว
-        $fttxData = Fttxbroadband::where('type_id',$type_id)->select('province_id', 'new', 'installation_type')->get()->groupBy('province_id');
+        $fttxData = Fttxbroadband::where('type_id', $type_id)->select('province_id', 'new', 'installation_type')->get()->groupBy('province_id');
+        // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
+        $adjustData = Fttxbroadband::where('type_id', $type_id)
+            ->select('province_id', 'new', 'installation_type')->where('new', 0)
+            ->get()
+            ->groupBy('province_id');
 
-        $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
+        // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
+        $moveData = Fttxbroadband::where('type_id', $type_id)
+            ->select('province_id', 'new', 'installation_type')->where('new', 2)
+            ->get()
+            ->groupBy('province_id');
+
+
+
+        $fttxNew = $fttxData->map(fn($items) => $items->whereIn('new', [1, 2])->count());
         $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
         $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
+        $adjust = $adjustData->map(fn($items) => $items->where('new', 0)->count());
+        $move = $moveData->map(fn($items) => $items->where('new', 2)->count());
 
         // โหลดข้อมูล Simmy และ TopUp ครั้งเดียว
-        $simmyData = Simmy::where('type_id',$type_id)->select('province_id', 'cus_new')->get()->groupBy('province_id');
+        $simmyData = Simmy::where('type_id', $type_id)->select('province_id', 'cus_new')->get()->groupBy('province_id');
         $Simmy_new = $simmyData->map(fn($items) => $items->where('cus_new', 1)->count());
         $Simmy_move = $simmyData->map(fn($items) => $items->where('cus_new', 0)->count());
 
-        $topUpData = TopUp::where('type_id',$type_id)->select('province_id', 'amount')->get()->groupBy('province_id');
+        $topUpData = TopUp::where('type_id', $type_id)->select('province_id', 'amount')->get()->groupBy('province_id');
         $Simmy_count = $topUpData->map(fn($items) => $items->count());
         $Simmy_price = $topUpData->map(fn($items) => $items->sum('amount'));
 
         // โหลดข้อมูล IctSolution ครั้งเดียว
-        $ictData = IctSolution::where('type_id',$type_id)->select('province_id', 'income')->get()->groupBy('province_id');
+        $ictData = IctSolution::where('type_id', $type_id)->select('province_id', 'income')->get()->groupBy('province_id');
         $Ict_count = $ictData->map(fn($items) => $items->count());
         $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
 
@@ -766,7 +781,9 @@ class ActivityController extends Controller
             'Simmy_price',
             'Ict_count',
             'Ict_income',
-            'types'
+            'types',
+            'move',
+            'adjust'
         ));
     }
 
@@ -775,7 +792,7 @@ class ActivityController extends Controller
         $type = TypeActivity::where('type_id', $type_id)->first();
         $typeName = $type ? $type->type_name : 'all';
         $filename = 'รายงานกิจกรรมการตลาด_' . $typeName . '_' . date('Y-m-d') . '.xlsx';
-        
+
         return Excel::download(new EventExport($type_id), $filename);
     }
     public function EventDepartment($type_id)
@@ -1500,16 +1517,81 @@ class ActivityController extends Controller
         $provinces = ($province_id == 1) ?
             ProvinceActivity::where('province_id', '<', 13)->get() :
             ProvinceActivity::where('province_id', '>', 12)->get();
+    
+        $provinces1 = ($province_id == 1)
+            ? ProvinceActivity::where('province_id', '<', 13)->pluck('province_id')->toArray()
+            : ProvinceActivity::where('province_id', '>', 12)->pluck('province_id')->toArray();
+        
         $types = TypeActivity::where('type_id', $type_id)->first();
+        
+        // ดึงข้อมูล IctSolution ที่ตรงกับเงื่อนไข
+        $ictData1 = IctSolution::where('type_id', $type_id)
+            ->whereIn('province_id', $provinces1)
+            ->with('products') // โหลด pivot data
+            ->get();
+    
+        // กำหนดรายการบริการหลัก
+        $mainServices = ['CCTV', 'smart pole', 'internet wifi', 'smart office', 'cyber security', 'ultimate connect'];
+        $serviceNames = array_merge($mainServices, ['บริการอื่นๆ']);
+    
+        // คำนวณสรุปข้อมูลและแยกตามบริการ
+        $ictSummary = $ictData1->map(function ($ict) use ($mainServices) {
+            return $ict->products->map(function ($product) use ($ict, $mainServices) {
+                // หา IctService ที่เชื่อมกับ IctSolution
+                $service = IctService::find($ict->ict_service_id);
+                $originalServiceName = $service ? $service->service_name : '';
+                
+                // ตรวจสอบว่าชื่อบริการอยู่ในรายการบริการหลักหรือไม่
+                $serviceName = in_array($originalServiceName, $mainServices) 
+                    ? $originalServiceName 
+                    : 'บริการอื่นๆ';
+    
+                return [
+                    'province_id' => $ict->province_id,
+                    'ict_id' => $ict->ict_id,
+                    'service_name' => $serviceName, // เก็บชื่อบริการที่จัดกลุ่มแล้ว
+                    'quantity' => $product->pivot->quantity ?? 0,
+                    'total_price' => ($product->pivot->quantity ?? 0) * ($product->pivot->price ?? 0),
+                ];
+            });
+        })->flatten(1);
+    
+        // สร้าง array โครงสร้างเริ่มต้นสำหรับทุกจังหวัดและทุกบริการ
+        $provinceSummary = [];
+        foreach ($provinces1 as $provinceId) {
+            $provinceSummary[$provinceId] = [];
+            
+            // สร้างข้อมูลเริ่มต้นสำหรับทุกบริการใน province นี้
+            foreach ($serviceNames as $serviceName) {
+                $provinceSummary[$provinceId][$serviceName] = [
+                    'total_quantity' => 0,
+                    'total_price' => 0,
+                ];
+            }
+        }
+    
+        // เติมข้อมูลจริงลงไป
+        foreach ($ictSummary as $summary) {
+            $provinceId = $summary['province_id'];
+            $serviceName = $summary['service_name'];
+    
+            // เพิ่มค่าเข้าไปในโครงสร้างที่มีอยู่แล้ว
+            $provinceSummary[$provinceId][$serviceName]['total_quantity'] += $summary['quantity'];
+            $provinceSummary[$provinceId][$serviceName]['total_price'] += $summary['total_price'];
+        }
+    
         // โหลดข้อมูล IctSolution เฉพาะ type_id
         $ictData = IctSolution::where('type_id', $type_id)
             ->select('province_id', 'income')
             ->get()
             ->groupBy('province_id');
+    
         $Ict_count = $ictData->map(fn($items) => $items->count());
         $Ict_income = $ictData->map(fn($items) => $items->sum('income'));
+        
         $IctCount = $IctIncome = 0;
         $IctCountOver33 = $IctIncomeOver33 = 0;
+        
         foreach ($provinces as $province) {
             $provinceId = $province->province_id;
             if ($provinceId <= 12) {
@@ -1520,11 +1602,13 @@ class ActivityController extends Controller
                 $IctIncomeOver33 += $Ict_income[$provinceId] ?? 0;
             }
         }
+        
         // คำนวณผลรวมทั้งหมด
         $total_all = [
             'IctCount' => $IctCount + $IctCountOver33,
             'IctIncome' => $IctIncome + $IctIncomeOver33
         ];
+        
         return view('events.events_service_ict', compact(
             'Ict_count',
             'Ict_income',
@@ -1534,7 +1618,11 @@ class ActivityController extends Controller
             'IctCount',
             'IctIncome',
             'IctCountOver33',
-            'IctIncomeOver33'
+            'IctIncomeOver33',
+            'ictData1',
+            'ictSummary',
+            'provinceSummary',
+            'serviceNames'
         ));
     }
 
@@ -1581,7 +1669,7 @@ class ActivityController extends Controller
             'IctCountOver33',
             'IctIncomeOver33',
             'total_all',
-            'ictData',
+
         ));
     }
 
@@ -1628,7 +1716,7 @@ class ActivityController extends Controller
             'ictData',
         ));
     }
-    public function EventcenterProductICT($ict_service_id,$center_id, $type_id)
+    public function EventcenterProductICT($ict_service_id, $center_id, $type_id)
     {
         $services = IctService::where('ict_service_id', $ict_service_id)->first();
         $ict_services = IctService::where('ict_service_id', $ict_service_id)->get();
@@ -1636,7 +1724,7 @@ class ActivityController extends Controller
         // โหลดข้อมูล IctSolution เฉพาะ province_id
         $ictData = IctSolution::where('ict_service_id', $ict_service_id)->where('type_id', $type_id)->where('center_id', $center_id)
             ->get();
-            
+
 
         return view('events.events_serviceProduct_ict', compact(
             'types',
@@ -1655,7 +1743,7 @@ class ActivityController extends Controller
 
         // ดึงข้อมูลลูกค้า และใช้เงื่อนไขการค้นหา
         $query = Customer::with(['type', 'service', 'promotion', 'province', 'speed', 'price', 'center'])
-            ->where('type_id', $type_id)->where('center_id',$center_id);
+            ->where('type_id', $type_id)->where('center_id', $center_id);
 
         // ค้นหาตามชื่อ
         if ($request->has('name') && !empty($request->name)) {
@@ -1734,5 +1822,4 @@ class ActivityController extends Controller
 
         ));
     }
-
 }

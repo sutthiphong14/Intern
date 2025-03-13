@@ -469,8 +469,6 @@ Route::get('/getSpeeds', [CustomerController::class, 'getSpeeds']);
 Route::get('/getPrices', [CustomerController::class, 'getPrices']);
 Route::get('/getCenters', [CustomerController::class, 'getCenters']);
 
-
-
 Route::get('/customers/search', [CustomerController::class, 'searchCustomers'])->name('customer_search');
 Route::post('/topUp_insert', [CustomerController::class,'insertTopup'])->name('topUp_insert');
 Route::delete('/topUp_delete/{topUp_id}', [CustomerController::class, 'TopUpDelete'])->name('topUp_delete');

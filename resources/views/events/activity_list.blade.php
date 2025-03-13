@@ -26,7 +26,7 @@
                 <tr class="bg-dark text-white text-center">
                     <th rowspan="3" class="align-middle">ลำดับ</th>
                     <th rowspan="3" class="align-middle">จังหวัด</th>
-                    <th colspan="3" class="text-center">FTTX</th>
+                    <th colspan="5" class="text-center">FTTX</th>
                     <th colspan="4" class="text-center">SIM my</th>
                     <th colspan="2" class="text-center">Ict Solution</th>
                 </tr>
@@ -34,6 +34,8 @@
                     <th rowspan="2" class="align-middle">new</th>
                     <th rowspan="2" class="align-middle">ติดตั้งเอง</th>
                     <th rowspan="2" class="align-middle">จ้างผู้รับเหมา</th>
+                    <th rowspan="2" class="align-middle">ปรับโปรโมชั่น</th>
+                    <th rowspan="2" class="align-middle">ลูกค้าย้ายค่าย</th>
                     <th rowspan="2" class="align-middle">ลูกค้าใหม่</th>
                     <th rowspan="2" class="align-middle">ลูกค้า (ย้ายค่าย)</th>
                     <th colspan="2" class="text-center">เติมเงินรายปี</th>
@@ -46,8 +48,8 @@
                 </tr>
             </thead>
             @php
-                $sumFttxNew = $sumSelfInstall = $sumHireInstall = 0; // สำหรับ province_id <= 33
-                $sumFttxNewOver33 = $sumSelfInstallOver33 = $sumHireInstallOver33 = 0; // สำหรับ province_id > 33
+                $sumFttxNew = $sumSelfInstall = $sumHireInstall = $sumAdjust = $sumfttxMove = 0; // สำหรับ province_id <= 33
+                $sumFttxNewOver33 = $sumSelfInstallOver33 = $sumHireInstallOver33 = $sumAdjustOver33 = $sumfttxMoveOver33 = 0; // สำหรับ province_id > 33
 
                 $sumNew = $sumMove = $sumCount = $sumPrice = 0; // สำหรับ province_id <= 33
                 $sumNewOver33 = $sumMoveOver33 = $sumCountOver33 = $sumPriceOver33 = 0; // สำหรับ province_id > 33
@@ -64,6 +66,8 @@
                             <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
                             <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
                             <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $adjust[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $move[$province->province_id] ?? 0 }}</td>
 
                             <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
@@ -77,6 +81,8 @@
                             $sumFttxNew += $fttxNew[$province->province_id] ?? 0;
                             $sumSelfInstall += $selfInstall[$province->province_id] ?? 0;
                             $sumHireInstall += $HireInstall[$province->province_id] ?? 0;
+                            $sumAdjust += $adjust[$province->province_id] ?? 0 ;
+                            $sumfttxMove += $move[$province->province_id] ?? 0;
                             $sumNew += $Simmy_new[$province->province_id] ?? 0;
                             $sumMove += $Simmy_move[$province->province_id] ?? 0;
                             $sumCount += $Simmy_count[$province->province_id] ?? 0;
@@ -92,6 +98,8 @@
                             <td>{{ $sumFttxNew }}</td>
                             <td>{{ $sumSelfInstall }}</td>
                             <td>{{ $sumHireInstall }}</td>
+                            <td>{{ $sumAdjust }}</td>
+                            <td>{{ $sumfttxMove }}</td>
 
                             <td>{{ $sumNew }}</td>
                             <td>{{ $sumMove }}</td>
@@ -109,6 +117,8 @@
                             <td>{{ $fttxNew[$province->province_id] ?? 0 }}</td>
                             <td>{{ $selfInstall[$province->province_id] ?? 0 }}</td>
                             <td>{{ $HireInstall[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $adjust[$province->province_id] ?? 0 }}</td>
+                            <td>{{ $move[$province->province_id] ?? 0 }}</td>
 
                             <td>{{ $Simmy_new[$province->province_id] ?? 0 }}</td>
                             <td>{{ $Simmy_move[$province->province_id] ?? 0 }}</td>
@@ -121,7 +131,8 @@
                             $sumFttxNewOver33 += $fttxNew[$province->province_id] ?? 0;
                             $sumSelfInstallOver33 += $selfInstall[$province->province_id] ?? 0;
                             $sumHireInstallOver33 += $HireInstall[$province->province_id] ?? 0;
-
+                            $sumAdjustOver33 += $adjust[$province->province_id] ?? 0 ;
+                            $sumfttxMoveOver33 += $move[$province->province_id] ?? 0; 
                             $sumNewOver33 += $Simmy_new[$province->province_id] ?? 0;
                             $sumMoveOver33 += $Simmy_move[$province->province_id] ?? 0;
                             $sumCountOver33 += $Simmy_count[$province->province_id] ?? 0;
@@ -138,6 +149,8 @@
                     <td>{{ $sumFttxNewOver33 }}</td>
                     <td>{{ $sumSelfInstallOver33 }}</td>
                     <td>{{ $sumHireInstallOver33 }}</td>
+                    <td>{{ $sumAdjustOver33 }}</td>
+                    <td>{{ $sumfttxMoveOver33 }}</td>
 
                     <td>{{ $sumNewOver33 }}</td>
                     <td>{{ $sumMoveOver33 }}</td>
@@ -152,6 +165,8 @@
                     <td>{{ $sumFttxNew + $sumFttxNewOver33 }}</td>
                     <td>{{ $sumSelfInstall + $sumSelfInstallOver33 }}</td>
                     <td>{{ $sumHireInstall + $sumHireInstallOver33 }}</td>
+                    <td>{{ $sumAdjust + $sumAdjustOver33 }}</td>
+                    <td>{{ $sumfttxMove + $sumfttxMoveOver33 }}</td>
 
                     <td>{{ $sumNew + $sumNewOver33 }}</td>
                     <td>{{ $sumMove + $sumMoveOver33 }}</td>

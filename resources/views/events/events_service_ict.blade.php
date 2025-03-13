@@ -65,69 +65,178 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-sm">
                         <thead>
                             <tr class="bg-dark text-center">
                                 <th rowspan="4">ดูข้อมูล</th>
                                 <th rowspan="4">จังหวัด</th>
-                                <th colspan="2">Ict Solution</th>
-                            </tr>
-                            <tr class="bg-dark text-center">
-                                <!-- You can add additional rows here if needed -->
+                                <th colspan="16">Ict Solution</th>
                             </tr>
                             <tr class="bg-dark text-center">
                                 <th rowspan="2">จำนวน (ราย)</th>
                                 <th rowspan="2">รายได้</th>
+                                <th colspan="2">CCTV</th>
+                                <th colspan="2">smart pole</th>
+                                <th colspan="2">internet wifi</th>
+                                <th colspan="2">smart office</th>
+                                <th colspan="2">cyber security</th>
+                                <th colspan="2">ultimate connect</th>
+                                <th colspan="2">บริการอื่นๆ</th>
+                            </tr>
+                            <tr class="bg-dark text-center">
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            @foreach ($provinces as $province)
-                                {{-- Grouping Provinces --}}
-                                @if ($province->province_id <= 12)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('event_center_ict', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
-                                                class="btn btn-warning">
-                                                <i class="fas fa-search"></i>
-                                            </a>
-                                        </td>
-                                        <td>{{ $province->province_name }}</td>
-                                        <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
-                                        <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
-                                    </tr>
-                                @endif
-
-                                {{-- Aggregating total for Province Group --}}
-                                @if ($province->province_id == 12)
-                                    <tr class="bg-dark">
-                                        <td colspan="2">รวม ตป.1</td>
-                                        <td>{{ $IctCount }}</td>
-                                        <td>{{ $IctIncome }}</td>
-                                    </tr>
-                                @endif
-
-                                @if ($province->province_id > 12)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('event_center_ict', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
-                                                class="btn btn-warning">
-                                                <i class="fas fa-search"></i>
-                                            </a>
-                                        </td>
-                                        <td>{{ $province->province_name }}</td>
-                                        <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
-                                        <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
-                                    </tr>
-                                @endif
-                            @endforeach
-
-                            {{-- Aggregating total for Province Group > 33 --}}
-                            @if ($province->province_id > 12)
-                                <tr class="bg-dark">
-                                    <td colspan="2">รวม ตป.2</td>
-                                    <td>{{ $IctCountOver33 }}</td>
-                                    <td>{{ $IctIncomeOver33 }}</td>
+                            @php
+                                $group1Provinces = [];
+                                $group2Provinces = [];
+                                
+                                // แยกจังหวัดเป็นสองกลุ่ม
+                                foreach ($provinces as $province) {
+                                    if ($province->province_id <= 12) {
+                                        $group1Provinces[] = $province;
+                                    } else {
+                                        $group2Provinces[] = $province;
+                                    }
+                                }
+                                
+                                // เตรียมตัวแปรสำหรับรวมข้อมูลกลุ่มที่ 1
+                                $group1TotalCount = 0;
+                                $group1TotalIncome = 0;
+                                $group1ServiceTotals = [
+                                    'CCTV' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'smart pole' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'internet wifi' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'smart office' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'cyber security' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'ultimate connect' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'บริการอื่นๆ' => ['total_quantity' => 0, 'total_price' => 0]
+                                ];
+                                
+                                // เตรียมตัวแปรสำหรับรวมข้อมูลกลุ่มที่ 2
+                                $group2TotalCount = 0;
+                                $group2TotalIncome = 0;
+                                $group2ServiceTotals = [
+                                    'CCTV' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'smart pole' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'internet wifi' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'smart office' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'cyber security' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'ultimate connect' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'บริการอื่นๆ' => ['total_quantity' => 0, 'total_price' => 0]
+                                ];
+                                
+                                $serviceNames = ['CCTV', 'smart pole', 'internet wifi', 'smart office', 'cyber security', 'ultimate connect', 'บริการอื่นๆ'];
+                            @endphp
+                            
+                            {{-- แสดงข้อมูลกลุ่มที่ 1 --}}
+                            @foreach ($group1Provinces as $province)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('event_center_ict', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
+                                            class="btn btn-warning">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </td>
+                                    <td>{{ $province->province_name }}</td>
+                                    <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
+                                    <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
+                                    
+                                    @php
+                                        // รวมข้อมูลสำหรับกลุ่มที่ 1
+                                        $group1TotalCount += ($Ict_count[$province->province_id] ?? 0);
+                                        $group1TotalIncome += ($Ict_income[$province->province_id] ?? 0);
+                                    @endphp
+                                    
+                                    @foreach ($serviceNames as $serviceName)
+                                        @php
+                                            $quantity = $provinceSummary[$province->province_id][$serviceName]['total_quantity'] ?? 0;
+                                            $price = $provinceSummary[$province->province_id][$serviceName]['total_price'] ?? 0;
+                                            
+                                            // รวมข้อมูลบริการสำหรับกลุ่มที่ 1
+                                            $group1ServiceTotals[$serviceName]['total_quantity'] += $quantity;
+                                            $group1ServiceTotals[$serviceName]['total_price'] += $price;
+                                        @endphp
+                                        <td>{{ number_format($quantity, 0) }}</td>
+                                        <td>{{ number_format($price) }}</td>
+                                    @endforeach
                                 </tr>
+                            @endforeach
+                            
+                            {{-- แสดงผลรวมของกลุ่มที่ 1 --}}
+                            @if ($province->province_id == 12)
+                            <tr class="bg-dark">
+                                <td colspan="2">รวม ตป.1</td>
+                                <td>{{ number_format($group1TotalCount, 0) }}</td>
+                                <td>{{ number_format($group1TotalIncome) }}</td>
+                                
+                                @foreach ($serviceNames as $serviceName)
+                                    <td>{{ number_format($group1ServiceTotals[$serviceName]['total_quantity'], 0) }}</td>
+                                    <td>{{ number_format($group1ServiceTotals[$serviceName]['total_price']) }}</td>
+                                @endforeach
+                            </tr>
+                            @endif
+                            
+                            {{-- แสดงข้อมูลกลุ่มที่ 2 --}}
+                            @foreach ($group2Provinces as $province)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('event_center_ict', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
+                                            class="btn btn-warning">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </td>
+                                    <td>{{ $province->province_name }}</td>
+                                    <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
+                                    <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
+                                    
+                                    @php
+                                        // รวมข้อมูลสำหรับกลุ่มที่ 2
+                                        $group2TotalCount += ($Ict_count[$province->province_id] ?? 0);
+                                        $group2TotalIncome += ($Ict_income[$province->province_id] ?? 0);
+                                    @endphp
+                                    
+                                    @foreach ($serviceNames as $serviceName)
+                                        @php
+                                            $quantity = $provinceSummary[$province->province_id][$serviceName]['total_quantity'] ?? 0;
+                                            $price = $provinceSummary[$province->province_id][$serviceName]['total_price'] ?? 0;
+                                            
+                                            // รวมข้อมูลบริการสำหรับกลุ่มที่ 2
+                                            $group2ServiceTotals[$serviceName]['total_quantity'] += $quantity;
+                                            $group2ServiceTotals[$serviceName]['total_price'] += $price;
+                                        @endphp
+                                        <td>{{ number_format($quantity, 0) }}</td>
+                                        <td>{{ number_format($price) }}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                            
+                            {{-- แสดงผลรวมของกลุ่มที่ 2 --}}
+                            @if ($province->province_id > 12)
+                            <tr class="bg-dark">
+                                <td colspan="2">รวม ตป.2</td>
+                                <td>{{ number_format($group2TotalCount, 0) }}</td>
+                                <td>{{ number_format($group2TotalIncome) }}</td>
+                                
+                                @foreach ($serviceNames as $serviceName)
+                                    <td>{{ number_format($group2ServiceTotals[$serviceName]['total_quantity'], 0) }}</td>
+                                    <td>{{ number_format($group2ServiceTotals[$serviceName]['total_price']) }}</td>
+                                @endforeach
+                            </tr>
                             @endif
                         </tbody>
                     </table>

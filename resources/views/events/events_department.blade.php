@@ -580,7 +580,7 @@ var myChart3 = new Chart(ctx3, {
 
 
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+          document.addEventListener("DOMContentLoaded", function () {
     // Get the initial selected filter value
     let currentFilter = document.getElementById("chartFilter").value;
     
@@ -649,9 +649,9 @@ var myChart3 = new Chart(ctx3, {
         updateChart(currentFilter);
     });
     
-    // Your existing updateChart function
+    // Your existing updateChart function with fixes
     function updateChart(filter) {
-        var newFttxNew, newSelfInstall, newHireInstall, adjust, newIctCount, newIctIncome, newSumNew, newSumMove,
+        var newFttxNew, newSelfInstall, newHireInstall, adjust, newMove, newIctCount, newIctIncome, newSumNew, newSumMove,
             newSumCount, newSumPrice;
 
         if (filter === "tp1") {
@@ -659,6 +659,7 @@ var myChart3 = new Chart(ctx3, {
             newSelfInstall = {{ $sumSelfInstall }};
             newHireInstall = {{ $sumHireInstall }};
             adjust = {{ $adjust12 }};
+            newMove = {{ $move12 }};
             newIctCount = {{ $IctCount }};
             newIctIncome = {{ $IctIncome }};
             newSumNew = {{ $sumNew }};
@@ -670,6 +671,7 @@ var myChart3 = new Chart(ctx3, {
             newSelfInstall = {{ $sumSelfInstallOver33 }};
             newHireInstall = {{ $sumHireInstallOver33 }};
             adjust = {{ $adjustover12 }};
+            newMove = {{ $moveover12 }};
             newIctCount = {{ $IctCountOver33 }};
             newIctIncome = {{ $IctIncomeOver33 }};
             newSumNew = {{ $sumNewOver33 }};
@@ -681,6 +683,7 @@ var myChart3 = new Chart(ctx3, {
             newSelfInstall = {{ $sumSelfInstall + $sumSelfInstallOver33 }};
             newHireInstall = {{ $sumHireInstall + $sumHireInstallOver33 }};
             adjust = {{ $adjust12 + $adjustover12 }};
+            newMove = {{ $move12 + $moveover12 }};
             newIctCount = {{ $IctCount + $IctCountOver33 }};
             newIctIncome = {{ $IctIncome + $IctIncomeOver33 }};
             newSumNew = {{ $sumNew + $sumNewOver33 }};
@@ -689,31 +692,76 @@ var myChart3 = new Chart(ctx3, {
             newSumPrice = {{ $sumPrice + $sumPriceOver33 }};
         }
 
-        myChart.data.datasets[0].data = [newFttxNew];
-        myChart.data.datasets[1].data = [newSelfInstall];
-        myChart.data.datasets[2].data = [newHireInstall];
-        myChart.data.datasets[3].data = [adjust];
-        myChart.update(); // อัปเดตกราฟ
+        // Update chart 1 data - Safe access with checks
+        if (myChart && myChart.data && myChart.data.datasets) {
+            // Create new dataset array with updated values
+            let newDatasets = [
+                {
+                    label: 'New',
+                    backgroundColor: 'rgba(20, 56, 94, 0.9)', 
+                    borderColor: 'rgba(20, 56, 94, 1)',
+                    borderWidth: 1,
+                    data: [newFttxNew],
+                },
+                {
+                    label: 'ติดตั้งเอง',
+                    backgroundColor: 'rgba(68, 131, 108, 0.9)',
+                    borderColor: 'rgba(68, 131, 108, 1)',
+                    borderWidth: 1,
+                    data: [newSelfInstall],
+                },
+                {
+                    label: 'จ้างผู้รับเหมา',
+                    backgroundColor: 'rgba(166, 198, 126, 0.9)',
+                    borderColor: 'rgba(166, 198, 126, 1)',
+                    borderWidth: 1,
+                    data: [newHireInstall],
+                },
+                {
+                    label: 'ปรับโปรโมชั่น',
+                    backgroundColor: 'rgba(249, 232, 151, 0.9)',
+                    borderColor: 'rgba(249, 232, 151, 1)',
+                    borderWidth: 1,
+                    data: [adjust], 
+                },
+                {
+                    label: 'ลูกค้าย้ายค่าย',
+                    backgroundColor: 'rgba(231, 183, 136, 0.9)',
+                    borderColor: 'rgba(231, 183, 136, 1)',
+                    borderWidth: 1,
+                    data: [newMove], 
+                }
+            ];
+            
+            // Filter out datasets with zero values
+            myChart.data.datasets = newDatasets.filter(dataset => dataset.data[0] > 0);
+            myChart.update();
+        }
 
-        // อัปเดตข้อมูลใน datasets2
-        myChart2.data.datasets[0].data = [newIctIncome]; // อัปเดตข้อมูลรายได้
-        ictCount = newIctCount; // อัปเดตค่า ictCount
-        ictIncome = newIctIncome; // อัปเดตค่า ictIncome
-        myChart2.update();
+        // Update chart 2 data
+        if (myChart2 && myChart2.data && myChart2.data.datasets && myChart2.data.datasets[0]) {
+            myChart2.data.datasets[0].data = [newIctIncome];
+            ictCount = newIctCount;
+            ictIncome = newIctIncome;
+            myChart2.update();
+        }
 
-        // อัปเดตข้อมูลใน datasets3
-        myChart3.data.datasets[0].data = [newSumNew]; // ลูกค้าใหม่
-        myChart3.data.datasets[1].data = [newSumMove]; // ลูกค้า(ย้ายค่าย)
+        // Update chart 3 data
+        if (myChart3 && myChart3.data && myChart3.data.datasets) {
+            if (myChart3.data.datasets[0]) myChart3.data.datasets[0].data = [newSumNew];
+            if (myChart3.data.datasets[1]) myChart3.data.datasets[1].data = [newSumMove];
+            sumNew = newSumNew;
+            sumMove = newSumMove;
+            myChart3.update();
+        }
 
-        // อัปเดต sumTotal สำหรับ Tooltip
-        sumNew = newSumNew;
-        sumMove = newSumMove;
-        sumCount = newSumCount;
-        sumPrice = newSumPrice;
-        myChart3.update();
-
-        myChart4.data.datasets[0].data = [newSumCount]; // เติมเงินรายปี
-        myChart4.update();
+        // Update chart 4 data
+        if (myChart4 && myChart4.data && myChart4.data.datasets && myChart4.data.datasets[0]) {
+            myChart4.data.datasets[0].data = [newSumPrice];
+            sumCount = newSumCount;
+            sumPrice = newSumPrice;
+            myChart4.update();
+        }
     }
 });
         </script>

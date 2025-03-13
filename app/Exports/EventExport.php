@@ -36,15 +36,31 @@ class EventExport implements FromView
         $provinces = ProvinceActivity::all();
         $types = TypeActivity::where('type_id', $this->type_id)->first();
 
-        // โหลดข้อมูล Fttxbroadband
-        $fttxData = Fttxbroadband::where('type_id', $this->type_id)
-            ->select('province_id', 'new', 'installation_type')
-            ->get()
-            ->groupBy('province_id');
+         // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
+         $fttxData = Fttxbroadband::where('type_id', $this->type_id)
+         ->select('province_id', 'new', 'installation_type')->whereIn('new', [1, 2]) // ✅ ใช้ whereIn() แทน
+         ->get()
+         ->groupBy('province_id');
 
-        $fttxNew = $fttxData->map(fn($items) => $items->where('new', 1)->count());
+          // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
+        $adjustData = Fttxbroadband::where('type_id', $this->type_id)
+        ->select('province_id', 'new', 'installation_type')->where('new', 0)
+        ->get()
+        ->groupBy('province_id');
+
+    // โหลดข้อมูล Fttxbroadband เฉพาะ type_id ที่ส่งมา
+    $moveData = Fttxbroadband::where('type_id', $this->type_id)
+        ->select('province_id', 'new', 'installation_type')->where('new', 2)
+        ->get()
+        ->groupBy('province_id');
+
+
+        $fttxNew = $fttxData->map(fn($items) => $items->whereIn('new', [1, 2])->count());
         $selfInstall = $fttxData->map(fn($items) => $items->where('installation_type', 1)->count());
         $HireInstall = $fttxData->map(fn($items) => $items->where('installation_type', 0)->count());
+        $adjust = $adjustData->map(fn($items) => $items->where('new', 0)->count());
+        $move = $moveData->map(fn($items) => $items->where('new', 2)->count());
+      
 
         // โหลดข้อมูล Simmy
         $simmyData = Simmy::where('type_id', $this->type_id)
@@ -83,6 +99,8 @@ class EventExport implements FromView
             'fttxNew',
             'selfInstall',
             'HireInstall',
+            'adjust',
+            'move',
             'Simmy_new',
             'Simmy_move',
             'Simmy_count',
