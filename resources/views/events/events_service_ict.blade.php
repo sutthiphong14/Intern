@@ -48,7 +48,27 @@
                         style="min-height: 300px; height: 290px; max-height: 300px; max-width: 100%;"></canvas>
                 </div>
             </div>
+            
         </div>
+
+        <!-- Card for ICT solution chart -->
+        <div class="col-md-12 mt-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0"><i class="fas fa-chart-line"></i> ICT solution</h3>
+                    <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart3">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="card-body collapse show" id="chart3">
+                    <canvas id="myChart3"
+                        style="min-height: 300px; height: 290px; max-height: 300px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+            
+        </div>
+
+
 
         <!-- Table for ICT Solution -->
         <div class="card mt-4">
@@ -347,4 +367,166 @@
             plugins: [ChartDataLabels] // ✅ เปิดใช้งาน Plugin
         });
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const serviceNames = [
+        'CCTV', 
+        'smart pole', 
+        'internet wifi', 
+        'smart office', 
+        'cyber security', 
+        'ultimate connect', 
+        'บริการอื่นๆ'
+    ];
+
+    const backgroundColors = [
+        'rgba(255, 99, 132, 0.7)',
+        'rgba(54, 162, 235, 0.7)',
+        'rgba(255, 206, 86, 0.7)',
+        'rgba(75, 192, 192, 0.7)',
+        'rgba(153, 102, 255, 0.7)',
+        'rgba(255, 159, 64, 0.7)',
+        'rgba(201, 203, 207, 0.7)'
+    ];
+
+    const borderColors = [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(201, 203, 207, 1)'
+    ];
+
+    const serviceTotals = @json($group1ServiceTotals);
+
+    const quantities = serviceNames.map(service => serviceTotals[service].total_quantity);
+    const prices = serviceNames.map(service => serviceTotals[service].total_price);
+
+    const ctx = document.getElementById('myChart3').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: serviceNames,
+            datasets: [
+                {
+                    label: 'จำนวนจุดติดตั้ง',
+                    data: quantities,
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
+                    borderWidth: 2,
+                    yAxisID: 'y-axis-quantity'
+                },
+                {
+                    label: 'รายได้ (บาท)',
+                    data: prices,
+                    backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                    borderColor: 'rgba(201, 203, 207, 1)',
+                    borderWidth: 2,
+                    yAxisID: 'y-axis-price'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            // Don't show tooltip for zero values
+                            if (context.raw === 0) {
+                                return null;
+                            }
+                            
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.datasetIndex === 0) {
+                                label += context.raw.toLocaleString() + ' จุด';
+                            } else {
+                                label += context.raw.toLocaleString() + ' บาท';
+                            }
+                            return label;
+                        }
+                    }
+                },
+                datalabels: {
+                    color: '#000',
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    },
+                    // Hide zero values in data labels
+                    formatter: function(value, context) {
+                        return value > 0 ? value.toLocaleString() : '';
+                    }
+                },
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'ประเภทบริการ',
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                'y-axis-quantity': {
+                    type: 'linear',
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'จำนวน (รายการ)',
+                        font: {
+                            size: 14
+                        }
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        // Format quantity values with commas
+                        callback: function(value) {
+                            if (value === 0) return '';
+                            return value.toLocaleString();
+                        }
+                    }
+                },
+                'y-axis-price': {
+                    type: 'linear',
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'รายได้ (บาท)',
+                        font: {
+                            size: 14
+                        }
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value) {
+                            if (value === 0) return '';
+                            if (value >= 1000000) {
+                                return (value / 1000000).toLocaleString() + 'M';
+                            } else if (value >= 1000) {
+                                return (value / 1000).toLocaleString() + 'K';
+                            }
+                            return value.toLocaleString();
+                        }
+                    },
+                    grid: {
+                        drawOnChartArea: false
+                    },
+                }
+            }
+        }
+    });
+});
+</script>
+
 @endsection
