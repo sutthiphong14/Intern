@@ -86,14 +86,9 @@
                         <td>{{ $Simmy_count[$center->center_id] ?? 0 }}</td>
                         <td>{{ $Simmy_price[$center->center_id] ?? 0 }}</td>
                         <td>
-                            @if (isset($Ict_count[$center->center_id]) && $Ict_count[$center->center_id] > 0)
-                                <a href="#" class="text-info" id="view"
-                                    data-center-id="{{ $center->center_id }}" data-type-id="{{ $types->type_id }}">
-                                    {{ $Ict_count[$center->center_id] }}
-                                </a>
-                            @else
+                           
                                 {{ $Ict_count[$center->center_id] ?? 0 }}
-                            @endif
+                           
                         </td>
 
 
