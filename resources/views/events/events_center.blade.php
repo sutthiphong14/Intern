@@ -29,6 +29,8 @@
         <div class="d-flex justify-content-between align-items-center gap-2">
                 <h3 class="card-header text-dark">สรุปผลการดำเนินงานกิจกรรมการตลาด {{ $types->type_name }} จังหวัด{{ $provinces->province_name }}</h3>
                 <div class="d-flex align-items-center gap-2">
+                    <a href="{{ route('customerExportView', ['province_id' => $provinces->province_id, 'type_id' => $types->type_id]) }}" class="btn btn-primary btn-sm">ดูข้อมูลลูกค้า</a>
+                    <a href="{{ route('customerExport', ['province_id' => $provinces->province_id, 'type_id' => $types->type_id]) }}" class="btn btn-success btn-sm">Export ข้อมูลลูกค้า</a>
                 </div>
             </div>
         </div>
@@ -223,9 +225,7 @@
 
                     }
 
-                    // ✅ แสดง product_counts แยกต่างหาก
-                    console.log("Product Counts:", );
-
+                 
                     // เปิด modal
                     $('#productModal').modal('show');
                 },

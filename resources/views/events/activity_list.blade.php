@@ -13,11 +13,6 @@
 
 <body>
     <div class="container">
-
-
-
-
-
         <div class="mt-5">
             <h3>สรุปรายงานผลการดำเนินงานกิจกรรมการตลาด {{ $types->type_name }}</h3>
         </div>
