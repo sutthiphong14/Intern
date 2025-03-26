@@ -490,5 +490,6 @@ Route::get('/Event_center_ict/{province_id},{type_id}', [ActivityController::cla
 Route::get('/Event_services_detail_ict/{center_id}/{type_id}', [ActivityController::class, 'EventcenterDetailICT'])->name('event_serviceDetail_ict');
 Route::get('/Event_services_prodcut_ict/{ict_service_id}/{center_id}/{type_id}', [ActivityController::class, 'EventcenterProductICT'])->name('event_serviceProduct_ict');
 Route::get('/Event_customer_ict/{center_id}/{type_id}', [ActivityController::class, 'EventCustomerICT'])->name('event_customer_ict');
-
+Route::get('/Event_customer_export/{province_id},{type_id}', [ActivityController::class, 'CustomerExport'])->name('customerExport');
+Route::get('/Event_customer_export_view/{province_id},{type_id}', [ActivityController::class, 'CustomerExportView'])->name('customerExportView');
 });

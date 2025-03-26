@@ -38,7 +38,7 @@
         <div class="col-md-12 mt-4">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0"><i class="fas fa-chart-line"></i> ICT solution</h3>
+                    <h3 class="mb-0"><i class="fas fa-chart-line"></i> ICT solution รายได้รวม</h3>
                     <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart2">
                         <i class="fas fa-chevron-down"></i>
                     </button>
@@ -48,7 +48,63 @@
                         style="min-height: 300px; height: 290px; max-height: 300px; max-width: 100%;"></canvas>
                 </div>
             </div>
+
         </div>
+
+        <!-- Card for ICT solution chart -->
+        <div class="col-md-12 mt-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0"><i class="fas fa-chart-line"></i> ICT solution</h3>
+                    <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#chart3">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="card-body collapse show" id="chart3">
+                    <canvas id="myChart3"
+                        style="min-height: 300px; height: 290px; max-height: 300px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- กราฟจำนวนจุดติดตั้งแยกตามจังหวัด -->
+        <div class="col-md-12 mt-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0"><i class="fas fa-chart-bar"></i> จำนวนจุดติดตั้งบริการ ICT Solution</h3>
+                    <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse"
+                        data-bs-target="#quantityChartContainer">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="card-body collapse show" id="quantityChartContainer">
+                    <canvas id="servicesQuantityChart"
+                        style="min-height: 400px; height: 400px; max-height: 400px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- กราฟรายได้แยกตามจังหวัด -->
+        <div class="col-md-12 mt-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0"><i class="fas fa-chart-bar"></i> รายได้บริการ ICT Solution</h3>
+                    <button class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse"
+                        data-bs-target="#incomeChartContainer">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="card-body collapse show" id="incomeChartContainer">
+                    <canvas id="servicesIncomeChart"
+                        style="min-height: 400px; height: 400px; max-height: 400px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+
+
 
         <!-- Table for ICT Solution -->
         <div class="card mt-4">
@@ -65,68 +121,197 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-sm">
                         <thead>
                             <tr class="bg-dark text-center">
                                 <th rowspan="4">ดูข้อมูล</th>
                                 <th rowspan="4">จังหวัด</th>
-                                <th colspan="2">Ict Solution</th>
-                            </tr>
-                            <tr class="bg-dark text-center">
-                                <!-- You can add additional rows here if needed -->
+                                <th colspan="16">Ict Solution</th>
                             </tr>
                             <tr class="bg-dark text-center">
                                 <th rowspan="2">จำนวน (ราย)</th>
                                 <th rowspan="2">รายได้</th>
+                                <th colspan="2">CCTV</th>
+                                <th colspan="2">smart pole</th>
+                                <th colspan="2">internet wifi</th>
+                                <th colspan="2">smart office</th>
+                                <th colspan="2">cyber security</th>
+                                <th colspan="2">ultimate connect</th>
+                                <th colspan="2">บริการอื่นๆ</th>
+                            </tr>
+                            <tr class="bg-dark text-center">
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
+                                <th>จำนวนจุดติดตั้ง</th>
+                                <th>รายได้</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            @foreach ($provinces as $province)
-                                {{-- Grouping Provinces --}}
-                                @if ($province->province_id <= 12)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('event_center_ict', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
-                                                class="btn btn-warning">
-                                                <i class="fas fa-search"></i>
-                                            </a>
-                                        </td>
-                                        <td>{{ $province->province_name }}</td>
-                                        <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
-                                        <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
-                                    </tr>
-                                @endif
+                            @php
+                                $group1Provinces = [];
+                                $group2Provinces = [];
 
-                                {{-- Aggregating total for Province Group --}}
-                                @if ($province->province_id == 12)
-                                    <tr class="bg-dark">
-                                        <td colspan="2">รวม ตป.1</td>
-                                        <td>{{ $IctCount }}</td>
-                                        <td>{{ $IctIncome }}</td>
-                                    </tr>
-                                @endif
+                                // แยกจังหวัดเป็นสองกลุ่ม
+                                foreach ($provinces as $province) {
+                                    if ($province->province_id <= 12) {
+                                        $group1Provinces[] = $province;
+                                    } else {
+                                        $group2Provinces[] = $province;
+                                    }
+                                }
 
-                                @if ($province->province_id > 12)
-                                    <tr>
-                                        <td>
-                                            <a href="{{ route('event_center_ict', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
-                                                class="btn btn-warning">
-                                                <i class="fas fa-search"></i>
-                                            </a>
-                                        </td>
-                                        <td>{{ $province->province_name }}</td>
-                                        <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
-                                        <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
-                                    </tr>
-                                @endif
+                                // เตรียมตัวแปรสำหรับรวมข้อมูลกลุ่มที่ 1
+                                $group1TotalCount = 0;
+                                $group1TotalIncome = 0;
+                                $group1ServiceTotals = [
+                                    'CCTV' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'smart pole' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'internet wifi' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'smart office' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'cyber security' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'ultimate connect' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'บริการอื่นๆ' => ['total_quantity' => 0, 'total_price' => 0],
+                                ];
+
+                                // เตรียมตัวแปรสำหรับรวมข้อมูลกลุ่มที่ 2
+                                $group2TotalCount = 0;
+                                $group2TotalIncome = 0;
+                                $group2ServiceTotals = [
+                                    'CCTV' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'smart pole' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'internet wifi' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'smart office' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'cyber security' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'ultimate connect' => ['total_quantity' => 0, 'total_price' => 0],
+                                    'บริการอื่นๆ' => ['total_quantity' => 0, 'total_price' => 0],
+                                ];
+
+                                $serviceNames = [
+                                    'CCTV',
+                                    'smart pole',
+                                    'internet wifi',
+                                    'smart office',
+                                    'cyber security',
+                                    'ultimate connect',
+                                    'บริการอื่นๆ',
+                                ];
+                            @endphp
+
+                            {{-- แสดงข้อมูลกลุ่มที่ 1 --}}
+                            @foreach ($group1Provinces as $province)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('event_center_ict', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
+                                            class="btn btn-warning">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </td>
+                                    <td>{{ $province->province_name }}</td>
+                                    <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
+                                    <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
+
+                                    @php
+                                        // รวมข้อมูลสำหรับกลุ่มที่ 1
+                                        $group1TotalCount += $Ict_count[$province->province_id] ?? 0;
+                                        $group1TotalIncome += $Ict_income[$province->province_id] ?? 0;
+                                    @endphp
+
+                                    @foreach ($serviceNames as $serviceName)
+                                        @php
+                                            $quantity =
+                                                $provinceSummary[$province->province_id][$serviceName][
+                                                    'total_quantity'
+                                                ] ?? 0;
+                                            $price =
+                                                $provinceSummary[$province->province_id][$serviceName]['total_price'] ??
+                                                0;
+
+                                            // รวมข้อมูลบริการสำหรับกลุ่มที่ 1
+                                            $group1ServiceTotals[$serviceName]['total_quantity'] += $quantity;
+                                            $group1ServiceTotals[$serviceName]['total_price'] += $price;
+                                        @endphp
+                                        <td>{{ number_format($quantity, 0) }}</td>
+                                        <td>{{ number_format($price) }}</td>
+                                    @endforeach
+                                </tr>
                             @endforeach
 
-                            {{-- Aggregating total for Province Group > 33 --}}
+                            {{-- แสดงผลรวมของกลุ่มที่ 1 --}}
+                            @if ($province->province_id == 12)
+                                <tr class="bg-dark">
+                                    <td colspan="2">รวม ตป.1</td>
+                                    <td>{{ number_format($group1TotalCount, 0) }}</td>
+                                    <td>{{ number_format($group1TotalIncome) }}</td>
+
+                                    @foreach ($serviceNames as $serviceName)
+                                        <td>{{ number_format($group1ServiceTotals[$serviceName]['total_quantity'], 0) }}
+                                        </td>
+                                        <td>{{ number_format($group1ServiceTotals[$serviceName]['total_price']) }}</td>
+                                    @endforeach
+                                </tr>
+                            @endif
+
+                            {{-- แสดงข้อมูลกลุ่มที่ 2 --}}
+                            @foreach ($group2Provinces as $province)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('event_center_ict', ['province_id' => $province->province_id, 'type_id' => $types->type_id]) }}"
+                                            class="btn btn-warning">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </td>
+                                    <td>{{ $province->province_name }}</td>
+                                    <td>{{ $Ict_count[$province->province_id] ?? 0 }}</td>
+                                    <td>{{ $Ict_income[$province->province_id] ?? 0 }}</td>
+
+                                    @php
+                                        // รวมข้อมูลสำหรับกลุ่มที่ 2
+                                        $group2TotalCount += $Ict_count[$province->province_id] ?? 0;
+                                        $group2TotalIncome += $Ict_income[$province->province_id] ?? 0;
+                                    @endphp
+
+                                    @foreach ($serviceNames as $serviceName)
+                                        @php
+                                            $quantity =
+                                                $provinceSummary[$province->province_id][$serviceName][
+                                                    'total_quantity'
+                                                ] ?? 0;
+                                            $price =
+                                                $provinceSummary[$province->province_id][$serviceName]['total_price'] ??
+                                                0;
+
+                                            // รวมข้อมูลบริการสำหรับกลุ่มที่ 2
+                                            $group2ServiceTotals[$serviceName]['total_quantity'] += $quantity;
+                                            $group2ServiceTotals[$serviceName]['total_price'] += $price;
+                                        @endphp
+                                        <td>{{ number_format($quantity, 0) }}</td>
+                                        <td>{{ number_format($price) }}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+
+                            {{-- แสดงผลรวมของกลุ่มที่ 2 --}}
                             @if ($province->province_id > 12)
                                 <tr class="bg-dark">
                                     <td colspan="2">รวม ตป.2</td>
-                                    <td>{{ $IctCountOver33 }}</td>
-                                    <td>{{ $IctIncomeOver33 }}</td>
+                                    <td>{{ number_format($group2TotalCount, 0) }}</td>
+                                    <td>{{ number_format($group2TotalIncome) }}</td>
+
+                                    @foreach ($serviceNames as $serviceName)
+                                        <td>{{ number_format($group2ServiceTotals[$serviceName]['total_quantity'], 0) }}
+                                        </td>
+                                        <td>{{ number_format($group2ServiceTotals[$serviceName]['total_price']) }}</td>
+                                    @endforeach
                                 </tr>
                             @endif
                         </tbody>
@@ -238,4 +423,410 @@
             plugins: [ChartDataLabels] // ✅ เปิดใช้งาน Plugin
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const serviceNames = [
+                'CCTV',
+                'smart pole',
+                'internet wifi',
+                'smart office',
+                'cyber security',
+                'ultimate connect',
+                'บริการอื่นๆ'
+            ];
+
+            const backgroundColors = [
+                'rgba(255, 99, 132, 0.7)'
+            ];
+
+            const borderColors = [
+                'rgba(201, 203, 207, 1)'
+            ];
+
+            // Directly assign the serviceTotals based on the Blade condition
+            @if ($province->province_id <= 12)
+                const serviceTotals = @json($group1ServiceTotals);
+            @else
+                const serviceTotals = @json($group2ServiceTotals);
+            @endif
+
+            const quantities = serviceNames.map(service => serviceTotals[service].total_quantity);
+            const prices = serviceNames.map(service => serviceTotals[service].total_price);
+
+            const ctx = document.getElementById('myChart3').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: serviceNames,
+                    datasets: [{
+                            label: 'จำนวนจุดติดตั้ง',
+                            data: quantities,
+                            backgroundColor: backgroundColors,
+                            borderColor: borderColors,
+                            borderWidth: 2,
+                            yAxisID: 'y-axis-quantity'
+                        },
+                        {
+                            label: 'รายได้ (บาท)',
+                            data: prices,
+                            backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                            borderColor: 'rgba(201, 203, 207, 1)',
+                            borderWidth: 2,
+                            yAxisID: 'y-axis-price'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.raw === 0) {
+                                        return null;
+                                    }
+
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.datasetIndex === 0) {
+                                        label += context.raw.toLocaleString() + ' จุด';
+                                    } else {
+                                        label += context.raw.toLocaleString() + ' บาท';
+                                    }
+                                    return label;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: '#000',
+                            font: {
+                                weight: 'bold',
+                                size: 14
+                            },
+                            formatter: function(value, context) {
+                                return value > 0 ? value.toLocaleString() : '';
+                            }
+                        },
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'ประเภทบริการ',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        'y-axis-quantity': {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'จำนวน (รายการ)',
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value) {
+                                    if (value === 0) return '';
+                                    return value.toLocaleString();
+                                }
+                            }
+                        },
+                        'y-axis-price': {
+                            type: 'linear',
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'รายได้ (บาท)',
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value) {
+                                    if (value === 0) return '';
+                                    if (value >= 1000000) {
+                                        return (value / 1000000).toLocaleString() + 'M';
+                                    } else if (value >= 1000) {
+                                        return (value / 1000).toLocaleString() + 'K';
+                                    }
+                                    return value.toLocaleString();
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // เพิ่มโค้ดนี้ในส่วน script ของไฟล์ blade
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // กำหนดชื่อบริการและสีที่จะใช้
+            const serviceNames = ['CCTV', 'smart pole', 'internet wifi', 'smart office', 'cyber security',
+                'ultimate connect', 'บริการอื่นๆ'
+            ];
+            const serviceColors = [
+                'rgba(255, 99, 132, 0.7)', // แดง
+                'rgba(54, 162, 235, 0.7)', // น้ำเงิน
+                'rgba(255, 206, 86, 0.7)', // เหลือง
+                'rgba(75, 192, 192, 0.7)', // เขียวฟ้า
+                'rgba(153, 102, 255, 0.7)', // ม่วง
+                'rgba(255, 159, 64, 0.7)', // ส้ม
+                'rgba(201, 203, 207, 0.7)' // เทา
+            ];
+            const serviceBorders = [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(201, 203, 207, 1)'
+            ];
+
+            // เตรียมข้อมูลสำหรับกราฟแท่งรวม (Stacked Bar Chart)
+            var provinceNames = [];
+            var provinceServiceData = {};
+
+            // สร้าง dataset สำหรับแต่ละบริการ
+            serviceNames.forEach((service, index) => {
+                provinceServiceData[service] = {
+                    label: service,
+                    data: [],
+                    backgroundColor: serviceColors[index],
+                    borderColor: serviceBorders[index],
+                    borderWidth: 1,
+                    stack: 'Stack 0' // ทุก service จะซ้อนกันในแต่ละจังหวัด
+                };
+            });
+
+            // ดึงข้อมูลจาก PHP เพื่อกำหนดค่าให้กับแต่ละจังหวัด
+            @foreach ($provinces as $province)
+                provinceNames.push("{{ $province->province_name }}");
+
+                // เพิ่มข้อมูลบริการแต่ละประเภทสำหรับจังหวัดนี้
+                @foreach ($serviceNames as $index => $serviceName)
+                    // ดึงจำนวนจุดติดตั้ง (quantity) สำหรับบริการนี้ในจังหวัดนี้
+                    provinceServiceData['{{ $serviceName }}'].data.push(
+                        {{ $provinceSummary[$province->province_id][$serviceName]['total_quantity'] ?? 0 }}
+                    );
+                @endforeach
+            @endforeach
+
+            // สร้าง datasets จาก provinceServiceData
+            var datasets = Object.values(provinceServiceData);
+
+            // สร้างกราฟแท่งสำหรับจำนวนจุดติดตั้งบริการตามจังหวัด
+            var ctxQuantity = document.getElementById('servicesQuantityChart').getContext('2d');
+            var servicesQuantityChart = new Chart(ctxQuantity, {
+                type: 'bar',
+                data: {
+                    labels: provinceNames,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'จำนวนจุดติดตั้งบริการ ICT Solution แยกตามจังหวัด',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.raw !== null && context.raw !== 0) {
+                                        label += context.raw.toLocaleString() + ' จุด';
+                                    } else {
+                                        label += '0 จุด';
+                                    }
+                                    return label;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: 'white',
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: function(value, context) {
+                                return value > 0 ? value.toLocaleString() : '';
+                            },
+                            display: function(context) {
+                                return context.dataset.data[context.dataIndex] > 0;
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'จังหวัด'
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'จำนวนจุดติดตั้ง'
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            // เตรียมข้อมูลสำหรับกราฟรายได้แยกตามบริการและจังหวัด
+            var provinceServiceIncome = {};
+
+            // สร้าง dataset สำหรับแต่ละบริการ (รายได้)
+            serviceNames.forEach((service, index) => {
+                provinceServiceIncome[service] = {
+                    label: service,
+                    data: [],
+                    backgroundColor: serviceColors[index],
+                    borderColor: serviceBorders[index],
+                    borderWidth: 1,
+                    stack: 'Stack 0' // ทุก service จะซ้อนกันในแต่ละจังหวัด
+                };
+            });
+
+            // ดึงข้อมูลรายได้จาก PHP
+            @foreach ($provinces as $province)
+                // เพิ่มข้อมูลรายได้บริการแต่ละประเภทสำหรับจังหวัดนี้
+                @foreach ($serviceNames as $index => $serviceName)
+                    // ดึงรายได้ (price) สำหรับบริการนี้ในจังหวัดนี้
+                    provinceServiceIncome['{{ $serviceName }}'].data.push(
+                        {{ $provinceSummary[$province->province_id][$serviceName]['total_price'] ?? 0 }}
+                    );
+                @endforeach
+            @endforeach
+
+            // สร้าง datasets จาก provinceServiceIncome
+            var incomeDatasets = Object.values(provinceServiceIncome);
+
+            // สร้างกราฟแท่งสำหรับรายได้บริการตามจังหวัด
+            var ctxIncome = document.getElementById('servicesIncomeChart').getContext('2d');
+            var servicesIncomeChart = new Chart(ctxIncome, {
+                type: 'bar',
+                data: {
+                    labels: provinceNames,
+                    datasets: incomeDatasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'รายได้บริการ ICT Solution แยกตามจังหวัด',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.raw !== null && context.raw !== 0) {
+                                        label += context.raw.toLocaleString() + ' บาท';
+                                    } else {
+                                        label += '0 บาท';
+                                    }
+                                    return label;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: 'white',
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: function(value, context) {
+                                if (value === 0) return '0';
+                                return value.toLocaleString();
+                            },
+                            display: function(context) {
+                                return context.dataset.data[context.dataIndex] > 0;
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'จังหวัด'
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'รายได้ (บาท)'
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value) {
+                                    if (value >= 1000000) {
+                                        return (value / 1000000).toLocaleString() + 'M';
+                                    } else if (value >= 1000) {
+                                        return (value / 1000).toLocaleString() + 'K';
+                                    }
+                                    return value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        });
+    </script>
+
+    
 @endsection

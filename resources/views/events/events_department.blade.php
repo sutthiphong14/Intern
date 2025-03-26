@@ -579,7 +579,7 @@ var myChart3 = new Chart(ctx3, {
         </script>
 
 
-<script>
+        <script>
           document.addEventListener("DOMContentLoaded", function () {
     // Get the initial selected filter value
     let currentFilter = document.getElementById("chartFilter").value;
